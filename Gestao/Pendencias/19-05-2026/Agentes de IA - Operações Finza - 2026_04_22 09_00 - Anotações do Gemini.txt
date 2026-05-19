@@ -1,0 +1,364 @@
+﻿📝 Observações
+abr. 22, 2026
+Agentes de IA - Operações Finza
+convidado Jéssica Margaritha Campos de Souza Felipe Recuperação de Credito Blips João Pedro Borges Martins Mateus Alberone Mesquita
+Anexos Agentes de IA - Operações Finza
+Registros da reunião Transcrição 
+
+
+
+
+Resumo
+Reunião definiu a escalabilidade operacional via tecnologia e priorizou a implementação de sete agentes de IA.
+
+Demanda por novos agentes
+O crescimento de 40% na carteira exige a implementação de 7 agentes de IA para escalar o atendimento. A equipe priorizou agentes focados em cancelamento, retirada de equipamentos e formalização.
+
+Estrutura e curadoria técnica
+Definiu-se a utilização de uma torre de controle e da plataforma Estia para gerenciar os agentes com autonomia. Ficou decidido que a Valentina será o foco imediato como agente de saque.
+
+Integração de sistemas
+A formalização será migrada para o novo sistema Finza com entrega prevista para 15 de maio. O agente Clara será redirecionado para atender a este novo departamento de formalização.
+
+
+
+
+Próximas etapas
+* [Mateus Alberone Mesquita] Liberar Valentina: Liberar acesso do agente Valentina e da plataforma Estia para curadoria da equipe até sexta-feira.
+* [Mateus Alberone Mesquita] Manter Agentes: Avaliar a possibilidade de manter os agentes de Distrato e Retirada dentro da Torre/Bitrix para gestão de carteira sequencial na plataforma de cobrança.
+* [Mateus Alberone Mesquita] Mapear Agentes: Desenhar e elaborar o roadmap para os 7 agentes, definindo as prioridades. Agendar reuniões de acompanhamento para detalhar escopo e processos dos agentes.
+* [Mateus Alberone Mesquita] Ajustar Transferência: Ajustar o nome ou a automação do departamento no Hyper de Onboarding para Formalização. Garantir que o agente Clara transfira a demanda para o setor correto.
+
+
+
+
+Detalhes
+* Apresentação do Contexto e Necessidade de Agentes de IA: Jéssica Margaritha Campos de Souza Felipe iniciou a reunião contextualizando a necessidade de novos agentes de IA para apoiar a operação Finza devido ao crescimento da carteira, que aumentou 40% entre outubro e março. A discussão com Léo abordou a necessidade de implementar sete agentes para escalar o atendimento via tecnologia, pois o aumento da carteira exige aprimoramento tecnológico ou aumento da estrutura física (00:00:00) (00:01:47). Já existem dois agentes em operação: Esperança (cobrança Blips) e Valentina (cobrança Finza), com uma equipe de curadoria que inclui Felipe, J e Breno (00:00:48).
+* Proposta de Agentes para Cancelamento (Distrato) e Retirada de Equipamentos: Jéssica Margaritha Campos de Souza Felipe descreveu a demanda por um agente dedicado à etapa de cancelamento ou distrato, que segue uma política fixa para o cálculo de valores e logística reversa usando a plataforma Intel Post (00:01:47). Além disso, propuseram um agente para a etapa processual de retirada de equipamentos, que envolve agendamento, comunicação com o cliente e coordenação com a transportadora via Intel Coast e Flávia (00:02:40). A IA na retirada poderia gerenciar o agendamento e o follow-up com o cliente, liberando a equipe para tarefas mais administrativas e garantindo maior velocidade na operação (00:03:53).
+* Proposta de Agentes para Formalização e Estrutura de Atendimento (Saque Finza): A equipe identificou a necessidade de dois agentes para formalização: um para Finza e outro para Blips, devido à migração de tarefas e à necessidade de segmentação, totalizando seis agentes até então (00:04:48). O sétimo agente proposto é o Saque Finza, focado em atendimento ao cliente de financiamento para dúvidas sobre parcelas, reenvio de boletos e acesso a contratos, visando não onerar as equipes de cobrança e formalização (00:05:50). Mateus Alberone Mesquita concordou que todos os pontos apresentados podem ser trabalhados e que a escalabilidade via tecnologia é o caminho correto (00:07:54).
+* Discussão sobre Formato e Curadoria Técnica dos Agentes de IA: Jéssica Margaritha Campos de Souza Felipe solicitou orientações técnicas sobre o melhor formato para executar os sete agentes e esclarecimentos sobre a curadoria, incluindo a autonomia da equipe e o papel da área técnica. Eles enfatizaram que os atendimentos via Hyper utilizam duas organizações (Blips e Finza) e precisam de uma gestão estruturada do texto para ambas (00:06:55). A proposta é escalar com tecnologia, pois não há espaço físico para aumentar a estrutura de pessoal (00:07:54).
+* Estrutura Atual de Agentes e Mudança Cultural na Blips/Finza: Mateus Alberone Mesquita explicou que a IA Clara, antes de onboard da Blips, foi dividida em três agentes separados devido a mudanças de setores, e ela agora é uma IA da Finza focada em coleta de documentos e auxílio na formalização (00:09:32). A meta é que a IA instrua o cliente a resolver problemas por conta própria, o que representa uma mudança cultural. Eles mencionaram que a curadoria dos agentes, como a da Dalila de venda, é feita via plataforma Estia, que é o sistema para treinamento e curadoria (00:09:00) (00:10:37).
+* Reorganização dos Agentes de Cobrança e Saque: Mateus Alberone Mesquita informou que, com a ida do financeiro e cobrança para a Finza, a Esperança tornou-se 100% IA Finza, focada na cobrança, e a Valentina está sendo lançada como o agente de saque da Finza. A Valentina atuará como intermediária, fazendo a recepção e direcionando problemas para agentes especialistas, como a Esperança para questões financeiras (00:12:33). Mateus Alberone Mesquita também apresentou o Francisco, a versão do Salvador para a Finza, que analisa módulos financeiro e neurônico (00:13:32).
+* Desafios de Integração e Autonomia na Curadoria de Agentes: Mateus Alberone Mesquita listou a estrutura atual de agentes (Valentina, Esperança, Clara e Francisco) e discutiu a possibilidade de os novos agentes serem "subagentes" controlados pela "torre de controle", onde a equipe teria mais liberdade de automação e regras (como a transição para o *prompt* de distrato após 91 dias) (00:15:36). Jéssica Margaritha Campos de Souza Felipe solicitou que os agentes de Distrato e Retirada fossem mantidos dentro da "torre" por ser onde a carteira de cobrança é gerida (00:17:42). Caso o Estia seja o formato, Jéssica Margaritha Campos de Souza Felipe enfatizou a necessidade de autonomia para o time na curadoria, para evitar a sobrecarga da equipe de Mateus Alberone Mesquita (00:18:53).
+* Integração de Funcionalidade de Reembolso/Reprovação no Agente de Formalização: Jéssica Margaritha Campos de Souza Felipe questionou se o processo de distrato e reembolso financeiro para clientes reprovados na documentação ou *compliance* seria um oitavo agente ou uma funcionalidade do agente de formalização (00:18:53). Mateus Alberone Mesquita sugeriu que seria uma funcionalidade da Clara, onde ela atuaria caso a formalização não fosse bem-sucedida (00:19:57). Eles definiram que a prioridade imediata é a Valentina (agente de saque), com previsão de liberação do acesso e treinamento no Estia até o final da semana, para que a equipe possa adicionar documentos e evoluir as funcionalidades (00:20:57).
+* Status da Integração e Próximos Passos para o Agente Clara (Formalização): João Pedro Borges Martins detalhou um ajuste pendente para redirecionar o gatilho da IA Clara, antes direcionado ao *onboarding*, para o departamento de formalização da Finza e Blips (00:21:52). Jéssica Margaritha Campos de Souza Felipe explicou que a etapa de formalização, que inclui coleta e validação de documentos e aprovação de *compliance*, será transferida da plataforma Bitrix para um novo sistema Finza com previsão de entrega para 15 de maio (00:24:20). Até lá, as movimentações automáticas de status no Bitrix foram pausadas, evitando o avanço de clientes sem validação (00:28:08) (00:29:34). A equipe de IA precisará integrar-se a este novo sistema Finza após seu lançamento (00:27:22).
+* Direcionamento de Transferências Humanas e Priorização de Projeto: João Pedro Borges Martins perguntou para qual departamento o agente Clara transfere quando um cliente solicita atendimento humano (00:29:34). Eles concordaram em resolver a questão de renomear ou trocar a automação do departamento para "formalização". Mateus Alberone Mesquita confirmou que irá mapear e desenvolver os novos agentes no *roadmap*, marcando agendas para entender melhor cada escopo (00:30:35). Jéssica Margaritha Campos de Souza Felipe reforçou que este projeto é uma prioridade alinhada com a liderança, pois a IA é a única forma de escalar as operações (00:31:45).
+
+
+
+
+Revise as anotações do Gemini para checar se estão corretas. Confira dicas e saiba como o Gemini faz anotações
+Como está a qualidade de destas observações? Responda a uma breve pesquisa para nos dar seu feedback, incluindo o quanto as observações foram úteis para o que você precisa.
+📖 Transcrição
+22 de abr. de 2026
+Agentes de IA - Operações Finza - Transcrição
+00:00:00
+ 
+Jéssica Margaritha Campos de Souza Felipe: Pronto, tá transendo. Tem opção também de gravar.
+Mateus Alberone Mesquita: Bora lá só a transcrição.
+Jéssica Margaritha Campos de Souza Felipe: Ah, mas não tá ligado.
+Mateus Alberone Mesquita: Aí ele já manda o resuminho pra
+Jéssica Margaritha Campos de Souza Felipe: Tá bom. Boa. Beronei.
+Mateus Alberone Mesquita: gente.
+Jéssica Margaritha Campos de Souza Felipe: Eh, você comentou que o Léo, né, havia apontado com você sobre a necessidade que nós temos aqui enquanto operação finza de outros agentes, né? Eh,
+Mateus Alberone Mesquita: Uhum.
+Jéssica Margaritha Campos de Souza Felipe: vou fazer um contexto para ficar todo mundo na mesma página. Eh, nós estamos avaliando aqui eh a operação como um todo, o crescimento de carteira versus a estrutura que a gente tem para poder atender e como a operação tem se desdobrado, tá? E aí uma dessas conversas eu comentei com o Léo, falei: "Olha, a gente eh na na minha visão, nós precisamos de sete agentes. Aí na minha cabeça,
+ 
+ 
+00:00:48
+ 
+Jéssica Margaritha Campos de Souza Felipe: o Berone, agentes individuais com instruções individuais. Aí, qual é o melhor formato de rodar? É um único agente com microagentes?" Não sei, não, não, não é, não sou especialista nisso. Aí eu entendo que tem que vir mais da área técnica para nós, tá?
+Mateus Alberone Mesquita: Sì.
+Jéssica Margaritha Campos de Souza Felipe: Mas de forma bem operacional mesmo assim, o que que nós temos hoje de demandas de agentes de dentro da operação? Nós temos a Esperança e a Valentina Esperança enquanto agente de cobrança da Blips e a Valentina enquanto agente de cobrança da Finza. Então, nós já temos esses dois agentes e tem, obviamente, né, o Felipe, o J e até o Breno que fazem esse processo aqui de curadoria. A gente sabe que tem oportunidade, sempre vai ter, né, sempre vai ter. Então são dois agentes muito importantes para nós, mas eh temos a oportunidade aí principalmente de entender melhor o comportamento, os números e como que a gente consegue potencializar isso aqui dentro da operação.
+ 
+ 
+00:01:47
+ 
+Jéssica Margaritha Campos de Souza Felipe: Eh, só trazendo uma informação, a nossa carteira, eu assumi a equipe em outubro, de outubro até março a carteira cresceu 40%. Então, à medida que a carteira cresce, nós temos dois caminhos. ou a gente aumenta a tecnologia ou a gente aumenta estrutura física, pessoas, enfim. E aí nós temos discutido muito essa questão de aprimorar a tecnologia mesmo para poder contribuir mais ali com o resultado. Então, por isso que que eu que eu falo muito que a gente realmente precisa eh daqui a pouco chegar no ponto de quanto que as IAS estão recuperando e quanto que é que isso em relação ao meu operador aqui, enfim, tá nesse nível de análise mais criterioso. Então, além dessas duas agentes, nós temos outras demandas também. E aí hoje nós temos uma etapa aqui que é a etapa de cancelamento, que é o distrato. E aí esse dstrato, a Berônia, ele tem uma política. Essa política é fixa.
+ 
+ 
+00:02:40
+ 
+Jéssica Margaritha Campos de Souza Felipe: Existe um um uma plataforma que a gente usa que é o Intel Post para fazer as cotações das retiradas da logística reversa e aí tem o que cobra do cliente. Então é uma política fixa. Eu entendo que tem a oportunidade da gente poder daqui a pouco ter um agente para poder calcular esses valores e e destratar ali efetivamente com os clientes. Então esse é um uma demanda, tá? um agente para cancelamento, para distrato. Então, a gente tem hoje já tá uma estrutura, uma política, tem parâmetro, tem critério. Então, eu acho que é é a gente instruar mesmo, desenvolver aquilo que precisa integrar para poder conseguir rodar. É uma demanda muito difícil que nós temos aqui na operação de conseguir contato ali com o cliente, tem que ser assim muito assertivo. Então eu vejo uma oportunidade que a IA pode nos dar escala que hoje a gente não tem tem a parte de retirada de equipamentos e também projeto eh um agente para essa etapa de retirada. Essa etapa de retirada, ela é processual, então a gente tem o fluxo todo mapeado, a gente tem eh todo o desenho aqui da operação, eh qual o momento que a gente entra em contato com o cliente, a agenda ali a retirada com o cliente,
+ 
+ 
+00:03:53
+ 
+Jéssica Margaritha Campos de Souza Felipe: eh agendando ali a retirada com o cliente, tem a parte do técnico para poder fazer essa embalagem do equipamento e tem a parte do da transportadora, né, que aí de novo volta o Intel Coast e a Flávia ali que é o hoje o ponto focal da empresa. Então eu vejo que daqui a pouco na retirada eu não vou conseguir ter 100% do agente fazendo todas as etapas, mas se eu consigo agendar com o cliente, se eu consigo daqui a pouco manter eh essa comunicação com o cliente, porque o mais difícil é é ficar dando update pro cliente. Ó, o técnico vai tal dia, tal hora. Isso gera um trabalho muito eh manual. Daqui a pouco eu pego o time aqui, concentro eles para executar essas etapas mais administrativas e eh esse contato com o cliente, essa esse follow-up ali com o cliente para poder dar esse status para ele. Ó, o técnico tá caminho, foi aberto aqui uma ordem de serviço. A gente poderia tentar fazer isso com a IA e a gente ganharia velocidade aqui dentro da operação também.
+ 
+ 
+00:04:48
+ 
+Jéssica Margaritha Campos de Souza Felipe: Então é uma outra oportunidade. Até aqui nós falamos de quatro, né? Temos também eh a IA de formalização eh da formalização finza. Essa IA da formalização finza ainda a gente tá bem eh inicial, vamos colocar assim, nós estamos migrando aquilo que tava sendo feito pela equipe da Mari. E aí essa EA de formalização Finza, ela na verdade vai precisar ser segmentada em dois, igual a Esperança e a Valentina, porque a gente faz a formalização da Blips também e a formalização da finza. Então aqui eu separo isso em dois agentes. Então formalização finza, a gente tem um um uma oportunidade gigantesca a nível de documentação, a nível de estruturar melhor isso. A gente tá tá bem na etapa inicial. E tem também a parte de formalização da blips. Então aqui nós estamos fechando em seis agentes até agora, né? Esperança Valentina, distrato, retirada, formalização blips, formalização finza.
+ 
+ 
+00:05:50
+ 
+Jéssica Margaritha Campos de Souza Felipe: E aí o último agente, que é o sétimo agente, ó, Birone, é o saqueza. O que que é esse saque finza? A gente não tem essa estrutura hoje, nós precisamos estruturar, mas aquele cliente que é financiamento, ele às vezes tem dúvida do financiamento. Quando vence minha primeira parcela? Eh, ah, eu não recebi o equipamento, ainda tenho que pagar, tem. Então, financiamento, desdobra, tem toda a política ali. Ah, eu quero não só um reenvio de boleto, mas eu quero daqui a pouco. Como que eu acesso para tirar o meu boleto? Onde que eu tenho a segunda via do meu do meu contrato, minha CCB? São algumas demandas que a gente já percebe que eu não queria honerar o time de cobrança com isso e nem o time de formalização. E tem essa lacuna que eu tô chamando hoje de saque finza, o Bruno chama de essa é gestão de carteira, a gente não faz gestão de carteira de financiamento, mas o saque finza em si pra gente poder ter essa essa esse atendimento ali pro cliente que ah, eu tô pedindo um reenvio de um contrato para você, poxa, ah, tem que conseguir fazer isso pra gente, isso é uma coisa simples.
+ 
+ 
+00:06:55
+ 
+Jéssica Margaritha Campos de Souza Felipe: Então, esse seria o sétimo agente. Eu estou separando bem as caixinhas, mas como estruturar isso tecnicamente, como fazer isso rodar tecnicamente? Aí é vocês que vão eh eh dizer para nós qual que é o melhor formato da gente rodar eh com esses agentes. O que eh eu preciso ter muito claro, Verone, assim, eh onde o time vai conseguir fazer essa curadoria desses agentes, então até que ponto, qual a autonomia que nós vamos conceder e até que ponto isso fica muito na parte técnica. Então, estruturar isso. E e um outro ponto também que eu gostaria de frisar, eh, Hyper, né? Nossos atendimentos são todos via, mas Hyper tem duas organizações, tem que a organização blips e a organização cinza, então de texto estruturado também para essas duas organizações, como que a gente gerencia e acompanha isso, tá? Eh, o que eu falei pro Léo foi bem essa primeira etapa, ó, eu preciso desses sete agentes. Eu eu preciso escalar em tecnologia aqui dentro.
+ 
+ 
+00:07:54
+ 
+Jéssica Margaritha Campos de Souza Felipe: para minha demanda está aumentando. A ideia não é aumentar a estrutura física, até porque eu não tenho nenhum onde pô as pessoas para acertar, né? Começa por aí. Mas de que ponto a gente pode escalar isso em tecnologia aqui dentro e aí fazendo o mapeamento aqui com o time aí depois se o Ja ou Felipe quiser complementar algo, fique à vontade, tá, meninos? Mas eh que eu consegui identificar foram esses sete pontos que acho que já tem demanda, já existe um espaço aqui da gente conseguir eh avançar com essas frentes aqui dentro da operação, tá?
+Mateus Alberone Mesquita: Legal, não deu para entender. Concordo com você que todos esses são pontos que hoje a gente já consegue trabalhar, já consegue começar a desenvolver essas ipas para funcionar, que realmente o caminho é é escalar tecnologia. Eu acho que esse é o caminho certo mesmo. E o bom dessas mudanças, o o que eu acho que a gente tem que levar, que a gente tá fazendo isso bastante ali junto com o Michel, estamos puxando a plataforma para esse lado, é o lado da gente tentar aproveitar a IAP, porque até então a Blip sempre teve uma cultura muito de fazer pelo cliente, coisas que não precisa.
+ 
+ 
+00:09:00
+ 
+Mateus Alberone Mesquita: Então, às vezes, a gente complicava muito o nosso processo para fazer as coisas por ele que ele poderia
+Jéssica Margaritha Campos de Souza Felipe: Que loucura que é.
+Mateus Alberone Mesquita: fazer,
+Jéssica Margaritha Campos de Souza Felipe: Uhum. Nossa,
+Mateus Alberone Mesquita: que ele poderia
+Jéssica Margaritha Campos de Souza Felipe: a gente tem hoje, isso é cultural, Berônia, eu enxergo isso também.
+Mateus Alberone Mesquita: fazer.
+Jéssica Margaritha Campos de Souza Felipe: Agora assumindo aqui formalização, ela falou: "Meu, o cara tem que mandar documento, o cara não consegue mandar e a gente tem que ter uma estrutura para poder o básico. O cara tá fazendo o financiamento, ele não consegue mandar um documento." Inclusive, semana passada o cara queria vir aqui pra gente fazer para ele.
+Mateus Alberone Mesquita: Pois é.
+Jéssica Margaritha Campos de Souza Felipe: Falei: "Não, amigo, eu ten que mandar é online, a nossa formalização é online". Enfim, eu percebo isso, tá? É, é, é,
+Mateus Alberone Mesquita: Aí é e é uma mudança de cultura.
+ 
+ 
+00:09:32
+ 
+Jéssica Margaritha Campos de Souza Felipe: e é cultural mesmo.
+Mateus Alberone Mesquita: E aí eu acho que esses momentos que a gente tá passando agora,
+Jéssica Margaritha Campos de Souza Felipe: M.
+Mateus Alberone Mesquita: onde tá áreas inteiras movimentando desse jeito, é o melhor momento pra gente começar a implantar uma cultura nova, né? que aí tá tá chegando gente nova, é cabeça nova, eh não tem ninguém tão tão enviezado assim para ir contra a mudança. Então acho que agora é o momento e é muito bem-vindo esse tipo de de aplicação. Eh, sobre os agentes, só para explicar certinho como que tá funcionando hoje, o que que a gente já tem paraa Finza e como que fica, até que essa mudança de formalização e tudo.
+Jéssica Margaritha Campos de Souza Felipe: Sim.
+Mateus Alberone Mesquita: Antes aqui na Blips a gente tinha a Clara, que era a nossa IA de onboard, que ela pegava toda a parte da documentação até a até a instalação.
+Jéssica Margaritha Campos de Souza Felipe: Ele
+Mateus Alberone Mesquita: Ela fazia todo esse processo ali de coleta de documento que ela pedia tudo, depois ajudava alguma coisa ali muito básica no checklist, coisa, depois na instalação. E aí agora com essas mudanças a gente tá dividindo a clara em três agentes separados.
+ 
+ 
+00:10:37
+ 
+Mateus Alberone Mesquita: pelas mudanças de setores, onde a gente tem a clara que a viraria ela seria agora enviada paraa FINZA com a parte de coleta de documentos, se precisar de auxílio nessa parte de formalização e tudo. Então a Clara agora é uma IA de vocês, né, da Finza. E aí a gente vai fazer mais uma só pra parte do comercial de checklist. E a I que já pediu reunir com o Michel na na segunda. É bem mais nesse estilo. Tipo assim, a função da IA não é fazer pelo cliente, é mais ficar instruir você, ó, você tem que acessar tal coisa, você tá com dificuldade aqui, ó, é isso aqui, toma esse vídeo, toma isso daqui, mas no sentido de tentar fazer a pessoa resolver o problema por ela mesmo, que aí desse jeito fica até mais fácil pros treinadores conseguir treinar, porque aí é só instrução, é dar arquivo, é dar conhecimento, né? Não, não ter que ficar fazendo ferramenta, adaptando plataforma, adaptando qualquer coisa para reenviar. Então a gente tá com essa e aí vai ter uma IA só pra instalação, que é a Estela que vai ficar pra instalação. Então agora aqui na FINS vocês já ganharam mais uma fila que é a Clara, que seria essa IA de documentação, onde a gente já consegue começar a treinar ela e passar algumas coisas numa outra plataforma que a gente tem de treinamentos de
+ 
+ 
+00:11:52
+ 
+Mateus Alberone Mesquita: agente, que é o estia. Depois a gente passa acesso paraos meninos for para dar uma olhada e provavelmente é onde vai tá ali a parte de treinamento de dos outros
+Jéssica Margaritha Campos de Souza Felipe: Eu ia perguntar isso agora,
+Mateus Alberone Mesquita: agentes.
+Jéssica Margaritha Campos de Souza Felipe: porque o STI, eu lembro quando lembro por alto, não participei das agendas, mas eu lembro de vocês comentarem que o ESTI é onde é como se fosse a nossa torre de controle que nós faríamos a
+Mateus Alberone Mesquita: Aham.
+Jéssica Margaritha Campos de Souza Felipe: a curadoria da Esperança da Valentina, mas para os demais agentes tem o Estia que lá você faz toda curadoria. Isso como é que tá,
+Mateus Alberone Mesquita: Que isso?
+Jéssica Margaritha Campos de Souza Felipe: Beron? Tá, tá funcional. O time consegue fazer
+Mateus Alberone Mesquita: Ah, tá. rodando hoje já todos os outros agentes, a gente treina por lá, tá tudo lá igual a Dalila de venda, treinamento acontece tudo por lá, tá tudo tá tudo lá.
+ 
+ 
+00:12:33
+ 
+Mateus Alberone Mesquita: Depois eu a gente pode marcar um um dia para mostrar. E aí uma coisa importante que a gente definiu agora, né, com a ida da do financeiro, da cobrança de tudo paraa Finza, a esperança também se tornou uma e a fininza. a gente não existe mais a Valentina e a Esperança na cobrança, porque antes existia as duas na cobrança. Agora, o que é cobrança? É 100% esperança. E a Valentina a gente já começou eh essa semana, inclusive a gente lança a Valentina para ela ser o que era para ela ser desde o começo, porque o objetivo da Valentina é ser a socorro da Finza, no número da Finza.
+Jéssica Margaritha Campos de Souza Felipe: É, no caso é gente de saque,
+Mateus Alberone Mesquita: É exatamente esse agente de saque que a função da Valentina é intermediar
+Jéssica Margaritha Campos de Souza Felipe: né?
+Mateus Alberone Mesquita: entre as áreas, tentar solucionar o problema do do cara conversando com esses agentes especialistas o caso,
+Jéssica Margaritha Campos de Souza Felipe: Eu
+Mateus Alberone Mesquita: mas direcionando ele, fazendo mesmo essa recepção e tudo. Aí esse cara caiu com o problema financeiro, aí a Valentina chama a esperança e a esperança vai tudo.
+ 
+ 
+00:13:32
+ 
+Mateus Alberone Mesquita: Então o João Pedro já tá terminando. Só tem João nesses time no aqui, né,
+Jéssica Margaritha Campos de Souza Felipe: já perguntar o meu João Pedro ou é outro?
+Mateus Alberone Mesquita: do É o é o outro João Pedro do meu João Pedro lá de tá terminando essa mudança para essa semana a gente já colocar no número
+Jéssica Margaritha Campos de Souza Felipe: Да.
+Mateus Alberone Mesquita: da Finza essa Valentina como porque hoje quem recebe os que mandam mensagem é a Valentina/Eanza, né? A esperanza que tá lá. Então a gente já vai ter ela para começar a ser treinada, vai passar esse tipo de dica, esse tipo de saca, esse tipo de conhecimento, de dúvida geral. e tudo e fazer esse intermédio com os outros agentes. Além disso, a gente tá fazendo também a versão do Salvador, já tá até pronto também, que é o Francisco, que é o salvador da Finza. Ele é bem crescida. A função dele é a mesma do Salvador, que é analisar o modoiro, analisar, analisar neurônio, ver se tá conectado, se não tá, só que com a especificidade da finza,
+Jéssica Margaritha Campos de Souza Felipe: Obrigado.
+ 
+ 
+00:14:28
+ 
+Mateus Alberone Mesquita: né, que não olha todas as carteiras igual olha o Salvador, que ele olha suprimentos, tanque, olha tudo. Esse daí o Francisco, ele é ligado no módulo financeiro e neurônico, tiver lá e tudo e a comece a entrar as outras indústrias,
+Jéssica Margaritha Campos de Souza Felipe: Mas
+Mateus Alberone Mesquita: ele consiga diferenciar. A Valentina, a gente até um problema em relação a isso que a gente levantou pro Léo, que hoje no modo financeiro, do jeito que funciona, a gente não consegue saber qual foi a empresa que originou o contrato Finza, que entra como finza, mas é tudo finza, mas assim, beleza, é finza da Blips, é finza da Rino, é finza de qual empresa? Hora que chega paraa Valentina, uma das missões da Valentina é que se chega alguém com problema técnico, ela tem que direcionar para empresa que comprou o equipamento. Hoje, jeito que tá,
+Jéssica Margaritha Campos de Souza Felipe: Perf.
+Mateus Alberone Mesquita: a gente não conseguiu fazer isso de forma automática dela bater na plataforma e já saber quem é a empresa e já direcionar o cara para lá. Hoje ela sabe, ela tá com esse conhecimento, mas ela vai perguntar pro cliente, dependendo se ah, seu equipamento comprou com qual empresa, aí para depois passar os contatos e o que for.
+ 
+ 
+00:15:36
+ 
+Jéssica Margaritha Campos de Souza Felipe: Perfeito.
+Mateus Alberone Mesquita: Então essa é hoje a estrutura de agentes que a gente já tem,
+Jéssica Margaritha Campos de Souza Felipe: paraem
+Mateus Alberone Mesquita: tá desenvolvendo nesses últimos dias para e que depois a gente vai marcar para te apresentar pra gente lançar e a terminar os testes da Valentina mostrar para vocês que aí depois vocês vão continuar a evolução delas, né? Eh, então a gente já tem a Valentina, a Esperança, a Clara agora que seria a de formalização, adaptar e o Francisco, que é o Salvador e a Esperança.
+Jéssica Margaritha Campos de Souza Felipe: ва
+Mateus Alberone Mesquita: A gente já tem cinco. Alguns desses agentes que você falou, eles podem ser suagentes, podem ser agente preparados. a gente pode definir como fazer, se vai ser noia, na torre, com base em alguns critérios no sentido de assim, eh, a gente consegue adaptar o o o agente que a gente tem, que a gente tem hoje na torre de controle da parte de promps, por exemplo, pra gente ter brompado para momentos que aí é o agente atua, a esperança assume, o agente que tiver atuando assume essa personalidade, esse pronte em determinadas situações,
+Jéssica Margaritha Campos de Souza Felipe: E aí pra gente tá acontecendo não,
+ 
+ 
+00:16:48
+ 
+Mateus Alberone Mesquita: a parte de regra. Aí o que a gente vai precisar entender é eh é
+Jéssica Margaritha Campos de Souza Felipe: mas então
+Mateus Alberone Mesquita: que acaba que é uma dinâmica de onde a gente vai criar e controlar as automações para dar independência para você. Por isso que eu falei de às vezes jogar na torre de controle,
+Jéssica Margaritha Campos de Souza Felipe: Sim.
+Mateus Alberone Mesquita: se a gente conseguir lá, a vantagem da torre é que vocês têm liberdade de automação. Então vocês conseguem falar: "Ah, a partir de agora, com 91 dias,
+Jéssica Margaritha Campos de Souza Felipe: Eu
+Mateus Alberone Mesquita: se for conversar com a esperança que for conversar, ela já não vai mais usar o promp de cobrança, ela já vai usar o promp agora de distrato, as regras para quanto tem mais de 90 dias.
+Jéssica Margaritha Campos de Souza Felipe: falei
+Mateus Alberone Mesquita: essas regras aqui que vai seguir e vocês controlam tudo no mesmo lugar, então vai mandar uma mensagem no dia tal, algumas automações básicas de início de contato, pelo menos vocês conseguiriam controlar pela torre e aí a gente do lado de cá
+Jéssica Margaritha Campos de Souza Felipe: mudar
+ 
+ 
+00:17:42
+ 
+Mateus Alberone Mesquita: desenvolveria algumas outras funcionalidades, por exemplo, de de followup da IA e a gente ia evoluindo nesse sentido.
+Jéssica Margaritha Campos de Souza Felipe: Fernando Ferreira
+Mateus Alberone Mesquita: Mas se não for por lá, pelo Estia, eles também vão conseguir treinar normalmente, só que vocês não vão ter às vezes tanta liberdade de automação, de regra de automação. Eh, e aí é entrar e definir mesmo, porque apesar de não ter pelo Estia, pelo Bitrix, por exemplo, a gente continuar usando lá, a gente consegue pô os gatios de atomação, pode chegar nessa raia que de tanto em tanto tempo, vai mandar mensagem, vai fazer esse tipo de coisa. E como agora você tem também o Michael aí que consegue até auxiliar nesse tipo de coisas, a gente deixa pronto, eles conseguem também fazer, desenvolver. Então eu acho que não é nada muito complexo da gente começar e tirar do papel, começar a desenvolver esses agentes pra gente colocar no ro aqui. Eh, até porque três dos agentes que você falou meio que é continuação do fluxo que já existe hoje,
+Jéssica Margaritha Campos de Souza Felipe: É exatamente.
+Mateus Alberone Mesquita: né?
+Jéssica Margaritha Campos de Souza Felipe: Aí se for possível o doato e da retirada seria interessante a gente manter dentro da torre.
+ 
+ 
+00:18:53
+ 
+Jéssica Margaritha Campos de Souza Felipe: Porque a carteira tá lá, é como é onde nós estamos gerindo a carteira de cobrança.
+Mateus Alberone Mesquita: Beleza.
+Jéssica Margaritha Campos de Souza Felipe: Então são etapas eh sequenciais, né? Então seria interessante, se for possível manter lá. Agora, em relação à formalização, em relação ao saque, aí tem que ver, né, qual que é o melhor formato, enfim, se for pelisti, eu só preciso que o time tenha essa autonomia de curadoria mesmo, porque assim, eu sei que hoje já é muita demanda, eu vejo os meninos aqui em agenda e tudo e aí passa caso aqu lá no grupo também, eu sei que às vezes é é até muito, o volume é muito grande, mas imagina, nós estamos aumentando agora exponencialmente. a gente não der autonomia, vai sobrecarregar mais ainda vocês. E eu acho que a gente não vai conseguir escalar da forma que a gente pode escalar com a IA. Só uma observação sobre a a IA da formalização. Berone também tem um ponto aqui que nós eh eu não sei se você se a gente coloca como eh funcionalidade ou se a gente coloca uma oitava ou um oitavo agente ali, que é a partir do momento que o cliente for reprovado na documentação e for reprovado no
+ 
+ 
+00:19:57
+ 
+Jéssica Margaritha Campos de Souza Felipe: compli uma das duas etapas, essas duas etapas são finza. Então, se ele foi reprovado nessas etapas, se não validou documento, se eh compli, nós temos o processo de distrato. Aí esse distrato também tá com a gente. Aí é um distrato que tem é distrato, eh, e reembolso financeiro. Então, de pegar dados ali, enfim, acho que algumas coisas a gente consegue otimizar ali mesmo, eh, para poder também dar dar esse suporte aqui pro time de operações. não sei se entra como um oitavo agente ou se ele entra como uma funcionalidade dentro de formalização, enfim, qual que é a melhor forma de fazer. Mas também tem essa demanda que também tá com a gente essa responsabilidade e a gente tá estruturando isso aqui do nosso lado. Então é um ponto que eu também vejo que a IA pode apoiar,
+Mateus Alberone Mesquita: Sim.
+Jéssica Margaritha Campos de Souza Felipe: tá?
+Mateus Alberone Mesquita: É isso. Eu acredito que seria uma funcionalidade na na Clara Lar de que se não deu certo essa etapa, se reprovou, ela vai começar a atuar.
+ 
+ 
+00:20:57
+ 
+Mateus Alberone Mesquita: Não precisaria de um novo.
+Jéssica Margaritha Campos de Souza Felipe: Tá
+Mateus Alberone Mesquita: Mas mas assim, ficou claro,
+Jéssica Margaritha Campos de Souza Felipe: bom.
+Mateus Alberone Mesquita: Jésica. Vou desenhar isso aqui, colocar isso aqui no roadmap de cada um desses agentes para conversar com os meninos a gente já priorizar. Então aí só para ficar ciente, o que a gente tá priorizando hoje é a Valentina, que é essa, né? primeira ali de saque e aí a gente já libera essa semana mesmo. Acho que até sexta a gente já consegue liberar para vocês o acesso, mostrar lá no Steam como que vocês fazem para adicionar, que vocês podem adicionar esse documento com perguntas frequentes, um fax um desse daí de como que a gente vai e depois a gente vai evoluindo ela nesse sentido das outras ferramentas que ela precisar. Então, ah, como que a gente faz para pegar um um contrato novo, para reviar esse contrato pro cliente? Aí a gente começa a adicionar esse tipo de funcionalidade para ela e e a gente vai evoluindo.
+Jéssica Margaritha Campos de Souza Felipe: Combinado da minha da minha parte.
+ 
+ 
+00:21:52
+ 
+Mateus Alberone Mesquita: Claro, vai ser
+Jéssica Margaritha Campos de Souza Felipe: É isso. Eh,
+Mateus Alberone Mesquita: bom.
+Jéssica Margaritha Campos de Souza Felipe: obrigada pela disponibilidade, assim, tô contando muito com esse com esse apoio de de tecnologia mesmo. Tem muita demanda, muita oportunidade aqui e se a gente conseguir avançar isso com a IA, não tenho dúvidas que vai ser bom para todo mundo, tá? Obrigada aí por por entrar nesse projeto junto com a gente,
+Mateus Alberone Mesquita: S deixar,
+Jéssica Margaritha Campos de Souza Felipe: tá?
+Mateus Alberone Mesquita: provavelmente a gente deve desdobrar mais algumas agendas depois para entrar nos detalhes dos agentes,
+Jéssica Margaritha Campos de Souza Felipe: Eh
+Mateus Alberone Mesquita: dos processos e ver como que a gente vai evoluir nesse sentido. Mas aí eu já começo a mapear aqui e vou no roadmap pra gente desenvolver contínuo. Falá.
+João Pedro Borges Martins: Eh, e aí, Veron? Beleza? Tão conseguindo me ouvir? Então, beleza. Eh, semana passada eu tava conversando com João Lucas referente a a um ajuste que a Jéssica pediu, que eu ainda não finalizei.
+ 
+ 
+00:22:56
+ 
+João Pedro Borges Martins: Qual que seria o ajuste? Atualmente, Alberone, eh, de acordo com a etapa da plataforma, é disparado um gatilho para, eh, acredito que é da IA Clara, né, a plataforma disparatilho, aí a IA Clara entra na condição, né, de pegar a questão dos documentos e tudo mais. E antes essa demanda era direcionada para o departamento de onboarding. E aí, como agora essa demanda ela é nossa, seria para ajustar o departamento do Hyper para a formalização tanto da Finza quanto da Blips, a das duas organizações. Eh, seria isso mesmo, Jéssica? Tudo desde o início, é tudo para formalização. Ah.
+Jéssica Margaritha Campos de Souza Felipe: É porque esse único agente, ele foi desmembrado em três frentes. Ele tá desmembrado na parte de documentação agora que tá aqui com a gente. Então toda a parte de coleta de documentação, a parte de compliar também, táô? do compli ele não tem que aparecer dentro da esteira, mas para nós aqui, eh, ele está dentro da formalização. Então, existe uma etapa de formalização e existe uma subetapa que ela não tem que ficar visível, obviamente, por ser compli, mas tá dentro aqui da nossa etapa também.
+ 
+ 
+00:24:20
+ 
+Jéssica Margaritha Campos de Souza Felipe: Então, até essa parte de eh recepção de documentos, validação de documentos em conformidade com os critérios, depois aprovação do complice, aí tem inclusive o compli ele tem níveis, tem o complice dos segmentos, exceto escavadeiro. Escavadeira ainda tem uma entrevista que o compliance faz, vista, né, o movimento ali de fraude e tudo. Então, até essa etapa tá com a gente. a partir disso que migra para checklist, eh, segunda o pagamento ali do da da segunda entrada, isso tá com comercial. Então, essa separação que o Verônio comentou, Jota, é justamente eh até a nossa etapa. Aí hoje tem um ofensor, que que eu tô falando aqui com o J. Hoje, o Berone, a plataforma, o cliente ele consegue adicionar documentos lá dentro e ela não valida. Então, se ele adiciona certo, se ele adiciona errado, se ele a gente tá pedindo um documento X, ele tá adicionando o documento Y, a plataforma aceita e aí automaticamente muda o status ali dentro da plataforma. Então, às vezes o cliente tá lá na etapa de checklist, mas ele, na verdade, o documento que ele enviou nós não validamos porque foi um processo que foi automático.
+ 
+ 
+00:25:33
+ 
+Jéssica Margaritha Campos de Souza Felipe: Então, isso é um gap. Aí, que que tá sendo feito? Até para dividir com vocês. Eu não sei se você tá para Berone, mas para passar pro J e pro Felipe aqui também. A parte de formalização, essa parte de documentação, ela não é uma etapa blixs, ela é uma etapa finza. E que que o Léo tá fazendo? Que que o Léo tá tá tocando esse projeto junto com o Ála? essa etapa de coleta de documentos, essa etapa que eh até a parte da assinatura da CCB, essas etapas vão ser retiradas da plataforma e vão ser feitas em um outro sistema que é um sistema FINZA. Aí a previsão que me passaram e me passaram na sexta-feira é que seria em torno do dia 15 de maio que isso vai ficar pronto. Então não é algo muito distante. Nós estamos falando aí de três semanas, né? três semanas isso vai ficar pronto.
+ 
+ 
+00:26:23
+ 
+Jéssica Margaritha Campos de Souza Felipe: Eh, isso tem um impacto muito grande em Brix, porque o Bitrix lefase. Isso tem um impacto muito grande na IA, porque a IA vai ver esse status na plataforma também. Enfim, mas é algo que se o time de tecnologia conseguir entregar dia 15, aí já deixando aqui também formalizado que nós vamos precisar depois integrar com esse outro sistema, porque esse sistema fins é que vai ser o mandatório para paraas nossas etapas aqui de formalização. Mas aí, Jota, eu acho que resolve essa questão da do avanço automático ali das fases sem a devida tratativa nossa. E aí esse ponto é um ponto que eu tava falando ali com o Rodolfo, que eu tava falando Rodolfo de Processos estava falando também com o Ál e com o Léo, porque hoje o impacto já existe, hoje tá meio que um causo, o cara tá lá no checklist, eu tenho que correr e puxar ele para e não tem como retroagir status e aquela confusão toda, mas esse problema ele já está acontecendo. Só que o que eles me pediram é, ao invés de concentrar a força para resolver isso, eu vou concentrar a força para te entregar um novo sistema.
+ 
+ 
+00:27:22
+ 
+Jéssica Margaritha Campos de Souza Felipe: E aí a previsão dele é 15 de maio. Então até lá nós vamos ter que meio que aguentar as pontas aqui. É um caos, é muito ruim. Eu não gosto de de assumir a postura de aguentar, de segurar as pontas, de nada. Mas eh hoje de fato a gente tem um time só e eles ou eles desenvolvem o novo ou eles fazem um paliativo. Então entendi o direcionamento do Léo que é para desenvolver o novo até o dia 15. Então até lá a gente vai ter que segurar. Mas já pensando que nesse agente nosso de formalização, ele vai ter que conectar em um outro sistema. Então vai ter ali dentro do projeto essa integração, esse esforço de tempo também. Após concluir o sistema no dia 15, no melhor cenário, vamos colocar assim, ainda vai exigir exigir um esforço do time de A para poder fazer essa integração. Mas é o que tem para hoje, é o que nós precisamos fazer.
+ 
+ 
+00:28:08
+ 
+Mateus Alberone Mesquita: Sim.
+Jéssica Margaritha Campos de Souza Felipe: Se eu
+Mateus Alberone Mesquita: O sobre esse ponto até já uma coisa que a gente já fez foi pausar pelo menos no Bitrix a movimentação
+Jéssica Margaritha Campos de Souza Felipe: resp
+Mateus Alberone Mesquita: automática, porque antes o Bitrix movimentava igual movimentava na Isso aí a gente já fez,
+Jéssica Margaritha Campos de Souza Felipe: eu pedi pelo amor de
+Mateus Alberone Mesquita: tá?
+Jéssica Margaritha Campos de Souza Felipe: Deus.
+Mateus Alberone Mesquita: Já pausamos. Então pelo menos no Bitrix não vai sair vocês sozinho, só na hora que vocês passar,
+Jéssica Margaritha Campos de Souza Felipe: Glória. Aham. M.
+Mateus Alberone Mesquita: tá?
+João Pedro Borges Martins: Aí, ô, ô Jéssica, a até lá a o dia 15, eh, a gente já pode solicitar pro time do Oberone que tudo que for disparado, gatilho da plataforma, eh, que a demanda não seja pro onboarding agora, seja paraa formalização. Então,
+Mateus Alberone Mesquita: É, a gente pode mudar, acho que o nome do departamento porque acaba que o documento lá tem o de documentação,
+ 
+ 
+00:28:48
+ 
+Jéssica Margaritha Campos de Souza Felipe: Eh
+Mateus Alberone Mesquita: agora só mudou o nome, né? Acaba tudo. E aí a gente cria um novo departamento pro pro comercial, o que seria a fase deles ali, né? que não sei que nome que eles estão dando para essa fase.
+Jéssica Margaritha Campos de Souza Felipe: não sei nem se criaram esse docum esse esse departamento.
+Mateus Alberone Mesquita: Mas mas daí
+Jéssica Margaritha Campos de Souza Felipe: Mas enfim,
+Mateus Alberone Mesquita: tá
+Jéssica Margaritha Campos de Souza Felipe: aí isso aqui que é importante citar, o comercial não atua no hyper organização finza,
+Mateus Alberone Mesquita: em
+Jéssica Margaritha Campos de Souza Felipe: eles sempre vão atuar hyper blips. Então esse ponto é importante e checklist que a próxima etapa deles é blips então tem que
+Mateus Alberone Mesquita: isso.
+Jéssica Margaritha Campos de Souza Felipe: ser lá na blips mesmo, independente se é fins ou não. Mas aí, ô, perdão, aí J,
+Mateus Alberone Mesquita: Umar aqui
+Jéssica Margaritha Campos de Souza Felipe: como o Aberone travou as automações dentro do Bitrix,
+ 
+ 
+00:29:34
+ 
+Mateus Alberone Mesquita: para cima.
+Jéssica Margaritha Campos de Souza Felipe: quando ele entra na parte de envio de documentos, ele vai receber aquela mensagem que vai do Bitrix, mas depois disso ele só vai avançar nas forma manual. Então, vai depender do nosso time avançar esse cliente nas raias. Não vai ser disparado mais nada para esse cliente, só na etapa de envio de documento, entendeu? Porque aí essa automação que tava avançando as raias foi pausada.
+Mateus Alberone Mesquita: Isso. Aí pausou ação.
+João Pedro Borges Martins: Ô, ô, Alone, e quando o cliente pede para falar com um mano, tipo, ele tá no processo lá, ele tá com a Clara, ele pede para falar com o atendente, o mano, sei lá, ele vai para qual departamento?
+Mateus Alberone Mesquita: Só só desp mal cortou aqui, eu não ouvi. Me pede por
+João Pedro Borges Martins: Quando o cliente pede para falar com um humano,
+Mateus Alberone Mesquita: favor
+João Pedro Borges Martins: aí a Clara não consegue resolver o problema dele, ele transfere para qual departamento essa demanda?
+Mateus Alberone Mesquita: de documentação. Aí vai virar audio de
+ 
+ 
+00:30:35
+ 
+João Pedro Borges Martins: É, é porque a gente já criou os departamentos no Hyper com o nome de
+Mateus Alberone Mesquita: formalização.
+João Pedro Borges Martins: formalização. Eh, aí acredito que seria então não renomear documentação, deixa ele como está e transferir, né, ali, colocar o comando na clara para transferir paraa formalização mesmo.
+Mateus Alberone Mesquita: Tá. É, a gente vou ver. É porque às vezes renomear é mais fácil do que do que trocar toda a automação. Se a gente só muda o nome, as automações continuam funcionando. O ideal mesmo, mas a gente vai resolver tá
+João Pedro Borges Martins: Não é, é, eu não sei como como é aí para vocês.
+Mateus Alberone Mesquita: tranquilo.
+João Pedro Borges Martins: Eu, na minha cabeça é tipo assim, também é só mudar o nome na aí onde joga o departamento, mas é isso que avisa pra gente.
+Mateus Alberone Mesquita: Beleza. Não,
+João Pedro Borges Martins: Valeu,
+Mateus Alberone Mesquita: a gente avisa sim. Então, tá bom, galera. Fico depois de retornar escrever holdmap certinho, Jés? Eh, aí eu vou ver lá com os meninos e vou te avisando pra gente desenvolver esses outros agentes, marcando as agendas de para cada um deles, entender melhor os escopos, o que que
+ 
+ 
+00:31:45
+ 
+Jéssica Margaritha Campos de Souza Felipe: Perfeito.
+Mateus Alberone Mesquita: precisa.
+Jéssica Margaritha Campos de Souza Felipe: Combinado, Verô. Qu coisa nós estamos à disposição. Acho que tá claro, né, a relevância e a importância da IAC dentro das nossas operações. E nós hoje nós já temos uma dependência, nós estamos aumentando ainda mais essa dependência. Então assim, qualquer coisa, esse projeto ele é prioridade para nós. Foiado com o Bruno, com o Léo também, com Érica. É o tema que é a única forma que a gente tem para poder fazer hoje, para escalar é cunhar. Então esse projeto é prioridade. Hoje tem o Ja que é líder dessa operação e eu tenho o Felipe e o Breno são os nossos dois jovens aprendizes aqui para poder tocar esse projeto. E aí qualquer coisa você vai sinalizando pra gente aqui também, tá bom?
+Mateus Alberone Mesquita: Combinado,
+Jéssica Margaritha Campos de Souza Felipe: Tá bom. Obrigada, viu?
+Mateus Alberone Mesquita: gente. Tchau.
+Jéssica Margaritha Campos de Souza Felipe: Eu
+João Pedro Borges Martins: Valeu,
+Recuperação de Credito Blips: Ciao.
+João Pedro Borges Martins: Так.
+ 
+ 
+A transcrição foi encerrada após 00:32:39
+
+
+Esta transcrição editável foi gerada por computador e pode conter erros. As pessoas também podem alterar o texto depois que ele for criado.

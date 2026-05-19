@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Squad IAF — Estado e Direção</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --finza-blue: #1A1AFF;
+      --finza-blue-deep: #0F0F8C;
+      --finza-blue-soft: #E8E8FF;
+      --finza-dark: #0A0A2E;
+      --bg: #F2F2F2;
+      --surface: #FFFFFF;
+      --ghost: #C8C8D4;
+      --text: #0A0A2E;
+      --text-muted: #5C5C7A;
+      --border: #D8D8E5;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 18px;
+      line-height: 1.5;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #deck { position: relative; height: 100vh; width: 100vw; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 64px 80px;
+      display: none;
+      flex-direction: column;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .slide.active { display: flex; }
+
+    /* Splash variants */
+    .slide.splash-blue { background: var(--finza-blue); color: #FFFFFF; }
+    .slide.splash-dark { background: var(--finza-dark); color: #FFFFFF; }
+    .slide.splash-blue .iaf-mark,
+    .slide.splash-dark .iaf-mark { color: #FFFFFF; opacity: 0.6; }
+
+    /* IAF top-right marker (mimetiza "finzaday" do PDF) */
+    .iaf-mark {
+      position: absolute;
+      top: 32px;
+      right: 40px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      color: var(--finza-blue);
+      text-transform: lowercase;
+      z-index: 5;
+    }
+    .iaf-mark::before {
+      content: '◆ ';
+      margin-right: 2px;
+    }
+
+    .slide-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    .slide-header { display: flex; flex-direction: column; gap: 4px; }
+
+    /* ─── Typography — Finza ghost-title style ─── */
+    h1 {
+      font-size: 56px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-weight: 300;
+      color: var(--ghost);
+    }
+    h1 .accent { color: var(--finza-blue); font-weight: 700; }
+    .splash-blue h1, .splash-dark h1 { color: #FFFFFF; }
+    .splash-blue h1 .accent, .splash-dark h1 .accent { color: #FFFFFF; font-weight: 800; }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-muted);
+      line-height: 1.35;
+      max-width: 900px;
+    }
+    .splash-blue h2, .splash-dark h2 { color: rgba(255,255,255,0.75); }
+
+    h3 { font-size: 17px; font-weight: 600; }
+    p { font-size: 17px; }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--finza-blue);
+    }
+    .splash-blue .eyebrow, .splash-dark .eyebrow { color: rgba(255,255,255,0.8); }
+    .label-up {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .label-up.accent { color: var(--finza-blue); }
+
+    /* ─── Dotted-bordered card (Finza signature) ─── */
+    .dotted-card {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 14px;
+      padding: 20px 22px;
+    }
+
+    /* ─── Slide 1: Capa ─── */
+    .cover .slide-inner { justify-content: center; align-items: flex-start; gap: 24px; }
+    .cover h1 { font-size: 64px; color: #FFFFFF; font-weight: 300; }
+    .cover h1 .accent { color: #FFFFFF; font-weight: 800; }
+    .cover-sub { font-size: 22px; color: rgba(255,255,255,0.85); font-weight: 400; max-width: 700px; }
+    .cover-diamond {
+      font-size: 36px;
+      color: #FFFFFF;
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+    }
+    .meta-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.25);
+      width: 100%;
+    }
+    .meta-col { display: flex; flex-direction: column; gap: 6px; }
+    .meta-col .label-up { color: rgba(255,255,255,0.7); }
+    .meta-value { font-size: 17px; font-weight: 600; color: #FFFFFF; }
+    .meta-sub { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+    /* ─── Slide 2: Escopo ─── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .pill-list { display: flex; flex-direction: column; gap: 10px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .pill.muted { color: var(--text-muted); border-color: var(--border); background: transparent; }
+    .pill::before {
+      content: '✓';
+      color: var(--finza-blue);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pill.muted::before { content: '—'; color: var(--text-muted); }
+    .scope-foot {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 920px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .col-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      color: var(--text-muted);
+    }
+    .col-label.accent { color: var(--finza-blue); }
+
+    /* ─── Slide 3: Fluxo Finza com plataformas ─── */
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 12px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      min-height: 260px;
+    }
+    .flow-step .num-eye {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--finza-dark);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .flow-step .platform {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--finza-blue);
+      letter-spacing: 0.01em;
+      margin-top: 6px;
+      line-height: 1.15;
+    }
+    .flow-step .meta {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+    .flow-step .desc {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+    .flow-step .desc strong { color: var(--finza-blue); font-weight: 700; }
+    .flow-step.highlight {
+      background: var(--finza-blue);
+      border: 2px solid var(--finza-blue);
+    }
+    .flow-step.highlight .num-eye { background: #FFFFFF; color: var(--finza-blue); }
+    .flow-step.highlight .platform,
+    .flow-step.highlight .meta,
+    .flow-step.highlight .desc { color: #FFFFFF; }
+    .flow-step.highlight .desc strong { color: #FFFFFF; }
+    .flow-banner {
+      background: var(--finza-dark);
+      color: #FFFFFF;
+      padding: 18px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.55;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-top: 4px;
+    }
+    .flow-banner strong { font-weight: 700; color: #FFFFFF; }
+    .flow-foot {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 8px;
+    }
+
+    /* ─── Torre — proposta + objetivos ─── */
+    .torre-proposal {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 14px;
+      padding: 22px 28px;
+    }
+    .torre-proposal .lede {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .torre-proposal .lede strong { color: var(--finza-blue); font-weight: 700; }
+    .torre-proposal .pitch-meta {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .torre-proposal .pitch-meta strong { color: var(--text); font-weight: 700; }
+
+    .section-divider {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--finza-blue);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: -4px;
+    }
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--finza-blue);
+      opacity: 0.3;
+    }
+
+    .objective-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .objective-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--finza-blue);
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .objective-card .num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--finza-blue);
+    }
+    .objective-card .title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+    }
+    .objective-card .detail {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* ─── Torre — 7 sistemas principais ─── */
+    .system-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .system-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .system-card .head {
+      background: var(--finza-blue);
+      color: #FFFFFF;
+      padding: 9px 13px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .system-card .head .num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      opacity: 0.75;
+    }
+    .system-card .head .name {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .system-card .body {
+      padding: 11px 13px;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--text);
+      flex: 1;
+    }
+    .system-card .body strong { color: var(--finza-blue); font-weight: 700; }
+    .system-card.wide { grid-column: span 2; }
+
+    /* ─── Torre — capacidades técnicas (stats + listas) ─── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat .num {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--finza-blue);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .stat .label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .stat .sub { font-size: 10px; color: var(--text-muted); line-height: 1.35; }
+
+    .cap-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .cap-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .cap-card .label-up { color: var(--finza-blue); margin-bottom: 6px; display: block; }
+    .cap-card .items { font-size: 11.5px; color: var(--text); line-height: 1.55; }
+    .cap-card .items strong { font-weight: 600; color: var(--finza-blue); }
+
+    .pill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill-tags .pt {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      background: var(--finza-blue-soft);
+      color: var(--finza-blue);
+      border-radius: 999px;
+    }
+
+    /* ─── Diferenciais e casos de uso ─── */
+    .diff-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+    .diff-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 18px;
+    }
+    .diff-list li {
+      padding: 3px 0;
+      font-size: 12px;
+      line-height: 1.5;
+      display: flex;
+      gap: 8px;
+      color: var(--text);
+    }
+    .diff-list li::before {
+      content: '▸';
+      color: var(--finza-blue);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .diff-list li strong { color: var(--finza-blue); font-weight: 700; }
+
+    /* ─── Slide: Torre de Controle — Problemas mapeados ─── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .problem-card {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .problem-card .tag-num {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--finza-blue);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      padding: 3px 9px;
+      border-radius: 3px;
+      margin-bottom: 2px;
+    }
+    .problem-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--finza-blue);
+      line-height: 1.25;
+    }
+    .problem-card p {
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .problem-card p strong { color: var(--finza-blue); font-weight: 700; }
+    .problem-card .proposta {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+      margin-top: auto;
+    }
+    .problem-card .proposta strong { color: var(--finza-blue); font-weight: 700; }
+    .problem-card .proposta::before {
+      content: '→ ';
+      color: var(--finza-blue);
+      font-weight: 700;
+    }
+    .problem-foot {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 8px;
+    }
+
+    /* ─── Slide 4: Torre de Controle ─── */
+    .torre-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .torre-text { font-size: 16px; line-height: 1.65; color: var(--text); }
+    .stack-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .stack-pills .stack {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      background: var(--finza-blue-soft);
+      color: var(--finza-blue);
+      border-radius: 999px;
+    }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .module-card {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.4;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .module-card .icon { font-size: 16px; line-height: 1; }
+
+    /* ─── Slide Esperanza (v8): hero escuro + fases + funções ─── */
+    .esp-hero {
+      background: var(--finza-dark);
+      color: #FFFFFF;
+      border-radius: 14px;
+      padding: 20px 26px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+      box-shadow: 0 6px 24px rgba(10, 10, 46, 0.18);
+    }
+    .esp-hero .esp-badge {
+      background: var(--finza-blue);
+      color: #FFFFFF;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-align: center;
+      line-height: 1.1;
+    }
+    .esp-hero .esp-badge small {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      font-weight: 600;
+      opacity: 0.7;
+      margin-bottom: 4px;
+    }
+    .esp-hero .hero-body h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 5px;
+      letter-spacing: 0.01em;
+    }
+    .esp-hero .hero-body p {
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.82);
+    }
+    .esp-hero .hero-body p strong {
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    .esp-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 2px;
+    }
+    .esp-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .esp-section-label.accent { color: var(--finza-blue); }
+    .esp-section-label.accent::after { background: var(--finza-blue); opacity: 0.3; }
+
+    .esp-phases {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .esp-phase {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--finza-dark);
+      border-radius: 8px;
+      padding: 11px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .esp-phase.featured {
+      border-top-color: var(--finza-blue);
+      background: var(--finza-blue-soft);
+    }
+    .esp-phase .ph-range {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .esp-phase.featured .ph-range { color: var(--finza-blue); }
+    .esp-phase h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+    }
+    .esp-phase p {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+    .esp-phase .ph-events {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-top: 4px;
+    }
+    .esp-phase .ph-events li {
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: var(--text-muted);
+      display: flex;
+      gap: 7px;
+      align-items: flex-start;
+    }
+    .esp-phase .ph-events li b {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 9.5px;
+      letter-spacing: 0.06em;
+      min-width: 36px;
+      flex-shrink: 0;
+      padding-top: 1px;
+      text-transform: uppercase;
+    }
+    .esp-phase.featured .ph-events li b { color: var(--finza-blue); }
+
+    .esp-funcs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px 10px;
+    }
+    .esp-func {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text);
+      padding: 2px 0;
+    }
+    .esp-func::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      background: var(--finza-blue);
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .esp-gap-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .esp-gap-mini {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--warning);
+      border-radius: 6px;
+      padding: 10px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .esp-gap-mini .gap-tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--warning);
+      letter-spacing: 0.18em;
+    }
+    .esp-gap-mini h4 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+    }
+    .esp-gap-mini p {
+      font-size: 10.5px;
+      line-height: 1.45;
+      color: var(--text-muted);
+    }
+
+    /* ─── Slide: Tudo que foi feito até aqui ─── */
+    .done-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .done-col {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .done-col-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .done-col-num {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: var(--finza-blue);
+    }
+    .done-col-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+    .done-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .done-list li {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .done-list li::before {
+      content: '✓';
+      color: #FFFFFF;
+      background: var(--success);
+      font-size: 10px;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+    .done-footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .done-stamp {
+      background: var(--finza-dark);
+      color: #FFFFFF;
+      padding: 12px 26px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .done-stamp::before {
+      content: '✓';
+      background: var(--success);
+      color: #FFFFFF;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* ─── Slide 6: Plano herdado ─── */
+    .decision-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .decision-card {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .decision-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--finza-blue);
+      color: #FFFFFF;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .decision-card h3 { font-size: 21px; color: var(--finza-blue); font-weight: 700; }
+    .decision-card p { font-size: 13px; line-height: 1.55; color: var(--text); }
+    .decision-card p strong { color: var(--finza-blue); }
+    .banner-accent {
+      background: var(--finza-blue);
+      color: #FFFFFF;
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ─── Slide 7: Sprints ─── */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+    .sprint-node {
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .sprint-node .status-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .sprint-node .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .sprint-node.done { border-style: solid; border-color: var(--success); }
+    .sprint-node.done .dot { background: var(--success); }
+    .sprint-node.done .status-row { color: var(--success); }
+    .sprint-node.active { border-style: solid; border-color: var(--warning); background: rgba(245, 158, 11, 0.06); }
+    .sprint-node.active .dot { background: var(--warning); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25); }
+    .sprint-node.active .status-row { color: #B45309; }
+    .sprint-node.pending .dot { background: #FFFFFF; border: 2px solid var(--border); }
+    .sprint-node.pending .status-row { color: var(--text-muted); }
+    .sprint-num { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.14em; }
+    .sprint-name { font-size: 13px; font-weight: 700; line-height: 1.2; color: var(--finza-blue); }
+    .sprint-dates { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    .sprint-desc { font-size: 10px; color: var(--text-muted); line-height: 1.4; margin-top: 2px; }
+    .sprint-callout {
+      background: var(--surface);
+      border-left: 4px solid var(--finza-blue);
+      padding: 14px 22px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 6px;
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .sprint-callout strong { color: var(--finza-blue); font-weight: 700; }
+
+    /* ─── Slide 8: Pendências ─── */
+    .pending-list { display: flex; flex-direction: column; gap: 10px; }
+    .pending-item {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 16px;
+      background: var(--surface);
+      border: 2px dotted var(--finza-blue);
+      border-radius: 10px;
+      padding: 12px 20px;
+      align-items: start;
+    }
+    .pending-num-eye {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--finza-dark);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .pending-body h3 { font-size: 15px; margin-bottom: 3px; font-weight: 700; color: var(--text); }
+    .pending-body p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .pending-action {
+      font-size: 12px;
+      color: var(--finza-blue);
+      margin-top: 4px;
+      font-weight: 600;
+      display: flex;
+      gap: 6px;
+    }
+    .pending-action::before { content: '→'; font-weight: 700; }
+
+    /* ─── Slide 9: Riscos ─── */
+    .risk-wrap {
+      border: 2px dotted var(--finza-blue);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .risk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .risk-table th {
+      text-align: left;
+      padding: 12px 18px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--finza-blue);
+      font-weight: 700;
+      background: var(--finza-blue-soft);
+      border-bottom: 1px solid var(--finza-blue);
+    }
+    .risk-table td {
+      padding: 14px 18px;
+      border-bottom: 1px dashed var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .risk-table tr:last-child td { border-bottom: none; }
+    .risk-table td:first-child { font-weight: 600; color: var(--text); }
+    .risk-table td:nth-child(2) { color: var(--text-muted); }
+
+    /* ─── Slide 10: Pedido + Fechamento (dark splash) ─── */
+    .ask-block { display: flex; flex-direction: column; gap: 20px; }
+    .ask-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .ask-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dotted rgba(255,255,255,0.4);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .ask-card .check {
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 1;
+      background: var(--finza-blue);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ask-card h3 { font-size: 13px; font-weight: 700; color: #FFFFFF; }
+    .ask-card p { font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.78); }
+    .ask-actions {
+      background: rgba(255,255,255,0.04);
+      border-left: 3px solid var(--finza-blue);
+      border-radius: 4px;
+      padding: 14px 22px;
+    }
+    .ask-actions .label-up {
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 10px;
+    }
+    .ask-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+    }
+    .ask-list li {
+      padding: 3px 0;
+      font-size: 13px;
+      display: flex;
+      gap: 10px;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.9);
+    }
+    .ask-list li::before { content: '→'; color: var(--finza-blue); font-weight: 700; flex-shrink: 0; }
+    .next-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .ask-list-vertical {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ask-list-vertical li {
+      padding: 2px 0;
+      font-size: 13px;
+      display: flex;
+      gap: 10px;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.92);
+    }
+    .ask-list-vertical li::before { content: '→'; color: var(--finza-blue); font-weight: 700; flex-shrink: 0; }
+    .closing-line {
+      margin-top: 8px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .closing-line .headline {
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: #FFFFFF;
+    }
+    .closing-line .headline .accent { color: #FFFFFF; font-weight: 700; }
+    .closing-line .sub { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+    /* ─── Slide Próximos passos: bloco de prioridade destacado ─── */
+    .ask-priority {
+      background: var(--finza-blue);
+      border-radius: 14px;
+      padding: 18px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 10px 28px rgba(26, 26, 255, 0.28);
+      position: relative;
+    }
+    .priority-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .priority-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+    .priority-pin {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--finza-blue);
+      background: #FFFFFF;
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+    .priority-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .priority-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .priority-tag {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.65);
+    }
+    .priority-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.25;
+    }
+    .priority-card p {
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.88);
+    }
+    .priority-card p strong { color: #FFFFFF; font-weight: 700; }
+    .priority-card .status {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      background: rgba(255,255,255,0.18);
+      padding: 3px 8px;
+      border-radius: 4px;
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+
+    /* ─── HUD: counter + hint ─── */
+    .hud {
+      position: fixed;
+      bottom: 22px;
+      right: 32px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      z-index: 10;
+      font-variant-numeric: tabular-nums;
+    }
+    .hud.hidden { display: none; }
+    .hud .counter { padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; }
+    .splash-dark + .hud .counter,
+    .slide.splash-dark.active ~ .hud .counter {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+      color: #FFFFFF;
+    }
+    .hint {
+      position: fixed;
+      bottom: 22px;
+      left: 32px;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      z-index: 10;
+      opacity: 0.55;
+    }
+    .hint.hidden { display: none; }
+
+    /* ─── Mouse navigation arrows ─── */
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid var(--finza-blue);
+      color: var(--finza-blue);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      font-family: inherit;
+      line-height: 1;
+      padding: 0;
+      z-index: 20;
+      opacity: 0.55;
+      transition: opacity 0.18s, transform 0.18s, background 0.18s;
+      box-shadow: 0 4px 16px rgba(10, 10, 46, 0.12);
+    }
+    .nav-arrow:hover {
+      opacity: 1;
+      background: var(--finza-blue);
+      color: #FFFFFF;
+      transform: translateY(-50%) scale(1.06);
+    }
+    .nav-arrow:focus-visible {
+      opacity: 1;
+      outline: 3px solid var(--finza-blue);
+      outline-offset: 4px;
+    }
+    .nav-arrow.left { left: 24px; }
+    .nav-arrow.right { right: 24px; }
+    .nav-arrow.hidden { display: none; }
+    .nav-arrow .chev { display: block; transform: translateY(-2px); }
+
+    /* Arrows on dark slides */
+    body.slide-is-dark .nav-arrow {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.5);
+      color: #FFFFFF;
+    }
+    body.slide-is-dark .nav-arrow:hover {
+      background: #FFFFFF;
+      color: var(--finza-blue);
+    }
+    body.slide-is-dark .hud .counter {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.25);
+      color: #FFFFFF;
+    }
+    body.slide-is-dark .hint { color: rgba(255,255,255,0.5); }
+
+    /* ─── Overview grid ─── */
+    #overview {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 46, 0.96);
+      z-index: 100;
+      padding: 60px 48px;
+      overflow: auto;
+      display: none;
+    }
+    #overview.open { display: block; }
+    .overview-title {
+      max-width: 1400px;
+      margin: 0 auto 28px;
+      color: #FFFFFF;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.75;
+    }
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .thumb {
+      aspect-ratio: 16 / 10;
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+      font-family: inherit;
+      text-align: left;
+    }
+    .thumb:hover, .thumb:focus { border-color: var(--finza-blue); outline: none; transform: translateY(-2px); }
+    .thumb.current { border-color: var(--finza-blue); }
+    .thumb .thumb-num { font-size: 10px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.14em; }
+    .thumb .thumb-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+
+    :focus-visible { outline: 3px solid var(--finza-blue); outline-offset: 4px; border-radius: 2px; }
+
+    @media (max-width: 1280px) {
+      .slide { padding: 48px 56px; }
+      h1 { font-size: 44px; }
+      .cover h1 { font-size: 52px; }
+      .nav-arrow { width: 44px; height: 44px; font-size: 24px; }
+      .nav-arrow.left { left: 12px; }
+      .nav-arrow.right { right: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main id="deck">
+
+    <!-- ============== Slide 1 — Capa (splash azul Finza) ============== -->
+    <section class="slide cover splash-blue active" data-title="Capa" aria-labelledby="s1-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="cover-diamond">◆ FINZA · TECNOLOGIA · IAF</div>
+        <h1 id="s1-title">Squad IAF<br><span class="accent">Estado e Direção</span></h1>
+        <p class="cover-sub">Visão consolidada após 1 semana como Supervisor</p>
+        <div class="meta-row">
+          <div class="meta-col">
+            <span class="label-up">De</span>
+            <span class="meta-value">João Vinícius</span>
+            <span class="meta-sub">Supervisor IAF</span>
+          </div>
+          <div class="meta-col">
+            <span class="label-up">Para</span>
+            <span class="meta-value">Leonardo Caixeta</span>
+            <span class="meta-sub">CTO Finza</span>
+          </div>
+          <div class="meta-col">
+            <span class="label-up">Data</span>
+            <span class="meta-value">13 de maio de 2026</span>
+            <span class="meta-sub">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 2 — Escopo ============== -->
+    <section class="slide" data-title="O que cobre" aria-labelledby="s2-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s2-title">O que esta conversa <span class="accent">cobre</span></h1>
+          <h2>E o que ainda não.</h2>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="col-label accent">Cobre</div>
+            <div class="pill-list">
+              <span class="pill">Torre de Controle</span>
+              <span class="pill">Problemas técnicos que já mapeei na Torre</span>
+              <span class="pill">Pendências e contradições que já identifiquei</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-label">Não cobre hoje</div>
+            <div class="pill-list">
+              <span class="pill muted">Detalhe técnico dos demais agentes Finza além da Esperanza</span>
+              <span class="pill muted">Progressso até aqui e o que falta</span>
+              <span class="pill muted">Métricas operacionais (sem dado consolidado ainda)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 3 — Fluxo Finza com plataformas (era 3+4) ============== -->
+    <section class="slide" data-title="Fluxo + plataformas" aria-labelledby="s3-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s3-title">Plataformas Finza, <span class="accent">em uma linha</span></h1>
+          <h2>5 plataformas no funil.</h2>
+        </div>
+        <div class="flow">
+          <div class="flow-step">
+            <span class="num-eye">1</span>
+            <span class="platform">Finza Start</span>
+            <span class="meta">Etapa 1 · Originação<br>TL Marco</span>
+            <span class="desc"><strong>Portal do cliente Finza</strong> Representante solicita crédito para um lead, simula financiamento, envia proposta, coleta assinatura + prova de vida, vincula neurônio à máquina.</span>
+          </div>
+          <div class="flow-step">
+            <span class="num-eye">2</span>
+            <span class="platform">Falcon</span>
+            <span class="meta">Etapa 2 · Análise de crédito<br>TL Girlan</span>
+            <span class="desc"><strong>Motor de Crédito. </strong> Avalia riscos, libera ou nega crédito. Sustenta toda a originação — qualquer crédito Finza passa por aqui.</span>
+          </div>
+          <div class="flow-step">
+            <span class="num-eye">3</span>
+            <span class="platform">Veritas</span>
+            <span class="meta">Etapa 3 · KYC + Compliance<br>TL Girlan</span>
+            <span class="desc">Entra <strong>após aprovação do Falcon</strong>. Documentos, biometria, antifraude, due diligence.</span>
+          </div>
+          <div class="flow-step">
+            <span class="num-eye">4</span>
+            <span class="platform">Módulo Financeiro</span>
+            <span class="meta">Etapa 4 · Backoffice cobrança<br>TL Marco</span>
+            <span class="desc">Gera títulos, parcelas, boletos. Integra com <strong>FIDCs e bancarizadores</strong>. Fonte da verdade financeira. <strong>A Torre se alimenta da base fria do MF</strong> para monitorar inadimplência.</span>
+          </div>
+          <div class="flow-step highlight">
+            <span class="num-eye">5</span>
+            <span class="platform">Torre de Controle</span>
+            <span class="meta">Etapa 5 · Cobrança<br>Sob a IAF</span>
+            <span class="desc"><strong>Único sistema sob a IAF.</strong> Onde a Esperanza vive, onde as réguas são configuradas, onde as campanhas HyperFlow (API oficial Meta) são disparadas. Atua a partir da inadimplência.</span>
+          </div>
+        </div>
+        <div class="flow-banner">
+          <span><strong>O time de IA desenvolve a plataforma da etapa 5 integrando com outras plataformas.</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 4 — Torre: proposta + objetivos ============== -->
+    <section class="slide" data-title="Torre — proposta" aria-labelledby="s4-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s4-title">Torre de <span class="accent">Controle</span></h1>
+          <h2>Sistema operacional da cobrança Finza.</h2>
+        </div>
+
+        <div class="torre-proposal">
+          <p class="lede">Plataforma de cobrança digital end-to-end: <strong>réguas, campanhas, filtros, ações, atribuição e IA</strong> orquestrada pelo time de <strong>cobrança</strong> como ferramenta. Opera de <strong>milhares de contatos</strong> sem crescer o time, com foco no WhatsApp e possibilitando integração com demais canais de comunição.</p>
+          <div class="pitch-meta">
+            <span><strong>Title-centric</strong> — toda decisão ancorada no título</span>
+            <span><strong>Multi-tenant</strong> — Em desenvolvimento</span>
+            <span><strong>IA com aprovação</strong> — humano aprova as decisões</span>
+          </div>
+        </div>
+
+        <div class="section-divider">Objetivos estratégicos · 3</div>
+        <div class="objective-grid">
+          <div class="objective-card">
+            <span class="num">01</span>
+            <span class="title">Maximizar recuperação de inadimplência</span>
+            <span class="detail">Réguas progressivas + dedup inteligente + atribuição de pagamento.</span>
+          </div>
+          <div class="objective-card">
+            <span class="num">02</span>
+            <span class="title">Reduzir custo de tempo por contato</span>
+            <span class="detail">Multi-canal escalonado (Email/SMS antes do WhatsApp; ligação só em casos críticos).</span>
+          </div>
+          <div class="objective-card">
+            <span class="num">03</span>
+            <span class="title">Visibilidade total da operação</span>
+            <span class="detail">Dashboard 5 abas (Executive, Operational, Workflows, AI, Attribution) + relatórios semanais por email.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 5 — Torre: problemas mapeados ============== -->
+    <section class="slide" data-title="Torre — problemas" aria-labelledby="s7p-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s7p-title">Torre — <span class="accent">problemas mapeados</span></h1>
+        </div>
+        <div class="problem-grid">
+          <div class="problem-card">
+            <span class="tag-num">P01</span>
+            <h3>Ambientes de teste</h3>
+            <p>Hoje só temos <strong>produção</strong> + um banco de dados de dev usado como "homologação" pelo próprio desenvolvedor.</p>
+            <span class="proposta">Viabilizar <strong>3 ambientes reais</strong>: desenvolvimento, homologação e produção.</span>
+          </div>
+          <div class="problem-card">
+            <span class="tag-num">P02</span>
+            <h3>Backend todo em Supabase Functions</h3>
+            <p>Telas levam <strong>5–10 segundos</strong> para carregar. Regras invisíveis, endpoints fantasmas, ausência de boas práticas.</p>
+            <span class="proposta">Refatorar para <strong>backend dedicado</strong>. Recomendação: <strong>FastAPI</strong>.</span>
+          </div>
+          <div class="problem-card">
+            <span class="tag-num">P03</span>
+            <h3>Sem metodologia de versionamento</h3>
+            <p>Não há padrão de branching, code review ou versionamento de código entre os integrantes do time.</p>
+            <span class="proposta">Nessa questão já comecei uma força tarefa com o time e apoio do Joao Lucas.</span>
+          </div>
+          <div class="problem-card">
+            <span class="tag-num">P04</span>
+            <h3>Sem QA — dev testa o próprio código</h3>
+            <p>Muita coisa sobe para produção testada apenas pelo próprio dev. <strong>Sem prazo de homologação formal.</strong></p>
+            <span class="proposta">Recomendação: incluir o <strong>solicitante da demanda como QA</strong>. Se não escalar, podemos estudar a viabilidade de um agente de IA QA ou um QA humano dedicado.</span>
+          </div>
+          <div class="problem-card">
+            <span class="tag-num">P05</span>
+            <h3>Sem priorização de negócio</h3>
+            <p>Solicitações chegam sem ranking — o time decide ordem por proximidade ou ruído, não por prioridade do negócio.</p>
+            <span class="proposta">Ritual semanal de priorização com Jéssica + Herivelton — canal único de demanda relacionadas a melhorias.</span>
+          </div>
+          <div class="problem-card">
+            <span class="tag-num">P06</span>
+            <h3>Múltiplos canais para incidentes</h3>
+            <p>Demandas e incidentes chegam por <strong>WhatsApp, Discord, Bitrix, Google Chat</strong> — e até pessoalmente, com o solicitante indo na mesa do responsável. Sem rastreio, sem fila, sem priorização.</p>
+            <span class="proposta">Padronizar <strong>Bitrix como canal único</strong> — automação já existente cria a demanda no Jira refinada por agente de IA.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 6 — Esperanza (v8: hero escuro + fases + funções) ============== -->
+    <section class="slide" data-title="Esperanza" aria-labelledby="s5-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s5-title">Esperanza, <span class="accent">em produção</span></h1>
+          <h2>Agente IA que conduz a régua de cobrança Finza no WhatsApp.</h2>
+        </div>
+
+        <div class="esp-hero">
+          <div class="esp-badge"><small>Modelo</small>Cobrança<br>4.0</div>
+          <div class="hero-body">
+            <h3>O que é Cobrança 4.0</h3>
+            <p><strong>Funil de CRM</strong> em que o time de cobrança faz o <strong>controle dos contratos com débitos em aberto</strong>, organizando a atuação do time humano por estágio. O funil é <strong>automatizado por fluxos no Bitrix e no n8n</strong> — que movem o contato entre fases, disparam comunicações e abrem tarefas. A Esperanza é a camada de IA que <strong>conversa, negocia e registra</strong> dentro dessa régua, atuando da cobrança amigável até a notificação extrajudicial.</p>
+          </div>
+        </div>
+
+        <div class="esp-section-label accent">Fases da régua que a Esperanza opera · fluxo Blips &amp; Ideal</div>
+        <div class="esp-phases">
+          <div class="esp-phase">
+            <span class="ph-range">D-10 → D-1 · Preventivo</span>
+            <h4>Pré-vencimento</h4>
+            <ul class="ph-events">
+              <li><b>D-10</b>1º aviso de vencimento — lembrete amigável</li>
+              <li><b>D-5</b>2º aviso de vencimento — reforço</li>
+              <li><b>D-1</b>Aviso véspera — foco em pagamento espontâneo</li>
+            </ul>
+          </div>
+          <div class="esp-phase">
+            <span class="ph-range">D0 → D+15 · Vencimento + bloqueio</span>
+            <h4>Bloqueio e 1ª negativação</h4>
+            <ul class="ph-events">
+              <li><b>D0</b>Vencimento</li>
+              <li><b>D+7</b>Bloqueio do equipamento</li>
+              <li><b>D+8 → D+10</b>Janela de desbloqueio em confiança (até 3d)</li>
+              <li><b>D+11</b>Bloqueio definitivo</li>
+              <li><b>D+15</b>Negativação Serasa — contratos ≤ 6 meses</li>
+            </ul>
+          </div>
+          <div class="esp-phase featured">
+            <span class="ph-range">D+16 → D+61 · Cobrança 4.0</span>
+            <h4>Negociação ativa</h4>
+            <ul class="ph-events">
+              <li><b>D+16</b>Notificação extrajudicial (online)</li>
+              <li><b>D+31</b>Negativação Serasa — contratos &gt; 7 meses</li>
+              <li><b>D+46</b>Notificação extrajudicial (correios)</li>
+              <li><b>D+61</b>Recompra FIDC</li>
+            </ul>
+          </div>
+          <div class="esp-phase featured">
+            <span class="ph-range">D+90 → D+180 · Cancelamento + retirada</span>
+            <h4>Cancelamento irrevogável</h4>
+            <ul class="ph-events">
+              <li><b>D+90</b>Cancelamento definitivo irrevogável</li>
+              <li><b>D+91</b>Liquidação (SLA 10d) + protesto em cartório</li>
+              <li><b>D+101</b>Retirada do equipamento (SLA 20d)</li>
+              <li><b>D+120</b>Deadline do processo</li>
+              <li><b>D+180</b>Contencioso (em avaliação)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="esp-section-label accent">O que a Esperanza faz hoje</div>
+        <div class="esp-funcs">
+          <div class="esp-func">Identifica o cliente pelo telefone ou CPF/CNPJ</div>
+          <div class="esp-func">Consulta dívida, contratos e títulos em tempo real</div>
+          <div class="esp-func">Verifica blocklist antes de iniciar a conversa</div>
+          <div class="esp-func">Propõe parcelamento dentro dos limites da operação</div>
+          <div class="esp-func">Gera link de PIX e boleto sob demanda</div>
+          <div class="esp-func">Registra promessa de pagamento (valor + data)</div>
+          <div class="esp-func">Avança o contato pelos estágios do funil</div>
+          <div class="esp-func">Escalona para humano em casos previstos</div>
+        </div>
+
+        <div class="esp-section-label">Gaps de qualidade — ainda na mesa</div>
+        <div class="esp-gap-row">
+          <div class="esp-gap-mini">
+            <span class="gap-tag">E01</span>
+            <h4>Delírio em conversas longas</h4>
+            <p>Perde contexto e gera respostas inconsistentes em diálogos extensos.</p>
+          </div>
+          <div class="esp-gap-mini">
+            <span class="gap-tag">E02</span>
+            <h4>Cobranças indevidas</h4>
+            <p>Vínculo título ↔ contrato falha — cobra valor ou pessoa errada.</p>
+          </div>
+          <div class="esp-gap-mini">
+            <span class="gap-tag">E03</span>
+            <h4>Informações imprecisas</h4>
+            <p>Afirma datas/valores/status que não batem com a base — alucinação.</p>
+          </div>
+          <div class="esp-gap-mini">
+            <span class="gap-tag">E04</span>
+            <h4>Workflow &gt; 1m30s</h4>
+            <p>Tempo longo quebra a sensação de conversa em tempo real.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 7 — Tudo que foi feito até aqui ============== -->
+    <section class="slide" data-title="Tudo que foi feito até aqui" aria-labelledby="s7done-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s7done-title">Tudo que foi feito <span class="accent">até aqui</span></h1>
+          <h2>Uma semana como Supervisor IAF — discovery, time e estruturação.</h2>
+        </div>
+
+        <div class="done-grid">
+          <div class="done-col">
+            <div class="done-col-head">
+              <span class="done-col-num">01</span>
+              <span class="done-col-title">Discovery &amp; Diagnóstico</span>
+            </div>
+            <ul class="done-list">
+              <li>Levantamento das tecnologias e stack atual</li>
+              <li>Entendimento do negócio, soluções e objetivos</li>
+              <li>Mapeamento dos processos internos de desenvolvimento</li>
+              <li>Identificação das pessoas-chave do squad e stakeholders</li>
+              <li>Mapeamento de gargalos e pontos de atenção operacionais</li>
+            </ul>
+          </div>
+
+          <div class="done-col">
+            <div class="done-col-head">
+              <span class="done-col-num">02</span>
+              <span class="done-col-title">Time &amp; Cultura</span>
+            </div>
+            <ul class="done-list">
+              <li>1v1 com cada integrante do squad</li>
+              <li>Treinamento em boas práticas de desenvolvimento</li>
+              <li>Orientação no uso correto do Jira (corrigindo vícios)</li>
+            </ul>
+          </div>
+
+          <div class="done-col">
+            <div class="done-col-head">
+              <span class="done-col-num">03</span>
+              <span class="done-col-title">Execução &amp; Estrutura</span>
+            </div>
+            <ul class="done-list">
+              <li>Distribuição de demandas entre os times</li>
+              <li>Estruturação dos processos internos do squad IAF</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="done-footer">
+          <span class="done-stamp">10 frentes concluídas em 1 semana</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Slide 8 — Próximos passos (dark splash) ============== -->
+    <section class="slide splash-dark" data-title="Próximos passos" aria-labelledby="s7-title">
+      <span class="iaf-mark">iaf</span>
+      <div class="slide-inner">
+        <div class="slide-header">
+          <h1 id="s7-title">Próximos <span class="accent">passos</span></h1>
+        </div>
+        <div class="ask-block">
+          <div class="ask-priority">
+            <div class="priority-head">
+              <span class="priority-label">Foco estratégico · próximas frentes</span>
+              <span class="priority-pin">Tema recorrente</span>
+            </div>
+            <div class="priority-cards">
+              <div class="priority-card">
+                <span class="priority-tag">01 · REPARCELAMENTO</span>
+                <h3>Automatizar o reparcelamento</h3>
+                <p>Hoje <strong>100% manual</strong> dentro do time de cobrança. Levantar fluxo atual, regras e pontos de automação — <strong>alto impacto operacional</strong>.</p>
+                <span class="status">Descoberta + Refinamento</span>
+              </div>
+              <div class="priority-card">
+                <span class="priority-tag">02 · RENEGOCIAÇÃO</span>
+                <h3>Automatizar a renegociação assistida por solução já existente</h3>
+                <p>Também manual hoje, mas <strong>já existe algumas soluções  mapeadas.</strong> Necessário reavaliar aderência, integração e ganho real para o time.</p>
+                <span class="status">Avaliação + Ajustes</span>
+              </div>
+            </div>
+          </div>
+          <div class="next-cols">
+            <div class="ask-actions">
+              <div class="label-up">Squad e processo · esta semana</div>
+              <ul class="ask-list-vertical">
+                <li>Lista de incidentes na semana</li>
+                <li>Treinamento com time sobre boas praticas de desenvolvimento</li>
+                <li>Indice de conclusão de casos da IA Finza</li>
+                <li>Reunião com Jéssica para entender dores e prioridades</li>
+              </ul>
+            </div>
+            <div class="ask-actions">
+              <div class="label-up">Torre · destravar problemas técnicos</div>
+              <ul class="ask-list-vertical">
+                <li>Levantar viabilidade do refator de backend</li>
+                <li>Definir ambientes (dev / homologação / produção)</li>
+                <li>Levantar lista de todas melhorias priorizadas por tempo e impacto</li>
+              </ul>
+            </div>
+          </div>
+          <div class="closing-line">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navigation -->
+  <button class="nav-arrow left hidden" type="button" aria-label="Slide anterior"><span class="chev">‹</span></button>
+  <button class="nav-arrow right" type="button" aria-label="Próximo slide"><span class="chev">›</span></button>
+
+  <div class="hud hidden" aria-hidden="true"><span class="counter">1 / 8</span></div>
+  <div class="hint hidden" aria-hidden="true">← → · espaço · ESC overview · F fullscreen</div>
+
+  <div id="overview" role="dialog" aria-label="Visão geral dos slides" aria-hidden="true">
+    <div class="overview-title">Visão geral · clique para abrir · ESC fecha</div>
+    <div class="overview-grid"></div>
+  </div>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const hud = document.querySelector('.hud');
+      const hint = document.querySelector('.hint');
+      const counter = document.querySelector('.hud .counter');
+      const overview = document.getElementById('overview');
+      const overviewGrid = overview.querySelector('.overview-grid');
+      const arrowLeft = document.querySelector('.nav-arrow.left');
+      const arrowRight = document.querySelector('.nav-arrow.right');
+      const total = slides.length;
+      let current = 0;
+      let thumbs = [];
+
+      function buildOverview() {
+        slides.forEach((slide, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'thumb';
+          btn.type = 'button';
+          const title = slide.dataset.title || ('Slide ' + (i + 1));
+          btn.innerHTML =
+            '<div class="thumb-num">' + String(i + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0') + '</div>' +
+            '<div class="thumb-title">' + title + '</div>';
+          btn.addEventListener('click', () => { goTo(i); closeOverview(); });
+          overviewGrid.appendChild(btn);
+          thumbs.push(btn);
+        });
+      }
+
+      function goTo(n) {
+        current = Math.max(0, Math.min(total - 1, n));
+        slides.forEach((s, i) => s.classList.toggle('active', i === current));
+        counter.textContent = (current + 1) + ' / ' + total;
+
+        // Hide HUD only on cover (slide 0)
+        const isCover = current === 0;
+        hud.classList.toggle('hidden', isCover);
+        hint.classList.toggle('hidden', isCover);
+
+        // Hide left arrow on cover, right arrow on last slide
+        arrowLeft.classList.toggle('hidden', isCover);
+        arrowRight.classList.toggle('hidden', current === total - 1);
+
+        // Toggle body class for dark-slide styling (counter/arrows adapt)
+        const activeSlide = slides[current];
+        document.body.classList.toggle('slide-is-dark',
+          activeSlide.classList.contains('splash-dark') || activeSlide.classList.contains('splash-blue'));
+
+        thumbs.forEach((t, i) => t.classList.toggle('current', i === current));
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+      function openOverview() {
+        overview.classList.add('open');
+        overview.setAttribute('aria-hidden', 'false');
+        const target = thumbs[current] || thumbs[0];
+        if (target) target.focus();
+      }
+      function closeOverview() {
+        overview.classList.remove('open');
+        overview.setAttribute('aria-hidden', 'true');
+      }
+      function isOverviewOpen() { return overview.classList.contains('open'); }
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      arrowLeft.addEventListener('click', prev);
+      arrowRight.addEventListener('click', next);
+
+      document.addEventListener('keydown', (e) => {
+        if (isOverviewOpen()) {
+          if (e.key === 'Escape') { e.preventDefault(); closeOverview(); }
+          return;
+        }
+        switch (e.key) {
+          case 'ArrowRight':
+          case ' ':
+          case 'PageDown':
+            e.preventDefault(); next(); break;
+          case 'ArrowLeft':
+          case 'PageUp':
+            e.preventDefault(); prev(); break;
+          case 'Home':
+            e.preventDefault(); goTo(0); break;
+          case 'End':
+            e.preventDefault(); goTo(total - 1); break;
+          case 'Escape':
+            e.preventDefault(); openOverview(); break;
+          case 'f':
+          case 'F':
+            e.preventDefault(); toggleFullscreen(); break;
+        }
+      });
+
+      buildOverview();
+      goTo(0);
+    })();
+  </script>
+</body>
+</html>

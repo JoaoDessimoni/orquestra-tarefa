@@ -1,0 +1,132 @@
+﻿Área de IA e Automações
+Documento estruturado para identificação das prioridades de atuação entre IA, Automações e Operações Finza.
+
+Elaborado em: 18/05/2026 
+Agentes de IA
+Esperanza
+Agente responsável pela operação de cobrança das carteiras Blips, Ideal e Finza, atuando através dos canais oficiais Blips e Finza.
+Seu foco é automatizar negociações, oferecer opções de renegociação e apoiar o fluxo operacional da recuperação de crédito.
+
+
+Próximos passos:
+1. Conclusão da implementação da renegociação dos valores vencidos
+Necessário homologar, em conjunto e em fórum específico, as renegociações realizadas com transferência para atendimento humano.
+Após validação e conformidade operacional, disponibilizar à IA a possibilidade de imputar diretamente a renegociação no Módulo Financeiro, sem necessidade de transferência para um operador humano. 
+
+2. Transferência para atendimento humano
+
+ Mapear o volume de transferências por departamento e por agente, com objetivo de identificar:
+   * Volume operacional;
+   * Dimensionamento das equipes;
+   * Possíveis gargalos no fluxo de atendimento.
+
+      3. Criação de tabulações automáticas via IA
+Mapear os atendimentos realizados pela IA, categorizando as interações por tipo de tabulação, permitindo maior controle operacional e geração de indicadores. 
+Valentina
+Agente voltada ao atendimento SAC da Finza, com foco em suporte operacional, esclarecimento de dúvidas e validações documentais.
+Próximos Passos
+      1. Atendimento para novas indústrias
+ O agente deverá estar apto a identificar automaticamente o originador (indústria) e personalizar o atendimento conforme a necessidade de cada operação.
+Também será necessário mapear, em conjunto, as demandas relacionadas ao originador Rhino.
+
+
+Clara
+Agente responsável pela formalização de processos, documentos e fluxos de comunicação relacionados às operações.
+
+
+Próximos passos:
+         1. Solicitação e recebimento de comprovantes de endereço
+ Solicitar os comprovantes conforme a regra vigente.
+Após o recebimento, transferir para validação humana e inclusão na Plataforma Blips.
+
+         2. Tratativa para reprovados em formalização
+ Em caso de retorno negativo na etapa de “Análise de Formalização”, comunicar o cliente sobre a negativa e solicitar os dados necessários para reembolso dos valores de entrada.
+
+         3. Envio e acompanhamento de biometria
+ Identificar o gatilho responsável pelo envio do link de biometria ao cliente.
+Após o envio, caso o cliente não realize o processo no prazo de até 2 horas, executar tratativa de acompanhamento com:
+            * Chamada de atenção;
+            * Orientações sobre boas práticas;
+            * Suporte para conclusão da etapa de biometria.
+
+
+Torre de Controle
+Novos Originadores (Rhino):
+ Integração de novos originadores ao ecossistema operacional e automatizado da companhia.
+Dashboard:
+ Validação conjunta de dashboards, cálculos, conceitos e usabilidade.
+Relatório IA:
+ Validação conjunta de dashboards, cálculos, conceitos e usabilidade dos relatórios gerenciais e operacionais relacionados à IA.
+RCS:
+ Implementação de comunicação via Rich Communication Services, ampliando os canais digitais e o engajamento com clientes.
+IA por Empresa/Carteira:
+ Estruturação de inteligências específicas para cada empresa ou carteira, permitindo personalização operacional e estratégica.
+
+
+Automações
+            * BITRIX Cobrança - Histórico:
+ Automação para registro e consulta de histórico no Bitrix Cobrança 4.0.
+Os campos da seção “Histórico de Atendimento” deverão ser adicionados em formato de histórico contínuo, evitando que um preenchimento sobreponha o outro.
+               * Gatilhos Hyper:
+ Revisão dos gatilhos existentes e identificação de novas oportunidades, visando facilitar consultas recorrentes em sistemas e otimizar o atendimento operacional.
+
+
+Regra Comprovação de Endereço
+
+Comprovantes de Endereço (emitidos nos últimos 30 dias): Conta de consumo (Agua, Luz, Internet ou Fatura de Cartão de Crédito 
+Precisamos dos comprovantes de conta de consumo dos seguintes endereços:
+
+
+1️⃣ Endereço da empresa
+(No nome da empresa, sócio que conste no CNPJ ou responsável)
+
+
+2️⃣ Endereço residencial do responsável
+(Pode estar no nome dos pais ou cônjuge. Se for cônjuge, enviar certidão de casamento ou declaração de união estável)
+
+
+3️⃣ Endereço do local de entrega/instalação da máquina
+(No nome da empresa, sócio ou responsável)
+
+
+⚠️ Importante:
+Não aceitamos comprovantes em nome de terceiros (exceto pais ou cônjuge)
+Não aceitamos cartão CNPJ ou NF como comprovante de endereço
+Não aceitamos documentos ou comprovantes escaneados ou fotocópias
+
+
+Regra Adicional Construção Civíl
+
+Por favor, envie também os itens abaixo:
+
+
+🏪 Foto da fachada do local:
+Imagem nítida do local onde a máquina ficará quando não estiver em uso.
+
+
+🧾 Notas fiscais recentes:
+Enviar 3 notas fiscais emitidas pelo próprio cliente nos últimos 3 meses.
+
+
+✔️ Formatos aceitos:
+
+
+NFS-e (Nota Fiscal de Serviço)
+NF-e (Nota Fiscal Eletrônica de venda)
+
+
+⚠️ Importante:
+As notas devem estar válidas
+Precisam estar legíveis
+Devem estar em conformidade com os padrões fiscais vigentes
+
+
+Orientação para coleta de dados para reembolso
+
+Solicitar ao cliente os seguintes dados:
+
+Banco: 
+Agência: 
+Conta Corrente: 
+Chave Pix:
+É necessário que a conta informada e a chave PIX correspondam à titularidade do contrato. Dessa forma, a devolução será realizada exclusivamente em conta vinculada ao mesmo CNPJ do contrato.

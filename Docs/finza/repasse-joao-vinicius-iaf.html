@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Repasse de Supervisão — IAF · João Vinicius</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3248;
+      --accent: #f5a623;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --board: #22c55e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      background: linear-gradient(135deg, #1a1d27 0%, #0f2a1c 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 48px 36px;
+      position: relative; overflow: hidden;
+    }
+    .header::after {
+      content: ''; position: absolute; top: 0; right: -100px; width: 400px; height: 100%;
+      background: radial-gradient(circle, rgba(34,197,94,.15) 0%, transparent 60%);
+    }
+    .header-inner { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; }
+    .header h1 { font-size: 32px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    .header h1 span { color: var(--board); }
+    .header .subtitle { color: var(--muted); margin-top: 8px; font-size: 15px; max-width: 720px; }
+    .handoff-meta { display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap; }
+    .handoff-meta div { font-size: 12px; }
+    .handoff-meta .label { color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-size: 10px; font-weight: 600; }
+    .handoff-meta .val { color: var(--text); font-weight: 600; margin-top: 3px; }
+    .badge-board {
+      display: inline-block; margin-bottom: 14px;
+      padding: 6px 14px; border-radius: 20px; font-size: 11px;
+      font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      background: rgba(34,197,94,.15); color: #4ade80; border: 1px solid rgba(34,197,94,.3);
+    }
+
+    /* ─── Layout ─── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 36px 48px 60px; }
+
+    /* ─── Section ─── */
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 18px; margin-top: 44px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-title:first-of-type { margin-top: 0; }
+
+    /* ─── Concept ─── */
+    .concept {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px 28px;
+    }
+    .concept h2 { font-size: 18px; color: #fff; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.3px; }
+    .concept h3 { font-size: 14px; color: #fff; margin: 18px 0 8px; font-weight: 700; }
+    .concept p { color: var(--muted); font-size: 13.5px; line-height: 1.75; margin-bottom: 12px; }
+    .concept p:last-child { margin-bottom: 0; }
+    .concept p strong { color: var(--text); }
+    .concept.accent { border-left: 4px solid var(--board); }
+    .concept.warm { border-left: 4px solid var(--accent); }
+
+    /* ─── Disambiguation ─── */
+    .disambig {
+      background: rgba(245,166,35,.06);
+      border: 1px solid rgba(245,166,35,.25);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .disambig .icon { font-size: 22px; flex-shrink: 0; }
+    .disambig h4 { font-size: 13px; color: var(--accent); margin-bottom: 4px; font-weight: 700; }
+    .disambig p { font-size: 12.5px; color: var(--text); line-height: 1.7; }
+    .disambig p strong { color: #fff; }
+
+    /* ─── Grids ─── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    /* ─── Team ─── */
+    .team-list { display: grid; gap: 12px; }
+    .person-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 22px;
+      display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center;
+    }
+    .person-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff; font-size: 16px;
+    }
+    .person-info h3 { font-size: 15px; color: #fff; font-weight: 700; margin-bottom: 3px; }
+    .person-info .email { font-size: 11px; color: var(--muted); font-family: 'Consolas', monospace; }
+    .person-info .role { font-size: 12.5px; color: var(--text); margin-top: 5px; }
+    .person-info .skills { font-size: 11px; color: #4ade80; margin-top: 4px; }
+    .level-badge {
+      display: inline-block; padding: 2px 9px; border-radius: 20px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+      margin-left: 8px;
+    }
+    .level-senior { background: rgba(34,197,94,.15); color: #4ade80; }
+    .level-mid    { background: rgba(59,130,246,.15); color: #60a5fa; }
+    .level-junior { background: rgba(245,158,11,.15); color: #fbbf24; }
+    .level-intern { background: rgba(168,85,247,.15); color: #c084fc; }
+    .level-novato { background: rgba(148,163,184,.1);  color: #94a3b8; }
+    .level-techlead { background: rgba(245,166,35,.15); color: var(--accent); }
+
+    /* ─── Agent Cards ─── */
+    .agents-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .agent-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 24px; position: relative;
+    }
+    .agent-name {
+      font-size: 19px; font-weight: 800; color: #fff;
+      letter-spacing: -0.3px; margin-bottom: 4px;
+    }
+    .agent-name span.icon { color: var(--board); margin-right: 6px; }
+    .agent-tagline { font-size: 13px; color: var(--text); font-weight: 600; margin-bottom: 8px; }
+    .agent-purpose { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .agent-meta { display: grid; gap: 7px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .agent-meta-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .agent-meta-row .k { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+    .agent-meta-row .v { font-size: 12px; color: var(--text); font-weight: 600; text-align: right; }
+    .agent-status {
+      position: absolute; top: 20px; right: 20px;
+      padding: 2px 8px; border-radius: 20px; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.8px; text-transform: uppercase;
+    }
+    .status-active     { background: rgba(34,197,94,.15);  color: #4ade80; }
+    .status-evolving   { background: rgba(59,130,246,.15); color: #60a5fa; }
+    .status-new        { background: rgba(245,166,35,.15); color: var(--accent); }
+
+    /* ─── Stack ─── */
+    .stack-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px;
+    }
+    .stack-card h4 { font-size: 14px; color: #fff; font-weight: 700; margin-bottom: 6px; }
+    .stack-card .what { font-size: 12px; color: var(--text); margin-bottom: 6px; }
+    .stack-card .why  { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
+    .stack-card code { font-family: 'Consolas', monospace; font-size: 11px; color: #4ade80; background: var(--surface2); padding: 1px 6px; border-radius: 3px; }
+
+    /* ─── Resource list ─── */
+    .resource-list {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .resource-row {
+      padding: 14px 22px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border); gap: 16px;
+    }
+    .resource-row:last-child { border-bottom: none; }
+    .resource-row .info { flex: 1; }
+    .resource-row .label { font-size: 13px; color: var(--text); font-weight: 600; }
+    .resource-row .desc  { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+    .resource-row .url {
+      font-family: 'Consolas', monospace; font-size: 11px;
+      background: var(--surface2); padding: 5px 10px; border-radius: 6px;
+      color: #4ade80; flex-shrink: 0;
+    }
+
+    /* ─── Steps ─── */
+    .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 22px;
+    }
+    .step-card .step-num {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      background: rgba(34,197,94,.15); color: #4ade80;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+    .step-card h4 { font-size: 14px; color: #fff; font-weight: 700; margin-bottom: 6px; }
+    .step-card p  { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+    .step-card p strong { color: var(--text); }
+
+    /* ─── Footer ─── */
+    .footer {
+      border-top: 1px solid var(--border); padding: 24px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      color: var(--muted); font-size: 11px;
+    }
+    .footer span.accent { color: var(--accent); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <span class="badge-board">IAF · iA Finza</span>
+    <h1>Repasse de Supervisão — <span>IAF</span></h1>
+    <p class="subtitle">Bem-vindo, João Vinicius. Este documento é uma introdução conceitual ao squad — o que fazemos, por que fazemos, o time, os agentes IA e a stack que usamos. Pensado pra você sair daqui entendendo o todo, não só checklists.</p>
+    <div class="handoff-meta">
+      <div>
+        <div class="label">De</div>
+        <div class="val">Mateus Alberone (Supervisor ISO)</div>
+      </div>
+      <div>
+        <div class="label">Para</div>
+        <div class="val">João Vinicius · Supervisor IAF</div>
+      </div>
+      <div>
+        <div class="label">Data do repasse</div>
+        <div class="val">07/05/2026</div>
+      </div>
+      <div>
+        <div class="label">Apoio técnico permanente</div>
+        <div class="val">Joao Lucas Freitas · Tech Lead cross-squad</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ── O QUE É O SQUAD ── -->
+  <div class="section-title">Por onde começar — O que é o IAF</div>
+  <div class="concept accent">
+    <h2>Em uma frase</h2>
+    <p>
+      O <strong>IAF (iA Finza)</strong> é o squad responsável pela <strong>IA & Automação aplicada à área financeira da Blips</strong>:
+      cobrança, recuperação de crédito, formalização de contratos e relacionamento com cliente em situação financeira (negociação, inadimplência, regularização).
+    </p>
+
+    <h3>Para entender o porquê</h3>
+    <p>
+      A Blips é uma fintech de <strong>technology-as-a-service</strong>: alugamos equipamentos com pagamento recorrente e antecipamos os recebíveis no mercado financeiro.
+      Quando a parcela atrasa, entra todo um funil de cobrança que vai de <strong>contato amigável</strong> até <strong>medidas extrajudiciais e judiciais</strong>. Cada etapa precisa ser executada com precisão (jurídica, regulatória) e rapidez (cada dia parado é dinheiro fora do caixa).
+      O IAF existe para fazer essa máquina rodar com automação e agentes IA, em vez de depender só de braço humano.
+    </p>
+
+    <h3>Como o IAF se diferencia dos outros dois squads</h3>
+    <p>
+      A área de IA & Automação da Blips tem três squads:
+      <strong>ISO</strong> (comercial / pré-venda — Mateus continua supervisor),
+      <strong>IA2</strong> (operação Blips, pós-venda, atendimento — Saulo assume),
+      e <strong>IAF</strong> (sua área: cobrança, Finza, formalização, recuperação de crédito).
+      A diferença prática: o IAF lida com <strong>cliente sob estresse financeiro</strong> e processos com implicações jurídicas. Compliance e precisão são tão importantes quanto velocidade.
+    </p>
+
+    <div class="disambig">
+      <span class="icon">⚠️</span>
+      <div>
+        <h4>Importante: dois "Vinícius" diferentes na área</h4>
+        <p>
+          <strong>Você (João Vinicius)</strong> é o novo Supervisor do IAF — papel executivo de gestão direta do time.
+          Existe também o <strong>Vinícius Cunha</strong>, que é o <strong>Gerente</strong> da área de IA & Automação — ele acompanha a evolução dos três squads, mas <strong>não executa nem distribui tasks</strong>.
+          Você reporta para ele e para o Mateus. Se aparecer uma task atribuída ao Vinícius Cunha, deve ser reatribuída ao supervisor correto.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ARQUITETURA DE IA NA BLIPS ── -->
+  <div class="section-title">Como a Blips constrói agentes IA — modelo mental</div>
+  <div class="concept">
+    <h2>O padrão "Main Agent + funções"</h2>
+    <p>
+      Quase todo agente IA da Blips é construído no <strong>n8n</strong> seguindo o mesmo padrão:
+      um <strong>workflow principal</strong> (o "cérebro") que conversa com o cliente via LLM,
+      e <strong>vários sub-workflows</strong> chamados de <code>func-*</code> que são as "mãos" — validar CNPJ, gerar link de pagamento, registrar promessa, consultar título no Sankhya, etc.
+      Sempre que você for entender um agente novo, comece pelo workflow principal e siga as ferramentas que ele invoca. Esse padrão se repete em todos.
+    </p>
+
+    <h3>O fluxo central de roteamento — Boas-vindas-IAs-2.0</h3>
+    <p>
+      Quando uma mensagem chega no WhatsApp da Blips, ela passa primeiro por um fluxo no <strong>HyperFlow</strong> chamado <strong>Boas-vindas-IAs-2.0</strong>.
+      Esse fluxo decide qual agente vai atender — Esperanza, Valentina, Dalila, Socorro, etc — com base no canal, no estágio do cliente e no departamento. É a "central telefônica" que distribui as conversas.
+      Para o IAF é especialmente relevante porque clientes inadimplentes podem chegar por qualquer canal e precisam ser direcionados para o agente certo.
+    </p>
+
+    <h3>Onde os agentes vivem</h3>
+    <p>
+      Os workflows dos agentes IA estão no ambiente <strong>n8n-assistants</strong> (<code>n8n-assistants.blips-labs.com</code>).
+      Existem 6 ambientes n8n no total. O IAF mexe principalmente em <strong>assistants</strong> (agentes), <strong>automacao</strong> (fluxos operacionais Esperanza) e <strong>dev</strong> (homologação de novos agentes como a Valentina).
+    </p>
+  </div>
+
+  <!-- ── CONTEXTO FINANCEIRO ── -->
+  <div class="section-title">Contexto de negócio Finza — vale entender</div>
+  <div class="concept warm">
+    <h2>O funil de cobrança em alto nível</h2>
+    <p>
+      Cada equipamento alugado gera <strong>parcelas mensais</strong> (chamamos de <em>installments</em>, dentro de um <em>deal</em>). Quando uma parcela vence sem pagamento, entra a fila de cobrança. O fluxo geral é:
+    </p>
+    <p>
+      <strong>1. Cobrança amigável</strong> (1–15 dias atraso) — Esperanza envia lembretes, oferece negociação, gera link de pagamento.<br>
+      <strong>2. Cobrança 4.0</strong> (16–60 dias) — escalonamento com mais firmeza, dependendo do cedente do recebível (FIDC, Blips, Finza, Ideal, Suprimentos cada um tem sua régua).<br>
+      <strong>3. Notificação extrajudicial</strong> (60+ dias) — formaliza o débito, ativa protesto, parecer jurídico.<br>
+      <strong>4. Recuperação extrajudicial</strong> — pesquisas patrimoniais, SISBAJUD, RENAJUD, INFOJUD, bloqueio de CNH.<br>
+      <strong>5. Judicial</strong> — ajuizamento, liminar, recuperação do equipamento por decisão judicial.
+    </p>
+    <p>
+      Cada etapa tem um conjunto de automações e agentes que tocam. Sua área de visão e atuação cobre da etapa 1 até parte da 4 — etapas 4 (final) e 5 envolvem o jurídico e parceiros externos.
+    </p>
+
+    <h3>Cedentes — por que isso importa</h3>
+    <p>
+      A Blips antecipa os recebíveis para diferentes <strong>cedentes</strong> (instituições financeiras que compram os títulos): <strong>FIDC, Blips, Finza, Ideal, Suprimentos</strong>. Cada cedente tem regras próprias de prazo, juros, contato e judicialização.
+      Vai aparecer constantemente nas demandas — vale conhecer o conceito desde o primeiro dia.
+    </p>
+
+    <h3>Compliance é pilar, não detalhe</h3>
+    <p>
+      Cobrança tem regras legais e regulatórias rígidas: horário de envio, frequência, conteúdo das mensagens, comprovação. <strong>Bug em fluxo de Esperanza não é só bug</strong> — pode virar passivo jurídico ou multa.
+      Toda mudança em fluxo de cobrança precisa de validação antes de ir pra produção.
+    </p>
+  </div>
+
+  <!-- ── TIME ── -->
+  <div class="section-title">O Time IAF — quem é cada um</div>
+  <div class="team-list">
+
+    <div class="person-card">
+      <div class="person-avatar" style="background:linear-gradient(135deg,#f5a623,#a85a00)">JF</div>
+      <div class="person-info">
+        <h3>Joao Lucas Freitas <span class="level-badge level-techlead">Tech Lead</span></h3>
+        <div class="email">joao.freitas@blips.com.br</div>
+        <div class="role">Tech Lead da área inteira (cross-squad). Atua em problemas estruturais, infra, Torre de Controle, HyperFlow e bugs críticos.</div>
+        <div class="skills">É o ponto de apoio mais profundo do time. Atende IAF, IA2 e ISO — use com critério.</div>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-avatar" style="background:linear-gradient(135deg,#a855f7,#6b21a8)">LM</div>
+      <div class="person-info">
+        <h3>Leandro Marques <span class="level-badge level-intern">Estagiário</span></h3>
+        <div class="email">leandro.gontijo@blips.com.br</div>
+        <div class="role">Forte na <strong>Torre de Controle</strong> (sistema operacional Finza) e em fluxos de fallback da <strong>Esperanza</strong>. Em curva de evolução muito boa — pode receber tarefas adultas.</div>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-avatar" style="background:linear-gradient(135deg,#94a3b8,#475569)">MR</div>
+      <div class="person-info">
+        <h3>Marcos Rodrigues <span class="level-badge level-novato">Dev novato</span></h3>
+        <div class="email">marcos.oliveira@finza.com.br</div>
+        <div class="role">Dono da <strong>Esperanza</strong>. Especialista em n8n, fluxos de notificação extrajudicial e integrações de e-mail/SMS.</div>
+        <div class="skills">Conhecimento profundo do funil extrajudicial — referência técnica no time.</div>
+      </div>
+    </div>
+
+    <div class="person-card">
+      <div class="person-avatar" style="background:linear-gradient(135deg,#94a3b8,#475569)">JP</div>
+      <div class="person-info">
+        <h3>João Pedro da Silva Neto <span class="level-badge level-novato">Dev novato</span></h3>
+        <div class="email">joaopedro@blips.com.br</div>
+        <div class="role">Dono da <strong>Valentina</strong> (atualmente em homologação). Trabalha com HyperFlow e migração de tools entre agentes.</div>
+        <div class="skills">É quem está construindo a Valentina hoje — quando ela entrar em produção, o IAF dá um salto operacional.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── AGENTES IA ── -->
+  <div class="section-title">Catálogo de Agentes IA — o que existe e por que</div>
+  <div class="agents-grid">
+
+    <div class="agent-card">
+      <span class="agent-status status-active">Em produção</span>
+      <div class="agent-name"><span class="icon">⚖️</span>Esperanza</div>
+      <div class="agent-tagline">Cobrança automatizada e relacionamento com cliente em atraso</div>
+      <div class="agent-purpose">É o agente principal do IAF hoje. Conversa com o cliente em atraso, valida CNPJ, gera link de pagamento, registra promessas, escalona conforme a régua de cobrança e dispara notificações formais quando necessário. Cobre da cobrança amigável até notificação extrajudicial.</div>
+      <div class="agent-meta">
+        <div class="agent-meta-row"><span class="k">Responsável</span><span class="v">Marcos Rodrigues</span></div>
+        <div class="agent-meta-row"><span class="k">Apoio (fallback)</span><span class="v">Leandro Marques</span></div>
+        <div class="agent-meta-row"><span class="k">Stack</span><span class="v">n8n · BigQuery · Sankhya · WhatsApp · E-mail</span></div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <span class="agent-status status-evolving">Em homologação</span>
+      <div class="agent-name"><span class="icon">💚</span>Valentina</div>
+      <div class="agent-tagline">A "Socorro da Finza" — orquestradora de atendimento Finza</div>
+      <div class="agent-purpose">Pense na Valentina como a recepcionista da Finza no WhatsApp. Ela atende a primeira mensagem, identifica do que o cliente precisa e <strong>orquestra a comunicação com os outros agentes especialistas</strong> (Esperanza para cobrança, Clara para formalização, Lívia para Finza, e o time humano quando necessário). É o equivalente da Socorro (atendimento geral da Blips), mas no escopo Finza.</div>
+      <div class="agent-meta">
+        <div class="agent-meta-row"><span class="k">Responsável</span><span class="v">João Pedro da Silva Neto</span></div>
+        <div class="agent-meta-row"><span class="k">Backup</span><span class="v">Marcos Rodrigues</span></div>
+        <div class="agent-meta-row"><span class="k">Status</span><span class="v" style="color:#60a5fa">Em homologação no ambiente dev</span></div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <span class="agent-status status-new">Migrou para Finza</span>
+      <div class="agent-name"><span class="icon">📋</span>Clara</div>
+      <div class="agent-tagline">IA de Formalização da Finza</div>
+      <div class="agent-purpose">A Clara originalmente era o agente de onboarding/formalização do IA2 (buscar negociação, blips educa, termos de contrato). Migrou agora para a Finza para focar no <strong>processo de formalização</strong> — fechamento de negociação, regularização de cliente, assinatura de aditivos e termos vinculados à cobrança e renegociação.</div>
+      <div class="agent-meta">
+        <div class="agent-meta-row"><span class="k">Escopo</span><span class="v">Formalização Finza</span></div>
+        <div class="agent-meta-row"><span class="k">Responsável (a definir)</span><span class="v">Time IAF</span></div>
+        <div class="agent-meta-row"><span class="k">Status</span><span class="v" style="color:var(--accent)">Em transição IA2 → IAF</span></div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <span class="agent-status status-active">Em produção</span>
+      <div class="agent-name"><span class="icon">🤝</span>Lívia</div>
+      <div class="agent-tagline">Agente do escopo Finza</div>
+      <div class="agent-purpose">A Lívia atua no escopo Finza com foco em relacionamento e plataforma. Conhecimento das regras Finza, dos parceiros e dos canais de comunicação que são específicos desse universo (que é distinto da operação Blips Equipamentos).</div>
+      <div class="agent-meta">
+        <div class="agent-meta-row"><span class="k">Escopo</span><span class="v">Finza · plataforma e relacionamento</span></div>
+        <div class="agent-meta-row"><span class="k">Responsável (a definir)</span><span class="v">Time IAF</span></div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <span class="agent-status status-active">Sistema-chave</span>
+      <div class="agent-name"><span class="icon">🗼</span>Torre de Controle</div>
+      <div class="agent-tagline">Sistema operacional usado pela equipe Finza no dia a dia</div>
+      <div class="agent-purpose">Não é um agente IA conversacional — é o <strong>painel de back-office</strong> que centraliza visão de contratos, status, geração de link PIX, integrações via MCP, dados de Sankhya e BigQuery. O time da Finza usa diariamente. Aparece muito como demanda do squad: ajustes, novos campos, integrações.</div>
+      <div class="agent-meta">
+        <div class="agent-meta-row"><span class="k">Responsável principal</span><span class="v">Joao Lucas Freitas</span></div>
+        <div class="agent-meta-row"><span class="k">Apoio em ajustes</span><span class="v">Leandro Marques</span></div>
+        <div class="agent-meta-row"><span class="k">Stack</span><span class="v">React · MCP · Supabase · BigQuery</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── STACK ── -->
+  <div class="section-title">Stack técnica que o squad usa</div>
+  <div class="grid-3">
+
+    <div class="stack-card">
+      <h4>n8n</h4>
+      <div class="what">Plataforma de automação onde vivem os agentes</div>
+      <div class="why">Toda a "lógica" dos agentes IA é construída em workflows n8n. O IAF mexe principalmente em <code>assistants</code>, <code>automacao</code> e <code>dev</code> (homologação Valentina).</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>HyperFlow</h4>
+      <div class="what">Plataforma de atendimento conversacional</div>
+      <div class="why">Onde os atendentes humanos atuam e onde o fluxo central <strong>Boas-vindas-IAs-2.0</strong> roteia as conversas para os agentes IA.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>Torre de Controle</h4>
+      <div class="what">Sistema interno de gestão Finza</div>
+      <div class="why">Frontend React + backend Supabase. Heavy use de MCPs. Importante mapear bem como o time usa ela no dia a dia.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>BigQuery — datasets de cobrança</h4>
+      <div class="what">Data warehouse Blips (<code>blips-bigdata</code>)</div>
+      <div class="why">Datasets-chave: <code>FINANCEIRO.deals</code> (títulos), <code>COBRANCA.envios_cobranca</code>, <code>PLATAFORMA.negotiation</code> (contratos), <code>SANKHYA.TitulosFull</code>. Vale 1h navegando por aí no início.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>Sankhya</h4>
+      <div class="what">ERP da Blips — fonte da verdade financeira</div>
+      <div class="why">Contratos, títulos e dados financeiros vivem no Sankhya. Esperanza consulta para confirmar status do cliente em tempo real antes de tomar ação de cobrança.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>WhatsApp + E-mail/SMS</h4>
+      <div class="what">Canais de comunicação com o cliente</div>
+      <div class="why">A maior parte dos contatos sai por WhatsApp (via Zapster). Casos formais (notificação extrajudicial) também usam e-mail registrado e às vezes SMS. Compliance de canal é estrito.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>Bitrix24</h4>
+      <div class="what">CRM/SAC corporativo</div>
+      <div class="why">Pipelines de cobrança, recuperação de crédito e jurídico vivem no Bitrix. A SPA <strong>Logística Reversa</strong> (mais de 21 mil itens) concentra todo o fluxo segmentado por cedente.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>OpenAI / Gemini</h4>
+      <div class="what">LLMs que alimentam os agentes</div>
+      <div class="why">Padrão atual: GPT-5.1/5.2 para conversas complexas com cliente, Gemini como alternativa. Custos e qualidade são monitorados pelo time.</div>
+    </div>
+
+    <div class="stack-card">
+      <h4>GitHub (blips-ai/agentes_ia)</h4>
+      <div class="what">Repositório de prompts dos agentes</div>
+      <div class="why">Os prompts dos agentes ficam versionados aqui e são carregados em runtime pelos workflows. Permite testar versões alternativas em branches.</div>
+    </div>
+
+  </div>
+
+  <!-- ── COMO O TIME TRABALHA ── -->
+  <div class="section-title">Como o time trabalha — princípios práticos</div>
+  <div class="grid-2">
+
+    <div class="concept">
+      <h2>Cada agente tem dono</h2>
+      <p>
+        Quando uma demanda chega que mexe em um agente, a primeira pergunta é: <strong>de quem é esse agente?</strong> O catálogo acima responde. Tarefa que toca Esperanza → Marcos. Tarefa que toca Valentina → João Pedro. Torre de Controle → Joao Freitas / Leandro.
+        Lívia e Clara estão em transição — a definição de dono no time IAF é um dos primeiros pontos de alinhamento que vale fazer com o time.
+      </p>
+    </div>
+
+    <div class="concept">
+      <h2>Detalhe muito as tasks dos novatos</h2>
+      <p>
+        Marcos e João Pedro são novatos em desenvolvimento. Tasks ambíguas geram retrabalho. Investir <strong>10 minutos extras na descrição</strong> (critério de aceite, contexto de negócio, exemplo de input/output esperado) economiza dias de execução. Vale como princípio do squad.
+      </p>
+    </div>
+
+    <div class="concept">
+      <h2>Tech Lead é coringa, não fila padrão</h2>
+      <p>
+        Joao Lucas Freitas atende os três squads. Reserve-o para o que ninguém mais consegue tocar — Torre de Controle, infra, bugs estruturais. Tudo que pode ir para Marcos, João Pedro ou Leandro com bom briefing, vá direto para eles. Isso protege a velocidade dos três squads simultaneamente.
+      </p>
+    </div>
+
+    <div class="concept">
+      <h2>Demandas atravessam squads — alinhe com Mateus e Saulo</h2>
+      <p>
+        Cobrança toca cliente, cliente passou pela operação (IA2), cliente veio do comercial (ISO). Demandas cross-squad são frequentes — especialmente em torno de Bitrix, Sankhya e dados do contrato.
+        Estabelecer um canal direto com Mateus (ISO) e Saulo (IA2) ajuda a definir rapidamente quem pega o que.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ── RECURSOS ── -->
+  <div class="section-title">Recursos para começar</div>
+  <div class="resource-list">
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">Jira — Board IAF</div>
+        <div class="desc">Backlog completo, sprints e tarefas em andamento do squad</div>
+      </div>
+      <span class="url">blips-dev.atlassian.net → IAF</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">n8n Assistants — onde a Esperanza vive</div>
+        <div class="desc">Workflows principais dos agentes IA (Esperanza, Valentina dev, Clara, Lívia, etc)</div>
+      </div>
+      <span class="url">n8n-assistants.blips-labs.com</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">n8n Automacao — fluxos operacionais</div>
+        <div class="desc">Automações de cobrança, Esperanza outbound, integrações Bitrix</div>
+      </div>
+      <span class="url">n8n.blips-labs.com</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">n8n Dev — homologação Valentina</div>
+        <div class="desc">Ambiente de desenvolvimento e treinamento de agentes</div>
+      </div>
+      <span class="url">n8n-dev.blips-labs.com</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">HyperFlow — plataforma de atendimento</div>
+        <div class="desc">Fluxo central Boas-vindas-IAs-2.0 e atendimento humano Finza</div>
+      </div>
+      <span class="url">app.hyperflow.global</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">Torre de Controle — sistema operacional Finza</div>
+        <div class="desc">Painel usado pela equipe de cobrança (peça acesso ao Joao Freitas)</div>
+      </div>
+      <span class="url">via SSO Blips</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">BigQuery — projeto blips-bigdata</div>
+        <div class="desc">FINANCEIRO.deals · COBRANCA.envios_cobranca · PLATAFORMA.negotiation · SANKHYA</div>
+      </div>
+      <span class="url">console.cloud.google.com</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">Bitrix24 — CRM/SAC</div>
+        <div class="desc">SPA Logística Reversa, pipelines de cobrança, jurídico</div>
+      </div>
+      <span class="url">blips.bitrix24.com</span>
+    </div>
+
+    <div class="resource-row">
+      <div class="info">
+        <div class="label">GitHub — blips-ai/agentes_ia</div>
+        <div class="desc">Prompts dos agentes versionados (Esperanza, Valentina, etc)</div>
+      </div>
+      <span class="url">github.com/blips-ai/agentes_ia</span>
+    </div>
+
+  </div>
+
+  <!-- ── PRIMEIROS 14 DIAS ── -->
+  <div class="section-title">Sugestão de primeiros 14 dias</div>
+  <div class="steps-grid">
+
+    <div class="step-card">
+      <span class="step-num">Dias 1–3</span>
+      <h4>Mapear o terreno</h4>
+      <p>Ler este doc inteiro com calma. Entrar no Jira do IAF e ler 10 tarefas "Done" + 10 "In Progress" pra sentir a textura. Conversar 1h com Joao Lucas Freitas (Tech Lead) sobre Esperanza, Torre de Controle e o histórico recente.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">Dias 4–7</span>
+      <h4>1:1 com cada membro do time</h4>
+      <p>30 minutos com cada: Marcos, João Pedro, Leandro. Roteiro: <strong>o que ele toca, o que está bloqueando hoje, o que ele precisa para crescer</strong>. Como o time é pequeno e novato, esses 1:1 são DECISIVOS — saia com plano de mentoria para cada um.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">Dias 8–10</span>
+      <h4>Imersão no negócio Finza</h4>
+      <p>Estudar regras de cobrança extrajudicial e compliance. Walkthrough da <strong>Esperanza</strong> com o Marcos. Walkthrough da <strong>Valentina</strong> (em homologação) com o João Pedro. Tour pelos datasets BigQuery (FINANCEIRO, COBRANCA). Sentar 1h com alguém da operação Finza para ver o uso real.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">Dias 11–14</span>
+      <h4>Definir sua agenda e prioridades</h4>
+      <p>Decidir cadência de rituais (daily, weekly, refinement). Definir <strong>donos de Lívia e Clara</strong> dentro do time. Estabelecer canal direto com Mateus (ISO) e Saulo (IA2) para sincronizar demandas atravessadas. Definir 1 indicador-chave para acompanhar nos próximos 60 dias e alinhar com a liderança da área.</p>
+    </div>
+
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <span class="accent">Repasse de Supervisão IAF</span>
+  <span>Mateus Alberone → João Vinicius &nbsp;·&nbsp; 07/05/2026</span>
+</div>
+
+</body>
+</html>
