@@ -1,0 +1,64 @@
+﻿mai. 19, 2026
+Alinhamento Torre
+convidado Marcos Rodrigues de Oliveira Júnior Joao Lucas Pontes Freitas João Vinicius Dessimoni Fernandes
+Anexos Alinhamento Torre
+Registros da reunião Transcrição Gravação 
+
+
+
+
+Resumo
+Revisão do banco de dados e alinhamento da estratégia de multiorganização para deploy em junho.
+
+Análise das tabelas Supabase
+Confirmada a contagem de 79 tabelas no banco de dados. Esquemas específicos serão migrados para garantir independência entre organizações.
+
+Estratégia de migração definida
+Adotado um script DDL de criação única para novas organizações, priorizando a limpeza e normalização dos dados. Decidido que tabelas serão classificadas para exclusão ou ajuste.
+
+Cronograma e ambiente
+Finalização do mapeamento e limpeza agendada para 4 de junho. Deploy em produção está planejado para o dia 8 de junho.
+
+
+O que achou deste resumo? Sim ou Não é útil?
+
+
+
+
+Próximas etapas
+* [Marcos Rodrigues de Oliveira Júnior] Mapear Tabelas: Identificar o estado de cada tabela classificando-as entre exclusão, alteração ou uso contínuo.
+* [Joao Lucas Pontes Freitas] Preparar ETL: Estruturar as consultas de extração de dados e validar as regras de importação com o Léo.
+* [Marcos Rodrigues de Oliveira Júnior] Limpar Repositório: Remover arquivos temporários gerados por equívoco no controle de versão.
+* [Marcos Rodrigues de Oliveira Júnior] Mapear tabelas: Separar tabelas inutilizadas e etiquetar aquelas que serao alteradas no banco de dados.
+* [Marcos Rodrigues de Oliveira Júnior] Normalizar funcoes: Realizar a normalizacao das funcoes e dos componentes da aplicacao.
+* [Marcos Rodrigues de Oliveira Júnior] Preparar deploy: Preparar o pacote contendo todas as migracoes necessarias para o ambiente de desenvolvimento.
+* [Marcos Rodrigues de Oliveira Júnior] Realizar testes: Validar todas as alteracoes realizadas no ambiente de desenvolvimento.
+* [Marcos Rodrigues de Oliveira Júnior] Normalizar demandas: Processar e padronizar as demandas que ja estao finalizadas.
+* [João Vinicius Dessimoni Fernandes] Migrar Git: Executar a migracao completa dos repositorios de codigo.
+* [João Vinicius Dessimoni Fernandes] Estruturar novo Git: Estruturar o novo ambiente de controle de versao e configurar os fluxos de integracao e entrega continua.
+* [João Vinicius Dessimoni Fernandes] Remover contexto lixo: Limpar o contexto obsoleto da aplicacao e realizar o levantamento de fluxos de extracao transformacao e carga.
+* [Joao Lucas Pontes Freitas] Submeter Pull Request: Finalizar e enviar as solicitacoes de mesclagem de codigo para o repositorio.
+
+
+
+
+Detalhes
+* Mapeamento das Tabelas do Banco de Dados: Marcos Rodrigues de Oliveira Júnior iniciou a análise das tabelas, criando a branch AF176 e documentando a estrutura na pasta docs/database (00:00:00). Após uma revisão, a equipe confirmou que o Supabase contabiliza 79 tabelas, considerando tabelas, visões e visões materializadas, corrigindo contagens anteriores (00:02:11).
+* Categorização e Estrutura dos Esquemas: Marcos Rodrigues de Oliveira Júnior realizou a anatomia das tabelas, categorizando-as em ações, configurações, campanhas, contatos e contratos (00:00:00). Ficou definido que o esquema "public" deve conter apenas recursos compartilhados, enquanto todos os outros esquemas, como "Cron", "Alf" e "Secrets", deverão ser migrados para a estrutura de organização de cada cliente, garantindo independência (00:09:55).
+* Análise de Dependências das Tabelas: A equipe discutiu a necessidade de verificar se as tabelas estão sendo utilizadas por funções SQL antes de qualquer exclusão (00:11:56). Marcos Rodrigues de Oliveira Júnior está mapeando quem lê e quem escreve em cada tabela, garantindo que dependências críticas não sejam interrompidas (00:03:36) (00:13:05).
+* Estratégia de Migração para Novas Organizações: Em vez de executar centenas de migrações antigas, a equipe adotará um script DDL de criação única para novas organizações, simplificando o processo de estruturação (00:14:46) (00:19:41). O foco principal é a limpeza dos dados e a normalização, não a execução da sequência histórica de migrações (00:15:46).
+* Divisão de Responsabilidades e Limpeza de Código: João Lucas Pontes Freitas está focando na remoção de código obsoleto e no ajuste de consultas de ETL, enquanto Marcos Rodrigues de Oliveira Júnior lidera o mapeamento detalhado das tabelas (00:17:05). João Lucas Pontes Freitas planeja alinhar as consultas SQL com o Léo para garantir a continuidade da importação de dados (00:19:00).
+* Sistema de Etiquetas para Tabelas: Para organizar o trabalho, as tabelas serão classificadas em três categorias: "lixo" (a serem deletadas), "alteração necessária" (precisam de ajustes, como as tabelas de Cron) e "plug-and-play" (serão mantidas como estão durante a transição) (00:24:01).
+* Normalização de Funções e Aplicação: Marcos Rodrigues de Oliveira Júnior é responsável por garantir que a aplicação continue operando após as alterações nas tabelas, o que exigirá a revisão de diversas funções SQL. Foi confirmado que as funções relacionadas ao "Cron" precisarão ser reconstruídas, pois a mudança de esquema quebrará as implementações atuais (00:24:53) (00:26:30).
+* Tratamento de Dados Sensíveis: João Vinicius Dessimoni Fernandes orientou que, ao migrar dados de produção para o ambiente de desenvolvimento, devem ser aplicadas máscaras para proteger informações sensíveis, como números de CNPJ, utilizando dados mockados (00:27:33).
+* Gestão de Tarefas no Quimera: A equipe discutiu dificuldades na importação de demandas para a ferramenta Quimera, observando a ausência de alguns integrantes do time e a necessidade de ajustar o fluxo de atribuição e nomenclatura das tarefas (00:31:36).
+* Padronização do Git e Repositórios: João Vinicius Dessimoni Fernandes assumiu a responsabilidade de migrar e estruturar os novos repositórios Git, estabelecendo um padrão de nomenclatura para branches que facilite o rastreamento das demandas (00:36:32).
+* Cronograma e Prazos do Projeto: Ficou estabelecido um cronograma detalhado para o projeto, com a meta de finalizar as etapas de mapeamento, limpeza e normalização até o dia 4 de junho (00:44:51) (00:47:41). A entrega final e o deploy em ambiente de produção estão planejados para o dia 8 de junho (00:47:41) (00:52:55).
+* Refatoração da Torre: Discussões sobre a refatoração completa da "Torre" foram postergadas, pois a prioridade atual da equipe é a implementação do modelo multiorganização para evitar atrasos e sobrecarga de trabalho (00:48:38).
+* Pipeline de Deploy e Ambientes: A equipe confirmou que o fluxo de deploy será configurado no novo ambiente Git, com a criação de instâncias separadas para desenvolvimento e homologação, permitindo testes integrados antes da subida para produção (00:50:36).
+
+
+
+
+Revise as anotações do Gemini para checar se estão corretas. Confira dicas e saiba como o Gemini faz anotações
+Como está a qualidade de destas observações? Responda a uma breve pesquisa para nos dar seu feedback, incluindo o quanto as observações foram úteis para o que você precisa.

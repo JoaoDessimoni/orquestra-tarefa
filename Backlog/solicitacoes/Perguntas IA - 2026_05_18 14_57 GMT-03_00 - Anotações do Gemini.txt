@@ -1,0 +1,65 @@
+﻿mai. 18, 2026
+Perguntas IA
+convidado Leandro Marques Gontijo Jersé João Pedro Borges Martins João Vinicius Dessimoni Fernandes
+Anexos Perguntas IA Perguntas IA - 2026/05/18 14:57 GMT-03:00 - Recording
+Registros da reunião Transcrição Gravando 2 Gravação 
+
+
+
+
+Resumo
+Revisão técnica via análise de disparidades de dados e melhorias operacionais da Inteligência Artificial.
+
+Análise de divergências operacionais
+Equipe identificou disparidades no volume de dados entre o Hyper e a torre devido a limitações de processamento. Decisão tomada de implementar departamento exclusivo para a agente Esperança.
+
+Otimização da Inteligência Artificial
+Discussão focou na necessidade de melhorar instruções de tags e base de conhecimento. Agentes devem utilizar arquivos de identificação para decisões mais assertivas.
+
+Processos de melhoria contínua
+Investigação sobre protocolos inativos no Hyper permanece necessária para garantir precisão. Equipe seguirá focada no desenvolvimento da torre e análise técnica da agente Esperança.
+
+
+O que achou deste resumo? Sim ou Não é útil?
+
+
+
+
+Próximas etapas
+* [Leandro Marques Gontijo Jersé] Implementar separação: Passar para a produção a alteração de separação de conversas por protocolo do Hyper.
+* [João Vinicius Dessimoni Fernandes, Leandro Marques Gontijo Jersé, João Lucas] Investigar divergência de dados: Realizar um processo de descoberta para entender e corrigir as divergências entre os relatórios da Torre e do Hyper.
+* [João Pedro Borges Martins] Revisar sistema de tags: Analisar o sistema de tagueamento para definir as descrições e o fluxo das tags de forma mais intuitiva e precisa.
+* [Leandro Marques Gontijo Jersé] Enviar vídeos de treinamento: Compartilhar com João Vinicius os vídeos explicativos sobre o uso da base de conhecimento e da ferramenta.
+* [Leandro Marques Gontijo Jersé] Investigar fechamento de protocolos: Analisar por que os protocolos de atendimento não estão sendo finalizados corretamente dentro do sistema Hyper.
+* [João Pedro Borges Martins] Elaborar questionário: Elaborar documento com perguntas e dados divergentes identificados para a equipe avaliar.
+* [João Pedro Borges Martins] Enviar material: Enviar o material de dúvidas e dados divergentes por e-mail com cópia para João Vinicius Dessimoni Fernandes.
+* [Leandro Marques Gontijo Jersé] Analisar falhas: Analisar casos de falha de resposta e protocolos abertos relacionados ao agente Esperança, Hyperflow e outros agentes.
+* [Leandro Marques Gontijo Jersé] Implementar sistema: Implementar sistema de separação de registros de conversa para diferenciar interações de agentes humanos e IAs.
+* [Leandro Marques Gontijo Jersé] Consultar colega: Conversar com João Lucas sobre o sistema de monitoramento de protocolos abertos para possível replicação.
+* [Leandro Marques Gontijo Jersé, João Lucas] Otimizar torre: Trabalhar em melhorias e funcionalidades na torre de controle utilizando o conhecimento sobre a solução.
+
+
+
+
+Detalhes
+* Separação de conversas por protocolo: Leandro Marques Gontijo Jersé informou que a separação de conversas por protocolo do Hyper foi concluída em ambiente de desenvolvimento e será movida para produção, visando corrigir a segmentação anterior que era baseada apenas em dias (00:04:25).
+* Discrepância de volume de dados no dashboard: João Pedro Borges Martins expressou preocupação com a diferença de volume entre o relatório de curadoria e o Hyper, citando como exemplo o dia 15/05, onde os números divergiam significativamente (aproximadamente 277 protocolos na torre versus 2000 no Hyper) (00:05:23).
+* Análise das categorias de atendimento: João Pedro Borges Martins questionou a clareza de certas classificações na Inteligência Artificial, como "pagamento confirmado" e "contato iniciado", buscando entender os motivos de transferência para humanos quando a Inteligência Artificial deveria gerenciar essas demandas (00:07:44).
+* Funcionamento do sistema de funil e tags: Leandro Marques Gontijo Jersé explicou que o sistema de funil e tags é uma ferramenta configurável e que, atualmente, utiliza um modelo padrão enquanto o cliente não define as configurações personalizadas, ressaltando que as transferências ocorrem conforme o fluxo e a remoção das etapas conforme a evolução do atendimento (00:08:38).
+* Limitações técnicas do dashboard: João Vinicius Dessimoni Fernandes esclareceu que os dados visualizados no dashboard da torre provêm de uma consulta de alta complexidade, que, devido a problemas de performance, passou a ser executada em intervalos de 12 horas, podendo gerar divergências temporárias em relação ao tempo real (00:10:16).
+* Processo de transbordo da Inteligência Artificial: Leandro Marques Gontijo Jersé detalhou que as transferências da agente "Esperança" são baseadas em comandos nos prompts e que o motivo do transbordo pode ser verificado em relatórios específicos, onde a Inteligência Artificial pode ocasionalmente identificar incorretamente o motivo da transferência (00:13:07).
+* Arquitetura do agente tagueador: Leandro Marques Gontijo Jersé descreveu o funcionamento do "agente tagueador", que é composto por múltiplos agentes responsáveis por salvar conversas, identificar o funil e realizar o tagueamento com base em regras predefinidas, destacando a necessidade de descrições explícitas para cada tag (00:15:03).
+* Necessidade de melhorias nas instruções das tags: João Vinicius Dessimoni Fernandes sugeriu que o problema de classificação não reside na ferramenta, mas na ausência de instruções claras nas tags, recomendando que as descrições e o fluxo das tags sejam aprimorados para torná-los mais intuitivos para a Inteligência Artificial (00:18:11).
+* Investigação de processos não automatizados: Leandro Marques Gontijo Jersé comentou que processos como renegociações não são realizados pela torre atualmente, propondo que João Pedro Borges Martins forneça exemplos de casos onde a Inteligência Artificial deveria resolver a questão sozinha, para que a equipe possa avaliar a viabilidade de desenvolvimento (00:19:13).
+* Volumetria e divergência entre sistemas: A equipe discutiu as possíveis causas para a alta contagem no Hyper, levantando a hipótese de que o Hyper contabiliza todos os agentes (como "Socorro" e "Maria"), enquanto a torre monitora exclusivamente a agente "Esperança", e cogitaram a criação de um departamento exclusivo para a "Esperança" para mitigar a disparidade (00:21:40) (00:24:18).
+* Registro de mensagens entre agentes: João Vinicius Dessimoni Fernandes reforçou que a torre salva as mensagens apenas quando estas passam pela agente "Esperança", garantindo a precisão dos dados, e a equipe discutiu a importância de monitorar também as interações entre agentes, como "Esperança" e "Socorro" (00:22:27) (00:35:55).
+* Base de conhecimento e tomada de decisão: Leandro Marques Gontijo Jersé orientou João Pedro Borges Martins a utilizar a base de conhecimento (ID files) da Inteligência Artificial para incluir normas e processos, o que permite que a agente tome decisões mais assertivas com menor custo de processamento (00:32:25).
+* Identificação de protocolos inativos: A equipe debateu a presença de protocolos antigos que permanecem ativos no Hyper, dificultando a medição precisa, e concluíram que é necessário investigar se o sistema de inatividade está sendo acionado corretamente ou se existem falhas no fechamento dos protocolos pelos agentes (00:37:27).
+* Definição dos próximos passos e documentação: João Pedro Borges Martins comprometeu-se a estruturar um documento com perguntas e casos reais encontrados para que a equipe de tecnologia possa investigar as falhas, mapear as oportunidades de melhoria e realizar os ajustes necessários (00:41:00) (00:48:44).
+* Responsabilidades da equipe: João Vinicius Dessimoni Fernandes definiu as frentes de trabalho: Leandro Marques Gontijo Jersé ficará responsável por conduzir os estudos sobre a agente "Esperança" e o Hyperflow, enquanto João Lucas e Leandro focarão nas melhorias e funcionalidades da torre (00:49:36).
+
+
+
+
+Revise as anotações do Gemini para checar se estão corretas. Confira dicas e saiba como o Gemini faz anotações
+Como está a qualidade de destas observações? Responda a uma breve pesquisa para nos dar seu feedback, incluindo o quanto as observações foram úteis para o que você precisa.

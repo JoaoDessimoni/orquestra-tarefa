@@ -1,0 +1,63 @@
+﻿mai. 20, 2026
+Filtros prompts e Trigger agenda
+convidado Leandro Marques Gontijo Jersé João Pedro Borges Martins João Vinicius Dessimoni Fernandes
+Anexos Filtros prompts e Trigger agenda
+Registros da reunião Transcrição 
+
+
+
+
+Resumo
+Reunião de alinhamento sobre a arquitetura multiorganização da Torre 2.0 e definição de estratégias operacionais.
+
+Arquitetura e Escopo Multiorganização
+A equipe adotará uma arquitetura multiorganização com banco de dados segregado via esquemas. Esta estrutura permitirá autonomia na configuração individualizada de cada unidade de negócio.
+
+Estratégia de Regras e Prompts
+Decidiu-se priorizar o uso de regras modulares em vez de prompts complexos. Regras serão vestimentas para o esqueleto do prompt, garantindo maior eficiência e clareza sistêmica.
+
+Otimização e Segurança Operacional
+Serão desenvolvidos templates para acelerar a configuração das réguas, reduzindo o trabalho manual. Backups rigorosos foram estabelecidos para garantir a segurança durante as futuras implementações.
+
+
+O que achou deste resumo? Sim ou Não é útil?
+
+
+
+
+Próximas etapas
+* [João Pedro Borges Martins] Definir Visibilidade Dados: Discutir com a Jessica a estrategia de multiplas organizacoes e quais informacoes serao publicas ou privadas entre elas.
+* [João Pedro Borges Martins] Testar Configuracoes: Avaliar as configuracoes de prompts e regras implementadas e reportar eventuais falhas ou problemas para a equipe tecnica.
+* [Leandro Marques Gontijo Jersé] Configurar Notificacoes: Implementar o sistema de notificacoes via Google Chat conforme a preferencia do usuario.
+* [Leandro Marques Gontijo Jersé] Filtrar Conhecimento: Implementar filtros na base de conhecimento para que as informacoes sejam aplicadas contextualmente conforme o departamento ou regra.
+* [Leandro Marques Gontijo Jersé, João Pedro Borges Martins] Revisar prompts: Atualizar os comandos dos agentes para ficarem mais genericos. Assegurar que o conhecimento seja especifico para cada caso.
+* [João Vinicius Dessimoni Fernandes, Leandro Marques Gontijo Jersé, João Pedro Borges Martins] Reunir com Jéssica: Discutir quais configuracoes da multiorganizacao serao unificadas e quais serao individualizadas.
+* [João Pedro Borges Martins] Mapear regras: Identificar os problemas e as regras de negocio antes de iniciar as alteracoes.
+* [Leandro Marques Gontijo Jersé, João Pedro Borges Martins] Realizar backup: Salvar todas as versoes atuais dos comandos antes de executar mudancas.
+
+
+
+
+Detalhes
+* Introduções e perfil acadêmico: Leandro Marques Gontijo Jersé compartilhou sua trajetória, mencionando ser estagiário no sétimo período da faculdade (00:00:00). A conversa abordou brevemente seu histórico acadêmico, incluindo passagens anteriores pela aeronáutica e pela engenharia civil antes de seguir para a computação em agosto de 2023, sendo destacado que eles ingressaram na faculdade aos 16 anos (00:00:58).
+* Demandas da Torre 2.0: Leandro Marques Gontijo Jersé levantou demandas referentes à Torre 2.0, focando em "prompts adaptáveis para régua mais sistema de evaluations" (00:01:28). João Pedro Borges Martins expressou a necessidade de personalizar o sistema para atender múltiplas realidades de negócios (como Finza, Blips e Ideal), questionando se isso deveria ser feito via prompt, regra ou filtro (00:02:20).
+* Arquitetura Multiorganização: João Vinicius Dessimoni Fernandes explicou que a força-tarefa composta por eles, João Lucas e Marcos, está transformando a Torre em uma arquitetura "multiorganização". Esta estrutura permitirá que cada organização tenha seu esquema no banco de dados de forma segregada, exigindo, consequentemente, a reconfiguração das réguas (00:03:11).
+* Proposta de implementação técnica: Leandro Marques Gontijo Jersé sugeriu habilitar a função de "novo prompt" para permitir a criação de prompts baseados em filtros, mantendo um esqueleto básico para todas as organizações enquanto se especializa o atendimento com base na empresa ou carteira (00:05:08). João Pedro Borges Martins avaliou a ideia inicial como complexa (00:06:06).
+* Estratégia de implementação de workflows: João Vinicius Dessimoni Fernandes sugeriu que a criação de diferentes workflows (como Esperanza Finza, Esperanza Blips) no N8N seria uma solução prática e rápida, mantendo a estrutura unificada mas permitindo volumetria individualizada por organização (00:07:57). Foi discutido que as consultas continuariam na Torre, alterando-se apenas o token de credencial (00:09:08).
+* Sistemas de registro e controle: Leandro Marques Gontijo Jersé propôs um sistema de registro por tags para identificar a organização, o que unificaria o gerenciamento. João Vinicius Dessimoni Fernandes confirmou que o modelo multiorganização permite que o próprio negócio configure sua esperança de maneira autônoma, ajustando nuances específicas para cada organização (00:09:53).
+* Segregação de carteiras e dados: A discussão girou em torno de como tratar a gestão da carteira (se unificada ou segregada). João Vinicius Dessimoni Fernandes enfatizou que a decisão depende de João Pedro Borges Martins, questionando se as carteiras de clientes devem ser idênticas para todas as organizações ou específicas para cada uma (00:11:36) (00:13:24).
+* Estrutura de banco de dados e compartilhamento: João Vinicius Dessimoni Fernandes esclareceu que, tecnicamente, o banco de dados da Torre utiliza esquemas, permitindo que dados comuns (como gestão de carteira) fiquem em um esquema "public", enquanto configurações da Esperança fiquem em esquemas organizacionais (00:16:40). Isso permitiria manter a carteira unificada visualmente (00:17:50).
+* Uso de regras para especialização: Leandro Marques Gontijo Jersé defendeu o uso de regras, que permitem selecionar filtros e contextos específicos (como datas ou carteiras), sendo mais poderosas que prompts para o caso de uso discutido (00:20:13). João Pedro Borges Martins expressou preocupações sobre a acurácia da Inteligência Artificial e a complexidade de gerenciar múltiplos condicionais (00:21:27).
+* Funcionamento das Inteligências Artificiais: Leandro Marques Gontijo Jersé explicou que, como utilizam Grandes Modelos de Linguagem (LLMs), a inteligência artificial opera de forma probabilística. Eles esclareceram que a aplicação de regras não funciona como uma série de condicionais empilhados, mas que o sistema utiliza apenas a regra necessária para o contexto, evitando sobrecarga (00:23:26).
+* Implementação de Agenda e notificações: Leandro Marques Gontijo Jersé apresentou um sistema de agenda que está em fase final de testes (00:25:05). João Pedro Borges Martins optou por receber as notificações do sistema via Google Chat (00:26:15).
+* Planejamento estratégico e deveres de casa: João Vinicius Dessimoni Fernandes solicitou que João Pedro Borges Martins alinhe com Jéssica e o time (João Lucas e Marcos) a definição do que será público versus privado entre as organizações. Foi acordado marcar um ponto de alinhamento com a diretoria para definir essas responsabilidades (00:28:22).
+* Operacionalização de regras e prompt: João Pedro Borges Martins questionou sobre a gestão de descontos e quitação, e Leandro Marques Gontijo Jersé orientou que o prompt deve ser mantido genérico e enxuto, deixando as especificidades para a aba de regras (00:30:35).
+* Definição de papéis no sistema: A equipe definiu uma analogia para o sistema: o prompt é o esqueleto (corpo), a regra é a roupa (vestimenta/vivência) e o conhecimento é o cérebro (memória) (00:33:51). Eles concordaram que priorizar o conhecimento e regras modulares é o caminho mais eficiente (00:32:44) (00:34:43).
+* Melhorias de interface e eficiência: João Pedro Borges Martins criticou a lentidão operacional atual para configurar as réguas, citando que o processo envolve muitos cliques e detalhes (00:35:44) (00:38:10). Leandro Marques Gontijo Jersé e João Vinicius Dessimoni Fernandes discutiram a ideia de criar templates ou sistemas de cópia para acelerar a configuração e reduzir o trabalho manual (00:36:52).
+* Encerramento e garantia de segurança: João Vinicius Dessimoni Fernandes reforçou a necessidade de backups rigorosos antes de qualquer mudança estrutural. Leandro Marques Gontijo Jersé garantiu que possui backups no Git (00:40:23). A reunião foi encerrada com o compromisso de colaboração entre eles para as implementações futuras (00:40:52).
+
+
+
+
+Revise as anotações do Gemini para checar se estão corretas. Confira dicas e saiba como o Gemini faz anotações
+Como está a qualidade de destas observações? Responda a uma breve pesquisa para nos dar seu feedback, incluindo o quanto as observações foram úteis para o que você precisa.

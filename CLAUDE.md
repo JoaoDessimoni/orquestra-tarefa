@@ -24,7 +24,9 @@ Sequência obrigatória no início de cada turno:
 
 | Quando o usuário menciona... | Use |
 |---|---|
-| pendência, bloqueio, decisão pendente, problema mapeado, "preciso lembrar de…" | `/pendencia` (skill `pendencia`) ou agente `pendencia-tracker` |
+| pendência tática, bloqueio, "preciso lembrar de…", tarefa atômica do supervisor | `/pendencia` (skill `pendencia`) ou agente `pendencia-tracker` |
+| demanda do negócio, história, épico, item, refinar, priorizar backlog, solicitação da Jéssica | `/backlog` (skill `backlog`) ou agente `po-backlog` |
+| anexo formalizado, doc do gestor, transcrição de reunião com demandas | `/backlog from-solicitacao <arquivo>` |
 | reunião, ata, alinhamento (2+ pessoas) | `/reuniao` (skill `reuniao`) |
 | 1:1, 1on1, conversa individual com pessoa do squad | `/reuniao` com tipo `1on1` (move depois para `1on1s/`) |
 | análise, investigação, comparativo, RFC, post-mortem | `/analise` (skill `analise`) |
@@ -33,7 +35,8 @@ Sequência obrigatória no início de cada turno:
 | deck, slide, apresentação | pipeline `/novo-deck`, `/novo-slide`, `/revisar-deck` |
 | pasta fora do lugar, README desatualizado, organização | `/organizar` (agente `folder-organizer`) |
 | fato técnico Finza, IAF, Torre, Esperanza | agente `finza-researcher` antes de redigir |
-| board, dashboard, painel, visão geral, "como tá tudo" | abrir `BOARD.html` na raiz (auto-alimentado); usar `/atualizar-board` se sincronia parece defasada |
+| board, dashboard, painel, visão geral, "como tá tudo" | abrir `BOARD.html` na raiz (projeção de Gestao/, auto-alimentado); usar `/atualizar-board` se sincronia parece defasada |
+| visualizar backlog, ver itens, kanban backlog | abrir `backlog.html` na raiz (projeção do Backlog/, regenerado por `/backlog regenerate`) |
 
 ### Encadeamento
 
@@ -51,7 +54,7 @@ Quando o pedido cruza 2+ domínios (ex: "analisa essas demandas e gera relatóri
 ```
 Repasse/
 ├── .claude/                          # Configuração do agente
-│   ├── agents/                       # Sub-agentes especializados
+│   ├── agents/                       # Sub-agentes especializados (10)
 │   │   ├── finza-researcher.md       # Pesquisa nos docs de contexto
 │   │   ├── slide-architect.md        # Estrutura outline do deck
 │   │   ├── slide-writer.md           # Redige texto no tom Finza
@@ -59,38 +62,39 @@ Repasse/
 │   │   ├── slide-builder.md          # Implementa HTML/CSS/JS vanilla
 │   │   ├── slide-reviewer.md         # QA: checklist Finza
 │   │   ├── folder-organizer.md       # Mantém arquitetura organizada
-│   │   ├── pendencia-tracker.md      # Gerencia Gestao/Pendencias
+│   │   ├── pendencia-tracker.md      # Gerencia Gestao/Pendencias (TÁTICO)
+│   │   ├── po-backlog.md             # Gerencia Backlog/ — Product Owner do squad (ESTRATÉGICO)
 │   │   └── board-updater.md          # Reescreve JSON inline de BOARD.html (projeção de Gestao/)
-│   ├── commands/                     # Slash commands
+│   ├── commands/                     # Slash commands (11)
 │   │   ├── novo-deck.md              # Orquestra deck completo
 │   │   ├── novo-slide.md             # Adiciona slide a deck existente
 │   │   ├── revisar-deck.md           # Roda reviewer em deck existente
 │   │   ├── organizar.md              # Roda folder-organizer
-│   │   ├── pendencia.md              # CRUD de pendências
+│   │   ├── pendencia.md              # CRUD de pendências táticas
+│   │   ├── backlog.md                # CRUD/refinement de backlog estratégico
 │   │   ├── reuniao.md                # Registra nota de reunião (em pasta datada)
 │   │   ├── analise.md                # Cria análise em Gestao/Analises/<dd-mm-aaaa>/
 │   │   ├── relatorio.md              # Cria relatório em Analises/<dd-mm-aaaa>/Relatorio/
 │   │   ├── atualizar-board.md        # Força resync do BOARD.html com Gestao/
 │   │   └── status.md                 # Gera status semanal do squad
-│   ├── skills/                       # Conhecimento canônico
+│   ├── skills/                       # Conhecimento canônico (4)
 │   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
-│   │   └── finza-contexto/           # Resumo do negócio Finza
+│   │   ├── finza-contexto/           # Resumo do negócio Finza
+│   │   └── po-backlog/               # INVEST, Given/When/Then, 7 frentes, RICE
 │   └── settings.local.json
 │
 ├── CLAUDE.md                         # ← Este arquivo
-├── BOARD.html                        # Board perpétuo — projeção visual de Gestao/ (auto-alimentado)
+├── BOARD.html                        # Board perpétuo — projeção visual de Gestao/ (auto-alimentado pelo board-updater)
+├── backlog.html                      # Visualizador do Backlog/ — JSON inline com 30+ itens em 7 frentes (regenerado por /backlog regenerate)
 │
 ├── Docs/                             # Base de contexto (fonte da verdade)
 │   ├── BRIEFING.md                   # Spec viva do deck principal (atualizar a cada iteração)
-│   ├── finza/                        # Docs canônicos de negócio
-│   │   ├── CONTEXTO-FINZA.md
-│   │   ├── PLATAFORMAS.md
-│   │   ├── TORRE_DE_CONTROLE_OVERVIEW.md
-│   │   ├── regua_de_cobranca.png
-│   │   └── repasse-joao-vinicius-iaf.html
-│   └── agentes/                      # Docs dos agentes IA Finza
-│       └── ESPERANZA_AGENT_OVERVIEW.md
+│   └── finza/                        # Docs canônicos de negócio
+│       ├── CONTEXTO-FINZA.md
+│       ├── PLATAFORMAS.md
+│       ├── regua_de_cobranca.png
+│       └── repasse-joao-vinicius-iaf.html
 │
 ├── Apresentacoes/
 │   ├── executando/                   # Decks em construção (HTML editáveis)
@@ -98,8 +102,22 @@ Repasse/
 │   │   └── apresentacao_cto_13-05-2026.html
 │   └── referencias/                  # PDFs/PPTX de referência (Boas-vindas Finza, Roadmap, Régua)
 │
-└── Gestao/                           # Painel de gestão do supervisor
-    ├── Pendencias/                   # PLANA — Pendências (P01-Pnn + custom_*)
+├── Backlog/                          # Backlog ESTRATÉGICO do squad IAF (7 frentes)
+│   ├── README.md
+│   ├── BACKLOG.md                    # Relatório mestre (regenerado por /backlog regenerate)
+│   ├── frentes/
+│   │   ├── bitrix-automacoes/        # BBT## (Bitrix) + BAU## (Automações) — frente unificada
+│   │   ├── torre/                    # BTR## — Torre de Controle (multi-org, refatoração)
+│   │   ├── clara/                    # BCL## — agente Clara (formalização)
+│   │   ├── esperanza/                # BES## — agente Esperanza (renegociação)
+│   │   ├── valentina/                # BVA## — agente Valentina (SAC)
+│   │   ├── livia/                    # BLV## — agente Lívia (jurídico/distrato)
+│   │   └── estrategica/              # BST## — transversal (NPS, narrativa, processo)
+│   ├── solicitacoes/                 # Docs formalizados pelo negócio (.txt, .pdf)
+│   ├── prints/                       # Screenshots de consulta
+│   └── contexto/                     # Docs de apoio (Torre overview, Esperanza overview)
+│
+└── Gestao/                           # Painel TÁTICO do supervisor
     ├── Reunioes/                     # DATADA — Reunioes/<dd-mm-aaaa>/<arquivo>.md
     ├── Analises/                     # DATADA — Analises/<dd-mm-aaaa>/<arquivo>.md
     │   └── <dd-mm-aaaa>/
@@ -107,7 +125,9 @@ Repasse/
     └── 1on1s/                        # DATADA — 1on1s/<dd-mm-aaaa>/<arquivo>.md
 ```
 
-> **Pasta datada** = `dd-mm-aaaa/` (ex: `18-05-2026/`). **Arquivos internos** seguem ISO `YYYY-MM-DD_<slug>.md` (ex: `2026-05-18_demandas-cobranca.md`). Cada análise pode gerar 1 ou mais relatórios em `Relatorio/`. **Pendências continuam planas** — não recebem pasta datada porque vivem como artefatos rastreáveis individualmente via `pendencia-tracker`.
+> **Pasta datada** = `dd-mm-aaaa/` (ex: `18-05-2026/`). **Arquivos internos** seguem ISO `YYYY-MM-DD_<slug>.md` (ex: `2026-05-18_demandas-cobranca.md`). Cada análise pode gerar 1 ou mais relatórios em `Relatorio/`.
+
+> **Backlog vs Gestao/** — `Backlog/` é estratégico (histórias por frente, RICE, sponsor); `Gestao/` é tático (reuniões, análises, 1on1s do dia a dia). Pendência tática (Gestao/Pendencias) foi absorvida pelo Backlog em 22/05/2026 — quando voltar a ser necessário tracking tático individual, recriar `Gestao/Pendencias/` e usar `pendencia-tracker` em paralelo ao backlog.
 
 ---
 
@@ -139,9 +159,10 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 
 **Conteúdo:**
 - Não invente. Marque `<!-- TODO: confirmar com gestor -->` em vez de fabricar fato.
-- Cite a fonte. Toda afirmação técnica deve poder ser ancorada em algum doc em `Docs/`.
+- Cite a fonte. Toda afirmação técnica deve poder ser ancorada em algum doc em `Docs/` ou `Backlog/contexto/`.
 - Atualize `Docs/BRIEFING.md` a cada mudança estrutural do deck principal.
 - Toda operação que cria/edita arquivo em `Gestao/` deve disparar `board-updater` ao final. O board é projeção da realidade — defasagem é bug.
+- **Backlog é estratégico, pendência é tática.** Item de backlog (`Backlog/frentes/`) tem história + critérios de aceite + subtarefas + RICE — dura semanas/meses. Pendência (`Gestao/Pendencias/`) é tarefa atômica do supervisor — dura dias. Não confunda os dois.
 
 **Visual:**
 - Paleta Finza exata. Sem cores fora dos tokens em `.claude/skills/finza-design-system/`.
@@ -178,12 +199,30 @@ Você descreve o objetivo, público, duração. O comando roda o pipeline comple
 ```
 Roda checklist Finza e devolve relatório.
 
-### Registrar pendência
+### Registrar pendência (tarefa tática)
 ```
 /pendencia add <título>
 /pendencia list
 /pendencia close <id>
 ```
+
+### Gerenciar backlog estratégico
+```
+/backlog                                  # lista itens ativos agrupados por frente
+/backlog add "<título>"                   # cria item bruto em uma das 7 frentes
+/backlog refine <id>                      # quebra subtarefas, escreve CA Given/When/Then, calcula RICE
+/backlog review <id>                      # auditoria INVEST (só aponta, não edita)
+/backlog prioritize                       # recalcula ranking RICE
+/backlog analyze                          # gaps, sobreposições, dependências, deadlines críticos
+/backlog regenerate                       # reescreve Backlog/BACKLOG.md mestre + JSON inline do backlog.html
+/backlog from <P##>                       # atalho — cria item a partir de pendência tática
+/backlog from-solicitacao <arquivo>       # lê doc do negócio em Backlog/solicitacoes/ e propõe N itens
+```
+Cada item vira `.md` em `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` com história, CA, subtarefas, RICE. Prefixos: `BBT` (Bitrix), `BTR` (Torre), `BCL` (Clara), `BES` (Esperanza), `BVA` (Valentina), `BAU` (Automações), `BLV` (Lívia), `BST` (Estratégica).
+
+**Refinement-pass canônico (introduzido 25/05/2026):** todo item refinado carrega seção `## Observações PO` com voz cética — gates não-negociáveis, contrapropostas concretas, sugestões de quebra, riscos políticos. Marcações `⚠️ PO:` em subtarefas críticas para sinalização visual. Princípio: "não tudo que o negócio pede vai pra frente — backlog é proposta de valor avaliada, não fila de pedidos."
+
+**Visualizador `backlog.html`:** projeção visual do `Backlog/` análoga ao `BOARD.html` (que projeta `Gestao/`). JSON inline em `<script id="backlog-data">` reflete os `.md` de `Backlog/frentes/`. Fonte da verdade: os `.md`. Para regerar o JSON: `/backlog regenerate`.
 
 ### Registrar reunião
 ```
@@ -246,6 +285,9 @@ Lê `Gestao/` e gera resumo executivo: pendências em curso, reuniões da semana
 - Análises: `Gestao/Analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`
 - Relatórios: `Gestao/Analises/<dd-mm-aaaa>/Relatorio/YYYY-MM-DD_<slug>.md`
 - Pendências: `Gestao/Pendencias/Pnn_<slug>.md` (ex: `P07_ambientes_teste.md`) ou `custom_<slug>.md` — **plana, sem pasta datada**.
+- Itens de backlog: `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` (ex: `Backlog/frentes/esperanza/BES03_volume_transferencias.md`). Prefixes: BBT (Bitrix), BAU (Automações) — ambos em `bitrix-automacoes/`; BTR (Torre); BCL (Clara); BES (Esperanza); BVA (Valentina); BLV (Lívia); BST (Estratégica).
+- Solicitações formalizadas: `Backlog/solicitacoes/YYYY-MM-DD_<autor>_<assunto>.<ext>`.
+- Prints: `Backlog/prints/YYYY-MM-DD_<sistema>_<assunto>.<ext>`.
 
 **Datas:**
 - Sempre absolutas no conteúdo (`2026-05-15`, não "hoje" nem "Thursday").
@@ -263,6 +305,37 @@ origem: Slide 5 do deck CTO 13/05
 owner: João Vinícius
 criada: 2026-05-15
 deadline: 2026-07-10
+---
+```
+
+**Frontmatter de item de backlog:**
+```yaml
+---
+id: BES03                                  # prefix da frente + nn (BBT/BAU/BTR/BCL/BES/BVA/BLV/BST)
+title: Título conciso e acionável
+frente: esperanza                          # bitrix-automacoes|torre|clara|esperanza|valentina|livia|estrategica
+status: refinado                           # a-refinar | em-refinamento | refinado | em-curso | bloqueado | cancelado | entregue | arquivado
+prioridade: alta                           # urgente | alta | media | baixa (derivada do RICE)
+rice: { reach: 8, impact: 7, confidence: 6, effort: 5, score: 6.7 }
+esforco: M                                 # XS | S | M | L | XL (camisetas)
+valor_negocio: alto                        # alto | medio | baixo
+origem:
+  pendencias: [P19]                        # IDs de pendências táticas (se houver)
+  reunioes: [...]
+  solicitacoes: [...]
+  analises: [...]
+roadmap_vinculado: RM03                    # null se não materializa iniciativa do roadmap
+owner: João Vinícius
+implementador: Joao Lucas                  # null se não atribuído
+sponsor: Jéssica
+criada: 2026-05-22
+refinada: 2026-05-22                       # null se status=bruto
+deadline_alvo: 2026-Q3                     # trimestre OU data específica
+dependencias: [BES01]                      # itens que precisam terminar antes
+bloqueia: [BVA02]                          # itens parados aguardando este
+riscos: [...]
+premissas: [...]
+tags: [esperanza, tabulacoes]
 ---
 ```
 
