@@ -1,0 +1,56 @@
+Agente de Cobrança
+Data: 26/05/2026
+Autor: João Lucas
+
+De onde veio, onde estamos e para onde vamos
+De onde veio
+O sistema da agente Esperanza começou em agosto de 2024. A proposta inicial dela não era ser um atendente como a Socorro (que veio depois) nem um agente interno como o Salvador (que veio antes). O objetivo sempre foi a cobrança automatizada com IA. Essa cobrança consistia em ler uma lista de contatos do BQ/Planilha, enviar uma mensagem de tom personalizado de acordo com o número de dias vencidos e conseguir passar as informações dos títulos vencidos, permitindo que o cliente pagasse sem precisar pedir os dados a um humano nem acessar a plataforma. Bastava copiar os dados do WhatsApp para o banco e pagar. Quaisquer dúvidas iriam para o humano, desde que não fossem em relação às parcelas de equipamento vencidas.
+
+Depois da primeira etapa, o foco passou a ser integrar Salvador + Esperanza para que, além dos dados financeiros, ela conseguisse validar o bloqueio e oferecer o desbloqueio em confiança. A partir disso, fomos seguindo para adicionar mais funcionalidades e também integrar o agente com a Socorro, de forma que toda pergunta de financeiro e cobrança passasse pela Esperanza — uma N1 da cobrança que não tem autoridade de renegociar ou registrar dados (além do desbloqueio em confiança), mas sim uma IA consultiva e capaz de dar o máximo de informações de fácil acesso ao cliente.
+
+Esse foi o projeto da Esperanza por 1 ano, com melhorias nos dados a que ela tinha acesso, no controle das mensagens e na medição de desempenho: quantas pessoas respondiam, quantas pagavam, quantas eram transferidas e quantas ela conseguia reter sem transferir. Tudo usando planilha/BQ para ver os logs da Esperanza e os dados financeiros de uma carteira muito menor na época.
+
+Nesse período, nossas maiores dificuldades eram o volume de envios no dia 15 — pelas limitações do ambiente de automação, que não aguentava um volume muito grande de disparos — e também a mentalidade que tínhamos de não enviar tudo de uma vez para não sobrecarregar a fila dos atendentes. Hoje esse controle nem é mais possível, devido ao volume de ações disparadas pela Torre; antes já era um risco terminar de noite, agora tentar evitar isso é inviável. Outro problema que aconteceu algumas vezes — e que nos fez limitar a Esperanza muitas vezes — foi o fato de que, às vezes, ela passava informações de títulos futuros para o cliente pagar no lugar dos títulos vencidos. Isso nos fez criar uma funcionalidade que permitia informar o cliente sobre títulos futuros, mas sem disponibilizar as formas de pagamento. Essa questão hoje volta na nova versão: os clientes querem saber informações sobre títulos futuros e temos que conseguir passar isso sem gerar pagamentos errados.
+
+Onde estamos
+Com a Torre — o estado atual —, a Esperanza deixou de ser algo controlado pelo time de IA e passou a ser uma colaboração entre o time de IA e a Gestão do Operacional. Nós fornecemos o esqueleto, mas os responsáveis por configurar de fato as regras, a forma de falar, a forma de atender e o fluxo de atendimento são os gestores. Não considero isso consolidado hoje; é um ponto de falha/melhoria/oportunidade. Não podemos ser nós a treinar e vigiar o agente. Temos que dar as ferramentas para o time de operação treinar, avaliar e vigiar o agente, mas são eles que precisam ser responsáveis por aquilo que o agente fala ou não fala. Além disso, é nosso trabalho gerar as funcionalidades para a IA usar, mas são os gestores que precisam controlar quando e como ela deve ser usada. Eles não precisam saber os nomes das tools da IA, mas nós temos que mapear os termos que eles usam para as tools. Exemplo: o gestor vai colocar na instrução que a Esperanza não pode oferecer liberação em confiança se o cliente tiver mais de 11 dias vencido; nós, como desenvolvedores, precisamos deixar claro na system message (em trechos que só nós editamos) que, sempre que ela precisar saber o número de dias vencidos do cliente, ela tem que usar a tool do MCP para consultar esses dados — e que nunca pode inventar isso.
+
+Para onde vamos
+Nosso objetivo com a Esperanza é torná-la capaz de tudo que um agente humano é capaz de fazer. Para isso, precisamos primeiro mapear o que ela faz e o que não faz hoje, depois mapear tudo que o agente humano faz e não faz sozinho (sem depender de um terceiro), para então conseguirmos montar um roadmap completo de todas as funcionalidades que a Esperanza precisa ter. Podemos pensar na estratégia que usaram com o time de Sales Ops: eles ficaram uma semana em treinamento junto com os vendedores. Seria de extrema importância entendermos exatamente o que os operadores precisam fazer, para entender o que fazer e como fazer — às vezes podemos até achar melhorias nos processos deles, pelo nosso conhecimento sobre as informações e automações existentes. Um dos passos mais complicados é o de renegociação, que já está na nossa lista de afazeres. Ao mesmo tempo, lembro de algo que o Vinícius falou sobre o Pareto (acho que é isso): precisamos mapear todas as coisas que os operadores fazem, mas também o volume dessas coisas. Pode ser que consigamos fazer algo muito mais simples que a renegoicação num primeiro momento que tenha um ganho muito grande em volume — resolver um problema grande em volume, mas simples em complexidade de solução. Isso é algo que precisamos mapear através da própria Esperanza, mas também por análises de auditoria junto com as ferramentas que já existem hoje na empresa.
+
+Principais fluxos (trabalho)
+O fluxo de trabalho da pessoa que cuida da Esperanza consiste em 3 principais atividades:
+
+Analisar os alertas de casos de clientes com atendimento na Esperanza há mais de 24h. Hoje, João Lucas e Leandro recebem esses alertas no Discord; o Leandro passa parte do dia olhando esses casos. Às vezes são casos simples — mensagens automáticas de bots —, outros são algum erro do fluxo n8n ou Hyperflow, ou, por fim, porque algum humano fez algo que não deveria: por exemplo, usar o gatilho de transferir para a IA quando não deveria, ou entrar no meio do atendimento da Esperanza sem finalizar ou sem transferir para o departamento correto. (Para o problema do gatilho, o Leandro está seguindo a ideia que dei de validar o canal no gatilho, para não rodar quando um humano chama indevidamente.)
+
+Analisar os logs de erro do n8n. Hoje João Lucas e Leandro também recebem alertas no Discord toda vez que uma execução do fluxo da IA Esperanza dá algum tipo de erro. Isso não é raro e ajuda a gente a saber se quebramos alguma coisa. O n8n é fácil de debugar e também é uma fonte clara de saúde da IA: se temos muitos cancelamentos ou erros, provavelmente algum sistema que integramos quebrou — seja função nossa, seja conexão com a Torre, seja conexão com os modelos.
+
+Analisar os casos de conversas do Hyperflow. Esses casos são os incidentes que o pessoal de cobrança aponta para a gente. Às vezes olhamos esses casos sem nenhuma necessidade, e esse é um ponto de melhoria e alinhamento com o pessoal de lá. Isso vai até ser minimizado quando dermos acesso ao Claude, à Torre e ao BQ para esse pessoal, porque aí eles vão parar de perguntar para a gente perguntas óbvias. Mas essa é a principal atividade de quem cuida da Esperanza: tratar e entender os casos que o pessoal reporta no grupo.
+
+Pessoas chave
+As pessoas-chave para conseguirmos controlar a Esperanza são:
+
+Mateus Alberone — a pessoa que mais sabe de Hyperflow dentro da Blips e de tudo que podemos fazer com a IA por lá. Se estivermos com dúvidas ou quisermos fazer algo novo, provavelmente ele pode ajudar.
+
+Leandro — a pessoa que mais sabe do prompt e do que a Esperanza faz hoje. João Lucas e Mateus Alberone têm um conhecimento mais superficial do que exatamente ela está fazendo hoje para responder cada mensagem.
+
+Jéssica e João Pedro Martins — nosso ponto de controle sobre o que a Esperanza deveria ser, o ideal. A participação deles (ou de subordinados deles) precisa aumentar nas próximas etapas para concluir o objetivo de segregação de funções. O negócio é quem define o que a Esperanza fala e não fala; os devs só dão as ferramentas para eles conseguirem construir o mundo ideal deles.
+
+Leonardo Caixeta e Marco — ponto de contato entre o time de IA e o MF. Todos os nossos sistemas que integram com alguma coisa do MF passam por eles — seja para entender dos bancos de dados, seja para entender dos endpoints do MF. São as pessoas que vão nos ajudar a entender o que é possível e o que não é, e a resolver problemas de integrações que já existem ou questões sobre como as fontes de dados do MF estão organizadas.
+
+Principais problemas/incidentes
+Os principais problemas e incidentes da IA vêm da falta de mapeamento exato de casos de exemplo, casos de teste e definição exata do que é escopo da Esperanza. Isso será resolvido quando finalmente conseguirmos implementar o fluxo correto de separação de responsabilidades da Esperanza. Outros problemas de n8n, tools e infraestrutura serão resolvidos quando mudarmos para uma arquitetura de código mais robusta — mas precisa ficar no mapa o fluxo de tratativa de erros de tool com problemas.
+
+Além disso, hoje temos um fluxo de erro que transfere para o humano automaticamente no Hyperflow quando a Esperanza dá erro; isso precisa ficar mapeado para continuar acontecendo nas próximas versões.
+
+Em questão de incidentes, a Esperanza tem mais incidentes do pessoal do negócio falando que ela disse algo que não deveria ter dito. Isso só será resolvido quando tivermos o mapa exato de casos, com o pessoal de cobrança deixando claro o que fazer em cada caso e nós deixando claro para eles as limitações do sistema hoje.
+
+Pendências
+Pendências já mapeadas, mas que ainda precisam ser resolvidas:
+
+Atuação omnichannel da IA — a Jéssica quer o RCS (acho que é esse o nome) e o SMS melhorado que tem no Hyperflow também, para que nossa IA atenda por lá sem que haja problemas. Isso hoje está muito preso nos fluxos, hardcoded; precisa ser melhor arquitetado antes de colocarmos em prática. Mas é mais uma questão de futuro do que uma pendência.
+
+Informações mais completas da Torre para a IA — esta é uma pendência de fato. Colocar as informações mais completas da Torre para que a IA tenha uma visão melhor do todo, de modo que os prompts e regras possam usar dessa visão mais ampla da situação do cliente e dos contratos dele, e assim conseguir seguir os caminhos e fluxos desenhados pelo pessoal do negócio (quando eles desenharem esses fluxos).
+
+Observações
+Hoje todo o nosso fluxo de cobrança é n8n + Hyperflow; a Esperanza usa n8n + Hyperflow. Mesmo que tenhamos como alvo trocar o n8n por código, o Hyperflow continuará sendo, pelo menos por enquanto, algo fundamental para o fluxo da Esperanza. É fundamental que a pessoa responsável tenha conhecimento de Hyperflow e que nossos fluxos estejam sempre otimizados, simples e corretos — sem o Hyperflow, tudo desmorona. O Leandro já está pegando bem o assunto, mas muito provavelmente precisará de ajuda.

@@ -1,10 +1,11 @@
-# CLAUDE.md — Repasse / Workspace gerencial do Supervisor IAF
+# CLAUDE.md — Workspace gerencial do Supervisor IAF
 
-Esta pasta é o **workspace gerencial** do João Vinícius (Supervisor IAF, Finza). Ela serve a três propósitos:
+Esta pasta é o **workspace gerencial** do João Vinícius (Supervisor IAF, Finza). Ela serve a dois propósitos centrais, apoiados por uma base de contexto viva:
 
-1. **Produção de decks/apresentações** no padrão visual Finza — pipeline de agentes especializados.
-2. **Gestão do squad IAF** — pendências, reuniões, análises, 1:1s.
-3. **Base de contexto viva** — `Docs/` é a fonte da verdade sobre IAF, Torre, Esperanza, plataformas Finza.
+1. **Gestão do backlog do squad IAF** — backlog estratégico por frente (`Backlog/`), alimentado por reuniões/análises (`Gestao/`) e pelos sistemas de tickets (Quimera interno + Jira/Confluence Atlassian via MCP).
+2. **Produção de decks/apresentações** no padrão visual Finza — pipeline de agentes especializados.
+
+Apoio: **base de contexto viva** — `Docs/finza/` e `Backlog/contexto/` são a fonte da verdade sobre IAF, Torre, Esperanza e plataformas Finza.
 
 Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é vivo — atualize sempre que mudar a estrutura.
 
@@ -16,16 +17,15 @@ Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é
 
 Sequência obrigatória no início de cada turno:
 
-1. Ler a lista de skills disponíveis no `<system-reminder>` (finza-contexto, finza-design-system, finza-tom-voz + skills de comando `pendencia`, `reuniao`, `analise`, `relatorio`, etc.).
-2. Considerar os 8 agentes em `.claude/agents/` e os 9 comandos em `.claude/commands/`.
+1. Ler a lista de skills disponíveis no `<system-reminder>` (7 skills de conhecimento: finza-contexto, finza-design-system, finza-tom-voz, po-backlog, finza-mapas, quimera, jira + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, etc.).
+2. Considerar os **12 agentes** em `.claude/agents/` e os **15 comandos** em `.claude/commands/`.
 3. Se o pedido do usuário se encaixar em um comando/skill, **invoque-o automaticamente** via a ferramenta Skill — não execute manualmente nem peça pro usuário digitar o comando.
 
 ### Gatilhos diretos
 
 | Quando o usuário menciona... | Use |
 |---|---|
-| pendência tática, bloqueio, "preciso lembrar de…", tarefa atômica do supervisor | `/pendencia` (skill `pendencia`) ou agente `pendencia-tracker` |
-| demanda do negócio, história, épico, item, refinar, priorizar backlog, solicitação da Jéssica | `/backlog` (skill `backlog`) ou agente `po-backlog` |
+| tarefa, bloqueio, "preciso lembrar de…", demanda, história, épico, item, refinar, priorizar, solicitação da Jéssica | `/backlog` (skill `backlog`) ou agente `po-backlog`. **Pendências táticas foram aposentadas** — tudo vira item ou subtarefa de backlog. |
 | anexo formalizado, doc do gestor, transcrição de reunião com demandas | `/backlog from-solicitacao <arquivo>` |
 | reunião, ata, alinhamento (2+ pessoas) | `/reuniao` (skill `reuniao`) |
 | 1:1, 1on1, conversa individual com pessoa do squad | `/reuniao` com tipo `1on1` (move depois para `1on1s/`) |
@@ -33,14 +33,20 @@ Sequência obrigatória no início de cada turno:
 | relatório, report, status para terceiros, devolutiva | `/relatorio` (skill `relatorio`) |
 | status semanal, resumo da semana, "como tá o squad" | `/status` |
 | deck, slide, apresentação | pipeline `/novo-deck`, `/novo-slide`, `/revisar-deck` |
+| mapa mental, mapa do agente, "história da Esperanza", narrativa de uma frente | `/mapa <assunto>` (textual) ou `/mapa regenerar` (visual) — agente `context-curator` / `mapa-updater` |
+| atualizar contexto, doc de negócio defasado, overview de sistema, "documenta isso" | `/contexto` (agente `context-curator`) |
+| "atualiza tudo", sincronizar projeções, backlog+mapa de uma vez | `/sync` |
 | pasta fora do lugar, README desatualizado, organização | `/organizar` (agente `folder-organizer`) |
-| fato técnico Finza, IAF, Torre, Esperanza | agente `finza-researcher` antes de redigir |
-| board, dashboard, painel, visão geral, "como tá tudo" | abrir `BOARD.html` na raiz (projeção de Gestao/, auto-alimentado); usar `/atualizar-board` se sincronia parece defasada |
+| fato técnico Finza, IAF, Torre, Esperanza, backlog | agente `finza-researcher` antes de redigir |
 | visualizar backlog, ver itens, kanban backlog | abrir `backlog.html` na raiz (projeção do Backlog/, regenerado por `/backlog regenerate`) |
+| ver dependências/conexões do backlog em canvas | abrir `mapa-mental.html` na raiz (projeção do Backlog/, regenerado por `/mapa regenerar`) |
+| Quimera, ticket interno, card, demanda (no sistema interno), chamado, indicadores do squad (Conclusão/Cycle Time/Intruders/CSAT), "o que tá aberto no Quimera" | `/quimera` (skill `quimera`) → agente `quimera-ops` via MCP `quimera`. **Não confundir com `/backlog`** (estratégia `.md`) **nem com `/jira`** (Atlassian externo). Default = time `ia_automacao_finza`. |
+| "demandas do time/da equipe", "o que cada um tá fazendo", status do time inteiro, carga da equipe, visão de gestor sobre o Quimera | `/equipe` (skill `equipe`) → agente `quimera-ops`. Recorte fixo da equipe direta (João Lucas, João Pedro, Leandro, Marcos + supervisor), agrupado por pessoa → status. **Só leitura.** Para agir num ticket, `/quimera`. |
+| Jira, issue, JQL, projeto Jira, Confluence, página/espaço, "abre a issue ABC-123", "busca no Jira/Confluence" | `/jira` (skill `jira`) → agente `jira-ops` via MCP `claude_ai_Atlassian`. **Convive com o Quimera** (são sistemas distintos). Descobre site/projetos ao vivo — não inventa cloudId/key/accountId. |
 
 ### Encadeamento
 
-Quando o pedido cruza 2+ domínios (ex: "analisa essas demandas e gera relatório"), encadeie comandos em sequência: `/analise` → `/relatorio from <análise>` → `/pendencia add` para cada ação derivada.
+Quando o pedido cruza 2+ domínios (ex: "analisa essas demandas e gera relatório"), encadeie comandos em sequência: `/analise` → `/relatorio from <análise>` → `/backlog add` para cada ação estratégica derivada. Depois de mexer em vários `.md` de backlog, feche com `/sync` para reconciliar as projeções.
 
 ### Quando NÃO usar comando
 
@@ -52,41 +58,55 @@ Quando o pedido cruza 2+ domínios (ex: "analisa essas demandas e gera relatóri
 ## 1 · Arquitetura
 
 ```
-Repasse/
+orquestra-tarefa/
 ├── .claude/                          # Configuração do agente
-│   ├── agents/                       # Sub-agentes especializados (10)
-│   │   ├── finza-researcher.md       # Pesquisa nos docs de contexto
+│   ├── agents/                       # Sub-agentes especializados (12)
+│   │   ├── finza-researcher.md       # Pesquisa fatos com citação (Docs/, Backlog/contexto)
 │   │   ├── slide-architect.md        # Estrutura outline do deck
 │   │   ├── slide-writer.md           # Redige texto no tom Finza
 │   │   ├── slide-designer.md         # Define layout/visual do slide
 │   │   ├── slide-builder.md          # Implementa HTML/CSS/JS vanilla
 │   │   ├── slide-reviewer.md         # QA: checklist Finza
 │   │   ├── folder-organizer.md       # Mantém arquitetura organizada
-│   │   ├── pendencia-tracker.md      # Gerencia Gestao/Pendencias (TÁTICO)
-│   │   ├── po-backlog.md             # Gerencia Backlog/ — Product Owner do squad (ESTRATÉGICO)
-│   │   └── board-updater.md          # Reescreve JSON inline de BOARD.html (projeção de Gestao/)
-│   ├── commands/                     # Slash commands (11)
+│   │   ├── po-backlog.md             # Product Owner do squad — Backlog/ (ESTRATÉGICO)
+│   │   ├── mapa-updater.md           # Reescreve JSON de mapa-mental.html (projeção do Backlog/)
+│   │   ├── context-curator.md        # Cura mapas textuais + Docs/finza + overviews
+│   │   ├── quimera-ops.md            # Opera o Quimera (tickets internos Finza) via MCP — squad IAF
+│   │   └── jira-ops.md               # Opera o Jira & Confluence (Atlassian) via MCP — convive c/ Quimera
+│   ├── commands/                     # Slash commands (15)
 │   │   ├── novo-deck.md              # Orquestra deck completo
 │   │   ├── novo-slide.md             # Adiciona slide a deck existente
 │   │   ├── revisar-deck.md           # Roda reviewer em deck existente
 │   │   ├── organizar.md              # Roda folder-organizer
-│   │   ├── pendencia.md              # CRUD de pendências táticas
 │   │   ├── backlog.md                # CRUD/refinement de backlog estratégico
 │   │   ├── reuniao.md                # Registra nota de reunião (em pasta datada)
 │   │   ├── analise.md                # Cria análise em Gestao/Analises/<dd-mm-aaaa>/
 │   │   ├── relatorio.md              # Cria relatório em Analises/<dd-mm-aaaa>/Relatorio/
-│   │   ├── atualizar-board.md        # Força resync do BOARD.html com Gestao/
-│   │   └── status.md                 # Gera status semanal do squad
-│   ├── skills/                       # Conhecimento canônico (4)
+│   │   ├── status.md                 # Gera status semanal do squad
+│   │   ├── sync.md                   # Regenera as projeções do backlog (backlog + mapa)
+│   │   ├── mapa.md                   # Mapas mentais — visual (regenerar) + textual (<assunto>)
+│   │   ├── contexto.md               # Curadoria da base de contexto viva
+│   │   ├── quimera.md                # Opera tickets Quimera via MCP (consultar/criar card, indicadores)
+│   │   ├── equipe.md                 # Visão de gestor: demandas de toda a equipe no Quimera (só leitura)
+│   │   └── jira.md                   # Opera Jira & Confluence (Atlassian) via MCP
+│   ├── skills/                       # Conhecimento canônico (7)
 │   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
-│   │   ├── finza-contexto/           # Resumo do negócio Finza
-│   │   └── po-backlog/               # INVEST, Given/When/Then, 7 frentes, RICE
-│   └── settings.local.json
+│   │   ├── finza-contexto/           # Resumo do negócio Finza, frentes
+│   │   ├── po-backlog/               # INVEST, Given/When/Then, frentes, RICE
+│   │   ├── finza-mapas/              # Estrutura do mapa textual + contrato do mapa visual
+│   │   ├── quimera/                  # Catálogo MCP Quimera, status, times, membros, indicadores
+│   │   └── jira/                     # Catálogo MCP Atlassian (Jira+Confluence), JQL/CQL, descoberta
+│   ├── hooks/                        # Hooks do harness (registrados em settings.json)
+│   │   └── check-backlog-sync.ps1    # PostToolUse: lembra de regenerar projeções do backlog
+│   ├── settings.json                 # Config do projeto — registra o hook PostToolUse
+│   └── settings.local.json           # Overrides locais (permissions)
 │
 ├── CLAUDE.md                         # ← Este arquivo
-├── BOARD.html                        # Board perpétuo — projeção visual de Gestao/ (auto-alimentado pelo board-updater)
-├── backlog.html                      # Visualizador do Backlog/ — JSON inline com 30+ itens em 7 frentes (regenerado por /backlog regenerate)
+│
+│   ─── PROJEÇÕES (raiz, single-file, descartáveis — fonte é sempre o .md) ───
+├── backlog.html                      # Projeção do Backlog/ em kanban (po-backlog regenerate · id="backlog-data")
+├── mapa-mental.html                  # Projeção do Backlog/ em canvas (mapa-updater · /mapa regenerar · id="map-data")
 │
 ├── Docs/                             # Base de contexto (fonte da verdade)
 │   ├── BRIEFING.md                   # Spec viva do deck principal (atualizar a cada iteração)
@@ -99,10 +119,11 @@ Repasse/
 ├── Apresentacoes/
 │   ├── executando/                   # Decks em construção (HTML editáveis)
 │   ├── entregues/                    # Decks já apresentados (read-only de fato)
-│   │   └── apresentacao_cto_13-05-2026.html
+│   │   ├── apresentacao_cto_13-05-2026.html
+│   │   └── status-demandas-cobranca_time-negocio_18-05-2026.html
 │   └── referencias/                  # PDFs/PPTX de referência (Boas-vindas Finza, Roadmap, Régua)
 │
-├── Backlog/                          # Backlog ESTRATÉGICO do squad IAF (7 frentes)
+├── Backlog/                          # Backlog ESTRATÉGICO do squad IAF (8 frentes)
 │   ├── README.md
 │   ├── BACKLOG.md                    # Relatório mestre (regenerado por /backlog regenerate)
 │   ├── frentes/
@@ -112,12 +133,16 @@ Repasse/
 │   │   ├── esperanza/                # BES## — agente Esperanza (renegociação)
 │   │   ├── valentina/                # BVA## — agente Valentina (SAC)
 │   │   ├── livia/                    # BLV## — agente Lívia (jurídico/distrato)
-│   │   └── estrategica/              # BST## — transversal (NPS, narrativa, processo)
+│   │   ├── estrategica/              # BST## — transversal (NPS, narrativa, processo)
+│   │   └── sustentacao/              # Bugs/infra/correções operacionais (itens QMR#### do Quimera)
 │   ├── solicitacoes/                 # Docs formalizados pelo negócio (.txt, .pdf)
 │   ├── prints/                       # Screenshots de consulta
-│   └── contexto/                     # Docs de apoio (Torre overview, Esperanza overview)
+│   └── contexto/                     # Referência viva do backlog
+│       ├── mapa_esperanza.md         # MAPA TEXTUAL (narrativa: de onde veio/onde estamos/pra onde vamos)
+│       ├── torre_de_controle_overview.md   # overview da Torre (migrou de Docs/finza/)
+│       └── esperanza_agent_overview.md     # overview da Esperanza (migrou de Docs/agentes/)
 │
-└── Gestao/                           # Painel TÁTICO do supervisor
+└── Gestao/                           # Painel TÁTICO do supervisor (alimentador do backlog)
     ├── Reunioes/                     # DATADA — Reunioes/<dd-mm-aaaa>/<arquivo>.md
     ├── Analises/                     # DATADA — Analises/<dd-mm-aaaa>/<arquivo>.md
     │   └── <dd-mm-aaaa>/
@@ -127,13 +152,19 @@ Repasse/
 
 > **Pasta datada** = `dd-mm-aaaa/` (ex: `18-05-2026/`). **Arquivos internos** seguem ISO `YYYY-MM-DD_<slug>.md` (ex: `2026-05-18_demandas-cobranca.md`). Cada análise pode gerar 1 ou mais relatórios em `Relatorio/`.
 
-> **Backlog vs Gestao/** — `Backlog/` é estratégico (histórias por frente, RICE, sponsor); `Gestao/` é tático (reuniões, análises, 1on1s do dia a dia). Pendência tática (Gestao/Pendencias) foi absorvida pelo Backlog em 22/05/2026 — quando voltar a ser necessário tracking tático individual, recriar `Gestao/Pendencias/` e usar `pendencia-tracker` em paralelo ao backlog.
+> **Backlog vs Gestao/** — `Backlog/` é estratégico (histórias por frente, RICE, sponsor); `Gestao/` é tático (reuniões, análises, 1on1s do dia a dia) e funciona como **alimentador**: o que sai de uma reunião/análise vira item de backlog. A pendência tática (`Gestao/Pendencias/`) foi **aposentada em 27/05/2026**: virou item/subtarefa de backlog. IDs `Pnn` sobrevivem só como rótulo de origem.
+
+> **Dois esquemas de ID no backlog** — itens **internos** nascem `B<prefix><nn>` (ex.: `BES03`); itens **importados do Quimera** mantêm a key de origem `QMR####` (ex.: `QMR3415`). Ambos vivem em `Backlog/frentes/<frente>/`.
+
+> **Duas projeções, uma fonte** — `backlog.html` e `mapa-mental.html` projetam o **mesmo** `Backlog/frentes/` (kanban vs canvas). Toda projeção é descartável: a verdade está nos `.md`. `/sync` regenera as duas de uma vez. Mapas **textuais** (`Backlog/contexto/mapa_*.md`) são curadoria humana, não projeção — não entram no `/sync`.
+
+> **Hook de coerência do backlog (`PostToolUse`)** — registrado em `.claude/settings.json`, roda `.claude/hooks/check-backlog-sync.ps1` após todo `Edit`/`Write`/`MultiEdit`. Quando o arquivo tocado é fonte de backlog (`Backlog/frentes/**/*.md`), uma das projeções (`backlog.html` / `mapa-mental.html`) ou o mestre (`Backlog/BACKLOG.md`), ele injeta no contexto um lembrete para rodar `/backlog regenerate` (ou `/sync --backlog`) e regravar **as duas** projeções + `BACKLOG.md`. Para fonte de item, lembra ainda de revisar mapas textuais defasados via `/contexto`. O hook **só lembra** — quem regenera é o agente. Ele se cala durante uma regeneração legítima e ignora `README.md` e arquivos fora do backlog. Editar o `.ps1` ou o `settings.json` muda o comportamento.
 
 ---
 
 ## 2 · Pipeline de criação de slides
 
-Um slide Finza nasce de 5 etapas. Cada uma tem um sub-agente dedicado em `.claude/agents/`:
+Um slide Finza nasce de 6 etapas. Cada uma tem um sub-agente dedicado em `.claude/agents/`:
 
 ```
 1. RESEARCH      finza-researcher   →  fatos + referências dos docs em Docs/
@@ -161,8 +192,10 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - Não invente. Marque `<!-- TODO: confirmar com gestor -->` em vez de fabricar fato.
 - Cite a fonte. Toda afirmação técnica deve poder ser ancorada em algum doc em `Docs/` ou `Backlog/contexto/`.
 - Atualize `Docs/BRIEFING.md` a cada mudança estrutural do deck principal.
-- Toda operação que cria/edita arquivo em `Gestao/` deve disparar `board-updater` ao final. O board é projeção da realidade — defasagem é bug.
-- **Backlog é estratégico, pendência é tática.** Item de backlog (`Backlog/frentes/`) tem história + critérios de aceite + subtarefas + RICE — dura semanas/meses. Pendência (`Gestao/Pendencias/`) é tarefa atômica do supervisor — dura dias. Não confunda os dois.
+- **Acoplamento de projeções é regra dura (hook-enforced).** Toda operação que mexe em `Backlog/frentes/**/*.md` deve disparar `/backlog regenerate` — que reescreve `BACKLOG.md` + `backlog.html` (`id="backlog-data"`, kanban) **e** aciona o `mapa-updater` para o `mapa-mental.html` (`id="map-data"`, canvas). As duas são **projeções da mesma fonte**: nunca atualize uma sem a outra. Um hook `PostToolUse` (`.claude/hooks/check-backlog-sync.ps1`) vigia essas fontes/projeções e injeta lembrete automático quando você esquece — ele **não** regenera (isso exige seu raciocínio). Projeção é espelho da realidade — defasagem é bug.
+- **Estratégico vs tático vive no mesmo lugar.** Item de backlog (`Backlog/frentes/`) tem história + critérios de aceite + subtarefas + RICE — dura semanas/meses. O tático curto é **subtarefa do item** (responsável + status próprios), não artefato separado. O subsistema de pendências (`Gestao/Pendencias/`) foi **aposentado em 27/05/2026** — não recrie sem decisão explícita.
+- **Mapa textual ≠ projeção.** `Backlog/contexto/mapa_*.md` é narrativa institucional curada à mão (`context-curator`), com história imutável. `mapa-mental.html` é projeção mecânica do backlog (`mapa-updater`). Nunca edite o JSON de uma projeção à mão — mude o `.md`-fonte e regenere.
+- **Três sistemas de demanda distintos.** `Backlog/` (estratégia interna `.md`, RICE) ≠ **Quimera** (tickets internos Finza, MCP `quimera`) ≠ **Jira/Confluence** (Atlassian externo, MCP `claude_ai_Atlassian`). Um item pode *referenciar* um ticket dos outros dois, mas não são a mesma coisa. Não cruze IDs nem confunda os comandos (`/backlog` · `/quimera` · `/jira`).
 
 **Visual:**
 - Paleta Finza exata. Sem cores fora dos tokens em `.claude/skills/finza-design-system/`.
@@ -174,7 +207,7 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - Números em destaque visual (azul, peso 700).
 - Sem "ótima notícia", "boas perspectivas". Quando incerto, declarar incerteza.
 
-**Stack:**
+**Stack (slides):**
 - HTML5 + CSS3 + JS vanilla. Single-file. Inter via Google Fonts.
 - Sem React, Vue, Reveal.js, libs de ícone, imagens externas.
 
@@ -199,30 +232,29 @@ Você descreve o objetivo, público, duração. O comando roda o pipeline comple
 ```
 Roda checklist Finza e devolve relatório.
 
-### Registrar pendência (tarefa tática)
+### Registrar tarefa / bloqueio (tático)
+O subsistema de pendências foi **aposentado**. Tarefa, bloqueio ou "preciso lembrar de X" agora entram no Backlog:
 ```
-/pendencia add <título>
-/pendencia list
-/pendencia close <id>
+/backlog add "<título>"          # item bruto numa das 8 frentes
+# tracking curto → subtarefa dentro do item (status próprio)
 ```
 
 ### Gerenciar backlog estratégico
 ```
 /backlog                                  # lista itens ativos agrupados por frente
-/backlog add "<título>"                   # cria item bruto em uma das 7 frentes
+/backlog add "<título>"                   # cria item bruto em uma das 8 frentes
 /backlog refine <id>                      # quebra subtarefas, escreve CA Given/When/Then, calcula RICE
 /backlog review <id>                      # auditoria INVEST (só aponta, não edita)
 /backlog prioritize                       # recalcula ranking RICE
 /backlog analyze                          # gaps, sobreposições, dependências, deadlines críticos
-/backlog regenerate                       # reescreve Backlog/BACKLOG.md mestre + JSON inline do backlog.html
-/backlog from <P##>                       # atalho — cria item a partir de pendência tática
+/backlog regenerate                       # reescreve BACKLOG.md + backlog.html + mapa-mental.html (via mapa-updater)
 /backlog from-solicitacao <arquivo>       # lê doc do negócio em Backlog/solicitacoes/ e propõe N itens
 ```
-Cada item vira `.md` em `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` com história, CA, subtarefas, RICE. Prefixos: `BBT` (Bitrix), `BTR` (Torre), `BCL` (Clara), `BES` (Esperanza), `BVA` (Valentina), `BAU` (Automações), `BLV` (Lívia), `BST` (Estratégica).
+Cada item interno vira `.md` em `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` com história, CA, subtarefas, RICE. Prefixos: `BBT` (Bitrix), `BTR` (Torre), `BCL` (Clara), `BES` (Esperanza), `BVA` (Valentina), `BAU` (Automações), `BLV` (Lívia), `BST` (Estratégica). Itens importados do Quimera mantêm a key `QMR####`.
 
 **Refinement-pass canônico (introduzido 25/05/2026):** todo item refinado carrega seção `## Observações PO` com voz cética — gates não-negociáveis, contrapropostas concretas, sugestões de quebra, riscos políticos. Marcações `⚠️ PO:` em subtarefas críticas para sinalização visual. Princípio: "não tudo que o negócio pede vai pra frente — backlog é proposta de valor avaliada, não fila de pedidos."
 
-**Visualizador `backlog.html`:** projeção visual do `Backlog/` análoga ao `BOARD.html` (que projeta `Gestao/`). JSON inline em `<script id="backlog-data">` reflete os `.md` de `Backlog/frentes/`. Fonte da verdade: os `.md`. Para regerar o JSON: `/backlog regenerate`.
+**Visualizador `backlog.html`:** projeção visual do `Backlog/`. JSON inline em `<script id="backlog-data">` reflete os `.md` de `Backlog/frentes/`. Fonte da verdade: os `.md`. Para regerar o JSON: `/backlog regenerate`.
 
 ### Registrar reunião
 ```
@@ -243,31 +275,51 @@ Cria documento individual em `Gestao/Analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`
 ```
 Grava em `Gestao/Analises/<dd-mm-aaaa>/Relatorio/YYYY-MM-DD_<slug>.md`. Cada destinatário/recorte vira um relatório individual.
 
+### Operar tickets — Quimera (interno) e Jira (Atlassian)
+```
+/quimera [demandas|show|card|status|comentar|indicadores|csat|...]   # sistema interno Finza (MCP quimera)
+/equipe                                                              # visão de gestor do squad no Quimera (só leitura)
+/jira [issues|show|criar|status|comentar|worklog|projetos|confluence|...]  # Atlassian externo (MCP claude_ai_Atlassian)
+```
+Leitura é livre nos dois; **escrita confirma antes** (dispara notificação/e-mail). Os dois convivem — não confunda com `/backlog` (estratégia `.md`).
+
 ### Manter arquitetura organizada
 ```
 /organizar
 ```
 Roda `folder-organizer`: detecta arquivos fora do lugar, duplicatas, READMEs desatualizados.
 
-### Board perpétuo (BOARD.html)
-
-`BOARD.html` na raiz do Repasse é a **projeção visual de todo `Gestao/`**. Abre com duplo-clique (single-file, sem servidor). Tem 6 visões via sidebar: Overview, Pendências, Reuniões, Análises, Relatórios, 1on1s — com KPIs, gráficos SVG e filtros.
-
-**Como é alimentado:** todos os comandos que mexem em `Gestao/` (`/pendencia`, `/reuniao`, `/analise`, `/relatorio`) invocam o agente `board-updater` ao final, que reescaneia `Gestao/` inteiro e regrava o JSON inline (`<script type="application/json" id="board-data">`) do `BOARD.html`. Para forçar resync manual:
-
-```
-/atualizar-board
-```
-
-**Fonte da verdade:** `Gestao/`. O `BOARD.html` é projeção descartável — apagá-lo não perde dado, basta rodar `/atualizar-board` para regenerá-lo a partir dos `.md`.
-
-**Não edite o JSON manualmente.** Mude o `.md` em `Gestao/` e rode `/atualizar-board`. Para mudar layout/cores/views, edite o HTML/CSS/JS do `BOARD.html` direto — o `board-updater` só toca no bloco JSON, o resto fica preservado.
-
 ### Status semanal
 ```
 /status
 ```
-Lê `Gestao/` e gera resumo executivo: pendências em curso, reuniões da semana, análises produzidas.
+Lê `Backlog/frentes/` e `Gestao/` e gera resumo executivo: itens de backlog em curso/bloqueados, reuniões da semana, análises produzidas, foco da próxima semana.
+
+### Sincronizar projeções
+```
+/sync                 # backlog + mapa visual, a partir das fontes .md
+/sync --backlog       # só backlog.html (+ mapa-mental.html, encadeado)
+/sync --mapa          # só mapa-mental.html
+```
+Use quando editou vários `.md` de backlog à mão, no fim de uma sessão de refinement, ou antes de apresentar. Mapas textuais **não** entram no `/sync`.
+
+### Mapas mentais
+```
+/mapa regenerar       # regenera o mapa-mental.html visual (canvas do Backlog)
+/mapa <assunto>       # cria/atualiza mapa TEXTUAL Backlog/contexto/mapa_<assunto>.md
+/mapa list            # lista mapas textuais + data do mapa visual
+/mapa audit           # frentes/agentes sem mapa, mapas defasados
+```
+Mapa **visual** = projeção do Backlog (agente `mapa-updater`). Mapa **textual** = narrativa institucional curada (agente `context-curator`, estrutura "de onde veio / onde estamos / para onde vamos").
+
+### Curar contexto
+```
+/contexto                       # = audit (saúde da base de contexto)
+/contexto update <assunto>      # atualiza doc existente (preserva história)
+/contexto new <assunto>         # cria doc novo
+/contexto sync-skill            # re-condensa a skill finza-contexto a partir dos docs
+```
+Agente `context-curator`. Mantém `Docs/finza/`, `Backlog/contexto/` e a skill `finza-contexto` vivos e sem referência quebrada. Não inventa — colhe do usuário, de `Gestao/` e do `finza-researcher`.
 
 ---
 
@@ -284,46 +336,35 @@ Lê `Gestao/` e gera resumo executivo: pendências em curso, reuniões da semana
 - 1on1s: `Gestao/1on1s/<dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md`
 - Análises: `Gestao/Analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`
 - Relatórios: `Gestao/Analises/<dd-mm-aaaa>/Relatorio/YYYY-MM-DD_<slug>.md`
-- Pendências: `Gestao/Pendencias/Pnn_<slug>.md` (ex: `P07_ambientes_teste.md`) ou `custom_<slug>.md` — **plana, sem pasta datada**.
-- Itens de backlog: `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` (ex: `Backlog/frentes/esperanza/BES03_volume_transferencias.md`). Prefixes: BBT (Bitrix), BAU (Automações) — ambos em `bitrix-automacoes/`; BTR (Torre); BCL (Clara); BES (Esperanza); BVA (Valentina); BLV (Lívia); BST (Estratégica).
+- Itens de backlog internos: `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` (ex: `Backlog/frentes/esperanza/BES03_volume_transferencias.md`). Prefixes: BBT (Bitrix), BAU (Automações) — ambos em `bitrix-automacoes/`; BTR (Torre); BCL (Clara); BES (Esperanza); BVA (Valentina); BLV (Lívia); BST (Estratégica).
+- Itens importados do Quimera: `Backlog/frentes/<frente>/QMR<nnnn>_<slug>.md` (mantêm a key de origem).
+- Mapas textuais: `Backlog/contexto/mapa_<assunto>.md` (snake/kebab minúsculo, ASCII — ex: `mapa_esperanza.md`). Overview técnico: `Backlog/contexto/<sistema>_overview.md`.
 - Solicitações formalizadas: `Backlog/solicitacoes/YYYY-MM-DD_<autor>_<assunto>.<ext>`.
 - Prints: `Backlog/prints/YYYY-MM-DD_<sistema>_<assunto>.<ext>`.
+- Pendências: ~~`Gestao/Pendencias/Pnn_<slug>.md`~~ — **aposentado em 27/05/2026.** Não criar. Tático = subtarefa de item de backlog.
 
 **Datas:**
 - Sempre absolutas no conteúdo (`2026-05-15`, não "hoje" nem "Thursday").
 - Briefing usa formato BR (`12/05/2026`); demais docs usam ISO (`2026-05-12`).
 - Pasta de dia usa `dd-mm-aaaa` (legível em PT-BR); arquivo interno usa ISO (ordena cronologicamente).
 
-**Frontmatter de pendência:**
-```yaml
----
-id: P07
-title: Definir 3 ambientes (dev, hml, prd)
-status: aberta            # aberta | em-curso | bloqueada | fechada
-prioridade: alta          # alta | media | baixa
-origem: Slide 5 do deck CTO 13/05
-owner: João Vinícius
-criada: 2026-05-15
-deadline: 2026-07-10
----
-```
-
 **Frontmatter de item de backlog:**
 ```yaml
 ---
-id: BES03                                  # prefix da frente + nn (BBT/BAU/BTR/BCL/BES/BVA/BLV/BST)
+id: BES03                                  # prefix da frente + nn (BBT/BAU/BTR/BCL/BES/BVA/BLV/BST) OU QMR####
 title: Título conciso e acionável
-frente: esperanza                          # bitrix-automacoes|torre|clara|esperanza|valentina|livia|estrategica
+frente: esperanza                          # bitrix-automacoes|torre|clara|esperanza|valentina|livia|estrategica|sustentacao
 status: refinado                           # a-refinar | em-refinamento | refinado | em-curso | bloqueado | cancelado | entregue | arquivado
 prioridade: alta                           # urgente | alta | media | baixa (derivada do RICE)
 rice: { reach: 8, impact: 7, confidence: 6, effort: 5, score: 6.7 }
 esforco: M                                 # XS | S | M | L | XL (camisetas)
 valor_negocio: alto                        # alto | medio | baixo
 origem:
-  pendencias: [P19]                        # IDs de pendências táticas (se houver)
+  pendencias: [P19]                        # IDs de pendências táticas (rótulo de origem, se houver)
   reunioes: [...]
   solicitacoes: [...]
   analises: [...]
+  quimera: [QMR3415]                       # ticket(s) Quimera de origem, se importado
 roadmap_vinculado: RM03                    # null se não materializa iniciativa do roadmap
 owner: João Vinícius
 implementador: Joao Lucas                  # null se não atribuído
@@ -343,13 +384,26 @@ tags: [esperanza, tabulacoes]
 
 ## 6 · Quando atualizar este arquivo
 
-- Adicionou novo agente, command ou skill → adicione na seção 1.
+- Adicionou novo agente, command ou skill → adicione na seção 1 (e atualize as contagens em §0).
 - Mudou o pipeline de slides → atualize seção 2.
 - Mudou convenção de nome ou frontmatter → atualize seção 5.
+- Aposentou/criou um subsistema (como pendências em 27/05) → reflita em §0, §1, §3, §5.
+- Adicionou/alterou um hook em `.claude/settings.json` ou `.claude/hooks/` → reflita em §1 (árvore) e §3 (regra que ele enforça).
+- Adicionou/mudou um conector MCP (Quimera, Jira) → reflita na tabela de gatilhos §0, na árvore §1 e na regra "três sistemas de demanda" §3.
 - Não atualize por mudança de conteúdo (uso normal) — só por mudança estrutural.
 
 ---
 
 ## 7 · Memória do agente
 
-A `auto-memory` em `~/.claude/projects/c--Users-Jo-o-Vinicius-Documents-Finza-Repasse/memory/` é onde o Claude armazena perfil do usuário, feedback acumulado, contexto de projeto. Não duplique aqui o que já vive lá — este arquivo é a **arquitetura**, a memória é a **história**.
+A `auto-memory` em `~/.claude/projects/C--Users-Jo-o-Vinicius-Documents-Finza-Projetos-orquestra-tarefa/memory/` é onde o Claude armazena perfil do usuário, feedback acumulado, contexto de projeto. Não duplique aqui o que já vive lá — este arquivo é a **arquitetura**, a memória é a **história**.
+
+---
+
+## 8 · Projeções — regra de edição
+
+`backlog.html` e `mapa-mental.html` na raiz são **projeções mecânicas** do `Backlog/frentes/`:
+
+- São regenerados automaticamente por `/sync`, `/backlog regenerate`, agente `mapa-updater` e o hook `check-backlog-sync.ps1`.
+- **Edição manual do bloco de dados é proibida** (`<script id="backlog-data">` / `<script id="map-data">`). Mude o `.md`-fonte e regenere.
+- Mudar **layout/cores/views** (HTML/CSS/JS fora do bloco de dados) pode ser feito direto no arquivo — os geradores só tocam no bloco JSON, o resto fica preservado.

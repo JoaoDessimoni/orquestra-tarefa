@@ -2,6 +2,7 @@
 id: BTR08
 title: Sistema de templates e cópia para acelerar configuração de réguas
 frente: torre
+fonte: backlog
 status: a-refinar
 prioridade: media
 rice:
@@ -26,7 +27,7 @@ sponsor: Jéssica
 criada: 2026-05-25
 refinada: 2026-05-25
 deadline_alvo: 2026-Q4
-dependencias: [BTR02]
+dependencias: []
 bloqueia: []
 riscos:
   - Templates podem virar "configuração escondida" que confunde gestor — se template muda, todas as réguas mudam.
@@ -64,28 +65,9 @@ Item complementa BTR02 (multi-org) — quando nova org é criada, templates poup
 - **CA-5** — Given multi-org operando (BTR02), When template é definido, Then é claro se é global (todas orgs) ou por org.
 - **CA-6** — Given primeira semana após release, When gestor configura nova régua, Then tempo de configuração cai >50% vs baseline.
 
-## Subtarefas
-
-- [ ] **ST-1 — Levantar baseline** — quanto tempo médio leva pra configurar régua hoje?
-  - Sem baseline, "redução de 50%" é palpite.
-- [ ] **ST-2 — Aguardar BTR02 fase 2** — multi-org afeta escopo de template (global vs por org).
-- [ ] **ST-3 — Definir biblioteca inicial** de templates:
-  - Cobrança amigável (D-10 a D+15)
-  - Cobrança 4.0 (D+16 a D+60)
-  - Extrajudicial (D+46+)
-  - Formalização follow-up
-  - NPS pós-jornada
-- [ ] **ST-4 — Implementar função de template** — pré-preenchimento + campos editáveis.
-- [ ] **ST-5 — Implementar função "copiar régua"** — duplicação isolada.
-- [ ] **ST-6 — Definir governança** — quem cria/altera templates? Squad? Gestor?
-- [ ] **ST-7 — UX de aviso de impacto** — alteração de template avisa quais réguas usam.
-- [ ] **ST-8 — Decidir escopo multi-org** — global vs por org (BTR02).
-- [ ] **ST-9 — Validação UX com gestor real** (João Pedro Borges) antes de publicar.
-- [ ] **ST-10 — Medir baseline pós-release** — confirmar ganho.
-
 ## Dependências cruzadas
 
-- **Depende de:** BTR02 (multi-org) — define escopo (global vs por org).
+- **Sinergia:** BTR02 (multi-org) — define escopo de template (global vs por org). Dependência formal removida em 2026-06-02 por decisão do supervisor; segue como sinergia técnica a considerar, não bloqueio.
 
 ## Observações PO
 
@@ -109,6 +91,7 @@ Item complementa BTR02 (multi-org) — quando nova org é criada, templates poup
 ## Histórico
 
 - 2026-05-25 — Item criado a partir de leitura crítica de `Backlog/solicitacoes/Filtros prompts e Trigger agenda - 2026_05_20 16_59 GMT-03_00 - Anotações do Gemini.txt`. Identificado como GAP no backlog — demanda explícita do gestor (João Pedro Borges) sobre lentidão de configuração. Status inicial: em-refinamento. RICE 6.3. Esforço: M.
+- 2026-06-02 — **Dependência removida.** `dependencias: [BTR02]` → `[]` por decisão do supervisor. BTR02 segue como sinergia técnica (escopo template global vs por org), não como bloqueio. Menções de dependência limpas no corpo (ST-2, Dependências cruzadas).
 
 ## Notas
 

@@ -2,6 +2,7 @@
 id: BES02
 title: Disponibilizar imputação direta de renegociação no Módulo Financeiro
 frente: esperanza
+fonte: backlog
 status: a-refinar
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P17]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -65,24 +66,6 @@ Passo seguinte à BES01. Após homologação operacional do fluxo "renegociaçã
 - **CA-3** — Given trilha de auditoria, When auditor externo solicita, Then é possível reconstituir cada decisão da IA a partir dos logs.
 - **CA-4** — Given homologação técnica concluída, When piloto controlado roda em janela limitada (ex: 50 imputações em 7 dias), Then taxa de erro/discrepância < 1% — caso contrário, reverte para fluxo humano.
 - **CA-5** — Given Compliance + Jurídico avalizaram a abordagem, When carta de risco é assinada, Then operação em produção é liberada.
-
-## Subtarefas
-
-- [ ] **ST-1 — Mapear restrições jurídicas e regulatórias** ⚠️ PO: COMEÇAR POR AQUI, não pelo código.
-  - Renegociação altera CCB? Há cláusulas que exigem assinatura física?
-  - LGPD: IA decidindo valores tem implicações de "decisão automatizada" (Art. 20)?
-  - Auditoria interna aceita IA como ator transacional?
-- [ ] **ST-2 — Definir critérios de bypass como REGRA EXECUTÁVEL** (não descrição).
-  - Lista exaustiva de condições simultâneas: tipo de cliente, faixa de desconto, faixa de parcelamento, idade da dívida, histórico de inadimplência, valor máximo.
-  - Tudo fora dessa lista → transferir para humano. Default = transfere.
-- [ ] **ST-3 — Aguardar conclusão da BES01 (homologação operacional do fluxo com humano).**
-- [ ] **ST-4 — Escopar integração técnica** entre Esperanza e Módulo Financeiro (com lead técnico MF + lead técnico Esperanza).
-  - Endpoint dedicado para "imputação por agente IA" — não reusar endpoint humano (auditoria diferente).
-- [ ] **ST-5 — Implementar trilha de auditoria** — toda imputação direta da IA precisa ser rastreável em granularidade descrita em CA-2.
-- [ ] **ST-6 — Submeter desenho a Compliance + Jurídico + CTO** para carta de risco formal.
-- [ ] **ST-7 — Piloto controlado** em produção com 50 imputações ou janela de 7 dias (o que vier primeiro), com revisão humana 100% das amostras.
-- [ ] **ST-8 — Decisão go/no-go** baseada em taxa de erro do piloto.
-- [ ] **ST-9 — Habilitar em produção** apenas após go-decision documentada.
 
 ## Dependências cruzadas
 

@@ -2,6 +2,7 @@
 id: BCL01
 title: Implementar solicitação e recebimento de comprovantes de endereço pela Clara
 frente: clara
+fonte: backlog
 status: em-refinamento
 prioridade: alta
 rice:
@@ -69,21 +70,6 @@ Hoje a solicitação de comprovantes de endereço é processo manual humano. Jé
 - **CA-3** — Given todos os comprovantes recebidos, When Clara identifica completude, Then transfere para validação humana com payload estruturado (3 arquivos + metadados).
 - **CA-4** — Given validação humana realizada na plataforma Blips, When status volta, Then Clara confirma com cliente (aprovado → próxima etapa / recusado → re-solicita item específico).
 - **CA-5** — Given segmento Construção Civil, When Clara identifica, Then solicita ITENS ADICIONAIS (foto fachada + 3 NFs) — se escopo for incluído no MVP.
-
-## Subtarefas
-
-- [ ] **ST-1 — Decisão de escopo MVP** ⚠️ PO: NÃO COMEÇAR sem decidir.
-  - MVP cobre apenas segmento genérico (não Construção Civil)? Reduz risco.
-  - Ou já cobre Construção Civil? Aumenta valor mas duplica regra.
-  - Recomendação: MVP sem Construção Civil; segmento entra em v2.
-- [ ] **ST-2 — Validar com Compliance** o texto da solicitação (Clara fala em nome da Finza — tom + obrigatoriedade não pode soar abusiva).
-- [ ] **ST-3 — Integração com Plataforma Blips** — endpoint de upload por humano após validação.
-  - Levantar com TL Plataforma Blips (Marco) se endpoint existe e qual contract.
-- [ ] **ST-4 — Implementar fluxo Clara: solicitar → receber → validar formato → transferir → confirmar.**
-- [ ] **ST-5 — Definir tratamento de loop de re-solicitação** — limite de tentativas (3?) antes de escalonar para humano para evitar irritar cliente.
-- [ ] **ST-6 — Validar com 10 casos reais piloto** antes de generalizar.
-- [ ] **ST-7 — Treinar operadores de validação humana** sobre o novo payload e fluxo.
-- [ ] **ST-8 — Métricas: tempo médio de coleta, taxa de envio na primeira tentativa, taxa de rejeição na validação humana.**
 
 ## Dependências cruzadas
 

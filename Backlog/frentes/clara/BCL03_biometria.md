@@ -2,6 +2,7 @@
 id: BCL03
 title: Implementar envio e acompanhamento de biometria pela Clara
 frente: clara
+fonte: backlog
 status: em-curso
 prioridade: alta
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P27]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -65,21 +66,6 @@ Clara deve cuidar de envio e acompanhamento de biometria. Primeiro passo é iden
 - **CA-3** — Given cliente não conclui biometria em 2h, When Clara é acionada, Then envia: (1) chamada de atenção; (2) orientações práticas (formato foto, iluminação, doc aceito); (3) oferta de suporte humanizado.
 - **CA-4** — Given calibragem inicial, When 30 dias de operação rodam, Then taxa de conversão pós-Clara > taxa pré-Clara (baseline).
 - **CA-5** — Given cliente conclui biometria, When status volta, Then Clara confirma com cliente (não fica acompanhando indefinidamente).
-
-## Subtarefas
-
-- [ ] **ST-1 — Mapear gatilho atual** ⚠️ PO: SEM ISSO, RESTO É ESPECULAÇÃO.
-  - Sessão com Girlan (TL Veritas) ou referência do Veritas.
-  - Documentar: evento que dispara, canal (SMS/WhatsApp/email), provedor de biometria, contract de retorno (sucesso/falha/timeout).
-- [ ] **ST-2 — Decidir arquitetura** — Clara envia diretamente vs observa envio existente.
-  - Recomendação PO: começar observando (menos invasivo). Migrar para envio direto em v2 se ganho ficar claro.
-- [ ] **ST-3 — Validar SLA de 2h com dado** — qual é o tempo médio de conclusão atual? 2h é alto/baixo?
-  - Se conclusão média é 15min, 2h é frouxo. Se é 4h, 2h é agressivo.
-- [ ] **ST-4 — Implementar acompanhamento pós-2h** — mensagem com 3 elementos (atenção + orientação + suporte).
-- [ ] **ST-5 — Calibrar texto** com Compliance (instrução técnica não pode virar pressão).
-- [ ] **ST-6 — Configurar limite de re-envios** — máximo 2 tentativas de acompanhamento antes de escalonar humano.
-- [ ] **ST-7 — Métricas** — taxa de conversão pré/pós-Clara, tempo médio até conclusão, taxa de escalonamento humano.
-- [ ] **ST-8 — Validação operacional** com Jéssica e equipe de formalização.
 
 ## Dependências cruzadas
 

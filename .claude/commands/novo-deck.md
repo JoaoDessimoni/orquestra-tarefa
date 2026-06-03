@@ -89,7 +89,7 @@ Se só houver observações, reporte e siga.
 1. Se este é deck principal (CTO / repasse / boas-vindas), atualize `Docs/BRIEFING.md`:
    - Incremente versão no header e no histórico.
    - Reflita mudanças estruturais (nº de slides, novos tipos).
-2. Atualize `Gestao/Pendencias/` se o deck gerou TODOs que viram pendências: invoque `pendencia-tracker`.
+2. Se o deck deixou `<!-- TODO: confirmar -->` ou gerou ações estratégicas, registre-as no Backlog via `/backlog add` (uma por item).
 
 ## Passo 9 — Encerramento
 

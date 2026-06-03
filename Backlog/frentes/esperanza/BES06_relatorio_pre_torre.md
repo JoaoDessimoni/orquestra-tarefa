@@ -2,6 +2,7 @@
 id: BES06
 title: Resgatar relatório pré-Torre sobre redirecionamento IA→humano
 frente: esperanza
+fonte: backlog
 status: entregue
 prioridade: alta
 rice:
@@ -56,16 +57,6 @@ Complementa BES03 (dashboard de transferências) e alimenta BST03 (narrativa IA)
 - **CA-2** — Given pessoa identificada, When solicita arquivo, Then arquivo original (e-mail/Drive/planilha) é recuperado E metodologia descrita.
 - **CA-3** — Given metodologia conhecida, When aplicada a dado atual, Then produz número de comparação válido — OU sinaliza incompatibilidade explicitamente.
 - **CA-4** — Given resgate concluído, When documentado, Then vira insumo de BES05 (discovery) e BST03 (narrativa IA).
-
-## Subtarefas
-
-- [ ] **ST-1 — Listar candidatos a "quem produzia o relatório"** — começar por Jéssica, Mateus (predecessor), Felipe, lideranças antigas de TI.
-- [ ] **ST-2 — Conversas curtas (15min)** com cada candidato — "vc lembra desse relatório?".
-- [ ] **ST-3 — Localizar arquivo** — Drive, e-mail, planilha local, anexo de reunião antiga.
-- [ ] **ST-4 — Validar metodologia** — fonte de dados, janela, definição operacional de "redirecionamento", filtros aplicados.
-- [ ] **ST-5 — Reproduzir cálculo com dado atual** (se metodologia for compatível com base atual).
-- [ ] **ST-6 — Documentar** em `Gestao/Analises/<data>/` como insumo de BES05 e BST03.
-- [ ] **ST-7 — Decidir aborto cedo** se ninguém lembra do relatório em 1 semana — timebox.
 
 ## Dependências cruzadas
 

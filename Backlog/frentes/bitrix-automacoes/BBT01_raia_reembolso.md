@@ -2,6 +2,7 @@
 id: BBT01
 title: Criar nova raia no Bitrix para visibilidade de reembolsos aos operadores
 frente: bitrix-automacoes
+fonte: backlog
 status: em-refinamento
 prioridade: alta
 rice:
@@ -60,19 +61,6 @@ Independente de código — é trabalho de **configuração** no Bitrix. Sinergi
 - **CA-3** — Given reembolso confirmado em conta + cliente notificado, When operador marca, Then card sai da raia.
 - **CA-4** — Given documentação interna publicada, When operador novo é treinado, Then aprende em <10 minutos.
 - **CA-5** — Given primeira semana em produção, When 5+ reembolsos rodam pela raia, Then SLA de execução é medido como baseline.
-
-## Subtarefas
-
-- [ ] **ST-1 — Identificar quem configura Bitrix** ⚠️ PO: GATE.
-  - TI Finza? Operação? Mateus? Marco?
-  - Sem responsável claro, item fica parado.
-- [ ] **ST-2 — Definir critério de entrada** — cliente reprovado em compliance + entrada paga + dados de reembolso coletados.
-- [ ] **ST-3 — Definir critério de saída** — reembolso confirmado em conta + cliente notificado.
-- [ ] **ST-4 — Configurar raia no Bitrix Cobrança 4.0** com esses critérios.
-- [ ] **ST-5 — Definir primeiro responsável operacional** da raia (1 nome).
-- [ ] **ST-6 — Treinar operadores** sobre o uso (mínimo — raia deve ser autoexplicativa).
-- [ ] **ST-7 — Documentar funcionamento** em local canônico.
-- [ ] **ST-8 — Medir baseline** — SLA médio nos primeiros 7 dias.
 
 ## Dependências cruzadas
 

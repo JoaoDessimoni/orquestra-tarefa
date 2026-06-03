@@ -2,6 +2,7 @@
 id: BAU02
 title: Revisar gatilhos Hyper existentes e mapear novas oportunidades
 frente: bitrix-automacoes
+fonte: backlog
 status: a-refinar
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: [P35]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -63,23 +64,6 @@ Há suspeita de gatilhos obsoletos, sobrepostos ou mal configurados — e oportu
 - **CA-3** — Given gatilhos sobrepostos identificados, When propostos para consolidação, Then plano de fusão documentado.
 - **CA-4** — Given lacunas identificadas, When mapeadas, Then top 5 novos gatilhos com estimativa de ganho.
 - **CA-5** — Given inventário versionado, When mudança acontece, Then é atualizado antes de produção.
-
-## Subtarefas
-
-- [ ] **ST-1 — Identificar quem tem o inventário** — time HyperFlow tem owner? Mateus? Marco?
-- [ ] **ST-2 — Extrair inventário atual** de gatilhos.
-- [ ] **ST-3 — Para cada gatilho coletar:**
-  - Propósito declarado.
-  - Frequência de uso real (do log do HyperFlow).
-  - Último incidente.
-  - Opinião dos operadores (3-5 entrevistas curtas).
-- [ ] **ST-4 — Identificar obsoletos** — não dispara há 90+ dias.
-- [ ] **ST-5 — Identificar sobrepostos** — múltiplos gatilhos fazem coisa similar.
-- [ ] **ST-6 — Mapear lacunas** — onde operadores fazem ação manual repetitiva.
-- [ ] **ST-7 — Top 5 novos gatilhos prioritários** com estimativa de ganho (tempo/mês economizado).
-- [ ] **ST-8 — Desativar obsoletos** (após validar com operadores).
-- [ ] **ST-9 — Implementar top 5 novos** (sob priorização do squad).
-- [ ] **ST-10 — Estabelecer revisão recorrente** (trimestral?).
 
 ## Dependências cruzadas
 

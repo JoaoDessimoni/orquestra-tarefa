@@ -2,6 +2,7 @@
 id: BTR06
 title: Estruturar inteligências específicas por empresa/carteira na Torre
 frente: torre
+fonte: backlog
 status: cancelado
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: [P33]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:

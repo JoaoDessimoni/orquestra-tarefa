@@ -78,10 +78,10 @@ tags: []
 ## Bloqueios
 <o que está travado e por quê. Quem precisa destravar.>
 
-## Pendências geradas
-<!-- Cada item pode virar pendência via /pendencia add -->
-- <pendência 1>
-- <pendência 2>
+## Ações geradas
+<!-- Cada ação estratégica pode virar item de backlog via /backlog add -->
+- <ação 1>
+- <ação 2>
 
 ## Próximos checkpoints
 <quando o supervisor volta com atualização. Datas absolutas.>
@@ -89,10 +89,6 @@ tags: []
 ## Notas
 <contexto adicional, citações verbatim, fontes, links>
 ```
-
-## Passo 4.5 — Atualizar board
-
-Após criar o arquivo do relatório, invoque o agente `board-updater` sem brief adicional. Ele reescaneia `Gestao/` e regrava o JSON inline de `BOARD.html` na raiz do Repasse. O novo relatório aparece na view "Relatórios" do board, e a análise-fonte (se houver) ganha o badge "tem relatório" na view "Análises".
 
 ## Passo 5 — Confirmar e oferecer próximas ações
 
@@ -106,7 +102,7 @@ Status: rascunho
 Próximas ações possíveis:
 - "Revisa" — releio e ajusto tom/dados.
 - "Marca como enviado" — atualizo status para `enviado`.
-- "Cria pendências derivadas" — abro via /pendencia add cada item.
+- "Cria itens de backlog" — abro via /backlog add cada ação derivada.
 - "Pronto" — fecho aqui.
 ```
 

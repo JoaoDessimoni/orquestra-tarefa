@@ -2,6 +2,7 @@
 id: BTR05
 title: Implementar comunicação RCS (Rich Communication Services)
 frente: torre
+fonte: backlog
 status: a-refinar
 prioridade: baixa
 rice:
@@ -15,7 +16,7 @@ valor_negocio: baixo
 origem:
   pendencias: [P32]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -61,21 +62,6 @@ RCS (Rich Communication Services) é canal de mensageria com recursos avançados
 - **CA-2** — Given casos de uso prioritários identificados, When listados, Then cada um tem: WhatsApp já cobre? RCS adiciona o quê de fato? Estimativa de conversão diferencial?
 - **CA-3** — Given decisão estratégica de seguir/não seguir, When tomada, Then é lastreada em piloto pequeno OU em análise comparativa clara.
 - **CA-4** — Given decisão "não seguir", When documentada, Then explica o porquê para evitar retrabalho de revisita em 6 meses.
-
-## Subtarefas
-
-- [ ] **ST-1 — Levantar caso de uso real** ⚠️ PO: COMEÇAR POR AQUI.
-  - Qual mensagem hoje (envio link, lembrete, NPS, autenticação) ganha de fato com RCS?
-  - WhatsApp cobre? Se sim, qual é a diferença operacional?
-- [ ] **ST-2 — Benchmark provedores** RCS no Brasil — Sinch, Twilio, operadoras diretas.
-  - Custo por mensagem
-  - Cobertura
-  - Requisitos de homologação
-  - Tempo médio de entrada em produção
-- [ ] **ST-3 — Avaliar custo/benefício** vs WhatsApp Business + Hyperflow (que já temos).
-- [ ] **ST-4 — Se valer: piloto pequeno** em uma carteira ou tipo de mensagem.
-- [ ] **ST-5 — Métricas piloto** — conversão, custo, satisfação.
-- [ ] **ST-6 — Decisão go/no-go documentada.**
 
 ## Dependências cruzadas
 

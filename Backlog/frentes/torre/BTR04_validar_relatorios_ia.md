@@ -2,6 +2,7 @@
 id: BTR04
 title: Validação de cálculos e conceitos dos relatórios IA da Torre
 frente: torre
+fonte: backlog
 status: em-curso
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: [P31]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -59,17 +60,6 @@ Relatórios gerenciais e operacionais relacionados à IA — produzidos pela Tor
 - **CA-2** — Given dicionário canônico de BTR03 disponível, When relatórios são validados, Then reusam definições (não criam concorrentes).
 - **CA-3** — Given relatórios redundantes/obsoletos identificados, When propostos para descomissionamento, Then validados com destinatário antes de remover.
 - **CA-4** — Given nomenclatura padronizada, When publicada, Then mesmo conceito = mesmo nome em todos os relatórios.
-
-## Subtarefas
-
-- [ ] **ST-1 — Aguardar BTR03 entregar dicionário canônico.**
-- [ ] **ST-2 — Aguardar BES08 corrigir divergência de dados.**
-- [ ] **ST-3 — Levantar quais relatórios IA existem** (recorrência, formato, destinatário, dono).
-- [ ] **ST-4 — Validar cálculos e definições conceituais** com Jéssica.
-- [ ] **ST-5 — Identificar relatórios redundantes ou subutilizados.**
-- [ ] **ST-6 — Padronizar nomenclatura** (mesmo conceito = mesma definição).
-- [ ] **ST-7 — Validar com destinatário antes de descomissionar.**
-- [ ] **ST-8 — Documentar dicionário expandido** em `Backlog/contexto/` (reusa o de BTR03).
 
 ## Dependências cruzadas
 

@@ -1,7 +1,8 @@
-﻿---
+---
 id: BST01
 title: Definir raia para tickets em validação no board Kanban
 frente: estrategica
+fonte: backlog
 status: em-curso
 prioridade: media
 rice:
@@ -55,13 +56,6 @@ O ticket 1807 está nessa situação, mas Marcos sinaliza que há outros equival
 - CA-1: Lista de tickets atualmente em validação que são da Torre publicada.
 - CA-2: Critério decidido em conjunto com Marcos e João Lucas.
 - CA-3: Padrão documentado para que squad siga automaticamente.
-
-## Subtarefas
-
-- [ ] Conversar com Marcos para listar todos os tickets atualmente em validação que são da Torre.
-- [ ] Definir critério: raia única "Em validação" ou raias separadas por contexto (Torre, fora-Torre, etc.).
-- [ ] Documentar a decisão para que o squad siga o padrão automaticamente.
-- [ ] Eventual conversa cruzada com João Lucas (Tech Lead) para alinhar critério com o restante do board.
 
 ## Dependências cruzadas
 

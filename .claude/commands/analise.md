@@ -63,17 +63,13 @@ tags: []
 <resposta direta à pergunta de investigação, sem rodeios>
 
 ## Próximas ações
-<!-- Cada ação pode virar pendência via /pendencia add -->
+<!-- Cada ação estratégica pode virar item de backlog via /backlog add -->
 - [ ] <ação 1> — owner: <quem>, deadline: <quando>
 - [ ] <ação 2>
 
 ## Notas / observações
 <contexto adicional, citações verbatim, links>
 ```
-
-## Passo 3.5 — Atualizar board
-
-Após criar o arquivo da análise, invoque o agente `board-updater` sem brief adicional. Ele reescaneia `Gestao/` e regrava o JSON inline de `BOARD.html` na raiz do Repasse. A nova análise aparece na view "Análises" do board.
 
 ## Passo 4 — Confirmar e oferecer próximas ações
 
@@ -82,7 +78,7 @@ Após criar o arquivo da análise, invoque o agente `board-updater` sem brief ad
 
 Próximas ações possíveis:
 - "Gera relatório" — derive um relatório dessa análise para destinatário específico via /relatorio from <arquivo>.
-- "Cria pendências" — para cada item em "Próximas ações", abro via /pendencia add.
+- "Cria itens de backlog" — para cada ação estratégica em "Próximas ações", abro via /backlog add.
 - "Pronto" — fecho aqui.
 ```
 

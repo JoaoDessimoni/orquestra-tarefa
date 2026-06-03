@@ -2,6 +2,7 @@
 id: BBT02
 title: Automação Bitrix Cobrança 4.0 — histórico contínuo
 frente: bitrix-automacoes
+fonte: backlog
 status: a-refinar
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: [P34]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -65,22 +66,6 @@ Não confundir com BBT01 (raia Bitrix de reembolso) — são dois projetos paral
 - **CA-3** — Given consumidores atuais (relatórios, exports, integrações) verificados, When publicação em produção, Then continuam funcionando sem regressão.
 - **CA-4** — Given histórico anterior, When migração roda, Then dado antigo é preservado (não some por substituição).
 - **CA-5** — Given operadores piloto, When testam, Then validam que UX faz sentido (não vira parede de texto).
-
-## Subtarefas
-
-- [ ] **ST-1 — Mapear campos da seção "Histórico de Atendimento"** que sofrem sobrescrita.
-- [ ] **ST-2 — Levantar consumidores atuais** ⚠️ PO: GATE — não mudar sem saber quem consome.
-  - Relatórios, exports, integrações, automações Hyper, dashboards Torre.
-- [ ] **ST-3 — Decidir abordagem técnica:**
-  - Opção A: alterar campos para multi-valor com timestamp.
-  - Opção B: adicionar campo paralelo que acumula histórico.
-  - Opção C: usar tabela `bitrix_activity_log` externa.
-- [ ] **ST-4 — Validar com operadores piloto** se UX da abordagem escolhida funciona.
-- [ ] **ST-5 — Migrar dados históricos existentes** (se relevante).
-- [ ] **ST-6 — Implementar** via admin Bitrix ou via automação custom.
-- [ ] **ST-7 — Testar consumidores** (não quebrar relatórios).
-- [ ] **ST-8 — Definir política de retenção** — quanto tempo mantém histórico acumulado.
-- [ ] **ST-9 — Generalizar após piloto.**
 
 ## Dependências cruzadas
 

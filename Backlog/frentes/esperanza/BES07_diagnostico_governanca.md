@@ -2,6 +2,7 @@
 id: BES07
 title: Diagnóstico completo Esperanza — governança, confiabilidade, KPIs estratégicos
 frente: esperanza
+fonte: backlog
 status: a-refinar
 prioridade: alta
 rice:
@@ -79,29 +80,6 @@ O doc `Perguntas a serem respondidas & melhorias_correções IA's.txt` (Jéssica
 - **CA-4** — Given auditoria de delírio (categoria 2), When amostra aleatória de 100 conversas é revisada, Then taxa de delírio é mensurada com critério explícito (não "feeling").
 - **CA-5** — Given comparativo IA vs Humano (categoria 4), When publicado, Then identifica top 5 fluxos onde humano resolve e IA não, com causa raiz.
 - **CA-6** — Given KPIs estratégicos (categoria 13), When dashboard agregado é publicado, Then traz: taxa resolução real, taxa transferência, taxa abandono, timeout, delírio, erro sistêmico, SLA, aderência treinamento, assertividade.
-
-## Subtarefas
-
-> ⚠️ **Item L** — DEVE ser quebrado em itens-filhos. Sugestão de quebra:
-> - BES07a — Observabilidade básica (categorias 1, 11)
-> - BES07b — Auditoria de delírio + score de confiança (categoria 2)
-> - BES07c — Comparativo IA vs Humano (categoria 4)
-> - BES07d — Painel de KPIs estratégicos (categoria 13)
-> - BES07e — Classificação de falhas + governança protocolos (categorias 10, 12)
-
-- [ ] **ST-1 — Aguardar BES05 (discovery)** — base para qualquer diagnóstico.
-- [ ] **ST-2 — Priorizar 3-5 categorias do doc origem** — não tentar tudo. Sugestão PO:
-  - Governança de atendimento + Rastreabilidade (1) — base.
-  - Indicadores estratégicos (13) — comunicação executiva.
-  - Auditoria de delírio (2) — risco operacional + reputacional.
-- [ ] **ST-3 — Instrumentar Esperanza para emitir eventos estruturados** por turno.
-- [ ] **ST-4 — Construir trilha de auditoria completa** (input, output, prompt, regra, fluxo, base, API, tempo, status).
-- [ ] **ST-5 — Implementar score de confiança** — heurística baseada em "IA disse que sabia" vs "IA precisou consultar base".
-- [ ] **ST-6 — Amostra manual de 100 conversas** para baseline de delírio.
-- [ ] **ST-7 — Dashboard de KPIs estratégicos.**
-- [ ] **ST-8 — Comparativo IA vs Humano** em 5 fluxos selecionados.
-- [ ] **ST-9 — Documentar classificação de origem da falha** (taxonomia).
-- [ ] **ST-10 — Publicar diagnóstico v1** em `Gestao/Analises/<data>/` — mesmo incompleto.
 
 ## Dependências cruzadas
 

@@ -5,7 +5,9 @@ description: Resumo executivo do negócio Finza, plataformas, organograma TI&Pro
 
 # Finza — contexto executivo
 
-Resumo destilado dos docs canônicos em `Docs/finza/`. Atualize aqui apenas quando os docs originais forem atualizados — este arquivo é a versão condensada deles.
+Resumo destilado dos docs canônicos em `Docs/finza/` e `Backlog/contexto/`. Atualize aqui apenas quando os docs originais forem atualizados — este arquivo é a versão condensada deles, mantida pelo agente `context-curator` (via `/contexto sync-skill`).
+
+> **Última revisão estrutural: 03/06/2026.** Mudanças desde a v inicial: Torre e Esperanza overviews migraram para `Backlog/contexto/`; squad IAF passou a operar por **8 frentes de backlog** (§3.1, incluindo `sustentacao`); pendências táticas P01–P06 viraram histórico (§6).
 
 ---
 
@@ -40,8 +42,30 @@ Modelo de receita: spread em operações de crédito, FIDCs, securitização. Te
 **Reporte:** Leonardo Caixeta (CTO Finza).
 
 **Agentes do squad:**
-- **Esperanza** — em produção. Cobrança no WhatsApp, multi-canal, multi-tenant. Conduz a régua de cobrança Finza (amigável → Cobrança 4.0 → extrajudicial).
-- **Valentina, Clara, Lívia, Prudente, Francisco** — mencionados, sem detalhe operacional ainda. (TODO: documentar.)
+- **Esperanza** — em produção. Cobrança no WhatsApp, multi-canal, multi-tenant. Conduz a régua de cobrança Finza (amigável → Cobrança 4.0 → extrajudicial). Mapa textual em `Backlog/contexto/mapa_esperanza.md`.
+- **Valentina** — SAC / atendimento. Já preparada para receber a carteira Rhino e o multi-org (validado com o dev João Pedro). Frente `valentina` (prefixo `BVA`) **zerada em 2026-06-02** — itens BVA01–BVA05 cancelados (perderam objeto); novas demandas serão criadas posteriormente.
+- **Clara** — formalização. Comprovantes de endereço, tratativa de reprovados, biometria. Frente `clara` (prefixo `BCL`).
+- **Lívia** — jurídico / distrato. Fluxo de carta de anuência (envolve Jurídico, fora do escopo estrito IAF). Frente `livia` (prefixo `BLV`).
+- **Prudente, Francisco, Salvador, Socorro** — citados no histórico (Salvador/Socorro precederam/coexistem com Esperanza); sem frente própria ativa. `<!-- TODO: confirmar papel atual com gestor -->`
+
+### 3.1 · As 8 frentes do backlog IAF
+
+O trabalho do squad é organizado em **8 frentes** no backlog estratégico (`Backlog/frentes/`). Bitrix & Automações é frente unificada com dois prefixos (BBT, BAU). Cada item tem prefixo por frente:
+
+| Frente | Prefixo | Escopo | Sponsor padrão |
+|---|---|---|---|
+| Bitrix & Automações | `BBT` / `BAU` | Bitrix Cobrança 4.0 + HyperFlow + automações n8n | Jéssica |
+| Torre | `BTR` | Plataforma Torre (multi-org, dashboards, refatoração, RCS) | Jéssica |
+| Clara | `BCL` | Agente de formalização | Jéssica |
+| Esperanza | `BES` | Agente de cobrança/renegociação | Jéssica |
+| Valentina | `BVA` | Agente de SAC | Jéssica |
+| Lívia | `BLV` | Agente jurídico/distrato | Jurídico + Jéssica |
+| Estratégica | `BST` | Transversal — NPS, narrativa IA, processo | João Vinícius / diretoria |
+| Sustentação | — | Bugs, infra/deploy, correções operacionais (itens `QMR####` importados do Quimera) | Jéssica |
+
+> **Dois esquemas de ID convivem:** itens **internos** nascem `B<prefix><nn>` (ex.: `BES03`); itens **importados do Quimera** mantêm a key de origem `QMR####` (ex.: `QMR3415`). Ambos vivem em `Backlog/frentes/<frente>/`.
+
+Estado mestre vive em `Backlog/BACKLOG.md`. Priorização por RICE (skill `po-backlog`). Iniciativas de alto nível agregam itens no **roadmap** (análise `tipo: roadmap` em `Gestao/Analises/`).
 
 ---
 
@@ -49,7 +73,7 @@ Modelo de receita: spread em operações de crédito, FIDCs, securitização. Te
 
 **Proposta:** sistema operacional da cobrança Finza. Title-centric, multi-tenant, com IA aprovada por humano. Atua entre **1.000 e 100.000+ contatos**, multi-canal nativo, cobrança preventiva D-7/D-1.
 
-**6 objetivos estratégicos** (de `TORRE_DE_CONTROLE_OVERVIEW.md` §2):
+**6 objetivos estratégicos** (de `Backlog/contexto/torre_de_controle_overview.md` §2):
 1. Maximizar recuperação de inadimplência
 2. Reduzir custo por contato
 3. Manter consumidor protegido
@@ -64,7 +88,7 @@ Modelo de receita: spread em operações de crédito, FIDCs, securitização. Te
 - Memória persistente, dedup 4D, reconciliação ETL, atribuição de pagamento em janela 48h
 - 3 modos do Maestro (orquestrador de campanhas)
 
-Detalhes operacionais completos em `Docs/finza/TORRE_DE_CONTROLE_OVERVIEW.md`.
+Detalhes operacionais completos em `Backlog/contexto/torre_de_controle_overview.md`.
 
 ---
 
@@ -77,7 +101,7 @@ Agente IA conversacional que conduz cobrança no WhatsApp. Não é chatbot — �
 - **D+16 → D+60 · Cobrança 4.0** — negociação digital ativa, notificação extrajudicial por e-mail, desconto/parcelamento. *(Fase principal.)*
 - **D+46+ · Extrajudicial** — notificação por correio, protesto em cartório, cancelamento e retirada de equipamento.
 
-**9 funções verificáveis nas tools MCP** (de `Docs/agentes/ESPERANZA_AGENT_OVERVIEW.md`):
+**9 funções verificáveis nas tools MCP** (de `Backlog/contexto/esperanza_agent_overview.md`):
 identificação por telefone/CPF · consulta de dívida/contratos/títulos · blocklist · desconto por tier · parcelamento · PIX/boleto · promessa · avanço de funil · escalonamento.
 
 **4 gaps de qualidade mapeados** (pelo supervisor):
@@ -88,9 +112,11 @@ identificação por telefone/CPF · consulta de dívida/contratos/títulos · bl
 
 ---
 
-## 6 · Problemas técnicos mapeados na Torre (P01–P06)
+## 6 · Problemas técnicos mapeados na Torre (P01–P06) — histórico
 
-Diagnóstico do supervisor após 5 dias. Cada problema tem proposta de mitigação.
+> **Nota (27/05/2026):** estes seis problemas foram o **diagnóstico inicial** do supervisor (deck CTO 13/05). Os IDs `P01`–`P06` eram pendências táticas em `Gestao/Pendencias/`, **subsistema aposentado** — viraram itens de backlog (`Backlog/frentes/`) e iniciativas de roadmap. Mantidos aqui como contexto fundador. Hoje a tarefa estratégica vive no Backlog; a tática, como subtarefa de item de backlog.
+
+Diagnóstico do supervisor após 5 dias. Cada problema tinha proposta de mitigação.
 
 | # | Problema | Proposta |
 |---|---|---|
@@ -111,6 +137,8 @@ P01–P05 dependem de decisão arquitetural/processo **fora do squad**. P06 é o
 
 **Chave de leitura:** o supervisor vai rodar este plano, não substituí-lo. Ajustes onde a realidade exigir, mas direção mantida.
 
+O plano herdado foi **desdobrado** no backlog estratégico (8 frentes) e no roadmap de iniciativas (`Gestao/Analises/<dia>/*roadmap*.md`), alimentado pelas reuniões de priorização com Jéssica (18-19/05) e pela reunião de jornada com a diretoria (15/05).
+
 ---
 
 ## 8 · Stakeholders relevantes
@@ -119,22 +147,27 @@ P01–P05 dependem de decisão arquitetural/processo **fora do squad**. P06 é o
 |---|---|---|
 | Leonardo Caixeta | CTO Finza | Reporte direto do supervisor |
 | Mateus | ex-supervisor IAF | Deixou plano de 6 sprints |
-| Jéssica | Gerente de operação de cobrança | Ritual semanal de priorização |
-| Marco | TL Finza Start + Módulo Financeiro | Vizinhança 1 e 4 |
+| Jéssica | Gerente de operação de cobrança | Sponsor das frentes de backlog · ritual de priorização |
+| João Pedro Martins | Negócio / cobrança | Define o que os agentes podem/não podem fazer (com Jéssica) |
+| Marco | TL Finza Start + Módulo Financeiro | Vizinhança 1 e 4 · ponte com o MF |
 | Girlan | TL Falcon + Veritas | Vizinhança 2 e 3 |
-| Joao Lucas | Dev do squad IAF | Owner do fluxo PR + code review |
+| Joao Lucas | Dev do squad IAF | Owner do fluxo PR + code review · infra Esperanza |
+| Leandro | Squad IAF | Maior conhecedor do prompt/comportamento atual da Esperanza |
+| Mateus Alberone | Blips | Maior conhecedor de HyperFlow (canal Cobrança 4.0) |
 
 ---
 
-## 9 · Fontes (docs canônicos)
+## 10 · Fontes (docs canônicos)
 
 Sempre que precisar de detalhe além deste resumo, leia o doc original:
 
 - `Docs/BRIEFING.md` — spec viva do deck CTO. Reflete estado real visual e de conteúdo.
 - `Docs/finza/CONTEXTO-FINZA.md` — modelo de negócio, organograma TI&Produtos, roadmap estratégico, cedentes, neuronização.
 - `Docs/finza/PLATAFORMAS.md` — referência completa das 5 plataformas.
-- `Docs/finza/TORRE_DE_CONTROLE_OVERVIEW.md` — 15 seções da Torre (objetivos, conceitos, sistemas, telas, crons, status, resiliência, integrações, API, variáveis, diferenciais, casos, fora do escopo, stack).
-- `Docs/agentes/ESPERANZA_AGENT_OVERVIEW.md` — 27 tools MCP, 5 camadas de prompt, multi-provider.
+- `Backlog/contexto/torre_de_controle_overview.md` — overview da Torre (objetivos, conceitos, sistemas, telas, crons, status, resiliência, integrações, API, variáveis, diferenciais, casos, fora do escopo, stack). *(Migrou de `Docs/finza/`.)*
+- `Backlog/contexto/esperanza_agent_overview.md` — Esperanza: tools MCP, camadas de prompt, multi-provider. *(Migrou de `Docs/agentes/`.)*
+- `Backlog/contexto/mapa_esperanza.md` — mapa textual da Esperanza (história, pessoas, riscos).
+- `Backlog/BACKLOG.md` — estado mestre das 8 frentes (itens, RICE, alertas, roadmap por trimestre).
 - `Docs/finza/repasse-joao-vinicius-iaf.html` — repasse Mateus → João Vinícius (07/05/2026).
 - `Apresentacoes/referencias/Boas Vinda FINZA - Tech - 2026.pdf` — paleta corporativa.
 - `Apresentacoes/referencias/Roadmap Agentes IA — Operações Finza.pdf` — plano herdado de 6 sprints.

@@ -127,7 +127,7 @@ Exemplo:
 Toda afirmação técnica precisa poder ser ancorada num doc. Em texto de slide, não exiba a citação — mas mantenha rastreabilidade no comentário HTML.
 
 ```html
-<!-- Fonte: Docs/finza/TORRE_DE_CONTROLE_OVERVIEW.md §2 -->
+<!-- Fonte: Backlog/contexto/torre_de_controle_overview.md §2 -->
 <li>Maximizar recuperação de inadimplência</li>
 ```
 

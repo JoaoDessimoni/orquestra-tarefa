@@ -2,6 +2,7 @@
 id: BES04
 title: Criar tabulações automáticas via IA — categorizar interações Esperanza
 frente: esperanza
+fonte: backlog
 status: em-refinamento
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: [P19]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Perguntas IA - 2026_05_18 14_57 GMT-03_00 - Anotações do Gemini.txt
@@ -65,23 +66,6 @@ Esperanza não categoriza sistematicamente as interações que conduz. Sem tabul
 - **CA-3** — Given amostra aleatória de 200 conversas tabuladas pela IA, When operador humano revisa, Then concordância >75% (kappa de Cohen).
 - **CA-4** — Given dashboard de tabulações publicado, When Jéssica e time visualizam, Then identificam pelo menos 3 padrões/insights acionáveis em <30 minutos.
 - **CA-5** — Given calibragem em produção por 30 dias, When número de "outros/desconhecido" >20%, Then taxonomia é revista (não é problema da IA, é da taxonomia).
-
-## Subtarefas
-
-- [ ] **ST-1 — Levantar taxonomia atual usada por humanos** ⚠️ PO: NÃO INVENTAR DO ZERO. Reusar o que já existe (Bitrix, planilha, Hyper).
-  - Conversar com Jéssica + equipe operacional + revisar Bitrix.
-  - Mapear se há divergência entre operadores (sinal de taxonomia frágil).
-- [ ] **ST-2 — Consolidar taxonomia canônica** — versão única, validada por Jéssica.
-  - Cada categoria com definição operacional (não só rótulo).
-  - Limite máximo de categorias: ~15-20 (mais que isso vira ruído).
-- [ ] **ST-3 — Investigar problema atual do tagueador** (Doc Perguntas IA 18/05) — sistema existe mas tagueia mal por falta de descrições.
-  - Não construir do zero se infra de tag já existe.
-- [ ] **ST-4 — Implementar classificador** — pós-processamento que roda no fim da conversa.
-  - Decidir: classificação por LLM dedicado, ou classificação pela própria Esperanza no encerramento, ou classificação por agente tagueador externo (atual)?
-- [ ] **ST-5 — Persistir em base estruturada** — compartilhar esquema com BES03 (volume transferências).
-- [ ] **ST-6 — Amostra manual de 200 conversas** — calibragem (kappa de Cohen).
-- [ ] **ST-7 — Dashboard de tabulações** — distribuição por tipo, evolução temporal, correlação com resultado (pagou/não pagou).
-- [ ] **ST-8 — Revisão pós-30-dias** — se "outros" >20%, revisar taxonomia (não modelo).
 
 ## Dependências cruzadas
 

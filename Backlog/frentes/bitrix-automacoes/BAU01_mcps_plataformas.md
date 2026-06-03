@@ -2,6 +2,7 @@
 id: BAU01
 title: Criar MCPs das plataformas Finza para expandir Valentina e Esperanza
 frente: bitrix-automacoes
+fonte: backlog
 status: a-refinar
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P14]
   reunioes:
-    - Gestao/Reunioes/15-05-2026/2026-05-15-reuniao-diretoria-jornada-cliente.md
+    - Gestao/Reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
   solicitacoes: []
   analises:
     - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
@@ -60,30 +61,9 @@ Valentina e Esperanza hoje operam com contexto estático (prompt + base de conhe
 - **CA-4** — Given autenticação/autorização validada com Segurança, When MCP é acessado, Then chamada é audita+rastreada.
 - **CA-5** — Given 30 dias de operação, When métricas são revisadas, Then acurácia de resposta sobre estado do cliente >95%.
 
-## Subtarefas
-
-- [ ] **ST-1 — Inventariar plataformas Finza com APIs/dados relevantes:**
-  - Módulo Financeiro (Marco) — status contrato, parcelas, posição.
-  - Plataforma Blips (formalização) — status formalização, documentos.
-  - Bitrix (Cobrança 4.0) — fila, histórico de atendimento.
-  - HyperFlow — campanhas, gatilhos.
-  - Veritas (Girlan) — KYC, biometria.
-  - Falcon (Girlan) — análise de crédito.
-  - AuditorIA — logs de decisão (se aplicável).
-- [ ] **ST-2 — Priorizar 1-3 plataformas** ⚠️ PO: NÃO TENTE TODAS DE UMA VEZ.
-  - Critério: maior alavanca para Valentina/Esperanza + menor fricção técnica + governança ok.
-  - Sugestão inicial: Módulo Financeiro (MF) primeiro — alimenta cobrança + SAC.
-- [ ] **ST-3 — Validar governança LGPD** com Compliance.
-- [ ] **ST-4 — Implementar autenticação/autorização** com time Segurança.
-- [ ] **ST-5 — Implementar primeiro MCP** (provavelmente MF).
-- [ ] **ST-6 — Configurar Valentina/Esperanza** para consumir.
-- [ ] **ST-7 — Validar com 50 conversas reais** — acurácia de resposta sobre estado do cliente.
-- [ ] **ST-8 — Documentar padrão** para próximos MCPs (Veritas, Bitrix, etc.).
-- [ ] **ST-9 — Iteração com próximas plataformas** uma a uma.
-
 ## Dependências cruzadas
 
-- **Sinergia:** BVA01 (base de contexto), BTR02 (multi-org — MCPs podem variar por org), BTR07 (refatoração — afeta APIs da Torre).
+- **Sinergia:** BTR02 (multi-org — MCPs podem variar por org), BTR07 (refatoração — afeta APIs da Torre).
 
 ## Observações PO
 
@@ -109,6 +89,7 @@ Valentina e Esperanza hoje operam com contexto estático (prompt + base de conhe
 
 - 2026-05-22 — Item criado a partir de P14 (pendência). Status inicial: bruto. Origem: análise mestre do Roadmap 2026Q3 (RM11) consolidando reunião com diretoria de 15/05/2026.
 - 2026-05-25 — **Refinamento PO.** Status promovido a `em-refinamento`. RICE 5.33. Esforço: L (corrigido — "criar MCPs" é programa, não item). Recomendação PO: começar pelo MF. Adicionada governança LGPD como gate. Lista de 7 plataformas candidatas.
+- 2026-06-02 — **Edição leve.** Menção a BVA01 removida da linha de sinergia (frente Valentina zerada). Valentina segue como consumidora dos MCPs (agente ativo), apenas o vínculo ao item BVA01 deixa de existir.
 
 ## Notas
 

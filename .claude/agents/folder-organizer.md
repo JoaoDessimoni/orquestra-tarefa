@@ -52,19 +52,24 @@ Repasse/
 |---|---|---|
 | `Apresentacoes/executando/` ou `entregues/` | `<tema>_<destino>_DD-MM-YYYY.html` | `^.+_.+_\d{2}-\d{2}-\d{4}\.html$` |
 | `Gestao/Reunioes/` | `YYYY-MM-DD-<slug>.md` | `^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.md$` |
-| `Gestao/Pendencias/` | `Pnn_<slug>.md` ou `custom_<slug>.md` | `^(P\d{2}|custom)_[a-z0-9_]+\.md$` |
 | `Gestao/Analises/` | `YYYY-MM-DD_<slug>.md` | `^\d{4}-\d{2}-\d{2}_[a-z0-9_]+\.md$` |
 | `Gestao/1on1s/` | `YYYY-MM-DD-1on1-<pessoa>.md` | `^\d{4}-\d{2}-\d{2}-1on1-[a-z]+\.md$` |
+| `Backlog/frentes/<frente>/` | `B<prefix><nn>_<slug>.md` (item interno) **ou** `QMR<nnnn>_<slug>.md` (importado do Quimera) | `^(B(BT\|AU\|TR\|CL\|ES\|VA\|LV\|ST)\d{2}\|QMR\d+)_[a-z0-9-]+\.md$` |
+| `Backlog/contexto/` | `mapa_<assunto>.md` ou `<sistema>_overview.md` | `^([a-z0-9_]+_overview\|mapa_[a-z0-9_]+)\.md$` |
+
+> **Não existe mais** `Gestao/Pendencias/` (aposentado em 27/05/2026). Se a pasta reaparecer com conteúdo, **flague** como resíduo a revisar, não como pasta esperada.
 
 ### 4 · Duplicatas
 - Mesmo nome em `executando/` e `entregues/` → flagar.
-- Pendência com mesmo título em dois arquivos → flagar.
+- Item de backlog com mesmo título em duas frentes → flagar.
+- Backups órfãos na raiz (`*.html` de cópia, `* copy.html`) → flagar para remoção.
 
 ### 5 · READMEs ausentes ou vazios
-Cada subpasta de `Gestao/` deve ter um `README.md` curto explicando o que vai lá. Se faltar, marcar.
+Cada subpasta de `Gestao/` e de `Backlog/` deve ter um `README.md` curto explicando o que vai lá. Se faltar, marcar. (Não exigir README em `Gestao/Pendencias/` — pasta aposentada.)
 
-### 6 · Referências quebradas em `CLAUDE.md` e `Docs/BRIEFING.md`
+### 6 · Referências quebradas em `CLAUDE.md`, `Docs/BRIEFING.md` e nos `.claude/`
 - Caminhos relativos que apontam para arquivos inexistentes.
+- Atenção especial às migrações: `Docs/finza/TORRE_DE_CONTROLE_OVERVIEW.md` → `Backlog/contexto/torre_de_controle_overview.md`; `Docs/agentes/ESPERANZA_AGENT_OVERVIEW.md` → `Backlog/contexto/esperanza_agent_overview.md`.
 - Listar ocorrências.
 
 ## Como você opera
@@ -96,7 +101,7 @@ Use `Glob` para listar tudo. Use `Read` em READMEs e em `CLAUDE.md`. Use `Grep` 
 - `<antigo>` → `<novo>` — razão: aderir convenção <regex>.
 
 ### Criar
-- `Gestao/Pendencias/README.md` — pasta sem README.
+- `Backlog/contexto/README.md` — pasta sem README (exemplo).
 
 ### Corrigir referência
 - `CLAUDE.md:42` aponta para `<path-quebrado>` → atualizar para `<path-correto>`.

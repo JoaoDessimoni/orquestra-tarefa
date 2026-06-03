@@ -1,5 +1,5 @@
 ---
-description: Gera resumo executivo da semana — lê Gestao/Pendencias/, Reunioes/, Analises/, 1on1s/ e produz overview de pendências em curso, reuniões realizadas, análises produzidas. Sem agente externo — leitura direta + síntese.
+description: Gera resumo executivo da semana — lê Backlog/frentes/, Gestao/Reunioes/, Analises/, 1on1s/ e produz overview de itens de backlog em curso, reuniões realizadas, análises produzidas. Sem agente externo — leitura direta + síntese.
 ---
 
 # /status — status semanal do supervisor
@@ -18,14 +18,15 @@ Use no fim da semana (ou quando o usuário pedir) para produzir resumo executivo
 
 Use Glob + Read para juntar:
 
-1. **Pendências em curso**
-   - `Glob Gestao/Pendencias/*.md`
-   - Leia frontmatter de cada (id, title, status, prioridade, deadline).
-   - Filtrar: `status != fechada`.
-   - Ordenar: alta prioridade > média > baixa; dentro, deadline mais próxima primeiro.
+1. **Backlog em curso**
+   - `Glob Backlog/frentes/**/B*.md` (exclua `README.md`).
+   - Leia frontmatter de cada (id, title, frente, status, prioridade, rice.score, deadline_alvo).
+   - Filtrar: `status ∈ {em-curso, bloqueado}` + itens `refinado` com prioridade `urgente`/`alta`.
+   - Ordenar: prioridade (urgente > alta > media > baixa) → RICE score desc → deadline mais próxima.
 
-2. **Pendências fechadas na janela**
-   - Mesma lista, mas `status == fechada AND fechada >= data-corte`.
+2. **Backlog movimentado na janela**
+   - Itens `entregue`/`cancelado` cuja última entrada de histórico cai na janela.
+   - Itens criados/refinados na janela (sinaliza vazão de refinement).
 
 3. **Reuniões na janela**
    - `Glob Gestao/Reunioes/**/*.md` (recursivo — pasta datada).
@@ -59,20 +60,20 @@ Produza o status no formato canônico:
 ## Resumo executivo
 <2-3 linhas: estado geral, principais avanços, principais bloqueadores>
 
-## Pendências
-**Total em curso:** N (alta: X · média: Y · baixa: Z)
-**Fechadas no período:** M
+## Backlog
+**Em curso:** N · **Bloqueados:** B · **Refinados aguardando:** R
+**Movimentado no período:** entregues M · cancelados C · refinados novos K
 
-### Críticas (alta + atrasadas)
-| ID | Título | Deadline | Owner |
-|---|---|---|---|
-| [P02] | Backend FastAPI | 2026-07-10 | Joao Lucas |
+### Críticos (urgente/alta + bloqueados)
+| ID | Frente | Título | RICE | Deadline |
+|---|---|---|---|---|
+| BTR02 | torre | Multi-Org — Rhino + x-api-key | 12.5 | 2026-06-09 |
 
-### Próximas a vencer (≤14 dias)
-| ID | Título | Deadline | Owner |
+### Próximos a vencer (≤14 dias)
+| ID | Frente | Título | Deadline |
 
-### Fechadas no período
-| ID | Título | Resultado |
+### Movimentado no período
+| ID | Frente | Título | Mudança |
 
 ## Reuniões
 - **YYYY-MM-DD** — <título> · <participantes> · <decisão chave em 1 linha>
@@ -88,7 +89,7 @@ Produza o status no formato canônico:
 - <nome> · <destino> · <data>
 
 ## Bloqueadores
-<lista de pendências bloqueadas (status=bloqueada) com motivo>
+<itens de backlog bloqueados (status=bloqueado) com motivo + o que/quem destrava>
 
 ## Próxima semana — foco
 <3-5 itens prioritários derivados do que ficou aberto>

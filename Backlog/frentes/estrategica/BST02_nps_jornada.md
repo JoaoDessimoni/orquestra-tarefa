@@ -2,6 +2,7 @@
 id: BST02
 title: Implementar coleta de NPS no fim da jornada Finza via IA
 frente: estrategica
+fonte: backlog
 status: a-refinar
 prioridade: alta
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P12]
   reunioes:
-    - Gestao/Reunioes/15-05-2026/2026-05-15-reuniao-diretoria-jornada-cliente.md
+    - Gestao/Reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
   solicitacoes: []
   analises:
     - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
@@ -26,7 +27,7 @@ sponsor: Diretoria
 criada: 2026-05-22
 refinada: 2026-05-25
 deadline_alvo: 2026-Q3
-dependencias: [BVA01]
+dependencias: []
 bloqueia: []
 riscos:
   - NPS captado pouco depois da formalização pode ser enviesado positivamente — cliente acabou de comprar, ainda não experimentou problema.
@@ -60,27 +61,10 @@ Diretoria identificou na reunião de 15/05/2026 que não há captura sistemátic
 - **CA-4** — Given dashboard publicado, When diretoria revisa, Then visualiza NPS por carteira/originador/mês com drill-down.
 - **CA-5** — Given dado coletado, When score baixo (<7), Then dispara ação operacional (escalonamento humano? análise da jornada?) — não fica só no dashboard.
 
-## Subtarefas
-
-- [ ] **ST-1 — Definir formato da pesquisa** ⚠️ PO: SEM ISSO, CÓDIGO É ESPECULATIVO.
-  - NPS clássica (0-10) ou múltiplas perguntas?
-  - Sugestão PO: começar com NPS clássica + 1 comentário opcional. Simples vence.
-- [ ] **ST-2 — Identificar gatilho "fim da jornada"** — provavelmente status formalização = concluída.
-  - Sessão com Marco (TL Finza Start / MF) para confirmar evento.
-- [ ] **ST-3 — Decidir agente que envia** — Valentina (SAC já existente) vs agente dedicado.
-  - Sugestão PO: Valentina, sem criar agente novo (princípio de não fragmentar).
-- [ ] **ST-4 — Definir momento exato do envio** — 24h após formalização? 7 dias? Logo após cliente receber máquina?
-  - Validar com Produto.
-- [ ] **ST-5 — Definir taxa de resposta esperada** — sem expectativa baseline (20%?), métrica não tem norte.
-- [ ] **ST-6 — Implementar envio + coleta + persistência.**
-- [ ] **ST-7 — Dashboard NPS** — por carteira, originador, mês.
-- [ ] **ST-8 — Definir ação para score baixo** — escalonamento, follow-up, análise. SEM ISSO, NPS vira vaidade.
-- [ ] **ST-9 — Calibragem** — 100 respostas iniciais validadas para garantir que não há viés grosseiro.
-
 ## Dependências cruzadas
 
-- **Depende de:** BVA01 (base de contexto Valentina) — se Valentina envia, precisa entender jornada.
 - **Sinergia:** BTR02 (multi-org) — NPS por carteira/originador.
+- Nota 2026-06-02: dependência de BVA01 (base de contexto Valentina) removida — frente Valentina foi zerada. A base de contexto necessária para o agente que envia o NPS deixa de ser pré-requisito formal; revisitar quando novas demandas Valentina forem criadas.
 
 ## Observações PO
 
@@ -90,7 +74,7 @@ Diretoria identificou na reunião de 15/05/2026 que não há captura sistemátic
 2. **Momento do envio é a maior alavanca.** NPS 1h depois da formalização vai ser inflado. NPS 30 dias depois é mais real mas tem fadiga. Validar com Produto antes de implementar.
 3. **ST-8 (ação para score baixo) é o ponto-chave do projeto.** Sem isso, é métrica decorativa.
 4. **"Pesquisa via IA" pode soar automática demais.** Mensagem precisa ter tom humano. ST-1 inclui calibragem de tom.
-5. **Esforço M com dependência em BVA01.** Se BVA01 atrasar, este item atrasa.
+5. **Esforço M.** Dependência de BVA01 removida em 2026-06-02 (frente Valentina zerada) — item deixa de estar atrelado ao cronograma de Valentina.
 6. **Recomendação PO: começar pequeno.** MVP = 1 pergunta NPS clássica + dashboard simples. Múltiplas perguntas em v2.
 
 ## Definição de pronto
@@ -105,6 +89,7 @@ Diretoria identificou na reunião de 15/05/2026 que não há captura sistemátic
 
 - 2026-05-22 — Item criado a partir de P12 (pendência). Status inicial: bruto. Origem: análise mestre do Roadmap 2026Q3 (RM23) consolidando reunião com diretoria de 15/05/2026.
 - 2026-05-25 — **Refinamento PO.** Status promovido a `em-refinamento`. RICE 4.9 (conservador por confidence baixa de extrair valor). Dependência de BVA01 adicionada. ST-8 (ação para score baixo) elevado como chave do projeto. Recomendação PO: MVP simples (NPS 0-10 + 1 comentário).
+- 2026-06-02 — **Dependência removida.** `dependencias: [BVA01]` → `[]`. Frente Valentina foi zerada (todos os BVA cancelados — Valentina já preparada p/ Rhino + multi-org via dev João Pedro). A base de contexto Valentina deixa de ser pré-requisito formal do NPS; revisitar quando novas demandas Valentina surgirem.
 
 ## Notas
 

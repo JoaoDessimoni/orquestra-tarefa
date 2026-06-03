@@ -54,10 +54,10 @@ tags: []                         # opcional
 - <decisão 1>
 - <decisão 2>
 
-## Pendências geradas
-<!-- Para cada pendência, criar via /pendencia add depois -->
-- [ ] <pendência 1> — owner: <quem>, deadline: <quando>
-- [ ] <pendência 2>
+## Ações geradas
+<!-- Para cada ação estratégica, criar item via /backlog add depois -->
+- [ ] <ação 1> — owner: <quem>, deadline: <quando>
+- [ ] <ação 2>
 
 ## Próximos passos
 - <ação 1> — owner: <quem>, deadline: <quando>
@@ -65,10 +65,6 @@ tags: []                         # opcional
 ## Notas / observações
 <contexto, citações, links>
 ```
-
-## Passo 3.5 — Atualizar board
-
-Após criar o arquivo da reunião (ou 1on1), invoque o agente `board-updater` sem brief adicional. Ele reescaneia `Gestao/` e regrava o JSON inline de `BOARD.html` na raiz do Repasse. O board mostra a nova reunião imediatamente após F5/reabrir.
 
 ## Passo 4 — Confirmar e oferecer próximas ações
 
@@ -78,7 +74,7 @@ Após criar o arquivo da reunião (ou 1on1), invoque o agente `board-updater` se
 
 Próximas ações possíveis:
 - "Preenche a discussão" — dite ou cole notas e eu redijo.
-- "Cria pendências" — para cada item em "Pendências geradas", abro via /pendencia add.
+- "Cria itens de backlog" — para cada item em "Ações geradas", abro via /backlog add.
 - "Pronto" — fecho aqui.
 ```
 

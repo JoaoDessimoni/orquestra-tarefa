@@ -2,6 +2,7 @@
 id: BTR03
 title: Validação conjunta de dashboards da Torre de Controle
 frente: torre
+fonte: backlog
 status: em-refinamento
 prioridade: media
 rice:
@@ -15,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: [P30]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
     - Gestao/Reunioes/18-05-2026/2026-05-18-perguntas-ia-divergencia-dados.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
@@ -66,19 +67,6 @@ Dashboards da Torre precisam validação conjunta — cálculos, conceitos e usa
 - **CA-3** — Given sessão de validação com Jéssica por dashboard, When realizada, Then ata documenta: cálculo (janela, base, fórmula), conceito (significado operacional), usabilidade (filtros, drill-down).
 - **CA-4** — Given dicionário canônico de conceitos publicado, When consultado, Then cada termo tem definição única (não 3 versões dependendo de quem lê).
 - **CA-5** — Given correções identificadas, When implementadas, Then validadas em revisita com Jéssica em <30 dias.
-
-## Subtarefas
-
-- [ ] **ST-1 — Inventariar dashboards existentes da Torre** — em curso.
-  - Para cada: dono, frequência de uso, último acesso, métrica principal.
-- [ ] **ST-2 — Aguardar BES08 (divergência dados)** — sem isso, validação semântica valida ruído.
-- [ ] **ST-3 — Para cada dashboard, marcar sessão de validação** com Jéssica + time de Dados.
-- [ ] **ST-4 — Validar cálculo** (janela, base de dados, fórmula).
-- [ ] **ST-5 — Validar conceito** (o que "cliente ativo" significa — definição única).
-- [ ] **ST-6 — Validar usabilidade** (filtros, drill-down).
-- [ ] **ST-7 — Documentar correções/ajustes solicitados.**
-- [ ] **ST-8 — Pós-validação, fixar dicionário em `Backlog/contexto/`** — fonte única para BTR04 também.
-- [ ] **ST-9 — Revisita pós-correção** — confirmar com Jéssica que ajustes resolveram.
 
 ## Dependências cruzadas
 

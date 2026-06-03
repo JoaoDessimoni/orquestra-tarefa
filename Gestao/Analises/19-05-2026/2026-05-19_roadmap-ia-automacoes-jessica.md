@@ -518,6 +518,6 @@ O roadmap 2026Q3 do IAF tem 24 iniciativas distribuídas em 6 frentes. A massa c
 - A análise consolida 3 fontes — Roadmap.txt formal, anotações de caderno do supervisor (15-18/05), e reunião com diretoria 15/05 — com peso documental igual.
 - O .txt original do Roadmap fica preservado em `Gestao/Pendencias/19-05-2026/Roadmap Novos Desenvolvimentos - IA e Automações.txt` — fonte primária.
 - Anotações do caderno enriqueceram especialmente as frentes Esperanza (RM04, RM05, RM06) e Estratégica (RM24).
-- Tipo `roadmap` no frontmatter é uma extensão acordada com o `board-updater` — a iniciativa `iniciativas:` é parseada para popular `roadmap[]` no JSON do BOARD.
+- Tipo `roadmap` no frontmatter marca esta análise como consolidação de iniciativas — o bloco `iniciativas:` lista RM01–RM24. (Originalmente havia uma projeção visual de board, hoje descontinuada; o registro canônico do roadmap é este próprio arquivo.)
 - Status inicial de todas as 24 iniciativas é `nao-iniciado`. Atualizações vêm via edição direta deste arquivo (campo `atualizada` + status) ou via reabertura do roadmap em ciclos futuros.
-- Esta análise pode ter sucessoras: 2026Q4, 2027Q1 etc. Cada uma com seu próprio bloco `iniciativas:` — o `board-updater` concatena na ordem das análises por data desc.
+- Esta análise pode ter sucessoras: 2026Q4, 2027Q1 etc. Cada uma com seu próprio bloco `iniciativas:`, lidas na ordem das análises por data desc.

@@ -2,6 +2,7 @@
 id: BES05
 title: Investigar fluxo Esperanza — escopo, casos atendidos e domínio
 frente: esperanza
+fonte: backlog
 status: em-refinamento
 prioridade: alta
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P20]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Perguntas a serem respondidas & melhorias_correções IA's.txt
@@ -63,17 +64,6 @@ Pré-requisito de várias outras iniciativas (5 itens bloqueados). **RICE 36.45 
 - **CA-2** — Given documento publicado em `Gestao/Analises/`, When supervisor revisa em isolamento, Then consegue responder com clareza: "que casos a Esperanza atende?", "que casos NÃO atende?", "qual o domínio conversacional?", "quais pontos cegos?".
 - **CA-3** — Given documento, When squad referencia em discussão de outro item (ex: BES03), Then é citado como fonte (não como "ah, achei que era assim").
 - **CA-4** — Given casos NÃO atendidos identificados, When listados, Then cada um vem com razão (limite técnico / decisão de produto / risco / falta de integração).
-
-## Subtarefas
-
-- [ ] **ST-1 — Preparar template de entrevista** ⚠️ PO: NÃO entrar na sessão sem template. Vira papo solto.
-  - 6 áreas: fluxo geral (turnos, decisões, transferências), casos atendidos (lista exaustiva ou amostra), casos NÃO atendidos (e por quê), domínio conversacional (escopo), pontos cegos conhecidos, deltas vs. doc `ESPERANZA_AGENT_OVERVIEW.md`.
-- [ ] **ST-2 — Ler `Docs/agentes/ESPERANZA_AGENT_OVERVIEW.md` ANTES da sessão** — sessão é para preencher gaps, não para repetir o que já está escrito.
-- [ ] **ST-3 — Agendar 1-2h com lead técnico Esperanza** (Leandro ou quem o supervisor identifique como referência).
-- [ ] **ST-4 — Conduzir sessão** com template + gravação.
-- [ ] **ST-5 — Produzir documento em `Gestao/Analises/<data>/`** estruturado pelas 6 áreas.
-- [ ] **ST-6 — Validar documento com lead técnico** — 1 rodada de revisão antes de publicar.
-- [ ] **ST-7 — Sinalizar squad** que documento é referência ativa — citar em próximos refinements de BES01-BES07.
 
 ## Dependências cruzadas
 

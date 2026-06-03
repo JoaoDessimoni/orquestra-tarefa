@@ -2,6 +2,7 @@
 id: BES03
 title: Mapear volume de transferências IA→humano por departamento e agente
 frente: esperanza
+fonte: backlog
 status: em-curso
 prioridade: alta
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P18]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Perguntas IA - 2026_05_18 14_57 GMT-03_00 - Anotações do Gemini.txt
@@ -64,19 +65,6 @@ Sem visibilidade hoje sobre quantas transferências IA→humano acontecem, em qu
 - **CA-3** — Given dashboard publicado, When gestor abre, Then visualiza distribuição por departamento, agente, motivo, carteira, originador, dia/semana/mês — com drill-down.
 - **CA-4** — Given dashboard validado, When Jéssica revisa, Then valida semanticamente que números fazem sentido (não diverge de operação real >5%).
 - **CA-5** — Given divergência Torre vs Hyper conhecida (277 vs 2000), When dashboard é publicado, Then documenta claramente o que é contabilizado e o que NÃO é — para evitar leitura errada.
-
-## Subtarefas
-
-- [ ] **ST-1 — Consolidar taxonomia de "motivo de transferência"** ⚠️ PO: SEM TAXONOMIA, dado é ruído.
-  - Lista fixa: cliente pediu humano, IA não soube responder, timeout, fora de escopo, regra de negócio, escalonamento por valor, escalonamento por sentimento, falha técnica, outro.
-  - Validar com Jéssica e lead técnico Esperanza.
-- [ ] **ST-2 — Investigar causa raiz da divergência Torre vs Hyper** (vide BES08).
-  - Antes de construir dashboard, garantir que medição atual está correta — senão dashboard amplifica erro.
-- [ ] **ST-3 — Instrumentar Esperanza** para emitir evento estruturado a cada transferência.
-- [ ] **ST-4 — Definir storage estruturado** (Supabase ou Postgres pós-BTR07). Definir retenção (90d default).
-- [ ] **ST-5 — Construir dashboard** com cortes (departamento, agente, motivo, carteira, originador, janela).
-- [ ] **ST-6 — Validar leitura semântica com Jéssica** — não publicar antes de bater dado com realidade operacional dela.
-- [ ] **ST-7 — Documentar o que é contabilizado e o que não é** — leitura sem ambiguidade.
 
 ## Dependências cruzadas
 

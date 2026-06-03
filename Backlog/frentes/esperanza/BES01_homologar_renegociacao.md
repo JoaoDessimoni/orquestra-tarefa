@@ -2,6 +2,7 @@
 id: BES01
 title: Homologar renegociação Esperanza com transferência para atendimento humano
 frente: esperanza
+fonte: backlog
 status: a-refinar
 prioridade: alta
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P16]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-roadmap.md
+    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
@@ -61,20 +62,6 @@ A implementação de renegociação de valores vencidos na Esperanza está parci
 - **CA-2** — Given conjunto de cenários de teste predefinidos (mínimo: cliente em D+30, D+60, D+90, com/sem desconto, com/sem parcelamento), When cada cenário é executado end-to-end, Then 100% concluem sem transferência indevida e sem alteração de valor fora do permitido.
 - **CA-3** — Given checklist de homologação rascunhado pelo supervisor, When validado no fórum, Then checklist é versionado em `Backlog/contexto/` como template para futuras homologações (Clara, Valentina, etc.).
 - **CA-4** — Given homologação aprovada, When ata é publicada, Then status do BES02 é desbloqueado (sai de `dependente de BES01`).
-
-## Subtarefas
-
-- [ ] **ST-1 — Validar maturidade técnica antes do fórum** ⚠️ PO: NÃO marcar fórum sem isso. Falha frequente em homologação é descobrir gap na hora.
-  - Lead técnico Esperanza confirma cobertura funcional (que casos a IA atende hoje vs. que ainda não atende).
-  - Demo interna privada (supervisor + lead técnico) antes do fórum externo.
-- [ ] **ST-2 — Rascunhar checklist de homologação operacional** — antes do fórum, não no fórum.
-  - Cobertura: cenários por idade de dívida, com/sem desconto, com/sem parcelamento, com/sem objeção do cliente, com/sem transferência intermediária.
-  - Critério de homologa/não-homologa por cenário (binário).
-- [ ] **ST-3 — Convocar fórum** — Jéssica + lead técnico Esperanza + representante Módulo Financeiro + (avaliar: Compliance? Auditoria?).
-- [ ] **ST-4 — Conduzir fórum** — rodar cenários do checklist, registrar resultado por cenário, veredicto consolidado.
-- [ ] **ST-5 — Publicar ata** em `Gestao/Reunioes/<data>/`.
-- [ ] **ST-6 — Versionar checklist final em `Backlog/contexto/`** como template para outras homologações.
-- [ ] **ST-7 — Destravar BES02** atualizando frontmatter da BES02 (dependencias removendo BES01 se aprovado).
 
 ## Dependências cruzadas
 

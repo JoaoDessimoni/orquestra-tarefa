@@ -2,6 +2,7 @@
 id: BCL02
 title: Implementar tratativa de reprovados em formalização (negativa + reembolso)
 frente: clara
+fonte: backlog
 status: a-refinar
 prioridade: alta
 rice:
@@ -71,22 +72,6 @@ Sinergia direta com BBT01 (raia Bitrix de reembolso) — Clara cria a entrada na
 - **CA-4** — Given dados validados, When Clara cria entrada na raia BBT01, Then payload contém: ID cliente, dados bancários, motivo da reprovação, timestamp.
 - **CA-5** — Given operador humano executa reembolso, When status volta, Then Clara comunica cliente sobre conclusão (com comprovante quando possível).
 - **CA-6** — Given dados inconsistentes (CNPJ não bate, PIX errado), When detectados, Then Clara escalona para humano (não tenta corrigir sozinha).
-
-## Subtarefas
-
-- [ ] **ST-1 — Validar com Compliance + Jurídico** ⚠️ PO: GATE NÃO-NEGOCIÁVEL.
-  - Pode IA comunicar reprovação ou tem que ser humano (assinado)?
-  - Texto da mensagem precisa de quais ressalvas legais?
-  - Coleta de dados bancários pela IA tem risco LGPD?
-- [ ] **ST-2 — Validar fluxo com Financeiro** — como se executa reembolso hoje? Quem confere? Qual SLA?
-- [ ] **ST-3 — Aguardar BBT01 (raia Bitrix)** estar minimamente desenhada.
-- [ ] **ST-4 — Definir tom + template** da comunicação de negativa (com Compliance).
-- [ ] **ST-5 — Implementar coleta de dados** + validação básica (formato + CNPJ).
-- [ ] **ST-6 — Integrar com BBT01** (criar entrada na raia).
-- [ ] **ST-7 — Implementar comunicação de status** para cliente.
-- [ ] **ST-8 — Piloto com 5 reprovações reais** com supervisão humana antes de generalizar.
-- [ ] **ST-9 — Tratamento de exceções** — dados inconsistentes escalam, não tenta corrigir sozinha.
-- [ ] **ST-10 — Métricas:** tempo médio até reembolso, taxa de re-solicitação de dados, satisfação do cliente reprovado (NPS pós-reembolso?).
 
 ## Dependências cruzadas
 

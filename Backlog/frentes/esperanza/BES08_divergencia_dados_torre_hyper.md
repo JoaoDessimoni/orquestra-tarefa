@@ -2,6 +2,7 @@
 id: BES08
 title: Resolver divergência de dados Torre vs Hyper (277 vs 2000 protocolos)
 frente: esperanza
+fonte: backlog
 status: a-refinar
 prioridade: alta
 rice:
@@ -70,24 +71,6 @@ Em 15/05/2026, divergência detectada: Torre reporta 277 protocolos, Hyper repor
 - **CA-4** — Given relação Torre vs Hyper documentada, When reportada para Jéssica, Then ela consegue ler ambos os números como complementares (não como erro).
 - **CA-5** — Given protocolos antigos ativos no Hyper, When investigados, Then é estabelecida regra de fechamento automático ou processo manual.
 - **CA-6** — Given sistema de tags configurado, When personalizado, Then descrições específicas são adicionadas (não modelo padrão).
-
-## Subtarefas
-
-- [ ] **ST-1 — Mapear o que CADA SISTEMA conta** — definir conceito de "protocolo" em Torre e em Hyper.
-- [ ] **ST-2 — Investigar 5 hipóteses do doc 18/05** uma a uma:
-  - Janela 12h da consulta Torre.
-  - Hyper conta múltiplos agentes.
-  - Renegociações fora da Torre.
-  - Protocolos antigos ativos.
-  - Tags em modelo padrão.
-- [ ] **ST-3 — Implementar separação de conversas por protocolo** (Leandro já encaminhou em dev, mover para prod).
-- [ ] **ST-4 — Avaliar criação de departamento exclusivo Esperança no Hyper** — pode mitigar (isola Esperança da contagem total) mas não resolve divergência conceitual.
-- [ ] **ST-5 — Revisar sistema de tags** ⚠️ Doc 18/05 sinaliza problema: descrições vagas atrapalham IA tagueadora.
-- [ ] **ST-6 — Investigar fechamento de protocolos** — por que protocolos antigos permanecem ativos.
-- [ ] **ST-7 — Implementar separação de registros humano vs IA** (já encaminhado pelo squad).
-- [ ] **ST-8 — Otimizar consulta da Torre** — reduzir janela de 12h se possível.
-- [ ] **ST-9 — Documentar relação canônica** entre números Torre e Hyper.
-- [ ] **ST-10 — Validar com Jéssica** que documentação faz sentido operacionalmente.
 
 ## Dependências cruzadas
 

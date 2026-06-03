@@ -5,6 +5,8 @@ Itens relacionados à agente IA **Valentina**, responsável pelo atendimento SAC
 **Sponsor padrão:** Jéssica (Gerente Cobrança) / Diretoria
 **ID prefix:** `BVA##`
 
+> **Frente ZERADA em 2026-06-02.** Todos os itens (BVA01–BVA05) foram cancelados. Motivo: a Valentina já está preparada para receber a carteira Rhino e o multi-org (validado com o dev João Pedro), então as demandas que tratavam disso perderam objeto. Os `.md` foram reduzidos a stubs de cancelamento (ID e histórico mínimo preservados). **Novas demandas da frente Valentina serão criadas posteriormente.** O escopo abaixo descreve o que a frente cobria — referência histórica.
+
 ## Escopo
 
 - Roteamento por originador (urgente: Rhino → suporte Rhino)

@@ -1,0 +1,206 @@
+# Backlog — Squad IAF
+
+**Última regeneração:** 2026-06-02 — zeragem da frente Valentina (BVA01–BVA05 cancelados) + limpeza de vínculos cruzados (BTR02, BTR08, BST02, BAU01)
+**Estado:** 30 itens · 13 a-refinar · 6 em-refinamento · 4 em-curso · 1 entregue · 6 cancelado · 1 frente sem itens (Lívia) · 1 frente zerada (Valentina)
+
+> Esta página é **projeção** dos itens em `Backlog/frentes/<frente>/B*.md`. Fonte da verdade são os `.md`. Para alterar conteúdo: edite o `.md` correspondente e rode `/backlog regenerate`. As projeções `backlog.html` (kanban) e `mapa-mental.html` (canvas) são regeradas em conjunto.
+
+---
+
+## Mudanças nesta regeneração (02/06/2026)
+
+### Frente Valentina ZERADA
+
+Decisão do supervisor (João Vinícius), 02/06/2026. A **Valentina já está preparada para receber a carteira Rhino e o multi-org** (validado com o dev João Pedro), então as demandas que tratavam disso perderam objeto.
+
+- **BVA01–BVA05 cancelados.** Status `cancelado`, prioridade `baixa`. Cada `.md` foi reduzido a **stub enxuto**: cabeçalho + motivo do cancelamento + rastreabilidade + histórico mínimo. Conteúdo detalhado (história, CA, subtarefas, RICE expandido, observações PO) removido para limpar a área de trabalho.
+- **IDs preservados** (regra invariante). Não reutilizar.
+- **Pasta `valentina/` e `README.md` mantidos.** README atualizado registrando a zeragem. **Novas demandas Valentina serão criadas posteriormente.**
+
+### Limpeza de vínculos cruzados (órfãos pós-cancelamento)
+
+- **BTR02 (Multi-Org)** — totalmente desvinculado da Valentina: `dependencias: [BVA02,BVA03,BVA05] → []`, `bloqueia: [BVA04] → []`. Vínculo interno **BTR08→BTR02 também removido** por decisão do supervisor. Mantidos CA-2/ST-7 (multi-org/ETL Rhino) e tags `rhino`/`originador` — escopo técnico legítimo.
+- **BTR08 (templates régua)** — `dependencias: [BTR02] → []`. BTR02 segue como sinergia técnica (escopo template global vs por org), não bloqueio.
+- **BST02 (NPS)** — `dependencias: [BVA01] → []`. Base de contexto Valentina deixa de ser pré-requisito formal.
+- **BAU01 (MCPs)** — menção a BVA01 removida da linha de sinergia (edição leve no `.md`; sem mudança estrutural no JSON). Valentina segue como consumidora dos MCPs (agente ativo).
+
+### Conhecimento/contexto
+
+- Skill `finza-contexto/SKILL.md` (linha "Valentina") atualizada: registra que a frente foi zerada em 2026-06-02 e que a Valentina já está preparada para Rhino + multi-org. `Backlog/contexto/` não tinha menção a Valentina/BVA/Rhino — nada a corrigir lá. Não existe mapa textual de Valentina.
+
+### Princípio aplicado
+
+IDs `BVA01–BVA05` permanecem. Os `.md` são a fonte; este `BACKLOG.md` e os JSONs de `backlog.html` + `mapa-mental.html` espelham o estado atual. Os demais 25 itens não foram tocados quanto a escopo — só os vínculos cruzados com a Valentina foram limpos em BTR02/BTR08/BST02/BAU01.
+
+---
+
+## Visão por frente
+
+### Torre de Controle — 7 itens (1 em-curso · 2 em-refinamento · 3 a-refinar · 1 cancelado)
+
+| ID | Título | Status | Prio | Deadline | RICE | Esforço | Implementador |
+|---|---|---|---|---|---|---|---|
+| **BTR02** | Implementação Multi-Org na Torre (schema + ETL Rhino) | **em-curso** | **urgente** | **2026-06-09** | 6.3 | XL | **Marcos Rodrigues + João Lucas** |
+| BTR03 | Validação conjunta de dashboards | em-refinamento | media | 2026-Q3 | 8.4 | S | — |
+| BTR04 | Validação de cálculos e conceitos de relatórios IA | em-curso | media | 2026-Q3 | 8.4 | S | — |
+| BTR05 | Implementar comunicação RCS | a-refinar | baixa | 2026-Q4 | 1.67 | L | — |
+| BTR06 | (CANCELADO) IA específica por carteira | cancelado | — | — | — | — | — |
+| BTR07 | Refatoração Torre — FastAPI/Postgres + enterprise | em-refinamento | alta | 2026-Q4 | 4.05 | XL | — |
+| BTR08 | Templates e cópia para acelerar config de réguas | a-refinar | media | 2026-Q4 | 6.3 | M | — |
+
+### Esperanza — Renegociação — 8 itens (1 em-curso · 2 em-refinamento · 4 a-refinar · 1 entregue)
+
+| ID | Título | Status | Prio | Deadline | RICE | Esforço |
+|---|---|---|---|---|---|---|
+| BES01 | Homologar renegociação Esperanza | a-refinar | alta | 2026-06-15 | 9.8 | M |
+| BES02 | Imputação direta no Módulo Financeiro | a-refinar | media | 2026-Q3 | 2.7 | L |
+| **BES03** | Mapear volume de transferências IA→humano | **em-curso** | alta | 2026-07-15 | 11.2 | M |
+| BES04 | Tabulações automáticas via IA | em-refinamento | media | 2026-Q3 | 5.04 | M |
+| BES05 | Investigar fluxo Esperanza — discovery | em-refinamento | alta | 2026-06-05 | **36.45** | S |
+| **BES06** | Resgatar relatório pré-Torre | **entregue** | alta | 2026-06-30 | 7.5 | XS |
+| BES07 | Diagnóstico completo Esperanza (14 categorias) | a-refinar | alta | 2026-Q4 | 6.17 | L |
+| BES08 | Resolver divergência dados Torre vs Hyper | a-refinar | alta | 2026-06-20 | **13.07** | S |
+
+### Clara — Formalização — 3 itens (1 em-curso · 1 em-refinamento · 1 a-refinar)
+
+| ID | Título | Status | Prio | Deadline | RICE | Esforço |
+|---|---|---|---|---|---|---|
+| BCL01 | Solicitação e recebimento de comprovantes endereço | em-refinamento | alta | 2026-07-30 | 8.58 | M |
+| BCL02 | Tratativa de reprovados (negativa + reembolso) | a-refinar | alta | 2026-08-15 | 5.76 | M |
+| **BCL03** | Envio e acompanhamento de biometria | **em-curso** | alta | 2026-08-30 | 6.3 | M |
+
+### Bitrix & Automações — 4 itens (1 em-refinamento · 3 a-refinar)
+
+| ID | Título | Status | Prio | Deadline | RICE | Esforço |
+|---|---|---|---|---|---|---|
+| BBT01 | Raia Bitrix para visibilidade de reembolsos | em-refinamento | alta | 2026-06-30 | 12.0 | XS |
+| BBT02 | Histórico contínuo Bitrix Cobrança 4.0 | a-refinar | media | 2026-Q3 | 4.5 | M |
+| BAU01 | MCPs das plataformas Finza | a-refinar | media | 2026-Q3 | 5.33 | L |
+| BAU02 | Revisar gatilhos Hyper | a-refinar | media | 2026-Q3 | 7.0 | S |
+
+### Valentina — SAC — 5 itens · FRENTE ZERADA em 2026-06-02 (5 cancelado)
+
+> Todos os itens foram cancelados. A Valentina já está preparada para receber a carteira Rhino e o multi-org (validado com o dev João Pedro), então as demandas perderam objeto. Stubs enxutos preservam ID + histórico. **Novas demandas serão criadas posteriormente.**
+
+| ID | Título | Status | Prio | Deadline | RICE (histórico) | Esforço |
+|---|---|---|---|---|---|---|
+| BVA01 | Base de contexto Valentina (jornada Finza) | cancelado | baixa | — | (6.4) | L |
+| BVA02 | Roteamento Rhino → suporte Rhino | cancelado | baixa | — | (12.25) | S |
+| BVA03 | Inventário agentes IA × números Finza/Blips | cancelado | baixa | — | (56.7) | XS |
+| BVA04 | Identificação automática de originador | cancelado | baixa | — | (4.9) | M |
+| BVA05 | Mapeamento de demandas Rhino | cancelado | baixa | — | (10.5) | S |
+
+### Lívia — Jurídico/Distrato — 0 itens
+
+Frente recém-criada (22/05/2026). Sem itens iniciais. Vai sendo populada conforme demandas do Jurídico chegam, via `/backlog add` ou `/backlog from-solicitacao`. Recomendação: primeiro item deve ser discovery análogo ao BES05 (sessão com lead jurídico).
+
+### Estratégica — 3 itens (1 em-curso · 2 a-refinar)
+
+| ID | Título | Status | Prio | Deadline | RICE | Esforço |
+|---|---|---|---|---|---|---|
+| BST01 | Definir raia para tickets em validação no board | em-curso | media | — | — | XS |
+| BST02 | Coleta de NPS via IA no fim da jornada | a-refinar | alta | 2026-Q3 | 4.9 | M |
+| BST03 | Discovery — narrativa "o que a IA faz" | a-refinar | alta | 2026-06-30 | 11.2 | S |
+
+---
+
+## Top RICE — banda alta (`score ≥ 7.0`) · apenas itens ativos
+
+> Itens cancelados (incl. os 5 BVA) saem do ranking ativo. BVA03 (RICE 56.7) e BVA02 (12.25) foram retirados na zeragem da Valentina.
+
+| # | Item | RICE | Frente | Status | Implementador |
+|---|---|---|---|---|---|
+| 1 | BES05 — Discovery Esperanza | 36.45 | Esperanza | em-refinamento | — |
+| 2 | BES08 — Divergência Torre vs Hyper | 13.07 | Esperanza | a-refinar | — |
+| 3 | BBT01 — Raia Bitrix reembolso | 12.0 | Bitrix-Auto | em-refinamento | — |
+| 4 | BES03 — Volume transferências | 11.2 | Esperanza | em-curso | — |
+| 5 | BST03 — Narrativa IA | 11.2 | Estratégica | a-refinar | — |
+| 6 | BES01 — Homologar renegociação | 9.8 | Esperanza | a-refinar | — |
+| 7 | BCL01 — Comprovantes endereço | 8.58 | Clara | em-refinamento | — |
+| 8 | BTR03 — Validar dashboards | 8.4 | Torre | em-refinamento | — |
+| 9 | BTR04 — Validar relatórios IA | 8.4 | Torre | em-curso | — |
+| 10 | BES06 — Relatório pré-Torre | 7.5 | Esperanza | entregue | — |
+| 11 | BAU02 — Gatilhos Hyper | 7.0 | Bitrix-Auto | a-refinar | — |
+
+> **Nota:** BTR02 (urgente, em-curso) tem RICE 6.3 — banda média no score, mas prioridade `urgente` por declaração explícita de sponsor (Jéssica) + restrição de tempo. Único item urgente do backlog.
+
+---
+
+## Dependências cruzadas críticas
+
+```
+BES05 (discovery) ──► BES01, BES02, BES03, BES04, BES07         (destrava 5 itens)
+BES08 (divergência) ──► BES03, BTR03, BTR04, BES07               (destrava 4 itens)
+BES01 ──► BES02
+BBT01 (raia) ──► BCL02
+BES03, BES06, BES07 ──► BST03 (narrativa IA)
+BTR02 ↔ BTR07 (sinergia técnica forte)
+BTR08 ⋯ BTR02 (sinergia técnica — escopo template global vs por org; não bloqueio)
+BST02 ⋯ BTR02 (sinergia — NPS por carteira/originador)
+```
+
+**Arestas removidas em 02/06/2026 (zeragem Valentina):** `BVA01→BVA04`, `BVA03→BVA02/BVA04`, `BVA05→BTR02/BVA04`, `BVA02→BTR02`, `BTR02→BVA04`, `BVA01→BST02`, e `BTR08→BTR02` (decisão do supervisor). Todos os nós BVA estão cancelados e fora do grafo ativo.
+
+**BTR02 (urgente, em-curso) — agora sem dependência de itens Valentina.** Mantém escopo enxuto (schema + ETL Rhino), cutover 09/jun. Sinergia forte com BTR07 (postergada). Demais entregas multi-org dependentes (dashboards, UI carteira, RAG por carteira) vivem em BTR03 e itens novos a serem refinados pós-cutover.
+
+---
+
+## Alertas estruturais (PO crítico)
+
+1. **BTR02 — execução em curso, deadline 09/jun.** Escopo enxuto: schema migration + ETL Rhino. 4 marcos concluídos (Marcos 21/05, 22/05, 27/05; João Lucas 27/05). 3 marcos restantes em janela 27/05–05/06: ST-4 (pacote dev, 29/05), ST-5 (teste dev, 01–05/06), ST-7 (ETL + migração Rhino, 27/05–05/06).
+2. **Frente Valentina zerada.** Quando o trabalho de SAC voltar à pauta, criar novas demandas via `/backlog add` — a Valentina já está preparada para Rhino + multi-org (dev João Pedro). Os IDs BVA01–BVA05 não serão reutilizados.
+3. **Itens novos a criar pós-cutover BTR02.** Backup, cutover, validação Jéssica, UI carteira, RAG por carteira, dashboards multi-org, n8n segregado, RBAC consolidado, decisão público/privado, DDL único, mascaramento HML — tudo isso saiu do BTR02 e precisa virar item novo (ou ser absorvido por BTR03/outros) quando refinado.
+4. **BES02 (imputação direta MF) RICE 2.7.** Alto risco regulatório. **Contraproposta PO:** "validador 1-click" mantendo humano. Discutir antes de avançar.
+5. **BTR07 (XL) postergado mas vivo.** Multi-org sobre Supabase pode forçar refazer quando BTR07 entrar. Revisitar ordem julho/agosto.
+6. **BTR05 (RCS) RICE 1.67.** Recomendação PO: parar na análise comparativa se não houver caso de uso forte. WhatsApp + Hyperflow cobre 80%.
+7. **BES07 é umbrella (14 categorias).** DEVE quebrar em 5 itens-filhos (BES07a-e) no próximo refinement.
+8. **BES08 bloqueia 4 itens.** Resolver divergência Torre vs Hyper é alavanca máxima curto prazo.
+9. **Itens da frente Clara concentram RISCO JURÍDICO.** BCL02 e BCL03 exigem gate Compliance/Jurídico antes de código.
+10. **BAU01 (MCPs) é programa, não item.** Reformular como inventário + primeiro MCP (MF) como itens separados se viável.
+11. **Frente Lívia vazia.** Apesar do discovery jurídico recomendado, ainda sem `BLV01` criado. Decisão pendente: criar via `/backlog add` ou aguardar demanda formal do Jurídico.
+
+---
+
+## Distribuição final
+
+| Frente | Total | a-refinar | em-refin. | em-curso | entregue | cancelado |
+|---|---|---|---|---|---|---|
+| Bitrix & Automações | 4 | 3 | 1 | 0 | 0 | 0 |
+| Torre de Controle | 7 | 3 | 2 | 1 | 0 | 1 |
+| Clara — Formalização | 3 | 1 | 1 | 1 | 0 | 0 |
+| Esperanza — Renegociação | 8 | 4 | 2 | 1 | 1 | 0 |
+| Valentina — SAC (ZERADA) | 5 | 0 | 0 | 0 | 0 | 5 |
+| Lívia — Jurídico/Distrato | 0 | — | — | — | — | — |
+| Estratégica | 3 | 2 | 0 | 1 | 0 | 0 |
+| **Total** | **30** | **13** | **6** | **4** | **1** | **6** |
+
+---
+
+## Próximos passos sugeridos (PO)
+
+1. **BTR02 — manter cadência semanal Marcos + João Lucas.** ST-4 (pacote dev) deadline 29/05. ST-5 (teste dev) janela 01-05/06. ST-7 (ETL+migração Rhino) em paralelo. Cutover 09/jun.
+2. **Criar item novo para "backup + cutover + validação Jéssica"** antes do deadline 09/jun. Saiu do BTR02 mas é operacionalmente obrigatório.
+3. **Criar item novo para "decisão público vs privado entre orgs"** com Jéssica como owner — bloqueante para o cutover.
+4. **BES05 (discovery Esperanza) — agendar 1h com Leandro esta semana.** RICE 36.45, destrava 5 itens, deadline 05/06.
+5. **BES08 (divergência Torre vs Hyper) — formalizar trabalho do squad em curso.** Bloqueia 4 itens.
+6. **BBT01 (raia reembolso) — identificar dono Bitrix.** RICE 12.0, esforço XS, destrava BCL02.
+7. **BES07 — quebrar em 5 itens-filhos** (a Observabilidade, b Auditoria delírio, c IA vs Humano, d KPIs, e Classificação falhas).
+8. **Validar com Jéssica BES02 (imputação direta MF) — contraproposta "validador 1-click".**
+9. **Frente Valentina — quando voltar à pauta, criar demandas novas** (não reabrir os BVA cancelados).
+
+---
+
+## Origem do backlog
+
+Os 30 itens foram destilados das seguintes fontes (período 22/04 a 02/06/2026):
+
+- **Reunião Diretoria (15/05/2026)** — origem de BVA01 (cancelado), BVA02 (cancelado), BST02, BAU01, BST03.
+- **Reunião Jéssica revisão roadmap (18/05/2026)** — origem mestre de BES01-BES06, BTR02-BTR05, BCL01-BCL03, BBT01, BBT02, BAU02, BVA04 (cancelado), BVA05 (cancelado).
+- **Reunião alinhamento Torre Multi-Org (19/05/2026)** — origem técnica de BTR02 (79 tabelas) e BTR07 (postergação).
+- **Reunião filtros prompts e trigger agenda (20/05/2026)** — origem de BTR08 (templates régua) e refinamentos de BTR02.
+- **Doc Perguntas IA (18/05/2026)** — origem de BES08 (divergência) e enriqueceu BES03, BES04.
+- **Doc Perguntas a serem respondidas IAs** — origem de BES07 (diagnóstico 14 categorias).
+- **Anotações de caderno do supervisor** — origem de BES05, BES06, BST03, BVA03 (cancelado), BTR07.
+- **Análise pendência P11** — origem de BST01.
+
+Histórico: o subsistema de pendências (`Gestao/Pendencias/`, IDs `Pnn`) foi aposentado em 27/05/2026. IDs `P##` sobrevivem como rótulo histórico no campo `origem.pendencias` de cada item.

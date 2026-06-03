@@ -1,0 +1,1310 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapa Mental · Backlog Squad IAF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --finza-blue:#1A1AFF;--finza-deep:#0F0F8C;--finza-soft:#E8E8FF;--finza-dark:#0A0A2E;
+  --bg:#F4F4F7;--surface:#FFFFFF;--surface-2:#FAFAFC;
+  --border:#E4E4ED;--border-strong:#D5D5E0;
+  --text:#0A0A2E;--text-muted:#5C5C7A;--text-subtle:#8A8AA0;
+  --urgent:#DC2626;--warning:#F59E0B;--success:#10B981;--info:#0EA5E9;
+  --font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:13px;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
+
+/* ===== Topbar ===== */
+.topbar{position:fixed;left:0;top:0;right:0;height:54px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 22px;display:flex;align-items:center;gap:18px;z-index:30}
+.topbar .crumb{font-size:11.5px;color:var(--text-subtle);font-weight:500}
+.topbar .crumb a{color:var(--finza-blue);font-weight:600;text-decoration:none}
+.topbar .crumb a:hover{text-decoration:underline}
+.topbar .crumb .cur{color:var(--text);font-weight:600}
+.topbar .title{font-size:13.5px;font-weight:600;color:var(--text);letter-spacing:-0.005em}
+.topbar .spacer{flex:1}
+.topbar .search{position:relative}
+.topbar .search input{padding:6px 12px 6px 30px;font-size:12px;border:1px solid var(--border);background:var(--surface-2);border-radius:99px;width:280px;outline:none;color:var(--text);font-family:var(--font-sans)}
+.topbar .search input:focus{border-color:var(--finza-blue);background:var(--surface)}
+.topbar .search::before{content:"";position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235C5C7A' stroke-width='2.5' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='m21 21-4.3-4.3'/></svg>") no-repeat center}
+.topbar .meta{font-size:11px;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+.topbar .meta strong{color:var(--text);font-weight:600}
+
+/* ===== Layout ===== */
+.layout{position:fixed;left:0;top:54px;right:0;bottom:0;display:grid;grid-template-columns:1fr 360px}
+
+/* ===== Viewport (canvas) ===== */
+#viewport{position:relative;overflow:hidden;background:#FAFAFC;background-image:radial-gradient(circle,#D5D5E0 1px,transparent 1px);background-size:30px 30px;background-position:0 0;cursor:grab;user-select:none;-webkit-user-select:none}
+#viewport.panning{cursor:grabbing}
+#viewport.panning .node{pointer-events:none}
+#world{position:absolute;left:50%;top:50%;width:0;height:0;transform-origin:0 0}
+#links{position:absolute;left:-3000px;top:-3000px;width:6000px;height:6000px;pointer-events:none;overflow:visible}
+#links line, #links path{vector-effect:non-scaling-stroke}
+
+.node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;transition:box-shadow .15s,transform .15s}
+.node.dragging{transition:none;z-index:50}
+.node:hover{z-index:20}
+
+/* Hub */
+.hub-node{width:240px;background:linear-gradient(135deg,#0A0A2E 0%,#15154A 100%);border:2px solid var(--finza-blue);border-radius:16px;padding:18px 22px;color:#fff;text-align:center;box-shadow:0 20px 40px -10px rgba(10,10,46,.35);z-index:10}
+.hub-node .hn{font-size:18px;font-weight:700;letter-spacing:-0.015em;line-height:1}
+.hub-node .hsub{font-size:9.5px;letter-spacing:.16em;color:#A5B4FC;font-weight:700;margin-top:6px;text-transform:uppercase}
+.hub-node .hd{font-size:10.5px;color:rgba(255,255,255,.62);margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.12);font-weight:500;letter-spacing:.02em}
+
+/* Frente node */
+.frente-node{width:230px;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 2px 6px rgba(10,10,46,.06),0 16px 28px -16px rgba(10,10,46,.18)}
+.frente-node .fc-band{height:8px;background:var(--c,var(--finza-blue))}
+.frente-node .fc-body{padding:10px 14px 12px;display:flex;align-items:center;gap:10px}
+.frente-node .fc-icon{width:28px;height:28px;border-radius:6px;background:var(--c);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700}
+.frente-node .fc-text{flex:1;min-width:0}
+.frente-node .fc-name{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-0.005em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frente-node .fc-meta{font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:.04em;margin-top:2px;text-transform:uppercase}
+.frente-node .fc-chev{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;line-height:1}
+.frente-node:hover{box-shadow:0 4px 10px rgba(10,10,46,.08),0 20px 30px -10px rgba(10,10,46,.25);transform:translate(-50%,-50%) translateY(-2px)}
+.frente-node.on{border-color:var(--c)}
+.frente-node.on .fc-chev{background:var(--c);color:#fff}
+.frente-node.sel{outline:3px solid var(--c);outline-offset:2px}
+
+/* Item node */
+.item-node{width:210px;background:var(--surface);border:1px solid var(--border);border-radius:7px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(10,10,46,.05),0 8px 16px -8px rgba(10,10,46,.12)}
+.item-node .it-bar{width:4px;background:var(--cs,#9CA3AF);flex-shrink:0}
+.item-node .it-body{flex:1;padding:7px 10px;min-width:0}
+.item-node .it-id{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--c,var(--finza-blue));letter-spacing:.04em}
+.item-node .it-title{font-size:11px;font-weight:600;color:var(--text);line-height:1.3;margin-top:1px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item-node .it-foot{display:flex;justify-content:space-between;align-items:center;margin-top:4px;gap:4px}
+.item-node .it-st{font-size:8.5px;font-weight:700;letter-spacing:.06em;color:var(--text-muted);text-transform:uppercase}
+.item-node .it-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.item-node .it-dot.urg{background:var(--urgent)}
+.item-node .it-dot.alta{background:#F97316}
+.item-node:hover{box-shadow:0 3px 8px rgba(10,10,46,.08),0 12px 20px -8px rgba(10,10,46,.22);transform:translate(-50%,-50%) translateY(-2px)}
+.item-node.sel{outline:2.5px solid var(--c);outline-offset:2px;z-index:15}
+.item-node.on{background:linear-gradient(180deg,var(--surface) 0%,#F9F9FE 100%)}
+.item-node[data-status="cancelado"]{opacity:.55}
+.item-node[data-status="cancelado"] .it-title{text-decoration:line-through}
+.item-node[data-status="entregue"] .it-id::after{content:" ✓";color:var(--success)}
+
+/* Bucket node (priority group) */
+.bucket-node{width:200px;background:var(--surface);border:1px solid var(--border);border-radius:99px;display:flex;align-items:center;gap:8px;padding:5px 9px 5px 5px;box-shadow:0 2px 4px rgba(10,10,46,.06),0 10px 18px -8px rgba(10,10,46,.15)}
+.bucket-node .bk-band{width:6px;height:30px;background:var(--c);border-radius:3px;flex-shrink:0}
+.bucket-node .bk-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bucket-node .bk-prio{font-size:10.5px;font-weight:700;color:var(--c);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px;line-height:1.1}
+.bucket-node .bk-prio .bk-count{font-family:var(--font-mono);font-size:9.5px;background:var(--bg);color:var(--text-muted);padding:1px 6px;border-radius:99px;font-weight:700;border:1px solid var(--border);text-transform:none;letter-spacing:.02em}
+.bucket-node .bk-hint{font-size:9.5px;font-family:var(--font-mono);color:var(--text-subtle);font-weight:600;letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bucket-node .bk-chev{width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;line-height:1}
+.bucket-node.on{border-color:var(--c)}
+.bucket-node.on .bk-chev{background:var(--c);color:#fff}
+.bucket-node:hover{box-shadow:0 4px 8px rgba(10,10,46,.08),0 14px 22px -8px rgba(10,10,46,.22);transform:translate(-50%,-50%) translateY(-2px)}
+
+/* Subtarefa node */
+.sub-node{background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:5px 9px;display:flex;align-items:center;gap:6px;font-size:10.5px;line-height:1.3;width:180px;box-shadow:0 1px 2px rgba(10,10,46,.04)}
+.sub-node .sub-id{font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-subtle);letter-spacing:.04em;flex-shrink:0}
+.sub-node .sub-t{flex:1;color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub-node .sub-gate{flex-shrink:0;width:14px;height:14px;border-radius:50%;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.sub-node.gate{border-color:#FDE68A;background:#FFFBEB}
+.sub-node:hover{border-color:var(--border-strong);background:var(--surface)}
+
+/* dimmed when filtered */
+.node.dim{opacity:0.18;pointer-events:none;filter:saturate(0.3)}
+.node.match{outline:2px solid #10B981;outline-offset:3px}
+
+/* ===== Side panel ===== */
+#panel{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;padding:18px 20px 24px;display:flex;flex-direction:column;gap:16px}
+#panel .ph{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--text-subtle);margin-bottom:8px}
+#panel .pn-empty{font-size:12.5px;color:var(--text-muted);line-height:1.65}
+#panel .pn-empty strong{display:block;font-size:14px;color:var(--text);font-weight:600;margin-bottom:8px;letter-spacing:-0.005em}
+#panel .pn-empty ul{margin:8px 0 0;padding-left:18px;font-size:12px}
+#panel .pn-empty li{margin:5px 0;line-height:1.55}
+#panel .pn-empty kbd{font-family:var(--font-mono);font-size:10px;background:var(--bg);border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-weight:600;color:var(--text)}
+
+.detail-card{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--c,var(--finza-blue));border-radius:8px;padding:14px 16px}
+.detail-card .d-id{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-subtle);letter-spacing:.04em}
+.detail-card .d-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin:5px 0 10px;letter-spacing:-0.005em}
+.detail-card .d-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.detail-card .d-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:11.5px;margin-bottom:10px}
+.detail-card .d-grid dt{font-size:9.5px;letter-spacing:.12em;color:var(--text-muted);font-weight:700;text-transform:uppercase;padding-top:1px}
+.detail-card .d-grid dd{margin:0;color:var(--text);font-weight:500}
+.detail-card .d-grid dd.mono{font-family:var(--font-mono);font-size:10.5px}
+.detail-card .d-grid dd.muted{color:var(--text-subtle);font-style:italic;font-weight:400}
+.detail-card .d-context{font-size:12px;color:var(--text-muted);line-height:1.55;padding-top:10px;border-top:1px solid var(--border)}
+
+.rels-section{margin-top:4px}
+.rels-section h4{margin:0 0 8px;font-size:9.5px;font-weight:700;letter-spacing:.16em;color:var(--text-muted);text-transform:uppercase}
+.rels-section .rel-chips{display:flex;flex-wrap:wrap;gap:5px}
+.rel-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:var(--surface);border:1px solid var(--border);border-radius:99px;font-family:var(--font-mono);font-size:10.5px;font-weight:700;color:var(--text);cursor:pointer;transition:all .12s}
+.rel-chip:hover{background:var(--finza-blue);color:#fff;border-color:var(--finza-blue)}
+.rel-chip.dep{border-color:#FED7AA;background:#FFF7EE;color:#9A3412}
+.rel-chip.dep:hover{background:#F59E0B;color:#fff;border-color:#F59E0B}
+.rel-chip.blq{border-color:#FECACA;background:#FEF2F2;color:#991B1B}
+.rel-chip.blq:hover{background:#EF4444;color:#fff;border-color:#EF4444}
+
+.sub-list{display:flex;flex-direction:column;gap:5px}
+.sub-list .sl-it{display:grid;grid-template-columns:auto 1fr auto;gap:8px;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:11px;line-height:1.4;align-items:center}
+.sub-list .sl-it .sl-id{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--text-subtle)}
+.sub-list .sl-it .sl-t{color:var(--text);font-weight:500;line-height:1.35}
+.sub-list .sl-it .sl-meta{font-family:var(--font-mono);font-size:9.5px;color:var(--text-subtle);white-space:nowrap}
+.sub-list .sl-it.gate{background:#FFFBEB;border-color:#FDE68A}
+.sub-list .sl-it.gate .sl-id{color:#92400E}
+
+/* Sub-node selection */
+.sub-node.sel{outline:2.5px solid var(--finza-blue);outline-offset:2px;background:#EEF2FF;z-index:15}
+
+/* Rich panel cards */
+.panel-section{margin-top:4px}
+.panel-section h4{margin:0 0 8px;font-size:9.5px;font-weight:700;letter-spacing:.16em;color:var(--text-muted);text-transform:uppercase;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.panel-section h4 .h4-count{font-family:var(--font-mono);font-size:9px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:1px 6px;border-radius:99px;font-weight:700;letter-spacing:.02em;text-transform:none}
+.panel-text{font-size:12px;color:var(--text);line-height:1.6;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:11px 13px;white-space:pre-wrap}
+.panel-text.muted{color:var(--text-muted);font-size:11.5px}
+.panel-text.history{border-left:3px solid var(--finza-blue);padding-left:13px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+.kpi-cell{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;text-align:left}
+.kpi-cell .kpi-l{font-size:8.5px;letter-spacing:.14em;color:var(--text-muted);font-weight:700;text-transform:uppercase}
+.kpi-cell .kpi-v{font-size:14px;font-weight:700;color:var(--text);font-family:var(--font-mono);margin-top:3px;letter-spacing:-0.01em}
+.kpi-cell.score{background:var(--finza-blue);border-color:var(--finza-blue)}
+.kpi-cell.score .kpi-l{color:rgba(255,255,255,.78)}
+.kpi-cell.score .kpi-v{color:#fff;font-size:15px}
+.ca-list{display:flex;flex-direction:column;gap:8px}
+.ca-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid #10B981;border-radius:6px;padding:10px 12px;font-size:11.5px;line-height:1.5}
+.ca-card .ca-line{display:grid;grid-template-columns:38px 1fr;gap:8px;margin-bottom:4px}
+.ca-card .ca-line:last-child{margin-bottom:0}
+.ca-card .ca-tag{font-size:8.5px;letter-spacing:.1em;font-weight:700;text-transform:uppercase;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;padding:1px 4px;border-radius:3px;align-self:start;text-align:center;line-height:1.4}
+.ca-card .ca-line.w .ca-tag{color:#92400E;background:#FFFBEB;border-color:#FDE68A}
+.ca-card .ca-line.t .ca-tag{color:#1A1AFF;background:#EEF2FF;border-color:#C7CEFF}
+.bullet-list{display:flex;flex-direction:column;gap:5px;margin:0;padding:0;list-style:none}
+.bullet-list li{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:7px 11px 7px 24px;font-size:11.5px;color:var(--text);line-height:1.5;position:relative}
+.bullet-list li::before{content:"";position:absolute;left:10px;top:13px;width:5px;height:5px;border-radius:50%;background:var(--text-subtle)}
+.bullet-list.risk li::before{background:#EF4444}
+.bullet-list.prem li::before{background:#0EA5E9}
+.tags-row{display:flex;flex-wrap:wrap;gap:4px}
+.tag-chip{font-family:var(--font-mono);font-size:9.5px;font-weight:700;padding:2px 7px;background:var(--bg);border:1px solid var(--border);border-radius:99px;color:var(--text-muted);letter-spacing:.02em}
+.subs-list{display:flex;flex-direction:column;gap:5px}
+.sub-card{display:grid;grid-template-columns:auto 1fr auto;gap:8px;padding:7px 11px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:11px;line-height:1.4;align-items:center;cursor:pointer;transition:border-color .12s,background .12s}
+.sub-card:hover{border-color:var(--finza-blue);background:#F8F8FF}
+.sub-card.sel{border-color:var(--finza-blue);background:#EEF2FF;outline:1px solid var(--finza-blue);outline-offset:-1px}
+.sub-card.gate{background:#FFFBEB;border-color:#FDE68A}
+.sub-card.gate:hover{background:#FEF3C7}
+.sub-card .sc-id{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--text-subtle);min-width:36px}
+.sub-card.gate .sc-id{color:#92400E}
+.sub-card .sc-t{color:var(--text);font-weight:500;line-height:1.35;min-width:0;overflow:hidden}
+.sub-card .sc-meta{font-family:var(--font-mono);font-size:9px;color:var(--text-subtle);white-space:nowrap;text-align:right}
+.back-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--finza-blue);font-weight:600;cursor:pointer;background:transparent;border:0;padding:3px 6px 3px 0;letter-spacing:.01em}
+.back-btn:hover{text-decoration:underline}
+.contextual-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.bucket-pill-row{display:flex;flex-wrap:wrap;gap:4px}
+.bucket-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.04em;cursor:pointer;border:1px solid;text-transform:uppercase;transition:transform .1s}
+.bucket-pill:hover{transform:translateY(-1px)}
+.bucket-pill .bp-n{font-family:var(--font-mono);font-size:9px;background:rgba(255,255,255,.5);padding:1px 5px;border-radius:99px}
+
+.badge{display:inline-flex;padding:2px 7px;font-size:9.5px;font-weight:700;letter-spacing:.06em;border-radius:3px;border:1px solid transparent;text-transform:uppercase}
+.badge.urgente{background:#FFF0F0;color:#B91C1C;border-color:#FECACA}
+.badge.alta{background:#FFF4EC;color:#9A3412;border-color:#FED7AA}
+.badge.media{background:#FFFBEB;color:#92400E;border-color:#FDE68A}
+.badge.baixa{background:#F4F4F7;color:#52525B;border-color:#E4E4ED}
+.badge.a-refinar{background:#F4F4F7;color:#52525B;border-color:#E4E4ED}
+.badge.em-refinamento{background:#FFFBEB;color:#92400E;border-color:#FDE68A}
+.badge.refinado{background:#ECFEFF;color:#0E7490;border-color:#A5F3FC}
+.badge.em-curso{background:#EEF2FF;color:#1A1AFF;border-color:#C7CEFF}
+.badge.bloqueado{background:#FEF2F2;color:#991B1B;border-color:#FECACA}
+.badge.validacao{background:#FAF5FF;color:#6B21A8;border-color:#E9D5FF}
+.badge.entregue{background:#ECFDF5;color:#047857;border-color:#A7F3D0}
+.badge.cancelado{background:#F4F4F7;color:#52525B;border-color:#E4E4ED}
+
+/* Toolbar */
+.toolbar{position:absolute;left:14px;bottom:14px;display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px;box-shadow:0 4px 12px rgba(10,10,46,.08);z-index:20}
+.toolbar button{background:var(--surface);border:0;padding:6px 10px;font-size:11.5px;font-weight:600;color:var(--text-muted);cursor:pointer;border-radius:5px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:4px}
+.toolbar button:hover{background:var(--bg);color:var(--text)}
+.toolbar button.primary{color:var(--finza-blue)}
+.toolbar .zoom-val{padding:6px 10px;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);min-width:48px;text-align:center;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+
+.hint{position:absolute;right:14px;bottom:14px;background:rgba(255,255,255,0.92);border:1px solid var(--border);padding:8px 12px;border-radius:8px;font-size:10.5px;color:var(--text-muted);line-height:1.6;backdrop-filter:blur(6px);max-width:280px;z-index:20;box-shadow:0 4px 12px rgba(10,10,46,.05)}
+.hint kbd{font-family:var(--font-mono);font-size:9.5px;background:var(--bg);border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-weight:600;color:var(--text)}
+.hint strong{color:var(--text);font-weight:600}
+
+@media (max-width:1100px){
+  .layout{grid-template-columns:1fr}
+  #panel{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="crumb"><a href="Backlog.html">← Backlog IAF</a> · <span class="cur">Mapa interativo</span></div>
+  <div class="title">Mapa Mental · Squad IAF</div>
+  <div class="spacer"></div>
+  <div class="search"><input type="text" id="search" placeholder="buscar por ID ou título (ex: BTR02)…"></div>
+  <div class="meta"><strong>30 itens</strong> · 7 frentes · 377 subtarefas</div>
+</header>
+
+<div class="layout">
+  <div id="viewport">
+    <div id="world">
+      <svg id="links" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="toolbar">
+      <button id="btn-zoom-out" title="Zoom out">−</button>
+      <span class="zoom-val" id="zoom-val">100%</span>
+      <button id="btn-zoom-in" title="Zoom in">+</button>
+      <button id="btn-fit" title="Centralizar">⌖ Centralizar</button>
+      <button id="btn-collapse" title="Colapsar tudo">⊟ Colapsar</button>
+      <button id="btn-hist" title="Mostrar/ocultar itens já entregues">○ Entregues</button>
+      <button id="btn-reset" title="Resetar posições" class="primary">↻ Reset</button>
+    </div>
+    <div class="hint">
+      <strong>Como navegar</strong><br>
+      <kbd>arrastar</kbd> o canvas para pan · <kbd>scroll</kbd> para zoom<br>
+      <kbd>clique</kbd> na frente → abre buckets de prioridade<br>
+      <kbd>clique</kbd> no bucket → itens ordenados por impacto<br>
+      <kbd>clique</kbd> no item → subtarefas + relações cruzadas
+    </div>
+  </div>
+  <aside id="panel"></aside>
+</div>
+
+<script type="application/json" id="map-data">
+{
+  "generated_at": "2026-06-02",
+  "owner": "João Vinícius",
+  "squad": "IAF — Inteligência Artificial Finza",
+  "frentes": [
+    { "key": "bitrix-automacoes", "label": "Bitrix & Automações", "color": "#FF6B35", "prefix": "BBT/BAU", "sponsor": "Jéssica", "plataforma": "Bitrix Cobrança 4.0 + HyperFlow", "desc": "Frente unificada. BBT (CRM Bitrix) e BAU (HyperFlow, MCPs, integrações). 4 itens — BBT01 (raia reembolso, RICE 12.0), BBT02, BAU01 (MCPs programa Q3), BAU02 (gatilhos Hyper)." },
+    { "key": "torre", "label": "Torre de Controle", "color": "#1A1AFF", "prefix": "BTR", "sponsor": "Jéssica", "plataforma": "Torre de Controle v2", "desc": "SaaS multi-tenant de cobrança digital. URGENTE: BTR02 (multi-org Rhino, em-curso, deadline 09/06). BTR07 postergada. BTR03/04 validação. BTR05 exploratório. BTR06 cancelado. BTR08 a-refinar." },
+    { "key": "clara", "label": "Clara · Formalização", "color": "#00B8D4", "prefix": "BCL", "sponsor": "Jéssica", "plataforma": "Plataforma Blips + Veritas", "desc": "Agente IA Clara — comprovantes, biometria, tratativa de reprovados. IA facilitadora, humano decisor. BCL02+BCL03 exigem gate Compliance/Jurídico antes de código." },
+    { "key": "esperanza", "label": "Esperanza · Renegociação", "color": "#0F0F8C", "prefix": "BES", "sponsor": "Jéssica", "plataforma": "Torre de Controle + Esperanza", "desc": "Agente IA Esperanza — cobrança WhatsApp, renegociação, métricas IA→humano, tabulações, discovery, divergência dados, diagnóstico. BES05 (RICE 36.45) destrava 5 itens; BES08 (RICE 13.07) destrava 4 itens." },
+    { "key": "valentina", "label": "Valentina · SAC", "color": "#6B5BFF", "prefix": "BVA", "sponsor": "Diretoria", "plataforma": "Esperanza-style multi-canal", "desc": "FRENTE ZERADA em 2026-06-02. BVA01–BVA05 cancelados. Valentina já preparada para Rhino + multi-org (dev João Pedro). Novas demandas serão criadas posteriormente." },
+    { "key": "livia", "label": "Lívia · Jurídico/Distrato", "color": "#D946EF", "prefix": "BLV", "sponsor": "Jurídico Finza", "plataforma": "(a definir conforme discovery)", "desc": "Agente IA Lívia — fluxos jurídicos, distrato, compliance. Frente criada em 22/05/2026. Sem itens." },
+    { "key": "estrategica", "label": "Estratégica", "color": "#8B5CF6", "prefix": "BST", "sponsor": "Diretoria", "plataforma": "Transversal", "desc": "Transversal — processo de squad (BST01), NPS via IA (BST02), narrativa institucional (BST03, RICE 11.2). 3 itens." }
+  ],
+  "items": [
+    { "id": "BBT01", "frente": "bitrix-automacoes", "title": "Criar nova raia no Bitrix para visibilidade de reembolsos aos operadores", "status": "em-refinamento", "prioridade": "alta", "esforco": "XS", "valor_negocio": "alto", "rice": { "reach": 5, "impact": 6, "confidence": 8, "effort": 2, "score": 12.0 }, "dependencias": [], "bloqueia": ["BCL02"], "deadline": "2026-06-30", "subtarefas": [ { "id": "ST-1", "title": "Identificar quem configura Bitrix", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Definir critério de entrada", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Definir critério de saída", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Configurar raia no Bitrix Cobrança 4.0", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Definir primeiro responsável operacional", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Treinar operadores", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Documentar funcionamento", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Medir baseline SLA primeiros 7 dias", "status": "a-refinar", "isGate": false } ], "tags": ["bitrix", "raia", "reembolso", "jessica", "operadores", "low-tech"] },
+    { "id": "BAU02", "frente": "bitrix-automacoes", "title": "Revisar gatilhos Hyper existentes e mapear novas oportunidades", "status": "a-refinar", "prioridade": "media", "esforco": "S", "valor_negocio": "medio", "rice": { "reach": 6, "impact": 5, "confidence": 7, "effort": 3, "score": 7.0 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Identificar quem tem o inventário", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Extrair inventário atual de gatilhos", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Coletar propósito, frequência, incidente e opinião por gatilho", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Identificar obsoletos (>90 dias sem disparo)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Identificar sobrepostos", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Mapear lacunas operacionais", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Top 5 novos gatilhos prioritários com estimativa de ganho", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Desativar obsoletos após validação com operadores", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Implementar top 5 novos", "status": "a-refinar", "isGate": false }, { "id": "ST-10", "title": "Estabelecer revisão recorrente (trimestral)", "status": "a-refinar", "isGate": false } ], "tags": ["hyper", "gatilhos", "automacao", "jessica", "revisao"] },
+    { "id": "BAU01", "frente": "bitrix-automacoes", "title": "Criar MCPs das plataformas Finza para expandir Valentina e Esperanza", "status": "a-refinar", "prioridade": "media", "esforco": "L", "valor_negocio": "alto", "rice": { "reach": 8, "impact": 8, "confidence": 5, "effort": 6, "score": 5.33 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Inventariar plataformas Finza com APIs/dados relevantes", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Priorizar 1-3 plataformas (NÃO TENTE TODAS DE UMA VEZ)", "status": "a-refinar", "isGate": true }, { "id": "ST-3", "title": "Validar governança LGPD com Compliance", "status": "a-refinar", "isGate": true }, { "id": "ST-4", "title": "Implementar autenticação/autorização com Segurança", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Implementar primeiro MCP (provavelmente Módulo Financeiro)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Configurar Valentina/Esperanza para consumir", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Validar com 50 conversas reais", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Documentar padrão para próximos MCPs", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Iteração com próximas plataformas uma a uma", "status": "a-refinar", "isGate": false } ], "tags": ["mcp", "valentina", "esperanza", "plataformas", "diretoria"] },
+    { "id": "BBT02", "frente": "bitrix-automacoes", "title": "Automação Bitrix Cobrança 4.0 — histórico contínuo", "status": "a-refinar", "prioridade": "media", "esforco": "M", "valor_negocio": "medio", "rice": { "reach": 6, "impact": 5, "confidence": 6, "effort": 4, "score": 4.5 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Mapear campos da seção Histórico de Atendimento que sofrem sobrescrita", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Levantar consumidores atuais (GATE)", "status": "a-refinar", "isGate": true }, { "id": "ST-3", "title": "Decidir abordagem técnica (multi-valor / campo paralelo / tabela externa)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Validar UX com operadores piloto", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Migrar dados históricos existentes", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Implementar via admin Bitrix ou automação custom", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Testar consumidores (não quebrar relatórios)", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Definir política de retenção", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Generalizar após piloto", "status": "a-refinar", "isGate": false } ], "tags": ["bitrix", "automacao", "historico", "jessica", "cobranca"] },
+    { "id": "BTR02", "frente": "torre", "title": "Implementação Multi-Org na Torre", "status": "em-curso", "prioridade": "urgente", "esforco": "XL", "valor_negocio": "alto", "rice": { "reach": 9, "impact": 9, "confidence": 7, "effort": 9, "score": 6.3 }, "dependencias": [], "bloqueia": [], "deadline": "2026-06-09", "subtarefas": [ { "id": "ST-1", "title": "Separar tabelas lixo das tabelas de uso", "status": "concluida", "isGate": false }, { "id": "ST-2", "title": "Etiquetar tabelas que serão alteradas", "status": "concluida", "isGate": false }, { "id": "ST-3", "title": "Normalizar functions e aplicação", "status": "concluida", "isGate": false }, { "id": "ST-4", "title": "Preparar pacote para dev (EM CURSO)", "status": "em-curso", "isGate": true }, { "id": "ST-5", "title": "Teste no ambiente dev (01-05/06)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Remoção de contexto lixo da aplicação", "status": "concluida", "isGate": false }, { "id": "ST-7", "title": "Levantamento de ETLs e migração Rhino (EM CURSO)", "status": "em-curso", "isGate": true } ], "tags": ["torre", "multi-org", "rhino", "originador", "urgente", "jessica", "xl", "cutover"] },
+    { "id": "BTR07", "frente": "torre", "title": "Refatoração da Torre — backend FastAPI/Postgres + arquitetura enterprise", "status": "em-refinamento", "prioridade": "alta", "esforco": "XL", "valor_negocio": "alto", "rice": { "reach": 9, "impact": 9, "confidence": 5, "effort": 10, "score": 4.05 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q4", "subtarefas": [ { "id": "ST-1", "title": "Reescrever backend Supabase → FastAPI + PostgreSQL", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Reajustar arquitetura de frontend e usabilidade", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Revisar arquitetura de disparos e otimizações", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Reavaliar todas as consultas da Torre", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Implementar paralelismo nos disparos", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Processamento de fila com reprocessamento enterprise", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Melhorar tratamento de erros (estrutura, observabilidade, retry)", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Refletir Módulo Financeiro (sincronização consistente)", "status": "a-refinar", "isGate": false }, { "id": "PR-1", "title": "Avaliar com BTR02 se multi-org sobre Supabase está doloroso o suficiente para inverter ordem", "status": "a-refinar", "isGate": true }, { "id": "PR-2", "title": "Validar capacidade — squad tem banca para XL no Q4?", "status": "a-refinar", "isGate": false }, { "id": "PR-3", "title": "Definir ambiente HML maduro (P01 Torre)", "status": "a-refinar", "isGate": true } ], "tags": ["torre", "refatoracao", "backend", "fastapi", "postgres", "enterprise", "xl", "postergado"] },
+    { "id": "BTR03", "frente": "torre", "title": "Validação conjunta de dashboards da Torre de Controle", "status": "em-refinamento", "prioridade": "media", "esforco": "S", "valor_negocio": "medio", "rice": { "reach": 6, "impact": 6, "confidence": 7, "effort": 3, "score": 8.4 }, "dependencias": ["BES08"], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Inventariar dashboards existentes da Torre", "status": "em-curso", "isGate": false }, { "id": "ST-2", "title": "Aguardar BES08 (divergência dados) — GATE", "status": "a-refinar", "isGate": true }, { "id": "ST-3", "title": "Marcar sessão de validação por dashboard com Jéssica", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Validar cálculo (janela, base de dados, fórmula)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Validar conceito (definição única por métrica)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Validar usabilidade (filtros, drill-down)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Documentar correções/ajustes solicitados", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Fixar dicionário canônico em Backlog/contexto/", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Revisita pós-correção com Jéssica", "status": "a-refinar", "isGate": false } ], "tags": ["torre", "dashboard", "validacao", "jessica"] },
+    { "id": "BTR04", "frente": "torre", "title": "Validação de cálculos e conceitos dos relatórios IA da Torre", "status": "em-curso", "prioridade": "media", "esforco": "S", "valor_negocio": "medio", "rice": { "reach": 6, "impact": 6, "confidence": 7, "effort": 3, "score": 8.4 }, "dependencias": ["BTR03", "BES08"], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Aguardar BTR03 entregar dicionário canônico", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Aguardar BES08 corrigir divergência de dados", "status": "a-refinar", "isGate": true }, { "id": "ST-3", "title": "Levantar quais relatórios IA existem", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Validar cálculos e definições conceituais com Jéssica", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Identificar relatórios redundantes ou subutilizados", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Padronizar nomenclatura (mesmo conceito = mesmo nome)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Validar com destinatário antes de descomissionar", "status": "a-refinar", "isGate": true }, { "id": "ST-8", "title": "Documentar dicionário expandido em Backlog/contexto/", "status": "a-refinar", "isGate": false } ], "tags": ["torre", "relatorios-ia", "validacao", "jessica"] },
+    { "id": "BTR08", "frente": "torre", "title": "Sistema de templates e cópia para acelerar configuração de réguas", "status": "a-refinar", "prioridade": "media", "esforco": "M", "valor_negocio": "medio", "rice": { "reach": 6, "impact": 6, "confidence": 7, "effort": 4, "score": 6.3 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q4", "subtarefas": [ { "id": "ST-1", "title": "Levantar baseline — tempo médio para configurar régua hoje", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Definir escopo de template frente ao multi-org (global vs por org)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Definir biblioteca inicial de 5+ templates", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Implementar função de template (pré-preenchimento)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Implementar função copiar régua (duplicação isolada)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Definir governança de templates (quem cria/altera)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "UX de aviso de impacto (alteração de template)", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Decidir escopo multi-org (global vs por org)", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Validação UX com gestor real (João Pedro Borges)", "status": "a-refinar", "isGate": false }, { "id": "ST-10", "title": "Medir baseline pós-release (confirmar ganho >50%)", "status": "a-refinar", "isGate": false } ], "tags": ["torre", "regua", "templates", "configuracao", "jessica", "ux"] },
+    { "id": "BTR05", "frente": "torre", "title": "Implementar comunicação RCS (Rich Communication Services)", "status": "a-refinar", "prioridade": "baixa", "esforco": "L", "valor_negocio": "baixo", "rice": { "reach": 5, "impact": 5, "confidence": 4, "effort": 6, "score": 1.67 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q4", "subtarefas": [ { "id": "ST-1", "title": "Levantar caso de uso real (COMEÇAR POR AQUI)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Benchmark provedores RCS no Brasil (Sinch, Twilio, operadoras)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Avaliar custo/benefício vs WhatsApp+Hyperflow", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Se valer: piloto pequeno em uma carteira", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Métricas piloto (conversão, custo, satisfação)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Decisão go/no-go documentada", "status": "a-refinar", "isGate": false } ], "tags": ["torre", "rcs", "comunicacao", "jessica", "canais", "exploratorio"] },
+    { "id": "BTR06", "frente": "torre", "title": "Estruturar inteligências específicas por empresa/carteira na Torre", "status": "cancelado", "prioridade": "media", "esforco": null, "valor_negocio": "medio", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [], "tags": ["torre", "inteligencia-especifica", "jessica", "personalizacao", "cancelado"] },
+    { "id": "BCL03", "frente": "clara", "title": "Implementar envio e acompanhamento de biometria pela Clara", "status": "em-curso", "prioridade": "alta", "esforco": "M", "valor_negocio": "alto", "rice": { "reach": 7, "impact": 6, "confidence": 6, "effort": 4, "score": 6.3 }, "dependencias": [], "bloqueia": [], "deadline": "2026-08-30", "subtarefas": [ { "id": "ST-1", "title": "Mapear gatilho atual de envio de biometria (SEM ISSO, RESTO É ESPECULAÇÃO)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Decidir arquitetura (Clara envia vs observa envio existente)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Validar SLA de 2h com dado real (não palpite)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Implementar acompanhamento pós-2h", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Calibrar texto com Compliance", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Configurar limite de re-envios (máx 2 antes de escalonar)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Métricas (conversão pré/pós-Clara, tempo, escalonamento)", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Validação operacional com Jéssica e equipe de formalização", "status": "a-refinar", "isGate": false } ], "tags": ["clara", "formalizacao", "biometria", "jessica", "veritas"] },
+    { "id": "BCL01", "frente": "clara", "title": "Implementar solicitação e recebimento de comprovantes de endereço pela Clara", "status": "em-refinamento", "prioridade": "alta", "esforco": "M", "valor_negocio": "alto", "rice": { "reach": 7, "impact": 7, "confidence": 7, "effort": 4, "score": 8.575 }, "dependencias": [], "bloqueia": [], "deadline": "2026-07-30", "subtarefas": [ { "id": "ST-1", "title": "Decisão de escopo MVP (NÃO COMEÇAR SEM DECIDIR)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Validar com Compliance o texto da solicitação", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Integração com Plataforma Blips (endpoint de upload por humano)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Implementar fluxo Clara: solicitar → receber → validar formato → transferir → confirmar", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Definir tratamento de loop de re-solicitação (limite 3 tentativas)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Validar com 10 casos reais piloto", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Treinar operadores de validação humana", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Métricas: tempo médio de coleta, taxa de envio, taxa de rejeição", "status": "a-refinar", "isGate": false } ], "tags": ["clara", "formalizacao", "comprovante", "endereco", "jessica"] },
+    { "id": "BCL02", "frente": "clara", "title": "Implementar tratativa de reprovados em formalização (negativa + reembolso)", "status": "a-refinar", "prioridade": "alta", "esforco": "M", "valor_negocio": "alto", "rice": { "reach": 6, "impact": 8, "confidence": 6, "effort": 5, "score": 5.76 }, "dependencias": ["BBT01"], "bloqueia": [], "deadline": "2026-08-15", "subtarefas": [ { "id": "ST-1", "title": "Validar com Compliance + Jurídico (GATE NÃO-NEGOCIÁVEL)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Validar fluxo com Financeiro (como executa reembolso, SLA)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Aguardar BBT01 (raia Bitrix) estar minimamente desenhada", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Definir tom + template da comunicação de negativa", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Implementar coleta de dados bancários + validação básica (formato + CNPJ)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Integrar com BBT01 (criar entrada na raia)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Implementar comunicação de status para cliente", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Piloto com 5 reprovações reais com supervisão humana", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Tratamento de exceções (dados inconsistentes → escalam para humano)", "status": "a-refinar", "isGate": false }, { "id": "ST-10", "title": "Métricas: tempo até reembolso, taxa de re-solicitação, satisfação", "status": "a-refinar", "isGate": false } ], "tags": ["clara", "formalizacao", "reembolso", "reprovado", "jessica", "compliance", "lgpd"] },
+    { "id": "BES05", "frente": "esperanza", "title": "Investigar fluxo Esperanza — escopo, casos atendidos e domínio", "status": "em-refinamento", "prioridade": "alta", "esforco": "S", "valor_negocio": "alto", "rice": { "reach": 9, "impact": 9, "confidence": 9, "effort": 2, "score": 36.45 }, "dependencias": [], "bloqueia": ["BES01", "BES02", "BES03", "BES04", "BES07"], "deadline": "2026-06-05", "subtarefas": [ { "id": "ST-1", "title": "Preparar template de entrevista (NÃO entrar na sessão sem template)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Ler ESPERANZA_AGENT_OVERVIEW.md antes da sessão", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Agendar 1-2h com lead técnico Esperanza", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Conduzir sessão com template + gravação", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Produzir documento em Gestao/Analises/<data>/", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Validar documento com lead técnico (1 rodada de revisão)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Sinalizar squad — documento é referência ativa", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "discovery", "jessica", "pre-requisito"] },
+    { "id": "BES08", "frente": "esperanza", "title": "Resolver divergência de dados Torre vs Hyper (277 vs 2000 protocolos)", "status": "a-refinar", "prioridade": "alta", "esforco": "S", "valor_negocio": "alto", "rice": { "reach": 7, "impact": 8, "confidence": 7, "effort": 3, "score": 13.07 }, "dependencias": [], "bloqueia": ["BES03", "BTR03", "BTR04", "BES07"], "deadline": "2026-06-20", "subtarefas": [ { "id": "ST-1", "title": "Mapear o que cada sistema conta (conceito de protocolo)", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Investigar 5 hipóteses do doc 18/05 uma a uma", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Implementar separação de conversas por protocolo (dev → prod)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Avaliar criação de departamento exclusivo Esperanza no Hyper", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Revisar sistema de tags (descrições vagas atrapalham IA tagueadora)", "status": "a-refinar", "isGate": true }, { "id": "ST-6", "title": "Investigar fechamento de protocolos antigos", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Implementar separação de registros humano vs IA", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Otimizar consulta da Torre (reduzir janela de 12h)", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Documentar relação canônica entre números Torre e Hyper", "status": "a-refinar", "isGate": false }, { "id": "ST-10", "title": "Validar com Jéssica que documentação faz sentido operacionalmente", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "dados", "governanca", "torre", "hyper", "divergencia", "qualidade-dados"] },
+    { "id": "BES03", "frente": "esperanza", "title": "Mapear volume de transferências IA→humano por departamento e agente", "status": "em-curso", "prioridade": "alta", "esforco": "M", "valor_negocio": "alto", "rice": { "reach": 8, "impact": 7, "confidence": 8, "effort": 4, "score": 11.2 }, "dependencias": ["BES05"], "bloqueia": ["BST03"], "deadline": "2026-07-15", "subtarefas": [ { "id": "ST-1", "title": "Consolidar taxonomia de motivo de transferência (SEM TAXONOMIA, DADO É RUÍDO)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Investigar causa raiz da divergência Torre vs Hyper (BES08)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Instrumentar Esperanza para emitir evento estruturado a cada transferência", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Definir storage estruturado (Supabase ou Postgres pós-BTR07)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Construir dashboard com cortes múltiplos (depto, agente, motivo, carteira)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Validar leitura semântica com Jéssica antes de publicar", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Documentar o que é contabilizado e o que não é", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "transferencias", "mapeamento", "jessica", "dados", "observabilidade"] },
+    { "id": "BES07", "frente": "esperanza", "title": "Diagnóstico completo Esperanza — governança, confiabilidade, KPIs estratégicos", "status": "a-refinar", "prioridade": "alta", "esforco": "L", "valor_negocio": "alto", "rice": { "reach": 9, "impact": 8, "confidence": 6, "effort": 7, "score": 6.17 }, "dependencias": ["BES05"], "bloqueia": ["BST03"], "deadline": "2026-Q4", "subtarefas": [ { "id": "ST-1", "title": "Aguardar BES05 (discovery) — base para qualquer diagnóstico", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Priorizar 3-5 categorias do doc origem (NÃO tentar todas as 14)", "status": "a-refinar", "isGate": true }, { "id": "ST-3", "title": "Instrumentar Esperanza para emitir eventos estruturados por turno", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Construir trilha de auditoria completa (input, output, prompt, regra, API, tempo)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Implementar score de confiança (heurístico inicial)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Amostra manual de 100 conversas para baseline de delírio", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Dashboard de KPIs estratégicos", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Comparativo IA vs Humano em 5 fluxos selecionados", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Documentar classificação de origem da falha (taxonomia)", "status": "a-refinar", "isGate": false }, { "id": "ST-10", "title": "Publicar diagnóstico v1 (mesmo cobrindo só 3-5 categorias)", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "diagnostico", "observabilidade", "governanca", "kpis", "delirio", "jessica"] },
+    { "id": "BES01", "frente": "esperanza", "title": "Homologar renegociação Esperanza com transferência para atendimento humano", "status": "a-refinar", "prioridade": "alta", "esforco": "M", "valor_negocio": "alto", "rice": { "reach": 7, "impact": 8, "confidence": 7, "effort": 4, "score": 9.8 }, "dependencias": ["BES05"], "bloqueia": ["BES02"], "deadline": "2026-06-15", "subtarefas": [ { "id": "ST-1", "title": "Validar maturidade técnica antes do fórum (NÃO marcar fórum sem isso)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Rascunhar checklist de homologação operacional antes do fórum", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Convocar fórum (Jéssica + lead técnico Esperanza + representante MF)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Conduzir fórum — rodar cenários do checklist", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Publicar ata em Gestao/Reunioes/<data>/", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Versionar checklist final em Backlog/contexto/ como template", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Destravar BES02 atualizando frontmatter", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "renegociacao", "jessica", "homologacao"] },
+    { "id": "BES04", "frente": "esperanza", "title": "Criar tabulações automáticas via IA — categorizar interações Esperanza", "status": "em-refinamento", "prioridade": "media", "esforco": "M", "valor_negocio": "medio", "rice": { "reach": 7, "impact": 6, "confidence": 6, "effort": 5, "score": 5.04 }, "dependencias": ["BES05"], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Levantar taxonomia atual usada por humanos (NÃO INVENTAR DO ZERO)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Consolidar taxonomia canônica validada por Jéssica (máx 15-20 categorias)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Investigar problema atual do tagueador (descrições vagas)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Implementar classificador (pós-processamento ao encerrar conversa)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Persistir em base estruturada (compartilhar esquema com BES03)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Amostra manual de 200 conversas para calibragem (kappa Cohen)", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Dashboard de tabulações (distribuição, evolução, correlação resultado)", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Revisão pós-30-dias (se outros >20%, revisar taxonomia)", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "tabulacoes", "jessica", "indicadores"] },
+    { "id": "BES06", "frente": "esperanza", "title": "Resgatar relatório pré-Torre sobre redirecionamento IA→humano", "status": "entregue", "prioridade": "alta", "esforco": "XS", "valor_negocio": "medio", "rice": { "reach": 5, "impact": 6, "confidence": 5, "effort": 2, "score": 7.5 }, "dependencias": [], "bloqueia": [], "deadline": "2026-06-30", "subtarefas": [ { "id": "ST-1", "title": "Listar candidatos a quem produzia o relatório", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Conversas curtas (15min) com cada candidato", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Localizar arquivo (Drive, e-mail, planilha)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Validar metodologia (fonte, janela, definição)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Reproduzir cálculo com dado atual se compatível", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Documentar em Gestao/Analises/<data>/ como insumo de BES05 e BST03", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Decidir aborto cedo se ninguém lembra em 1 semana (timebox)", "status": "a-refinar", "isGate": true } ], "tags": ["esperanza", "relatorio", "torre", "historico"] },
+    { "id": "BES02", "frente": "esperanza", "title": "Disponibilizar imputação direta de renegociação no Módulo Financeiro", "status": "a-refinar", "prioridade": "media", "esforco": "L", "valor_negocio": "alto", "rice": { "reach": 6, "impact": 8, "confidence": 4, "effort": 7, "score": 2.7 }, "dependencias": ["BES01"], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Mapear restrições jurídicas e regulatórias (COMEÇAR POR AQUI)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Definir critérios de bypass como REGRA EXECUTÁVEL (não descrição)", "status": "a-refinar", "isGate": true }, { "id": "ST-3", "title": "Aguardar conclusão da BES01 (homologação operacional)", "status": "a-refinar", "isGate": true }, { "id": "ST-4", "title": "Escopar integração técnica Esperanza ↔ Módulo Financeiro", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Implementar trilha de auditoria completa", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Submeter desenho a Compliance + Jurídico + CTO (carta de risco formal)", "status": "a-refinar", "isGate": true }, { "id": "ST-7", "title": "Piloto controlado (50 imputações ou 7 dias, 100% revisão humana)", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Decisão go/no-go baseada em taxa de erro do piloto", "status": "a-refinar", "isGate": false }, { "id": "ST-9", "title": "Habilitar em produção apenas após go-decision documentada", "status": "a-refinar", "isGate": false } ], "tags": ["esperanza", "modulo-financeiro", "jessica", "integracao", "compliance-critico"] },
+    { "id": "BVA01", "frente": "valentina", "title": "Construir base de contexto Valentina sobre jornada Finza completa", "status": "cancelado", "prioridade": "baixa", "esforco": "L", "valor_negocio": "alto", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [], "tags": ["valentina", "cancelado"] },
+    { "id": "BVA02", "frente": "valentina", "title": "Ajustar Valentina para roteamento Rhino → suporte Rhino (urgente)", "status": "cancelado", "prioridade": "baixa", "esforco": "S", "valor_negocio": "alto", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [], "tags": ["valentina", "rhino", "cancelado"] },
+    { "id": "BVA03", "frente": "valentina", "title": "Mapear quais agentes IA estão em quais números (Finza vs Blips)", "status": "cancelado", "prioridade": "baixa", "esforco": "XS", "valor_negocio": "medio", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [], "tags": ["valentina", "numeros", "inventario", "cancelado"] },
+    { "id": "BVA04", "frente": "valentina", "title": "Ajustar Valentina para identificar originador automaticamente", "status": "cancelado", "prioridade": "baixa", "esforco": "M", "valor_negocio": "alto", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [], "tags": ["valentina", "originador", "cancelado"] },
+    { "id": "BVA05", "frente": "valentina", "title": "Mapear demandas relacionadas ao originador Rhino na Valentina", "status": "cancelado", "prioridade": "baixa", "esforco": "S", "valor_negocio": "alto", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [], "tags": ["valentina", "rhino", "mapeamento", "cancelado"] },
+    { "id": "BST01", "frente": "estrategica", "title": "Definir raia para tickets em validação no board Kanban", "status": "em-curso", "prioridade": "media", "esforco": null, "valor_negocio": "medio", "rice": null, "dependencias": [], "bloqueia": [], "deadline": null, "subtarefas": [ { "id": "ST-1", "title": "Listar com Marcos tickets em validação Torre", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Definir critério (raia única vs separadas por contexto)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Documentar decisão para o squad seguir automaticamente", "status": "a-refinar", "isGate": false } ], "tags": ["processo", "board", "raia", "marcos"] },
+    { "id": "BST03", "frente": "estrategica", "title": "Discovery — definir narrativa o que a IA faz para o negócio Finza", "status": "a-refinar", "prioridade": "alta", "esforco": "S", "valor_negocio": "alto", "rice": { "reach": 8, "impact": 7, "confidence": 6, "effort": 3, "score": 11.2 }, "dependencias": ["BES03", "BES06"], "bloqueia": [], "deadline": "2026-06-30", "subtarefas": [ { "id": "ST-1", "title": "Aguardar dados base (BES03 + BES06; se BES06 abortar usar baseline Torre)", "status": "a-refinar", "isGate": false }, { "id": "ST-2", "title": "Rascunhar documento síntese 1-2 páginas", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Lastrear com dados (BES03, BES06, BES04 quando disponíveis)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Produzir 3 versões (diretoria, CTO/Tech, operação)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Validação com diretoria antes de adotar", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Publicar como narrativa oficial em Docs/finza/", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Comunicar squad — narrativa de referência ativa", "status": "a-refinar", "isGate": false } ], "tags": ["discovery", "narrativa", "ia", "estrategico", "diretoria"] },
+    { "id": "BST02", "frente": "estrategica", "title": "Implementar coleta de NPS no fim da jornada Finza via IA", "status": "a-refinar", "prioridade": "alta", "esforco": "M", "valor_negocio": "alto", "rice": { "reach": 7, "impact": 7, "confidence": 5, "effort": 5, "score": 4.9 }, "dependencias": [], "bloqueia": [], "deadline": "2026-Q3", "subtarefas": [ { "id": "ST-1", "title": "Definir formato da pesquisa (SEM ISSO, CÓDIGO É ESPECULATIVO)", "status": "a-refinar", "isGate": true }, { "id": "ST-2", "title": "Identificar gatilho fim da jornada (sessão com Marco)", "status": "a-refinar", "isGate": false }, { "id": "ST-3", "title": "Decidir agente que envia (Valentina recomendado vs dedicado)", "status": "a-refinar", "isGate": false }, { "id": "ST-4", "title": "Definir momento exato do envio (24h? 7d? logo após receber máquina?)", "status": "a-refinar", "isGate": false }, { "id": "ST-5", "title": "Definir taxa de resposta esperada (baseline)", "status": "a-refinar", "isGate": false }, { "id": "ST-6", "title": "Implementar envio + coleta + persistência", "status": "a-refinar", "isGate": false }, { "id": "ST-7", "title": "Dashboard NPS por carteira/originador/mês", "status": "a-refinar", "isGate": false }, { "id": "ST-8", "title": "Definir ação para score baixo (CHAVE DO PROJETO — sem isso NPS vira vaidade)", "status": "a-refinar", "isGate": true }, { "id": "ST-9", "title": "Calibragem com 100 respostas iniciais (sem viés grosseiro)", "status": "a-refinar", "isGate": false } ], "tags": ["nps", "jornada", "valentina", "diretoria", "satisfacao"] }
+  ]
+}
+</script>
+<script>
+const DATA = JSON.parse(document.getElementById('map-data').textContent);
+const FRENTES = Object.fromEntries(DATA.frentes.map(f => [f.key, f]));
+const ITEMS = DATA.items;
+const ITEMS_BY_ID = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+
+const STATUS_LABELS = {'a-refinar':'A refinar','em-refinamento':'Em refinamento','refinado':'Refinado','em-curso':'Em curso','bloqueado':'Bloqueado','validacao':'Em validação','entregue':'Entregue','cancelado':'Cancelado'};
+const STATUS_COLORS = {'a-refinar':'#9CA3AF','em-refinamento':'#F59E0B','refinado':'#0EA5E9','em-curso':'#1A1AFF','bloqueado':'#EF4444','validacao':'#A855F7','entregue':'#10B981','cancelado':'#9CA3AF'};
+const PRIO_LABELS = {urgente:'Urgente',alta:'Alta',media:'Média',baixa:'Baixa'};
+const FRENTE_LETTER = {'bitrix-automacoes':'B','torre':'T','clara':'C','esperanza':'E','valentina':'V','livia':'L','estrategica':'S'};
+const STORAGE = 'mindmap.iaf.v9';
+
+try {
+  const prior = localStorage.getItem('mindmap.iaf.v8') || localStorage.getItem('mindmap.iaf.v7') || localStorage.getItem('mindmap.iaf.v6');
+  if(prior && !localStorage.getItem(STORAGE)){
+    const o = JSON.parse(prior);
+    if(o.positions){
+      o.positions = Object.fromEntries(Object.entries(o.positions).filter(([k]) => !k.startsWith('sub:')));
+    }
+    localStorage.setItem(STORAGE, JSON.stringify(o));
+  }
+} catch(e){}
+
+// ===== State =====
+let pan = {x:0, y:0};
+let zoom = 1;
+let expandedFrentes = new Set();
+let expandedBuckets = new Set(); // keys 'frenteKey|prio'
+let expandedItems = new Set();
+let selectedItem = null;
+let selectedFrente = null;
+let selectedSub = null; // {itemId, subId}
+let positions = {};
+let searchQ = '';
+let matchedIds = new Set();
+let showHistorico = false;
+
+// Load persisted state
+try{
+  const saved = JSON.parse(localStorage.getItem(STORAGE) || '{}');
+  if(saved.positions) positions = saved.positions;
+  if(saved.pan) pan = saved.pan;
+  if(saved.zoom) zoom = saved.zoom;
+  if(saved.expandedFrentes) expandedFrentes = new Set(saved.expandedFrentes);
+  if(saved.expandedBuckets) expandedBuckets = new Set(saved.expandedBuckets);
+  if(typeof saved.showHistorico === 'boolean') showHistorico = saved.showHistorico;
+}catch(e){}
+
+function persist(){
+  try{
+    localStorage.setItem(STORAGE, JSON.stringify({
+      positions, pan, zoom,
+      expandedFrentes:[...expandedFrentes],
+      expandedBuckets:[...expandedBuckets],
+      showHistorico
+    }));
+  }catch(e){}
+}
+
+// ===== Helpers =====
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs){
+  const e = document.createElementNS(NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+function escapeHtml(s){return (s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function ensureFrentePositions(){
+  DATA.frentes.forEach((f, i) => {
+    const key = 'frente:'+f.key;
+    if(!positions[key]){
+      const angle = (-90 + i * (360/DATA.frentes.length)) * Math.PI/180;
+      positions[key] = {x: 460*Math.cos(angle), y: 460*Math.sin(angle)};
+    }
+  });
+}
+
+// ===== Priority / impact ordering =====
+const PRIO_ORDER = ['urgente','alta','media','baixa'];
+const PRIO_LBL = {urgente:'Urgentes', alta:'Altas', media:'Médias', baixa:'Baixas'};
+const PRIO_COLOR = {urgente:'#DC2626', alta:'#F97316', media:'#F59E0B', baixa:'#9CA3AF'};
+const STATUS_RANK = {'em-curso':0,'em-refinamento':1,'refinado':2,'validacao':3,'bloqueado':4,'a-refinar':5,'entregue':6,'cancelado':7};
+
+function activeItems(fk){
+  // Cancelados nunca aparecem no mapa (não contam no backlog)
+  const its = ITEMS.filter(i => i.frente === fk && i.status !== 'cancelado');
+  if(showHistorico) return its;
+  return its.filter(i => i.status !== 'entregue');
+}
+function bucketsForFrente(fk){
+  const its = activeItems(fk);
+  return PRIO_ORDER.filter(p => its.some(i => i.prioridade === p));
+}
+function sortByImpact(a, b){
+  const sa = STATUS_RANK[a.status]; const sb = STATUS_RANK[b.status];
+  const saV = sa==null ? 9 : sa, sbV = sb==null ? 9 : sb;
+  if(saV !== sbV) return saV - sbV;
+  const ra = a.rice || 0, rb = b.rice || 0;
+  if(ra !== rb) return rb - ra;
+  const da = a.deadline && /^\d{4}-\d{2}-\d{2}$/.test(a.deadline) ? +new Date(a.deadline) : Infinity;
+  const db = b.deadline && /^\d{4}-\d{2}-\d{2}$/.test(b.deadline) ? +new Date(b.deadline) : Infinity;
+  return da - db;
+}
+
+function ensureBucketPositions(fk){
+  const buckets = bucketsForFrente(fk);
+  if(!buckets.length) return;
+  const fpos = positions['frente:'+fk];
+  const a0 = Math.atan2(fpos.y, fpos.x);
+  const N = buckets.length;
+  const spread = (N === 1 ? 0 : N === 2 ? 50 : N === 3 ? 90 : 130) * Math.PI/180;
+  const r = 220;
+  buckets.forEach((p, i) => {
+    const t = N === 1 ? 0.5 : i/(N-1);
+    const a = a0 - spread/2 + t*spread;
+    const key = 'bucket:'+fk+':'+p;
+    if(!positions[key]){
+      positions[key] = {x: fpos.x + r*Math.cos(a), y: fpos.y + r*Math.sin(a)};
+    }
+  });
+}
+// ===== Layout helpers (slot-aware arc) =====
+// Lays out N children around a parent. Uses a CONSTANT spread across rings,
+// so slot widths are predictable. Half-slot stagger offsets odd rings so
+// items in adjacent rings don't fall on the same radial line.
+function layoutAround(parentPos, refPos, n, opts){
+  const dx = parentPos.x - refPos.x, dy = parentPos.y - refPos.y;
+  const a0 = Math.atan2(dy, dx);
+  const baseR = opts.baseR;
+  const ringStep = opts.ringStep; // MUST be >= node width to prevent radial overlap
+  const minSep = opts.minSep;
+  const spread = opts.spread * Math.PI/180;
+  const positions = [];
+  let placed = 0, ri = 0;
+  while(placed < n){
+    const r = baseR + ri*ringStep;
+    const arcLen = spread * r;
+    const slots = Math.max(1, Math.floor(arcLen / minSep));
+    const take = Math.min(slots, n - placed);
+    const slotWidth = spread / slots;
+    const offset = (ri % 2) * (slotWidth / 2);
+    for(let j = 0; j < take; j++){
+      const t = (j + 0.5) / slots;
+      const a = a0 - spread/2 + t*spread + offset;
+      positions.push({x: parentPos.x + r*Math.cos(a), y: parentPos.y + r*Math.sin(a)});
+    }
+    placed += take;
+    ri++;
+    if(ri > 8) break;
+  }
+  return positions;
+}
+function ensureItemPositions(fk, prio){
+  const items = activeItems(fk).filter(i => i.prioridade === prio).sort(sortByImpact);
+  if(!items.length) return;
+  const bpos = positions['bucket:'+fk+':'+prio];
+  const fpos = positions['frente:'+fk];
+  if(!bpos || !fpos) return;
+  // item-node ~210px wide → ringStep 220 ensures no radial overlap
+  const pts = layoutAround(bpos, fpos, items.length, {
+    baseR: 200, ringStep: 220, minSep: 240, spread: 160
+  });
+  items.forEach((it, i) => {
+    const key = 'item:'+it.id;
+    if(!positions[key]) positions[key] = pts[i];
+  });
+}
+function ensureSubPositions(itemId){
+  const item = ITEMS_BY_ID[itemId];
+  if(!item || !item.subtarefas.length) return;
+  const ipos = positions['item:'+itemId];
+  const fpos = positions['frente:'+item.frente];
+  if(!ipos || !fpos) return;
+  // sub-node ~190px wide → ringStep 195 ensures no radial overlap;
+  // baseR 205 keeps the first ring just clear of the item-node bbox (item ~210 wide)
+  const pts = layoutAround(ipos, fpos, item.subtarefas.length, {
+    baseR: 205, ringStep: 195, minSep: 215, spread: 210
+  });
+  item.subtarefas.forEach((st, i) => {
+    const key = 'sub:'+itemId+':'+st.id;
+    if(!positions[key]) positions[key] = pts[i];
+  });
+}
+
+// ===== DOM refs =====
+const viewport = document.getElementById('viewport');
+const world = document.getElementById('world');
+const links = document.getElementById('links');
+const panel = document.getElementById('panel');
+const zoomVal = document.getElementById('zoom-val');
+const searchInput = document.getElementById('search');
+
+// ===== Transform =====
+function applyTransform(){
+  world.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`;
+  zoomVal.textContent = Math.round(zoom*100) + '%';
+}
+
+// ===== Render =====
+function render(){
+  // Clear node DOM
+  Array.from(world.querySelectorAll('.node')).forEach(n => n.remove());
+  // Hub
+  const hub = document.createElement('div');
+  hub.className = 'node hub-node';
+  hub.style.left = '0px';
+  hub.style.top = '0px';
+  hub.innerHTML = `
+    <div class="hn">Squad IAF</div>
+    <div class="hsub">Inteligência Artificial Finza</div>
+    <div class="hd">30 itens · 7 frentes</div>
+  `;
+  world.appendChild(hub);
+
+  // Frentes
+  DATA.frentes.forEach(f => {
+    const pos = positions['frente:'+f.key];
+    const count = ITEMS.filter(i => i.frente === f.key).length;
+    const el = document.createElement('div');
+    const isOn = expandedFrentes.has(f.key);
+    el.className = 'node frente-node' + (isOn ? ' on' : '') + (selectedFrente === f.key ? ' sel' : '');
+    el.style.left = pos.x + 'px';
+    el.style.top = pos.y + 'px';
+    el.style.setProperty('--c', f.color);
+    el.dataset.key = 'frente:'+f.key;
+    el.innerHTML = `
+      <div class="fc-band"></div>
+      <div class="fc-body">
+        <div class="fc-icon">${FRENTE_LETTER[f.key]||'·'}</div>
+        <div class="fc-text">
+          <div class="fc-name">${escapeHtml(f.label.split('·')[0].trim())}</div>
+          <div class="fc-meta">${activeItems(f.key).length + (showHistorico ? '' : ' ativos')} · ${escapeHtml(f.sponsor)}</div>
+        </div>
+        <div class="fc-chev">${isOn ? '−' : '+'}</div>
+      </div>
+    `;
+    attachInteractions(el, () => toggleFrente(f.key));
+    world.appendChild(el);
+  });
+
+  // Buckets (priority groups) and then items inside expanded buckets
+  const visibleItemIds = new Set();
+  expandedFrentes.forEach(fk => {
+    ensureBucketPositions(fk);
+    const buckets = bucketsForFrente(fk);
+    buckets.forEach(prio => {
+      const bpos = positions['bucket:'+fk+':'+prio];
+      if(!bpos) return;
+      const items = activeItems(fk).filter(i => i.prioridade === prio).sort(sortByImpact);
+      const bkey = fk+'|'+prio;
+      const isOn = expandedBuckets.has(bkey);
+      // Bucket node
+      const bel = document.createElement('div');
+      bel.className = 'node bucket-node' + (isOn ? ' on' : '');
+      bel.style.left = bpos.x + 'px';
+      bel.style.top = bpos.y + 'px';
+      bel.style.setProperty('--c', PRIO_COLOR[prio]);
+      bel.style.setProperty('--cf', FRENTES[fk].color);
+      bel.dataset.key = 'bucket:'+fk+':'+prio;
+      const hint = items.slice(0,2).map(i=>i.id).join(' · ') + (items.length>2 ? ' · +'+(items.length-2) : '');
+      bel.innerHTML = `
+        <div class="bk-band"></div>
+        <div class="bk-body">
+          <div class="bk-prio">${PRIO_LBL[prio]}<span class="bk-count">${items.length}</span></div>
+          <div class="bk-hint">${hint || '\u2014'}</div>
+        </div>
+        <div class="bk-chev">${isOn ? '−' : '+'}</div>
+      `;
+      attachInteractions(bel, () => toggleBucket(fk, prio));
+      world.appendChild(bel);
+      // Items inside expanded bucket
+      if(isOn){
+        ensureItemPositions(fk, prio);
+        items.forEach(it => {
+          visibleItemIds.add(it.id);
+          const ipos = positions['item:'+it.id];
+          if(!ipos) return;
+          const f = FRENTES[it.frente];
+          const iel = document.createElement('div');
+          iel.className = 'node item-node' + (selectedItem === it.id ? ' sel' : '') + (expandedItems.has(it.id) ? ' on' : '');
+          iel.style.left = ipos.x + 'px';
+          iel.style.top = ipos.y + 'px';
+          iel.style.setProperty('--c', f.color);
+          iel.style.setProperty('--cs', STATUS_COLORS[it.status]);
+          iel.dataset.key = 'item:'+it.id;
+          iel.dataset.status = it.status;
+          const dotCls = it.prioridade === 'urgente' ? 'urg' : it.prioridade === 'alta' ? 'alta' : '';
+          iel.innerHTML = `
+            <div class="it-bar"></div>
+            <div class="it-body">
+              <div class="it-id">${it.id}</div>
+              <div class="it-title">${escapeHtml(it.title)}</div>
+              <div class="it-foot">
+                <span class="it-st">${STATUS_LABELS[it.status]}</span>
+                ${dotCls ? '<span class="it-dot '+dotCls+'"></span>' : ''}
+              </div>
+            </div>
+          `;
+          attachInteractions(iel, () => selectItem(it.id));
+          world.appendChild(iel);
+        });
+      }
+    });
+  });
+
+  // Subtarefas
+  expandedItems.forEach(iid => {
+    if(!visibleItemIds.has(iid)) return;
+    ensureSubPositions(iid);
+    const item = ITEMS_BY_ID[iid];
+    item.subtarefas.forEach(st => {
+      const pos = positions['sub:'+iid+':'+st.id];
+      const el = document.createElement('div');
+      el.className = 'node sub-node' + (st.isGate ? ' gate' : '');
+      el.style.left = pos.x + 'px';
+      el.style.top = pos.y + 'px';
+      el.dataset.key = 'sub:'+iid+':'+st.id;
+      el.innerHTML = `
+        ${st.isGate ? '<span class="sub-gate">!</span>' : ''}
+        <span class="sub-id">${st.id}</span>
+        <span class="sub-t">${escapeHtml(st.title)}</span>
+      `;
+      if(selectedSub && selectedSub.itemId === iid && selectedSub.subId === st.id) el.classList.add('sel');
+      attachInteractions(el, () => selectSubtarefa(iid, st.id));
+      world.appendChild(el);
+    });
+  });
+
+  // SVG links
+  renderLinks(visibleItemIds);
+
+  // Search dim/highlight
+  applySearchVisual();
+
+  // Side panel
+  renderPanel();
+
+  applyTransform();
+}
+
+function renderLinks(visibleItemIds){
+  // Clear
+  while(links.firstChild) links.removeChild(links.firstChild);
+
+  // Defs: arrow markers
+  const defs = svgEl('defs', {});
+  const mk = (id, color) => {
+    const m = svgEl('marker', {id, markerWidth:8, markerHeight:8, refX:7, refY:4, orient:'auto-start-reverse', markerUnits:'userSpaceOnUse'});
+    const p = svgEl('path', {d:'M0,0 L8,4 L0,8 z', fill:color});
+    m.appendChild(p);
+    return m;
+  };
+  defs.appendChild(mk('arr-dep', '#F59E0B'));
+  defs.appendChild(mk('arr-blq', '#EF4444'));
+  links.appendChild(defs);
+
+  const O = 3000; // offset
+
+  // Hub → frentes (always)
+  DATA.frentes.forEach(f => {
+    const fpos = positions['frente:'+f.key];
+    // direction
+    const dx = fpos.x, dy = fpos.y;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    const ux = dx/len, uy = dy/len;
+    // hub edge ≈ 100px from center; frente edge ≈ 130px from center (frente size 230x96)
+    const x1 = O + ux*95;
+    const y1 = O + uy*55;
+    const x2 = O + fpos.x - ux*130;
+    const y2 = O + fpos.y - uy*45;
+    links.appendChild(svgEl('line', {x1, y1, x2, y2, stroke:f.color, 'stroke-width':2.5, 'stroke-opacity':expandedFrentes.has(f.key) ? 0.85 : 0.45}));
+  });
+
+  // Frente → buckets, and bucket → items (when expanded)
+  expandedFrentes.forEach(fk => {
+    const fpos = positions['frente:'+fk];
+    bucketsForFrente(fk).forEach(prio => {
+      const bpos = positions['bucket:'+fk+':'+prio];
+      if(!bpos) return;
+      links.appendChild(svgEl('line', {
+        x1: O+fpos.x, y1: O+fpos.y,
+        x2: O+bpos.x, y2: O+bpos.y,
+        stroke: PRIO_COLOR[prio],
+        'stroke-width': 1.8,
+        'stroke-opacity': 0.55
+      }));
+      if(expandedBuckets.has(fk+'|'+prio)){
+        activeItems(fk).filter(i => i.prioridade === prio).forEach(it => {
+          const ipos = positions['item:'+it.id];
+          if(!ipos) return;
+          links.appendChild(svgEl('line', {
+            x1: O+bpos.x, y1: O+bpos.y,
+            x2: O+ipos.x, y2: O+ipos.y,
+            stroke: FRENTES[fk].color,
+            'stroke-width': 1,
+            'stroke-opacity': 0.32
+          }));
+        });
+      }
+    });
+  });
+
+  // Item → subtarefas
+  expandedItems.forEach(iid => {
+    if(!visibleItemIds.has(iid)) return;
+    const ipos = positions['item:'+iid];
+    ITEMS_BY_ID[iid].subtarefas.forEach(st => {
+      const spos = positions['sub:'+iid+':'+st.id];
+      if(!spos) return;
+      links.appendChild(svgEl('line', {
+        x1: O+ipos.x, y1: O+ipos.y,
+        x2: O+spos.x, y2: O+spos.y,
+        stroke: '#9CA3AF',
+        'stroke-width': 1,
+        'stroke-opacity': 0.55,
+        'stroke-dasharray': '3,3'
+      }));
+    });
+  });
+
+  // Item ↔ Item dependencies/blocks
+  ITEMS.forEach(i => {
+    if(!visibleItemIds.has(i.id)) return;
+    const a = positions['item:'+i.id];
+    // depends on
+    i.dependencias.forEach(depId => {
+      if(!visibleItemIds.has(depId)) return;
+      const b = positions['item:'+depId];
+      // curve from b → a (dep flows TO i)
+      const mx = (a.x+b.x)/2, my = (a.y+b.y)/2;
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const len = Math.sqrt(dx*dx+dy*dy) || 1;
+      const px = -dy/len * 28, py = dx/len * 28;
+      links.appendChild(svgEl('path', {
+        d: `M ${O+b.x} ${O+b.y} Q ${O+mx+px} ${O+my+py} ${O+a.x} ${O+a.y}`,
+        stroke: '#F59E0B',
+        'stroke-width': 1.6,
+        'stroke-dasharray': '5,3',
+        fill: 'none',
+        opacity: 0.85,
+        'marker-end': 'url(#arr-dep)'
+      }));
+    });
+    // blocks
+    i.bloqueia.forEach(blockId => {
+      if(!visibleItemIds.has(blockId)) return;
+      const b = positions['item:'+blockId];
+      const mx = (a.x+b.x)/2, my = (a.y+b.y)/2;
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const len = Math.sqrt(dx*dx+dy*dy) || 1;
+      const px = -dy/len * (-28), py = dx/len * (-28);
+      links.appendChild(svgEl('path', {
+        d: `M ${O+a.x} ${O+a.y} Q ${O+mx+px} ${O+my+py} ${O+b.x} ${O+b.y}`,
+        stroke: '#EF4444',
+        'stroke-width': 1.6,
+        'stroke-dasharray': '7,4',
+        fill: 'none',
+        opacity: 0.85,
+        'marker-end': 'url(#arr-blq)'
+      }));
+    });
+  });
+}
+
+function renderPanel(){
+  // === Subtarefa selecionada ===
+  if(selectedSub){
+    const it = ITEMS_BY_ID[selectedSub.itemId];
+    const f = FRENTES[it.frente];
+    const st = it.subtarefas.find(s => s.id === selectedSub.subId);
+    if(!st){selectedSub = null; return renderPanel();}
+    const depsHtml = (st.dependencias||[]).length
+      ? `<div class="panel-section"><h4>Depende de <span class="h4-count">${st.dependencias.length}</span></h4><div class="tags-row">${st.dependencias.map(d=>`<span class="tag-chip">${escapeHtml(d)}</span>`).join('')}</div></div>` : '';
+    panel.innerHTML = `
+      <div>
+        <button class="back-btn" id="back-to-item">← voltar para ${it.id}</button>
+        <div class="ph" style="margin-top:8px">Subtarefa</div>
+        <div class="detail-card" style="--c:${st.isGate?'#F59E0B':f.color}">
+          <div class="d-id">${st.id} · ${escapeHtml(f.label.split('·')[0].trim())} / ${it.id}</div>
+          <div class="d-title">${escapeHtml(st.title)}</div>
+          <div class="d-tags">
+            <span class="badge ${st.status}">${STATUS_LABELS[st.status]||st.status}</span>
+            ${st.isGate?'<span class="badge alta" style="background:#FEF3C7;color:#92400E;border-color:#FDE68A">⚠ Gate</span>':''}
+            ${st.esforco?`<span class="badge baixa">${st.esforco}</span>`:''}
+          </div>
+          <dl class="d-grid">
+            <dt>Responsável</dt><dd>${escapeHtml(st.responsavel||'—')}</dd>
+            <dt>Prazo</dt><dd class="${st.prazo?'mono':'muted'}">${st.prazo||'— a definir'}</dd>
+            <dt>Esforço</dt><dd class="mono">${st.esforco||'—'}</dd>
+          </dl>
+        </div>
+      </div>
+      ${st.description ? `<div class="panel-section"><h4>Descrição</h4><div class="panel-text">${escapeHtml(st.description)}</div></div>` : ''}
+      ${depsHtml}
+      <div class="panel-section"><h4>Contexto do item-pai</h4>
+        <div class="sub-card" data-goto-item="${it.id}">
+          <span class="sc-id">${it.id}</span>
+          <span class="sc-t">${escapeHtml(it.title)}</span>
+          <span class="sc-meta">${STATUS_LABELS[it.status]}</span>
+        </div>
+      </div>
+    `;
+    document.getElementById('back-to-item').onclick = () => { selectedSub = null; render(); persist(); };
+    panel.querySelectorAll('[data-goto-item]').forEach(c => c.onclick = () => navigateToItem(c.dataset.gotoItem));
+    return;
+  }
+
+  // === Item selecionado ===
+  if(selectedItem){
+    const it = ITEMS_BY_ID[selectedItem];
+    const f = FRENTES[it.frente];
+
+    // Contexto/história
+    const contextoHtml = it.contexto ? `<div class="panel-section"><h4>Contexto executivo</h4><div class="panel-text">${escapeHtml(it.contexto)}</div></div>` : '';
+    const historiaHtml = it.historia ? `<div class="panel-section"><h4>Como user story</h4><div class="panel-text history">${escapeHtml(it.historia)}</div></div>` : '';
+
+    // RICE
+    const riceHtml = it.rice ? `<div class="panel-section"><h4>RICE · prioridade quantificada</h4>
+      <div class="kpi-grid">
+        <div class="kpi-cell"><div class="kpi-l">Reach</div><div class="kpi-v">${it.rice.reach||'—'}</div></div>
+        <div class="kpi-cell"><div class="kpi-l">Impact</div><div class="kpi-v">${it.rice.impact||'—'}</div></div>
+        <div class="kpi-cell"><div class="kpi-l">Conf.</div><div class="kpi-v">${it.rice.confidence||'—'}</div></div>
+        <div class="kpi-cell score"><div class="kpi-l">Score</div><div class="kpi-v">${it.rice.score||'—'}</div></div>
+      </div></div>` : '';
+
+    // Critérios de aceite (lista simples · id + texto)
+    const caHtml = it.criterios_aceite && it.criterios_aceite.length ? `<div class="panel-section">
+      <h4>Critérios de aceite <span class="h4-count">${it.criterios_aceite.length}</span></h4>
+      <div class="ca-list">
+        ${it.criterios_aceite.map(c => `<div class="ca-card">
+          <div class="ca-line"><span class="ca-tag">${escapeHtml(c.id||'CA')}</span><span>${escapeHtml(c.texto)}</span></div>
+        </div>`).join('')}
+      </div></div>` : '';
+
+    // Riscos
+    const riscosHtml = it.riscos && it.riscos.length ? `<div class="panel-section">
+      <h4>Riscos <span class="h4-count">${it.riscos.length}</span></h4>
+      <ul class="bullet-list risk">${it.riscos.map(r=>`<li>${escapeHtml(r)}</li>`).join('')}</ul>
+    </div>` : '';
+
+    // Premissas
+    const premHtml = it.premissas && it.premissas.length ? `<div class="panel-section">
+      <h4>Premissas <span class="h4-count">${it.premissas.length}</span></h4>
+      <ul class="bullet-list prem">${it.premissas.map(p=>`<li>${escapeHtml(p)}</li>`).join('')}</ul>
+    </div>` : '';
+
+    // Observações do PO
+    const obsHtml = it.observacoes_po ? `<div class="panel-section"><h4>Observações do PO</h4><div class="panel-text">${escapeHtml(it.observacoes_po)}</div></div>` : '';
+
+    // Tags
+    const tagsHtml = it.tags && it.tags.length ? `<div class="panel-section"><h4>Tags</h4><div class="tags-row">${it.tags.map(t=>`<span class="tag-chip">#${escapeHtml(t)}</span>`).join('')}</div></div>` : '';
+
+    // Subtarefas (clicáveis)
+    const subList = it.subtarefas.length ? `<div class="panel-section">
+      <h4>Subtarefas <span class="h4-count">${it.subtarefas.length}</span></h4>
+      <div class="subs-list">
+        ${it.subtarefas.map(st => `<div class="sub-card ${st.isGate?'gate':''} ${selectedSub && selectedSub.subId===st.id?'sel':''}" data-sub="${st.id}">
+          <span class="sc-id">${st.id}</span>
+          <span class="sc-t">${escapeHtml(st.title)}</span>
+          <span class="sc-meta">${st.esforco||'—'}<br>${escapeHtml(st.responsavel?st.responsavel.split(' ')[0]:'—')}</span>
+        </div>`).join('')}
+      </div></div>` : '';
+
+    // Relações
+    const depsHtml = it.dependencias.length ? `<div class="panel-section"><h4>Depende de <span class="h4-count">${it.dependencias.length}</span></h4><div class="rel-chips">${it.dependencias.map(d => `<span class="rel-chip dep" data-goto="${d}">${d}</span>`).join('')}</div></div>` : '';
+    const blqHtml = it.bloqueia.length ? `<div class="panel-section"><h4>Bloqueia <span class="h4-count">${it.bloqueia.length}</span></h4><div class="rel-chips">${it.bloqueia.map(d => `<span class="rel-chip blq" data-goto="${d}">${d}</span>`).join('')}</div></div>` : '';
+    const absorvHtml = it.absorvido_por ? `<div class="panel-section"><h4>Absorvido por</h4><div class="rel-chips"><span class="rel-chip" data-goto="${it.absorvido_por}">${it.absorvido_por}</span></div></div>` : '';
+    const motivoHtml = it.motivo_cancelamento ? `<div class="panel-section"><h4>Motivo do cancelamento</h4><div class="panel-text muted">${escapeHtml(it.motivo_cancelamento)}</div></div>` : '';
+
+    panel.innerHTML = `
+      <div>
+        <div class="ph">Item selecionado</div>
+        <div class="detail-card" style="--c:${f.color}">
+          <div class="d-id">${it.id} · ${escapeHtml(f.label.split('·')[0].trim())}</div>
+          <div class="d-title">${escapeHtml(it.title)}</div>
+          <div class="d-tags">
+            <span class="badge ${it.status}">${STATUS_LABELS[it.status]}</span>
+            <span class="badge ${it.prioridade}">${PRIO_LABELS[it.prioridade]||it.prioridade}</span>
+            ${it.esforco?`<span class="badge baixa">${it.esforco}</span>`:''}
+            ${it.refinada?'<span class="badge refinado">✓ Refinada</span>':''}
+          </div>
+          <dl class="d-grid">
+            <dt>Sponsor</dt><dd>${escapeHtml(it.sponsor||'—')}</dd>
+            <dt>Owner</dt><dd>${escapeHtml(it.owner||'—')}</dd>
+            ${it.implementador?`<dt>Implementador</dt><dd>${escapeHtml(it.implementador)}</dd>`:''}
+            <dt>Deadline</dt><dd class="${it.deadline?'mono':'muted'}">${it.deadline||'— a definir'}</dd>
+            ${it.origem?`<dt>Origem</dt><dd>${escapeHtml(it.origem)}</dd>`:''}
+            ${it.roadmap?`<dt>Roadmap</dt><dd class="mono">${escapeHtml(it.roadmap)}</dd>`:''}
+          </dl>
+          ${it.valor_negocio?`<div class="d-context"><strong style="color:var(--text);font-weight:600">Valor de negócio: </strong>${escapeHtml(it.valor_negocio)}</div>`:''}
+        </div>
+      </div>
+      ${motivoHtml}
+      ${absorvHtml}
+      ${contextoHtml}
+      ${historiaHtml}
+      ${riceHtml}
+      ${depsHtml}
+      ${blqHtml}
+      ${caHtml}
+      ${riscosHtml}
+      ${premHtml}
+      ${obsHtml}
+      ${subList}
+      ${tagsHtml}
+      <div class="panel-section"><h4>Ações</h4><div class="rel-chips"><a class="rel-chip" href="Backlog.html" target="_blank" style="text-decoration:none">Abrir no backlog ↗</a></div></div>
+    `;
+    panel.querySelectorAll('[data-goto]').forEach(c => c.onclick = () => navigateToItem(c.dataset.goto));
+    panel.querySelectorAll('[data-sub]').forEach(c => c.onclick = () => selectSubtarefa(it.id, c.dataset.sub));
+    return;
+  }
+
+  // === Frente selecionada ===
+  if(selectedFrente){
+    const f = FRENTES[selectedFrente];
+    const allItems = ITEMS.filter(i => i.frente === selectedFrente);
+    const its = activeItems(selectedFrente);
+    const byStatus = {};
+    its.forEach(i => byStatus[i.status] = (byStatus[i.status]||0)+1);
+    const buckets = bucketsForFrente(selectedFrente);
+    const histCount = allItems.length - its.length;
+    const totSubs = its.reduce((a,i)=>a+i.subtarefas.length, 0);
+    const totDeps = its.reduce((a,i)=>a+i.dependencias.length, 0);
+    const refinadas = its.filter(i=>i.refinada).length;
+    // Foco: item with highest priority, then highest RICE
+    const foco = [...its].sort((a,b) => {
+      const pa = PRIO_ORDER.indexOf(a.prioridade), pb = PRIO_ORDER.indexOf(b.prioridade);
+      if(pa !== pb) return pa - pb;
+      return (b.rice?.score||0) - (a.rice?.score||0);
+    })[0];
+
+    panel.innerHTML = `
+      <div>
+        <div class="ph">Frente selecionada</div>
+        <div class="detail-card" style="--c:${f.color}">
+          <div class="d-id">${escapeHtml(f.prefix)}## · ${its.length} ativos / ${allItems.length} total</div>
+          <div class="d-title">${escapeHtml(f.label)}</div>
+          <dl class="d-grid">
+            <dt>Sponsor</dt><dd>${escapeHtml(f.sponsor)}</dd>
+            <dt>Plataforma</dt><dd>${escapeHtml(f.plataforma||'—')}</dd>
+          </dl>
+          ${f.desc?`<div class="d-context">${escapeHtml(f.desc)}</div>`:''}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h4>Visão da frente</h4>
+        <div class="kpi-grid">
+          <div class="kpi-cell"><div class="kpi-l">Ativos</div><div class="kpi-v">${its.length}</div></div>
+          <div class="kpi-cell"><div class="kpi-l">Refinados</div><div class="kpi-v">${refinadas}</div></div>
+          <div class="kpi-cell"><div class="kpi-l">Subtarefas</div><div class="kpi-v">${totSubs}</div></div>
+          <div class="kpi-cell"><div class="kpi-l">Deps</div><div class="kpi-v">${totDeps}</div></div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h4>Distribuição por status</h4>
+        <div class="rel-chips">
+          ${Object.entries(byStatus).sort((a,b)=>b[1]-a[1]).map(([s,n]) => `<span class="badge ${s}" style="font-size:10px">${STATUS_LABELS[s]} · ${n}</span>`).join('')}
+          ${histCount?`<span class="badge cancelado" style="font-size:10px;opacity:.7">+ ${histCount} concluídos/cancelados</span>`:''}
+        </div>
+      </div>
+
+      ${foco ? `<div class="panel-section">
+        <h4>Item-foco recomendado</h4>
+        <div class="sub-card sel" data-goto="${foco.id}" style="border-color:${f.color};outline-color:${f.color}">
+          <span class="sc-id" style="color:${f.color}">${foco.id}</span>
+          <span class="sc-t">${escapeHtml(foco.title)}</span>
+          <span class="sc-meta">${foco.rice?'RICE '+foco.rice.score:foco.prioridade}</span>
+        </div>
+      </div>` : ''}
+
+      ${buckets.map(prio => {
+        const bItems = its.filter(i => i.prioridade === prio).sort(sortByImpact);
+        return `
+          <div class="panel-section">
+            <h4 style="color:${PRIO_COLOR[prio]}">${PRIO_LBL[prio]} <span class="h4-count">${bItems.length}</span></h4>
+            <div class="subs-list">
+              ${bItems.map(i => `<div class="sub-card" data-goto="${i.id}">
+                <span class="sc-id">${i.id}</span>
+                <span class="sc-t">${escapeHtml(i.title)}</span>
+                <span class="sc-meta">${i.rice?.score?'RICE '+i.rice.score:(i.esforco||'—')}<br>${STATUS_LABELS[i.status].split(' ')[0]}</span>
+              </div>`).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    `;
+    panel.querySelectorAll('[data-goto]').forEach(c => c.onclick = () => navigateToItem(c.dataset.goto));
+    return;
+  }
+
+  // === Empty state ===
+  panel.innerHTML = `
+    <div>
+      <div class="ph">Mapa interativo</div>
+      <div class="pn-empty">
+        <strong>Squad IAF · 30 itens · 7 frentes</strong>
+        Canvas tipo Miro · explore o backlog clicando, arrastando, dando zoom.
+        <ul>
+          <li><kbd>clique</kbd> em uma <strong>frente</strong> para abrir buckets de prioridade</li>
+          <li><kbd>clique</kbd> num <strong>bucket</strong> para ver os itens ordenados por impacto</li>
+          <li><kbd>clique</kbd> num <strong>item</strong> para ver contexto, RICE, critérios, riscos e subtarefas</li>
+          <li><kbd>clique</kbd> numa <strong>subtarefa</strong> para detalhe + responsável + prazo</li>
+          <li>Linhas <span style="color:#F59E0B;font-weight:600">laranja tracejadas</span> = depende de</li>
+          <li>Linhas <span style="color:#EF4444;font-weight:600">vermelhas tracejadas</span> = bloqueia</li>
+          <li><kbd>arraste</kbd> nós · <kbd>scroll</kbd> para zoom · <kbd>arraste o fundo</kbd> para pan</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="ph">Ir para uma frente</div>
+      <div class="bucket-pill-row">
+        ${DATA.frentes.map(f => `<span class="bucket-pill" data-frente="${f.key}" style="border-color:${f.color};color:${f.color};background:rgba(0,0,0,0)">${escapeHtml(f.label.split('·')[0].trim())}<span class="bp-n" style="color:${f.color};border:1px solid ${f.color}30">${activeItems(f.key).length}</span></span>`).join('')}
+      </div>
+    </div>
+  `;
+  panel.querySelectorAll('[data-frente]').forEach(c => {
+    c.onclick = () => {
+      const k = c.dataset.frente;
+      if(!expandedFrentes.has(k)) expandedFrentes.add(k);
+      selectedFrente = k; selectedItem = null; selectedSub = null;
+      ensureBucketPositions(k);
+      panTo(positions['frente:'+k]);
+      render(); persist();
+    };
+  });
+}
+
+function applySearchVisual(){
+  const q = searchQ.toLowerCase().trim();
+  if(!q){
+    document.querySelectorAll('.node').forEach(n => {n.classList.remove('dim'); n.classList.remove('match');});
+    matchedIds.clear();
+    return;
+  }
+  matchedIds.clear();
+  ITEMS.forEach(i => {
+    if(i.id.toLowerCase().includes(q) || i.title.toLowerCase().includes(q)) matchedIds.add(i.id);
+  });
+  document.querySelectorAll('.node').forEach(n => {
+    const key = n.dataset.key||'';
+    if(!key){n.classList.add('dim');return;}
+    if(key.startsWith('item:')){
+      const id = key.slice(5);
+      if(matchedIds.has(id)){n.classList.add('match');n.classList.remove('dim');}
+      else {n.classList.add('dim');n.classList.remove('match');}
+    } else if(key.startsWith('bucket:')){
+      const [, fk, prio] = key.split(':');
+      const hasMatch = ITEMS.some(i => i.frente===fk && i.prioridade===prio && matchedIds.has(i.id));
+      if(hasMatch){n.classList.remove('dim');n.classList.remove('match');}
+      else {n.classList.add('dim');n.classList.remove('match');}
+    } else if(key.startsWith('frente:')){
+      const fk = key.slice(7);
+      const has = ITEMS.some(i => i.frente===fk && matchedIds.has(i.id));
+      if(has){n.classList.remove('dim');n.classList.remove('match');}
+      else{n.classList.add('dim');n.classList.remove('match');}
+    } else {
+      n.classList.add('dim');
+    }
+  });
+}
+
+// ===== Actions =====
+function toggleFrente(key){
+  if(expandedFrentes.has(key)){
+    expandedFrentes.delete(key);
+    // collapse buckets and items in this frente
+    [...expandedBuckets].forEach(b => { if(b.startsWith(key+'|')) expandedBuckets.delete(b); });
+    ITEMS.filter(i => i.frente === key).forEach(i => expandedItems.delete(i.id));
+  } else {
+    expandedFrentes.add(key);
+    ensureBucketPositions(key);
+  }
+  selectedFrente = key;
+  selectedItem = null;
+  render(); persist();
+}
+function toggleBucket(fk, prio){
+  const key = fk+'|'+prio;
+  if(expandedBuckets.has(key)){
+    expandedBuckets.delete(key);
+    activeItems(fk).filter(i => i.prioridade === prio).forEach(i => expandedItems.delete(i.id));
+  } else {
+    expandedBuckets.add(key);
+    ensureItemPositions(fk, prio);
+  }
+  render(); persist();
+}
+function selectItem(id){
+  selectedItem = id;
+  selectedFrente = null;
+  selectedSub = null;
+  if(expandedItems.has(id)) expandedItems.delete(id);
+  else { expandedItems.add(id); ensureSubPositions(id); }
+  render(); persist();
+}
+function selectSubtarefa(itemId, subId){
+  selectedSub = {itemId, subId};
+  selectedItem = itemId;
+  selectedFrente = null;
+  render(); persist();
+}
+function navigateToItem(id){
+  const it = ITEMS_BY_ID[id];
+  if(!it) return;
+  selectedItem = id;
+  selectedFrente = null;
+  // Cancelados não aparecem no mapa — só atualiza painel
+  if(it.status === 'cancelado'){
+    render(); persist(); return;
+  }
+  if(it.status === 'entregue' && !showHistorico){
+    showHistorico = true; updateHistoricoBtn();
+  }
+  if(!expandedFrentes.has(it.frente)) {
+    expandedFrentes.add(it.frente);
+    ensureBucketPositions(it.frente);
+  }
+  const bkey = it.frente+'|'+it.prioridade;
+  if(!expandedBuckets.has(bkey)){
+    expandedBuckets.add(bkey);
+    ensureItemPositions(it.frente, it.prioridade);
+  }
+  panTo(positions['item:'+id]);
+  render(); persist();
+}
+function panTo(worldPos){
+  const rect = viewport.getBoundingClientRect();
+  // we want world point at viewport center
+  pan.x = -worldPos.x * zoom;
+  pan.y = -worldPos.y * zoom;
+}
+function resetAll(){
+  if(!confirm('Resetar posições e estado do mapa?')) return;
+  positions = {};
+  expandedFrentes.clear();
+  expandedBuckets.clear();
+  expandedItems.clear();
+  selectedItem = null; selectedFrente = null;
+  pan = {x:0, y:0}; zoom = 1;
+  searchQ = ''; searchInput.value = '';
+  showHistorico = false; updateHistoricoBtn();
+  ensureFrentePositions();
+  render(); persist();
+}
+function collapseAll(){
+  expandedFrentes.clear();
+  expandedBuckets.clear();
+  expandedItems.clear();
+  render(); persist();
+}
+function fitView(){
+  pan = {x:0, y:0}; zoom = 1;
+  applyTransform(); persist();
+}
+
+// ===== Interactions on nodes =====
+function attachInteractions(el, onClick){
+  let startX, startY, origPos, moved, downTime;
+  el.addEventListener('mousedown', e => {
+    if(e.button !== 0) return;
+    e.stopPropagation();
+    startX = e.clientX; startY = e.clientY;
+    moved = false;
+    downTime = Date.now();
+    const key = el.dataset.key;
+    origPos = positions[key] ? {...positions[key]} : null;
+    const onMove = ev => {
+      const dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if(!moved && Math.abs(dx)+Math.abs(dy) > 4){moved = true; el.classList.add('dragging');}
+      if(moved && origPos){
+        positions[key] = {x: origPos.x + dx/zoom, y: origPos.y + dy/zoom};
+        el.style.left = positions[key].x + 'px';
+        el.style.top = positions[key].y + 'px';
+        // re-render links on the fly
+        const visibleItemIds = new Set();
+        expandedFrentes.forEach(fk => {
+          bucketsForFrente(fk).forEach(prio => {
+            if(expandedBuckets.has(fk+'|'+prio)){
+              activeItems(fk).filter(i => i.prioridade === prio).forEach(i => visibleItemIds.add(i.id));
+            }
+          });
+        });
+        renderLinks(visibleItemIds);
+      }
+    };
+    const onUp = () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      el.classList.remove('dragging');
+      if(!moved){ onClick(); }
+      else persist();
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  });
+}
+
+// ===== Pan / zoom on viewport =====
+let panning = false, panStart = null;
+viewport.addEventListener('mousedown', e => {
+  if(e.target.closest('.node')) return;
+  if(e.button !== 0) return;
+  panning = true;
+  panStart = {x:e.clientX, y:e.clientY, px:pan.x, py:pan.y};
+  viewport.classList.add('panning');
+});
+window.addEventListener('mousemove', e => {
+  if(!panning) return;
+  pan.x = panStart.px + (e.clientX - panStart.x);
+  pan.y = panStart.py + (e.clientY - panStart.y);
+  applyTransform();
+});
+window.addEventListener('mouseup', () => {
+  if(panning){panning = false; viewport.classList.remove('panning'); persist();}
+});
+viewport.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = viewport.getBoundingClientRect();
+  const cx = e.clientX - rect.left - rect.width/2;
+  const cy = e.clientY - rect.top - rect.height/2;
+  const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
+  const newZoom = Math.max(0.18, Math.min(2.8, zoom * factor));
+  const worldX = (cx - pan.x)/zoom;
+  const worldY = (cy - pan.y)/zoom;
+  pan.x = cx - worldX * newZoom;
+  pan.y = cy - worldY * newZoom;
+  zoom = newZoom;
+  applyTransform(); persist();
+}, {passive:false});
+
+// ===== Toolbar =====
+document.getElementById('btn-zoom-in').onclick = () => { zoom = Math.min(2.8, zoom*1.15); applyTransform(); persist(); };
+document.getElementById('btn-zoom-out').onclick = () => { zoom = Math.max(0.18, zoom/1.15); applyTransform(); persist(); };
+document.getElementById('btn-fit').onclick = fitView;
+document.getElementById('btn-collapse').onclick = collapseAll;
+document.getElementById('btn-reset').onclick = resetAll;
+function updateHistoricoBtn(){
+  const b = document.getElementById('btn-hist');
+  if(!b) return;
+  b.textContent = showHistorico ? '● Entregues visíveis' : '○ Entregues ocultos';
+  b.style.color = showHistorico ? 'var(--success)' : '';
+}
+document.getElementById('btn-hist').onclick = () => {
+  showHistorico = !showHistorico;
+  updateHistoricoBtn();
+  render(); persist();
+};
+updateHistoricoBtn();
+
+// Search
+let searchTimer;
+searchInput.addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQ = e.target.value;
+    // auto-expand frentes that contain matches
+    if(searchQ.trim()){
+      const q = searchQ.toLowerCase();
+      ITEMS.forEach(i => {
+        if(i.status === 'cancelado') return;
+        if(i.id.toLowerCase().includes(q) || i.title.toLowerCase().includes(q)){
+          if(i.status === 'entregue' && !showHistorico){
+            showHistorico = true; updateHistoricoBtn();
+          }
+          expandedFrentes.add(i.frente);
+          ensureBucketPositions(i.frente);
+          const bkey = i.frente+'|'+i.prioridade;
+          expandedBuckets.add(bkey);
+          ensureItemPositions(i.frente, i.prioridade);
+        }
+      });
+      render();
+    } else {
+      applySearchVisual();
+    }
+  }, 150);
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if(document.activeElement === searchInput) return;
+  if(e.key === 'Escape'){selectedItem = null; selectedFrente = null; selectedSub = null; render(); persist();}
+  if(e.key === '0'){fitView();}
+  if(e.key === '+' || e.key === '='){document.getElementById('btn-zoom-in').click();}
+  if(e.key === '-'){document.getElementById('btn-zoom-out').click();}
+});
+
+// Init
+ensureFrentePositions();
+render();
+</script>
+</body>
+</html>

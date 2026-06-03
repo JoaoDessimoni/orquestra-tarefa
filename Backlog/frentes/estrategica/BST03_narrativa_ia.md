@@ -2,6 +2,7 @@
 id: BST03
 title: Discovery — definir narrativa "o que a IA faz para o negócio Finza"
 frente: estrategica
+fonte: backlog
 status: a-refinar
 prioridade: alta
 rice:
@@ -15,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: [P36]
   reunioes:
-    - Gestao/Reunioes/15-05-2026/2026-05-15-reuniao-diretoria-jornada-cliente.md
+    - Gestao/Reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
   solicitacoes: []
   analises:
     - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
@@ -59,24 +60,6 @@ Pré-requisito implícito para qualquer comunicação executiva futura.
 - **CA-3** — Given 3 versões produzidas (diretoria, CTO/Tech, operação), When comparadas, Then não há divergência factual entre versões — apenas de foco.
 - **CA-4** — Given validação com diretoria, When acordada, Then é adotada como narrativa oficial.
 - **CA-5** — Given narrativa adotada, When citada em deck/apresentação posterior, Then bate com versão oficial (não improvisa).
-
-## Subtarefas
-
-- [ ] **ST-1 — Aguardar dados base** — BES03 (volume transferências) e BES06 (relatório pré-Torre).
-  - Se BES06 abortar (timebox), usar baseline da Torre atual como ponto-zero.
-- [ ] **ST-2 — Rascunhar documento síntese curto** (1-2 páginas):
-  - Por que existe IA na Finza? (problema raiz)
-  - O que a IA faz hoje? (mapa concreto, não abstração)
-  - Que valor entrega? (números, sempre que possível)
-  - Para onde vai? (visão 6-12 meses)
-- [ ] **ST-3 — Lastrear com dados** — coletar números (BES03, BES06, BES04 quando disponíveis).
-- [ ] **ST-4 — Produzir 3 versões:**
-  - **Diretoria** — foco em valor de negócio, números agregados.
-  - **CTO/Tech** — foco em capacidade técnica, escala, débito.
-  - **Operação** — foco em o que a IA tira do prato deles, como evolução pode tirar mais.
-- [ ] **ST-5 — Validação com diretoria** antes de adotar.
-- [ ] **ST-6 — Publicar como narrativa oficial** em `Docs/finza/` ou equivalente.
-- [ ] **ST-7 — Comunicar squad** que esta é a narrativa de referência.
 
 ## Dependências cruzadas
 

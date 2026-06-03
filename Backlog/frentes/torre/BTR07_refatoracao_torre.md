@@ -2,6 +2,7 @@
 id: BTR07
 title: Refatoração da Torre — backend FastAPI/Postgres + arquitetura enterprise
 frente: torre
+fonte: backlog
 status: em-refinamento
 prioridade: alta
 rice:
@@ -69,26 +70,6 @@ Item **XL** — provavelmente precisa quebrar em itens-filhos durante refinement
 - **CA-6** — Given tratamento de erros padronizado, When erro acontece, Then estrutura única, observabilidade (traces/logs/metrics), retry inteligente.
 - **CA-7** — Given Torre reflete Módulo Financeiro, When dados são consultados, Then sem divergência operacional registrada.
 - **CA-8** — Given cutover em produção, When acontece, Then sem perda de dados, janela de rollback validada, runbook publicado.
-
-## Subtarefas
-
-> ⚠️ **Item XL** — DEVE ser quebrado em itens-filhos no próximo refinement com João Lucas.
-
-- [ ] **ST-1 — Reescrever backend Supabase → FastAPI + PostgreSQL.**
-  - Portar tabelas, migrar Edge Functions para endpoints FastAPI, manter compatibilidade de API externa.
-- [ ] **ST-2 — Reajustar arquitetura de frontend e usabilidade.**
-- [ ] **ST-3 — Revisar arquitetura de disparos e otimizações.**
-- [ ] **ST-4 — Reavaliar todas as consultas da Torre** (performance + correção).
-- [ ] **ST-5 — Implementar paralelismo nos disparos.**
-- [ ] **ST-6 — Processamento de fila com reprocessamento (padrão enterprise).**
-- [ ] **ST-7 — Melhorar tratamento de erros** (estrutura, observabilidade, retry).
-- [ ] **ST-8 — Refletir Módulo Financeiro** — sincronização ou consulta consistente.
-
-### Pré-requisitos antes de retomar (pós-postergação):
-
-- [ ] **PR-1 — Avaliar com BTR02:** multi-org sobre Supabase está doloroso o suficiente para inverter ordem?
-- [ ] **PR-2 — Validar capacidade** — squad tem banca para XL no Q4?
-- [ ] **PR-3 — Definir ambiente HML maduro** (P01 Torre) — sem isso, cutover é alto risco.
 
 ## Dependências cruzadas
 
