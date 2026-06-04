@@ -1,6 +1,6 @@
 ---
 name: quimera
-description: Conhecimento canônico do Quimera — o sistema de tickets/Jira interno da Finza, acessível via MCP (server "quimera"). Define o catálogo de 31 ferramentas, o workflow de status, o mapa de times (com o time da IA Finza = ia_automacao_finza), categorias, membros do squad com UUID, regras de criação de ticket e a definição dos indicadores gerenciais (Conclusão, Cycle Time, Intruders, CSAT). Carregue antes de qualquer operação no Quimera (criar/consultar card, indicadores) para não fabricar IDs, times ou e-mails.
+description: Conhecimento canônico do Quimera — o sistema de tickets/Jira interno da Finza, acessível via MCP (server "quimera"). Define o catálogo de 29 ferramentas, o workflow de status, o mapa de times (com o time da IA Finza = ia_automacao_finza), categorias, membros do squad com UUID, regras de criação de ticket e a definição dos indicadores gerenciais (Conclusão, Cycle Time, Intruders, CSAT). Carregue antes de qualquer operação no Quimera (criar/consultar card, indicadores) para não fabricar IDs, times ou e-mails.
 ---
 
 # Skill — Quimera (tickets internos Finza via MCP)
@@ -77,7 +77,7 @@ backlog → fila_exec → em_andamento → em_validacao → finalizado
 
 ---
 
-## 3 · Catálogo de ferramentas (31)
+## 3 · Catálogo de ferramentas (29)
 
 ### Tickets — consulta
 - **`list_tickets`** — lista com filtros: `status`, `team`, `assigned_to` (UUID), `priority` (low|medium|high), `requester_email`, `parent_ticket_id`, `only_subtasks`, `only_parents` (exclui subtarefas), `search` (texto em título/descrição), `limit` (≤200, default 50), `offset`. Ordena por `created_at desc`.

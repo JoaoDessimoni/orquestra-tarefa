@@ -10,7 +10,12 @@
       "PowerShell($file = \"c:\\\\Users\\\\João Vinicius\\\\Documents\\\\Finza\\\\Repasse\\\\apresentacao_cto_13-05-2026.html\"; if \\(Test-Path $file\\) { $size = \\(Get-Item $file\\).Length; $lines = \\(Get-Content $file | Measure-Object -Line\\).Lines; Write-Output \"Size: $size bytes, Lines: $lines\" } else { Write-Output \"NOT FOUND\" })",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\João Vinicius\\\\.claude\" -ErrorAction SilentlyContinue | Select-Object Name, @{N='Type';E={if\\($_.PSIsContainer\\){'Dir'}else{'File'}}})",
       "PowerShell(if \\(-not \\(Test-Path \"C:\\\\Users\\\\João Vinicius\\\\.claude\\\\plans\"\\)\\) { New-Item -ItemType Directory -Path \"C:\\\\Users\\\\João Vinicius\\\\.claude\\\\plans\" -Force | Out-Null }; Test-Path \"C:\\\\Users\\\\João Vinicius\\\\.claude\\\\plans\")",
-      "mcp__quimera__list_tickets"
+      "mcp__quimera__list_tickets",
+      "mcp__claude_ai_Atlassian__atlassianUserInfo",
+      "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+      "mcp__quimera__list_teams",
+      "mcp__quimera__list_users",
+      "mcp__claude_ai_Atlassian__getVisibleJiraProjects"
     ]
   }
 }
