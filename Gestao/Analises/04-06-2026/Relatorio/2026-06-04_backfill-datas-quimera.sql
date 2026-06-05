@@ -16,18 +16,26 @@
 --   * Parte A (created_at, 130) — pode ser feita pelo MCP OU por este script (redundante; rede de segurança).
 --   * Parte B (finalização, 72) — SÓ no banco. É o que de fato normaliza Cycle/Lead Time.
 --
--- >>> PREMISSAS DE SCHEMA — O DBA DEVE CONFIRMAR ANTES DE RODAR <<<
---   Os nomes abaixo são SUPOSTOS. Ajuste para o schema real do Quimera:
+-- >>> SCHEMA REAL CONFIRMADO (2026-06-05) <<<
+--   Nomes abaixo confirmados ao vivo: a tabela de histórico apareceu na query do endpoint
+--   Gestão > Indicadores (`ticket_status_history?select=ticket_id,new_status,changed_at`).
 --     - Tabela de tickets ............ public.tickets
---     - Chave de negócio do ticket ... ticket_number      (o "#3288"); se a FK do histórico usar o id UUID, faça o JOIN.
---     - Coluna de criação ............ created_at          (timestamptz)
---     - Tabela de histórico .......... public.status_history
---     - FK p/ ticket no histórico .... ticket_id           (UUID) — mapear via tickets.id
---     - Coluna de status ............. status              (texto; valor de conclusão = 'finalizado')
+--     - PK do ticket ................. id                  (UUID) — é a FK usada no histórico
+--     - Chave de negócio ............. ticket_number       (o "#3288") — só p/ leitura humana
+--     - Coluna de criação ............ created_at          (timestamptz)  [já corrigida via MCP]
+--     - Tabela de histórico .......... public.ticket_status_history   ◀ nome REAL (não "status_history")
+--     - FK p/ ticket no histórico .... ticket_id           (UUID → tickets.id)
+--     - Coluna de status ............. new_status          (texto)  ◀ nome REAL (não "status")
 --     - Coluna de data do evento ..... changed_at          (timestamptz)
---   Confirme também se a "finalização" é (a) uma LINHA no status_history com status='finalizado',
---   ou (b) uma coluna finalizado_at/resolved_at/closed_at na própria tabela tickets.
---   As duas variantes estão na Parte B — ESCOLHA UMA.
+--     - Valor de conclusão ........... 'finalizado'        (enum: backlog|fila_exec|em_andamento|bloqueado|em_validacao|finalizado|cancelado)
+--
+--   >>> LIMITE IMPORTANTE DO BACKFILL created+resolved <<<
+--   O Cycle Time soma dias úteis em (em_andamento+bloqueado+em_validacao) ao longo de TODO
+--   o histórico até o último move p/ 'finalizado'. Corrigir só o 1º evento (created) e o
+--   último ('finalizado') conserta LEAD TIME e as datas exibidas, mas NÃO reconstrói o
+--   Cycle Time real — para isso é preciso reescrever cada transição intermediária a partir
+--   do CHANGELOG do Jira (campo `changelog`/histories por issue). Ver Parte C (opcional).
+--   O DBA deve confirmar (a) e (b) na Parte B e escolher.
 --
 -- COMO USAR
 --   1. Confirmar/ajustar as premissas de schema acima.
@@ -216,32 +224,59 @@ UPDATE tickets t
    AND b.resolved_real IS NOT NULL;
 */
 
--- ---- VARIANTE B2: finalização modelada como LINHA em status_history ----
--- Atualiza o changed_at do evento de transição para 'finalizado' de cada ticket.
--- (Cycle Time = touch+wait até o ÚLTIMO move para 'finalizado'.)
+-- ---- VARIANTE B2 (APLICÁVEL — schema real confirmado): LINHA em ticket_status_history ----
+-- O dashboard (Lead/Cycle Time, datas de "surgiu/finalizou") lê ESTA tabela, não tickets.created_at.
+-- Por isso a correção via MCP (só created_at) NÃO moveu o dashboard. Esta é a correção que move.
+-- Atualiza o changed_at do(s) evento(s) new_status='finalizado' de cada ticket concluído.
 /*
-UPDATE status_history sh
+UPDATE ticket_status_history sh
    SET changed_at = b.resolved_real
   FROM _iaf_backfill b
   JOIN tickets t ON t.ticket_number = b.ticket_number
  WHERE sh.ticket_id = t.id
-   AND sh.status = 'finalizado'
+   AND sh.new_status = 'finalizado'
    AND b.resolved_real IS NOT NULL;
 */
--- Se NÃO existir a linha 'finalizado' no histórico (o import pode não ter criado),
--- inserir o evento — ajuste colunas obrigatórias (autor, status anterior, etc.):
+-- Se NÃO existir a linha 'finalizado' no histórico, inserir o evento
+-- (ajuste colunas obrigatórias extras — autor, old_status etc. — conforme o schema real):
 /*
-INSERT INTO status_history (ticket_id, status, changed_at)
+INSERT INTO ticket_status_history (ticket_id, new_status, changed_at)
 SELECT t.id, 'finalizado', b.resolved_real
   FROM _iaf_backfill b
   JOIN tickets t ON t.ticket_number = b.ticket_number
  WHERE b.resolved_real IS NOT NULL
    AND NOT EXISTS (
-        SELECT 1 FROM status_history sh
-         WHERE sh.ticket_id = t.id AND sh.status = 'finalizado');
+        SELECT 1 FROM ticket_status_history sh
+         WHERE sh.ticket_id = t.id AND sh.new_status = 'finalizado');
 */
--- Verificação B (após escolher a variante): conferir alguns tickets-chave
+-- TAMBÉM corrigir o 1º evento do histórico (o "created" exibido no dashboard), que o import
+-- carimbou na data de import. Alinha a data de criação exibida + o início do Lead Time:
+/*
+WITH primeiro AS (
+  SELECT DISTINCT ON (sh.ticket_id) sh.ctid, sh.ticket_id, b.created_real
+    FROM ticket_status_history sh
+    JOIN tickets t ON t.id = sh.ticket_id
+    JOIN _iaf_backfill b ON b.ticket_number = t.ticket_number
+   ORDER BY sh.ticket_id, sh.changed_at ASC
+)
+UPDATE ticket_status_history sh
+   SET changed_at = p.created_real
+  FROM primeiro p
+ WHERE sh.ctid = p.ctid;
+*/
+-- Verificação B: conferir tickets-chave
 --   3288 -> finalização 2026-04-07 | 3338/IAF-81 -> created 2025-11-14 (sem conclusão)
+
+-- =============================================================================
+-- PARTE C (OPCIONAL — Cycle Time REAL) — reconstruir transições intermediárias
+-- =============================================================================
+-- B só corrige o 1º e o último evento. O Cycle Time real (tempo em em_andamento+
+-- bloqueado+em_validacao) precisa das transições intermediárias REAIS, que vivem no
+-- CHANGELOG do Jira (GET issue?expand=changelog → histories[].items[field='status']).
+-- Sem isso, o Cycle Time dos 130 fica aproximado. Se quiser o número fiel:
+--   1. Extrair, por issue IAF, cada transição de status com timestamp (changelog Jira).
+--   2. Substituir o bloco de eventos importado de cada ticket por essas transições reais.
+-- (Isso é uma extração à parte do Jira — peça ao Claude p/ gerar o staging de transições.)
 
 -- =============================================================================
 -- NÃO ESQUECER: revisar os SELECTs de verificação ANTES de confirmar.
