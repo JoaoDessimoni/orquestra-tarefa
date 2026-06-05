@@ -276,7 +276,12 @@ UPDATE ticket_status_history sh
 -- Sem isso, o Cycle Time dos 130 fica aproximado. Se quiser o número fiel:
 --   1. Extrair, por issue IAF, cada transição de status com timestamp (changelog Jira).
 --   2. Substituir o bloco de eventos importado de cada ticket por essas transições reais.
--- (Isso é uma extração à parte do Jira — peça ao Claude p/ gerar o staging de transições.)
+--
+-- >>> JÁ FEITO (2026-06-05): este passo C está IMPLEMENTADO e PRONTO em:
+--     `2026-06-05_backfill-status-history-quimera.sql` (mesma pasta)
+--     — staging com 369 eventos reais (changelog do Jira), DELETE+INSERT em
+--     ticket_status_history + sync de status/status_changed_at/resolved_at.
+--     Esse arquivo SUBSTITUI a Parte B acima (faz tudo de forma fiel). Prefira-o.
 
 -- =============================================================================
 -- NÃO ESQUECER: revisar os SELECTs de verificação ANTES de confirmar.

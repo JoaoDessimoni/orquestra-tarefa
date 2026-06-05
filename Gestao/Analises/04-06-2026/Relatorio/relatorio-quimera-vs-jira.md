@@ -183,7 +183,10 @@ A migração Jira → Quimera via CSV (import em lote em **2026-05-20 ~15:09**) 
 
 ## 4. O que ainda falta — e por quê
 
-### 4.1 Parte B — finalização / Cycle Time (PENDENTE, no banco)
+### 4.0 ✅ Backfill de histórico REAL gerado (2026-06-05) — `2026-06-05_backfill-status-history-quimera.sql`
+Após o changelog do Jira ser extraído (130 issues, **369 eventos de status reais**), foi gerado o SQL que **realmente conserta os dashboards**: reconstrói `ticket_status_history` a partir das transições reais (DELETE do histórico bogus do import + INSERT das transições do Jira) e sincroniza `status` / `status_changed_at` / `resolved_at`. Captura inclusive reaberturas (ex.: IAF-177 fechou 08/05, reabriu, refechou 12/05 → Cycle Time conta os dois ciclos). **Este arquivo substitui a Parte B abaixo** (faz tudo, de forma fiel). Premissa única documentada: 1º evento = `backlog` (status de criação não-contável). Default `ROLLBACK`; trocar por `COMMIT` após validar. **Rodar no banco.**
+
+### 4.1 Parte B — finalização / Cycle Time (substituída pela 4.0)
 - **72 tickets** têm data de conclusão real no Jira (`resolved`). O Cycle/Lead Time do Quimera deriva do histórico `ticket_status_history`, que **não é gravável por MCP**.
 - A correção exige o SQL em **`Relatorio/2026-06-04_backfill-datas-quimera.sql`** (staging com os 130 + 2 variantes de schema p/ o DBA escolher). Default seguro = `ROLLBACK`; trocar por `COMMIT` após validar.
 - **Responsável:** dev/DBA do Quimera (o usuário roda a partir de 2026-06-05).
@@ -201,8 +204,8 @@ A migração Jira → Quimera via CSV (import em lote em **2026-05-20 ~15:09**) 
 | `created_at` dos 130 tickets | ✅ corrigido (real do Jira), persistido — inclui QMR3372→IAF-123 (06/05) |
 | Efeitos colaterais | ✅ nenhum (só metadata) |
 | **Dashboard Lead/Cycle Time + datas exibidas** | ❌ **NÃO mudou e não muda via MCP** — lê `ticket_status_history`, que o MCP não escreve |
-| **Único caminho de correção do dashboard** | ⏳ Parte B — backfill de `ticket_status_history` no banco (schema real já confirmado no `.sql`) |
-| Cycle Time *fiel* (não só lead time) | ⏳ Parte C (opcional) — precisa do changelog do Jira p/ transições intermediárias |
+| **Único caminho de correção do dashboard** | ✅ SQL pronto — `2026-06-05_backfill-status-history-quimera.sql` (rodar no banco) |
+| Cycle Time *fiel* (com reaberturas) | ✅ incluído no SQL — 369 eventos reais do changelog do Jira |
 | 58 tickets sem conclusão | ✅ nada além do `created_at` a fazer |
 | `get_gestao_overview` last_month/quarter | ⚠️ endpoint quebra no `IN` grande — reportar ao Quimera |
 | Mapa 3372 → IAF-123 no `.md` de origem | ⚠️ corrigir (valor no Quimera já certo) |
