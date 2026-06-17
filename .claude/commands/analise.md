@@ -1,5 +1,5 @@
 ---
-description: Cria documento de análise individual em Gestao/Analises/<dd-mm-aaaa>/. Cada análise é autônoma — investigação técnica, comparativo, RFC, post-mortem ou cruzamento de respostas. Pasta do dia é criada automaticamente.
+description: Cria documento de análise individual em Backlog/analises/<dd-mm-aaaa>/. Cada análise é autônoma — investigação técnica, comparativo, RFC, post-mortem ou cruzamento de respostas. Pasta do dia é criada automaticamente.
 ---
 
 # /analise — criar análise individual
@@ -19,7 +19,7 @@ Pergunte em uma única chamada `AskUserQuestion`:
 
 - `slug = kebab-case(título)` (ASCII, sem acento, sem espaço).
 - `pasta-dia = dd-mm-aaaa` derivada da data informada.
-- `caminho = Gestao/Analises/<dd-mm-aaaa>/<YYYY-MM-DD>_<slug>.md`.
+- `caminho = Backlog/analises/<dd-mm-aaaa>/<YYYY-MM-DD>_<slug>.md`.
 
 Se a pasta `<dd-mm-aaaa>/` não existir, **crie** (Write em qualquer arquivo dentro cria a pasta).
 
@@ -74,7 +74,7 @@ tags: []
 ## Passo 4 — Confirmar e oferecer próximas ações
 
 ```
-✓ Análise criada: Gestao/Analises/<dd-mm-aaaa>/<arquivo>.md
+✓ Análise criada: Backlog/analises/<dd-mm-aaaa>/<arquivo>.md
 
 Próximas ações possíveis:
 - "Gera relatório" — derive um relatório dessa análise para destinatário específico via /relatorio from <arquivo>.

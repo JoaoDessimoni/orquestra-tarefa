@@ -1,4 +1,4 @@
----
+﻿---
 id: BTR02
 title: Implementação Multi-Org na Torre
 frente: torre
@@ -16,15 +16,15 @@ valor_negocio: alto
 origem:
   pendencias: [P29]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
-    - Gestao/Reunioes/19-05-2026/2026-05-19-alinhamento-torre-multi-org.md
-    - Gestao/Reunioes/20-05-2026/2026-05-20-filtros-prompts-trigger-agenda.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
+    - Backlog/reunioes/19-05-2026/2026-05-19-alinhamento-torre-multi-org.md
+    - Backlog/reunioes/20-05-2026/2026-05-20-filtros-prompts-trigger-agenda.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Alinhamento Torre - 2026_05_19 15_47 GMT-03_00 - Anotações do Gemini.txt
     - Backlog/solicitacoes/Filtros prompts e Trigger agenda - 2026_05_20 16_59 GMT-03_00 - Anotações do Gemini.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM16
 owner: João Vinícius
 implementador: Marcos Rodrigues + João Lucas

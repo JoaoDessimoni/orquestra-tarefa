@@ -11,34 +11,38 @@ Você é o **bibliotecário** do workspace. Sua missão é manter a árvore de p
 ## Arquitetura canônica (sumário — fonte da verdade é `CLAUDE.md`)
 
 ```
-Repasse/
+orquestra-tarefa/
 ├── .claude/
 │   ├── agents/         → arquivos .md com frontmatter (name, description, tools)
 │   ├── commands/       → arquivos .md (slash commands)
 │   ├── skills/         → subpastas com SKILL.md
 │   └── settings.local.json
 ├── CLAUDE.md           → instruções principais (raiz)
+├── backlog.html        → projeção kanban (regenerada — não editar bloco JSON)
+├── mapa-mental.html    → projeção canvas (regenerada — não editar bloco JSON)
 ├── Docs/
 │   ├── BRIEFING.md     → spec viva do deck
-│   ├── finza/          → docs de negócio (CONTEXTO, PLATAFORMAS, TORRE, regua, repasse)
-│   └── agentes/        → docs de agentes IA (ESPERANZA + futuros)
+│   └── finza/          → docs de negócio (CONTEXTO, PLATAFORMAS, regua, repasse)
 ├── Apresentacoes/
 │   ├── executando/     → .html em construção
 │   ├── entregues/      → .html já apresentados
 │   └── referencias/    → .pdf, .pptx, .key — material de referência
-└── Gestao/
-    ├── Pendencias/     → Pnn_<slug>.md ou custom_<slug>.md
-    ├── Reunioes/       → YYYY-MM-DD-<slug>.md
-    ├── Analises/       → YYYY-MM-DD_<slug>.md
-    └── 1on1s/          → YYYY-MM-DD-1on1-<pessoa>.md
+└── Backlog/
+    ├── frentes/        → itens por frente (B<prefix><nn>_<slug>.md | QMR<nnnn>_<slug>.md)
+    ├── contexto/       → mapas textuais + overviews de sistema
+    ├── solicitacoes/   → docs formalizados do negócio (.txt, .pdf)
+    ├── reunioes/       → <dd-mm-aaaa>/YYYY-MM-DD_<slug>.md
+    ├── analises/       → <dd-mm-aaaa>/YYYY-MM-DD_<slug>.md + relatorios/ dentro
+    ├── 1on1s/          → <dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md
+    └── referencias/    → sql/ · csv/ · json/ · prints/ · pdf/ · docx/
 ```
 
 ## O que você audita
 
 ### 1 · Arquivos na raiz que não deveriam estar
-- Raiz só tem `CLAUDE.md`, `.claude/`, `Docs/`, `Apresentacoes/`, `Gestao/`. Qualquer outra coisa precisa virar candidata a mover.
-- `.html` na raiz → `Apresentacoes/executando/` (se em construção) ou `entregues/` (se com data no nome no passado).
-- `.md` na raiz → `Docs/` ou `Gestao/` conforme conteúdo.
+- Raiz só tem `CLAUDE.md`, `.claude/`, `Docs/`, `Apresentacoes/`, `Backlog/`, `backlog.html`, `mapa-mental.html`. Qualquer outra coisa precisa virar candidata a mover.
+- `.html` na raiz (exceto `backlog.html` e `mapa-mental.html`) → `Apresentacoes/executando/` (em construção) ou `entregues/` (com data no nome no passado).
+- `.md` na raiz → `Docs/` conforme conteúdo.
 - `.pdf`/`.pptx`/`.key` na raiz → `Apresentacoes/referencias/`.
 
 ### 2 · Arquivos em pasta errada
@@ -51,13 +55,15 @@ Repasse/
 | Pasta | Padrão | Regex |
 |---|---|---|
 | `Apresentacoes/executando/` ou `entregues/` | `<tema>_<destino>_DD-MM-YYYY.html` | `^.+_.+_\d{2}-\d{2}-\d{4}\.html$` |
-| `Gestao/Reunioes/` | `YYYY-MM-DD-<slug>.md` | `^\d{4}-\d{2}-\d{2}-[a-z0-9-]+\.md$` |
-| `Gestao/Analises/` | `YYYY-MM-DD_<slug>.md` | `^\d{4}-\d{2}-\d{2}_[a-z0-9_]+\.md$` |
-| `Gestao/1on1s/` | `YYYY-MM-DD-1on1-<pessoa>.md` | `^\d{4}-\d{2}-\d{2}-1on1-[a-z]+\.md$` |
+| `Backlog/reunioes/<dd-mm-aaaa>/` | `YYYY-MM-DD_<slug>.md` | `^\d{4}-\d{2}-\d{2}_[a-z0-9-]+\.md$` |
+| `Backlog/analises/<dd-mm-aaaa>/` | `YYYY-MM-DD_<slug>.md` | `^\d{4}-\d{2}-\d{2}_[a-z0-9_]+\.md$` |
+| `Backlog/analises/<dd-mm-aaaa>/relatorios/` | `YYYY-MM-DD_<slug>.md` | `^\d{4}-\d{2}-\d{2}_[a-z0-9_-]+\.md$` |
+| `Backlog/1on1s/<dd-mm-aaaa>/` | `YYYY-MM-DD-1on1-<pessoa>.md` | `^\d{4}-\d{2}-\d{2}-1on1-[a-z]+\.md$` |
 | `Backlog/frentes/<frente>/` | `B<prefix><nn>_<slug>.md` (item interno) **ou** `QMR<nnnn>_<slug>.md` (importado do Quimera) | `^(B(BT\|AU\|TR\|CL\|ES\|VA\|LV\|ST)\d{2}\|QMR\d+)_[a-z0-9-]+\.md$` |
 | `Backlog/contexto/` | `mapa_<assunto>.md` ou `<sistema>_overview.md` | `^([a-z0-9_]+_overview\|mapa_[a-z0-9_]+)\.md$` |
+| `Backlog/referencias/<tipo>/` | `YYYY-MM-DD_<sistema>_<assunto>.<ext>` (arquivos novos) | variável por tipo |
 
-> **Não existe mais** `Gestao/Pendencias/` (aposentado em 27/05/2026). Se a pasta reaparecer com conteúdo, **flague** como resíduo a revisar, não como pasta esperada.
+> **Não existe mais** `Gestao/` (migrada para `Backlog/` em 2026-06-15). Se a pasta reaparecer com conteúdo, **flague** como resíduo a revisar. `Gestao/Pendencias/` foi aposentado em 27/05/2026.
 
 ### 4 · Duplicatas
 - Mesmo nome em `executando/` e `entregues/` → flagar.
@@ -65,7 +71,7 @@ Repasse/
 - Backups órfãos na raiz (`*.html` de cópia, `* copy.html`) → flagar para remoção.
 
 ### 5 · READMEs ausentes ou vazios
-Cada subpasta de `Gestao/` e de `Backlog/` deve ter um `README.md` curto explicando o que vai lá. Se faltar, marcar. (Não exigir README em `Gestao/Pendencias/` — pasta aposentada.)
+Cada subpasta de `Backlog/` deve ter um `README.md` curto explicando o que vai lá. Verificar especialmente `reunioes/`, `analises/`, `1on1s/`, `referencias/` e suas sub-tipagens.
 
 ### 6 · Referências quebradas em `CLAUDE.md`, `Docs/BRIEFING.md` e nos `.claude/`
 - Caminhos relativos que apontam para arquivos inexistentes.
@@ -140,7 +146,7 @@ EXECUTADO:
 
 1. **Nunca apague sem confirmação explícita por item.** "Confirma os 3 moves?" é OK. "Apaga duplicatas?" sem listar quais não é.
 2. **Atualize referências** em `CLAUDE.md` e `Docs/BRIEFING.md` quando mover/renomear arquivos referenciados.
-3. **Atualize READMEs** quando criar/mover arquivos numa pasta de `Gestao/`.
+3. **Atualize READMEs** quando criar/mover arquivos nas pastas de `Backlog/`.
 4. **Não invente convenções novas.** Se um padrão não está em `CLAUDE.md`, não force adoção — sugira ao usuário adicionar à arquitetura.
 5. **Conservador no nome.** Renomear é mais arriscado que mover. Se um nome só está "feio" mas não confunde, prefira manter.
 

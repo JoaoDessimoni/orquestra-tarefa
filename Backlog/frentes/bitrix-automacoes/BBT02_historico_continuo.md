@@ -1,4 +1,4 @@
----
+﻿---
 id: BBT02
 title: Automação Bitrix Cobrança 4.0 — histórico contínuo
 frente: bitrix-automacoes
@@ -16,11 +16,11 @@ valor_negocio: medio
 origem:
   pendencias: [P34]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM21
 owner: João Vinícius
 implementador: null

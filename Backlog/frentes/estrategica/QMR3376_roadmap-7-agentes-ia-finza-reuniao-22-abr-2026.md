@@ -2,7 +2,7 @@
 id: QMR3376
 title: Roadmap 7 Agentes IA Finza (Reunião 22/abr/2026)
 frente: estrategica
-status: em-curso
+status: cancelado
 prioridade: media
 fonte: quimera+jira
 quimera: 3376
@@ -88,3 +88,4 @@ Entrega prevista: **15/mai/2026**. Substitui Bitrix na coleta/validação de doc
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3376: cancelado. Responsável: João Vinícius Dessimoni.

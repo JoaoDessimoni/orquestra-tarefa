@@ -20,5 +20,5 @@ Pasta com documentação técnica e de negócio que serve de **referência viva*
 
 - Contexto de negócio amplo da Finza → `Docs/finza/`
 - Solicitação formalizada pelo gestor → `Backlog/solicitacoes/`
-- Print/screenshot → `Backlog/prints/`
-- Nota de reunião → `Gestao/Reunioes/`
+- Nota de reunião → `Backlog/reunioes/`
+- Print/screenshot → `Backlog/referencias/prints/`

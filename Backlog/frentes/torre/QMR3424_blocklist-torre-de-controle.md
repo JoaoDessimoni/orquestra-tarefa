@@ -2,7 +2,7 @@
 id: QMR3424
 title: [Bitrix ID-1869] Blocklist Torre de Controle
 frente: torre
-status: validacao
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3424
@@ -13,7 +13,7 @@ story_points: 5
 tipo_origem: Tarefa
 responsavel: Marcos Rodrigues
 criada: 2026-05-11
-concluida: null
+concluida: 2026-06-11
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -83,3 +83,4 @@ Observações: não foram informados anexos adicionais.
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3424: entregue. Concluída 2026-06-11. Responsável: Marcos Rodrigues.

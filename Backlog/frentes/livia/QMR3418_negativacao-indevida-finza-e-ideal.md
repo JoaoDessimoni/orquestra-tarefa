@@ -2,7 +2,7 @@
 id: QMR3418
 title: [Bitrix ID-1853] Negativação Indevida Finza e Ideal
 frente: livia
-status: refinado
+status: cancelado
 prioridade: media
 fonte: quimera+jira
 quimera: 3418
@@ -11,7 +11,7 @@ categoria: TI
 deliverable_type: Pipeline de dados
 story_points: 3
 tipo_origem: Bug
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-05-08
 concluida: null
 prazo: null
@@ -56,3 +56,4 @@ Anexos/Links adicionais: não informado.
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3418: cancelado. Responsável: Joao Lucas Pontes Freitas.

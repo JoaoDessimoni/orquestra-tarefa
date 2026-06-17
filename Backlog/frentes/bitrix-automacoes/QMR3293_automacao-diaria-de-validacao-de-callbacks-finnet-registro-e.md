@@ -2,7 +2,7 @@
 id: QMR3293
 title: [Bitrix ID-861] Automação diária de validação de callbacks Finnet (Registro e Liquidação)
 frente: bitrix-automacoes
-status: refinado
+status: cancelado
 prioridade: alta
 fonte: quimera+jira
 quimera: 3293
@@ -87,3 +87,4 @@ Observações adicionais:
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3293: cancelado. Responsável: João Vinícius Dessimoni.

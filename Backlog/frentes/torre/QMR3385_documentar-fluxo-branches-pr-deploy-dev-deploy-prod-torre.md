@@ -2,7 +2,7 @@
 id: QMR3385
 title: Documentar fluxo branches/PR/deploy dev/deploy prod (Torre)
 frente: torre
-status: validacao
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3385
@@ -11,9 +11,9 @@ categoria: TI
 deliverable_type: Outros
 story_points: 2
 tipo_origem: Subtarefa
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-04-27
-concluida: null
+concluida: 2026-06-05
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -55,3 +55,4 @@ Documentação de referência para todo o time IAF que mexe na Torre. Deve ficar
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3385: entregue. Concluída 2026-06-05. Responsável: Joao Lucas Pontes Freitas.

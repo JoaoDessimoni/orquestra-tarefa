@@ -1,5 +1,5 @@
 ---
-description: Cria nota de reunião em Gestao/Reunioes/. Template padrão Finza com participantes, pauta, decisões, pendências geradas, próximos passos. Não usa agente externo — operação direta do Claude.
+description: Cria nota de reunião em Backlog/reunioes/. Template padrão Finza com participantes, pauta, decisões, ações geradas, próximos passos. Não usa agente externo — operação direta do Claude.
 ---
 
 # /reuniao — registrar nota de reunião
@@ -19,8 +19,8 @@ Pergunte em uma única chamada `AskUserQuestion`:
 
 - `slug = kebab-case(título)` (ASCII, sem acento, sem espaço).
 - `pasta-dia = dd-mm-aaaa` derivada da data.
-- Se for 1on1 (tipo `1on1`), grave em `Gestao/1on1s/<dd-mm-aaaa>/<data>-1on1-<pessoa>.md`.
-- Senão: `caminho = Gestao/Reunioes/<dd-mm-aaaa>/<data>-<slug>.md`.
+- Se for 1on1 (tipo `1on1`), grave em `Backlog/1on1s/<dd-mm-aaaa>/<data>-1on1-<pessoa>.md`.
+- Senão: `caminho = Backlog/reunioes/<dd-mm-aaaa>/<data>_<slug>.md`.
 
 Pasta do dia é criada automaticamente pelo Write se não existir. Se o arquivo já existir, sufixar com `-2`, `-3`, etc.
 
@@ -69,8 +69,8 @@ tags: []                         # opcional
 ## Passo 4 — Confirmar e oferecer próximas ações
 
 ```
-✓ Nota criada: Gestao/Reunioes/<dd-mm-aaaa>/<data>-<slug>.md
-                (ou Gestao/1on1s/<dd-mm-aaaa>/<data>-1on1-<pessoa>.md)
+✓ Nota criada: Backlog/reunioes/<dd-mm-aaaa>/<data>_<slug>.md
+                (ou Backlog/1on1s/<dd-mm-aaaa>/<data>-1on1-<pessoa>.md)
 
 Próximas ações possíveis:
 - "Preenche a discussão" — dite ou cole notas e eu redijo.
@@ -85,4 +85,4 @@ Próximas ações possíveis:
 - **Participantes em array YAML.** Sem espaço entre vírgulas: `[Joao, Jessica]`.
 - **Slug ASCII e curto.** Não use o título inteiro.
 - **Não invente** pauta/discussão/decisões. Deixe placeholders se o usuário não ditou.
-- **Para 1:1s recorrentes** com a mesma pessoa, tipo `1on1` → o arquivo vai para `Gestao/1on1s/<dd-mm-aaaa>/` (não `Reunioes/`).
+- **Para 1:1s recorrentes** com a mesma pessoa, tipo `1on1` → o arquivo vai para `Backlog/1on1s/<dd-mm-aaaa>/` (não `Reunioes/`).

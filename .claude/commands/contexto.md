@@ -1,5 +1,5 @@
 ---
-description: Cura a base de contexto viva do workspace — docs de negócio (Docs/finza/), overviews de sistema e mapas textuais (Backlog/contexto/), e re-condensa a skill finza-contexto. Detecta docs defasados, referências quebradas e contradições. Não inventa — colhe do usuário, de Gestao/ e do finza-researcher.
+description: Cura a base de contexto viva do workspace — docs de negócio (Docs/finza/), overviews de sistema e mapas textuais (Backlog/contexto/), e re-condensa a skill finza-contexto. Detecta docs defasados, referências quebradas e contradições. Não inventa — colhe do usuário, de Backlog/reunioes/ e Backlog/analises/ e do finza-researcher.
 argument-hint: "update <assunto> | new <assunto> | audit | sync-skill | list"
 ---
 

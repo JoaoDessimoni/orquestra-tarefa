@@ -6,9 +6,11 @@ Pasta-raiz do backlog estratégico do supervisor IAF (João Vinícius).
 
 Consolidar em estrutura única tudo que o squad está construindo, dividido em **7 frentes** com itens individuais que carregam história, critérios de aceite, subtarefas, prioridade RICE e dependências cruzadas.
 
-**Backlog é estratégico. Pendência é tática.**
+**Backlog é o hub único — estratégico e tático.**
 - Item de backlog (`Backlog/frentes/`) — história com critérios de aceite, dura semanas/meses, sponsor do negócio.
-- Pendência (`Gestao/Pendencias/`) — tarefa atômica do supervisor, dura dias, sem cerimônia.
+- Tático curto (reuniões, análises, 1on1s) → `Backlog/reunioes/`, `Backlog/analises/`, `Backlog/1on1s/`.
+- ~~Pendência (`Gestao/Pendencias/`)~~ — **aposentado em 27/05/2026.** Tático = subtarefa do item.
+- ~~`Gestao/`~~ — **aposentado em 2026-06-15.** Tudo migrou para `Backlog/`.
 
 ## Estrutura
 
@@ -53,7 +55,7 @@ Detalhe completo em `.claude/agents/po-backlog.md` e `.claude/commands/backlog.m
 `Backlog/frentes/` é a fonte da verdade dos itens. `BACKLOG.md` é projeção — apagá-lo não perde dado, basta rodar `/backlog regenerate`.
 
 Itens são alimentados por:
-- **Pendências táticas** em `Gestao/Pendencias/` (referência cruzada via `origem.pendencias`)
-- **Reuniões** em `Gestao/Reunioes/` (referência via `origem.reunioes`)
-- **Análises** em `Gestao/Analises/` (referência via `origem.analises`)
+- ~~**Pendências táticas** em `Gestao/Pendencias/`~~ — aposentado (rótulo histórico `Pnn` sobrevive em `origem.pendencias`)
+- **Reuniões** em `Backlog/reunioes/` (referência via `origem.reunioes`)
+- **Análises** em `Backlog/analises/` (referência via `origem.analises`)
 - **Solicitações formalizadas** em `Backlog/solicitacoes/` (referência via `origem.solicitacoes`)

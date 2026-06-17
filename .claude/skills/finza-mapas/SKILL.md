@@ -29,7 +29,7 @@ Documento que captura o **estado mental** de um agente, frente, plataforma ou pr
 
 **Quando NÃO criar:**
 - É uma tarefa → item de backlog (`Backlog/frentes/`).
-- É decisão de uma reunião → nota de reunião (`Gestao/Reunioes/`).
+- É decisão de uma reunião → nota de reunião (`Backlog/reunioes/`).
 - É contexto de negócio amplo da Finza → `Docs/finza/`.
 - É spec técnica de plataforma vizinha → `Backlog/contexto/<sistema>_overview.md` (overview, não mapa).
 

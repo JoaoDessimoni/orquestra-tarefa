@@ -1,4 +1,4 @@
----
+﻿---
 id: BCL02
 title: Implementar tratativa de reprovados em formalização (negativa + reembolso)
 frente: clara
@@ -16,11 +16,11 @@ valor_negocio: alto
 origem:
   pendencias: [P26]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-formalizacao.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-formalizacao.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM13
 owner: João Vinícius
 implementador: null

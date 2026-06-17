@@ -2,7 +2,7 @@
 id: QMR3304
 title: Fluxo de consistência de dados da torre
 frente: torre
-status: refinado
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3304
@@ -11,9 +11,9 @@ categoria: TI
 deliverable_type: Outros
 story_points: 5
 tipo_origem: Tarefa
-responsavel: Leandro Marques
+responsavel: Leandro Marques Gontijo
 criada: 2026-03-17
-concluida: null
+concluida: 2026-06-05
 prazo: null
 prazo_estimado: False
 rice: null
@@ -44,3 +44,4 @@ Fluxo que compara os dados do Hyperflow com os dados da torre para encontrar pro
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3304: entregue. Concluída 2026-06-05. Responsável: Leandro Marques Gontijo.

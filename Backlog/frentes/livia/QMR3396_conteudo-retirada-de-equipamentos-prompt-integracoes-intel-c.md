@@ -2,7 +2,7 @@
 id: QMR3396
 title: [Sprint 4] Conteúdo Retirada de Equipamentos: prompt + integrações (Intel Coast + agendamento + OS)
 frente: livia
-status: bloqueado
+status: cancelado
 prioridade: media
 fonte: quimera+jira
 quimera: 3396
@@ -11,7 +11,7 @@ categoria: TI
 deliverable_type: Outros
 story_points: 5
 tipo_origem: Tarefa
-responsavel: Leandro Marques
+responsavel: Leandro Marques Gontijo
 criada: 2026-04-27
 concluida: null
 prazo: null
@@ -74,3 +74,4 @@ IAF-130
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3396: cancelado. Responsável: Leandro Marques Gontijo.

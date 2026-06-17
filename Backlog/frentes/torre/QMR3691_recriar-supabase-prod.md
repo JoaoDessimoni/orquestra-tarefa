@@ -2,7 +2,7 @@
 id: QMR3691
 title: Recriar Supabase PROD
 frente: torre
-status: em-curso
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3691
@@ -11,9 +11,9 @@ categoria: Cobrança
 deliverable_type: Aplicação/Sistema
 story_points: 3
 tipo_origem: ticket
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-06-02
-concluida: null
+concluida: 2026-06-05
 prazo: 2026-06-12
 prazo_estimado: True
 rice: null
@@ -44,3 +44,4 @@ Devido a grande mudança de migrations da demanda mult-org da torre, é necessá
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3691: entregue. Concluída 2026-06-05. Responsável: Joao Lucas Pontes Freitas.

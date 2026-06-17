@@ -1,4 +1,4 @@
----
+﻿---
 id: BES08
 title: Resolver divergência de dados Torre vs Hyper (277 vs 2000 protocolos)
 frente: esperanza
@@ -16,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: []
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-perguntas-ia-divergencia-dados.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-perguntas-ia-divergencia-dados.md
   solicitacoes:
     - Backlog/solicitacoes/Perguntas IA - 2026_05_18 14_57 GMT-03_00 - Anotações do Gemini.txt
   analises: []

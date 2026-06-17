@@ -1,4 +1,4 @@
----
+﻿---
 id: BES03
 title: Mapear volume de transferências IA→humano por departamento e agente
 frente: esperanza
@@ -16,12 +16,12 @@ valor_negocio: alto
 origem:
   pendencias: [P18]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Perguntas IA - 2026_05_18 14_57 GMT-03_00 - Anotações do Gemini.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM02
 owner: João Vinícius
 implementador: null

@@ -1,4 +1,4 @@
----
+﻿---
 id: BTR03
 title: Validação conjunta de dashboards da Torre de Controle
 frente: torre
@@ -16,13 +16,13 @@ valor_negocio: medio
 origem:
   pendencias: [P30]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
-    - Gestao/Reunioes/18-05-2026/2026-05-18-perguntas-ia-divergencia-dados.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-perguntas-ia-divergencia-dados.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Perguntas IA - 2026_05_18 14_57 GMT-03_00 - Anotações do Gemini.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM17
 owner: João Vinícius
 implementador: null

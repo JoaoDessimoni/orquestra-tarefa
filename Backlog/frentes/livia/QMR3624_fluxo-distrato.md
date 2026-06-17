@@ -2,7 +2,7 @@
 id: QMR3624
 title: Fluxo Distrato
 frente: livia
-status: em-curso
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3624
@@ -11,9 +11,9 @@ categoria: Recuperação
 deliverable_type: Informação
 story_points: 3
 tipo_origem: ticket
-responsavel: João Pedro
+responsavel: João Pedro da Silva Neto
 criada: 2026-05-29
-concluida: null
+concluida: 2026-06-03
 prazo: 2026-06-12
 prazo_estimado: True
 rice: null
@@ -50,3 +50,4 @@ Preciso que seja desenhado no miro todo o fluxo de distrato que temos conhecimen
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3624: entregue. Concluída 2026-06-03. Responsável: João Pedro da Silva Neto.

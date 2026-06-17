@@ -2,7 +2,7 @@
 id: QMR3375
 title: [Bitrix ID-1807] Status Cancelamento - Em análise judicial | Plataforma
 frente: bitrix-automacoes
-status: validacao
+status: entregue
 prioridade: alta
 fonte: quimera+jira
 quimera: 3375
@@ -13,7 +13,7 @@ story_points: 5
 tipo_origem: Tarefa
 responsavel: Marcos Rodrigues
 criada: 2026-04-24
-concluida: null
+concluida: 2026-06-11
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -57,3 +57,4 @@ Descrição detalhada: Implementar automação para tratamento de contratos com 
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3375: entregue. Concluída 2026-06-11. Responsável: Marcos Rodrigues.

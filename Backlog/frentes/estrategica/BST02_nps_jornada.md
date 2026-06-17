@@ -1,4 +1,4 @@
----
+﻿---
 id: BST02
 title: Implementar coleta de NPS no fim da jornada Finza via IA
 frente: estrategica
@@ -16,10 +16,10 @@ valor_negocio: alto
 origem:
   pendencias: [P12]
   reunioes:
-    - Gestao/Reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
+    - Backlog/reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
   solicitacoes: []
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM23
 owner: João Vinícius
 implementador: null

@@ -1,4 +1,4 @@
----
+﻿---
 id: BAU01
 title: Criar MCPs das plataformas Finza para expandir Valentina e Esperanza
 frente: bitrix-automacoes
@@ -16,10 +16,10 @@ valor_negocio: alto
 origem:
   pendencias: [P14]
   reunioes:
-    - Gestao/Reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
+    - Backlog/reunioes/15-05-2026/2026-05-15-jornada-cliente-diretoria.md
   solicitacoes: []
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM11
 owner: João Vinícius
 implementador: null

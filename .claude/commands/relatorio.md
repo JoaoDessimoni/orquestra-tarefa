@@ -1,5 +1,5 @@
 ---
-description: Cria relatório individual em Gestao/Analises/<dd-mm-aaaa>/Relatorio/. Cada relatório é derivado de uma análise (ou criado do zero) e tem destinatário definido. Pasta Relatorio/ é criada automaticamente dentro da pasta do dia.
+description: Cria relatório individual em Backlog/analises/<dd-mm-aaaa>/relatorios/. Cada relatório é derivado de uma análise (ou criado do zero) e tem destinatário definido. Pasta relatorios/ é criada automaticamente dentro da pasta do dia.
 ---
 
 # /relatorio — criar relatório individual
@@ -35,9 +35,9 @@ Pergunte (em 1 chamada `AskUserQuestion`):
 
 - `slug = kebab-case("relatorio-" + título)` (ASCII).
 - `pasta-dia = dd-mm-aaaa` derivada da data.
-- `caminho = Gestao/Analises/<dd-mm-aaaa>/Relatorio/<YYYY-MM-DD>_<slug>.md`.
+- `caminho = Backlog/analises/<dd-mm-aaaa>/relatorios/<YYYY-MM-DD>_<slug>.md`.
 
-Se a pasta `Relatorio/` não existir dentro de `<dd-mm-aaaa>/`, **crie** ao escrever o primeiro arquivo (Write resolve isso).
+Se a pasta `relatorios/` não existir dentro de `<dd-mm-aaaa>/`, **crie** ao escrever o primeiro arquivo (Write resolve isso).
 
 Se já existir, sufixar com `-2`, `-3`.
 
@@ -93,7 +93,7 @@ tags: []
 ## Passo 5 — Confirmar e oferecer próximas ações
 
 ```
-✓ Relatório criado: Gestao/Analises/<dd-mm-aaaa>/Relatorio/<arquivo>.md
+✓ Relatório criado: Backlog/analises/<dd-mm-aaaa>/relatorios/<arquivo>.md
 
 Análise-fonte: <caminho ou "criado do zero">
 Destinatário: <destinatário>
@@ -108,7 +108,7 @@ Próximas ações possíveis:
 
 ## Regras
 
-- **Relatório SEMPRE dentro de Analises/<dd-mm-aaaa>/Relatorio/**. Nunca solto.
+- **Relatório SEMPRE dentro de `analises/<dd-mm-aaaa>/relatorios/`**. Nunca solto.
 - **Múltiplos relatórios no mesmo dia são esperados**, cada um para destinatário ou recorte diferente.
 - **`status: enviado` só depois de confirmação do usuário.** Não marque sozinho.
 - **Tom técnico-executivo Finza.** Sem "ótima notícia", sem "boas perspectivas". Quando incerto, declarar incerteza.

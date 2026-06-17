@@ -2,7 +2,7 @@
 id: QMR3327
 title: Realizar indexação da pesquisa na aba de ações
 frente: torre
-status: validacao
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3327
@@ -13,7 +13,7 @@ story_points: 5
 tipo_origem: Subtarefa
 responsavel: Marcos Rodrigues
 criada: 2026-04-07
-concluida: null
+concluida: 2026-06-11
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -46,3 +46,4 @@ Implementar ou corrigir a indexação da pesquisa na aba de ações para melhora
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3327: entregue. Concluída 2026-06-11. Responsável: Marcos Rodrigues.

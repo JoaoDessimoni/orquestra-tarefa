@@ -2,7 +2,7 @@
 id: QMR3415
 title: [Bitrix ID-1839] Inclusão da carteira Rhino no fluxo operacional da Torre de Controle
 frente: torre
-status: em-curso
+status: entregue
 prioridade: alta
 fonte: quimera+jira
 quimera: 3415
@@ -13,7 +13,7 @@ story_points: 5
 tipo_origem: Tarefa
 responsavel: Marcos Rodrigues
 criada: 2026-05-07
-concluida: null
+concluida: 2026-06-11
 prazo: 2026-06-17
 prazo_estimado: True
 rice: null
@@ -61,3 +61,4 @@ Mapear impactos no fluxo atual, dependências técnicas e operacionais, sistemas
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3415: entregue. Concluída 2026-06-11. Responsável: Marcos Rodrigues.

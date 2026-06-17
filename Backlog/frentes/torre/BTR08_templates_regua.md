@@ -1,4 +1,4 @@
----
+﻿---
 id: BTR08
 title: Sistema de templates e cópia para acelerar configuração de réguas
 frente: torre
@@ -16,7 +16,7 @@ valor_negocio: medio
 origem:
   pendencias: []
   reunioes:
-    - Gestao/Reunioes/20-05-2026/2026-05-20-filtros-prompts-trigger-agenda.md
+    - Backlog/reunioes/20-05-2026/2026-05-20-filtros-prompts-trigger-agenda.md
   solicitacoes:
     - Backlog/solicitacoes/Filtros prompts e Trigger agenda - 2026_05_20 16_59 GMT-03_00 - Anotações do Gemini.txt
   analises: []

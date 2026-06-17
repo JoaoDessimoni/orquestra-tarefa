@@ -2,7 +2,7 @@
 id: QMR3430
 title: Estudar e projetar estrutura nova de deploy e limpeza de migrations
 frente: sustentacao
-status: em-curso
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3430
@@ -13,7 +13,7 @@ story_points: 2
 tipo_origem: Tarefa
 responsavel: João Vinícius Dessimoni
 criada: 2026-05-14
-concluida: null
+concluida: 2026-06-11
 prazo: 2026-06-12
 prazo_estimado: True
 rice: null
@@ -45,3 +45,4 @@ Conversando com o <custom data-type="mention" data-id="id-0">@joao.dessimoni</cu
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3430: entregue. Concluída 2026-06-11. Responsável: João Vinícius Dessimoni.

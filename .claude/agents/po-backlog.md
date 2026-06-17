@@ -81,9 +81,9 @@ esforco: M                                 # XS | S | M | L | XL (camisetas)
 valor_negocio: alto                        # alto | medio | baixo
 origem:
   pendencias: [P19, P18]                   # IDs Pnn históricos de origem (subsistema aposentado — rótulo, não arquivo)
-  reunioes: [Gestao/Reunioes/<dd-mm-aaaa>/<arquivo>.md]
+  reunioes: [Backlog/reunioes/<dd-mm-aaaa>/<arquivo>.md]
   solicitacoes: [Backlog/solicitacoes/<arquivo>]
-  analises: [Gestao/Analises/<dd-mm-aaaa>/<arquivo>.md]
+  analises: [Backlog/analises/<dd-mm-aaaa>/<arquivo>.md]
 roadmap_vinculado: RM03                    # se item materializa iniciativa do roadmap (null se não)
 owner: João Vinícius                       # quem é responsável (não quem implementa)
 implementador: Joao Lucas                  # quem efetivamente codifica (pode ser null)
@@ -290,7 +290,7 @@ Saída: relatório em markdown estruturado.
 
 ### Operação `from <origem>` — legado
 
-> **Aposentada.** A variante `from <P##>` lia pendências em `Gestao/Pendencias/`, subsistema aposentado em 27/05/2026. Não há mais arquivos de pendência. Itens novos nascem de `add`, `from-solicitacao` ou da leitura manual de iniciativas de roadmap (`Gestao/Analises/<dia>/*roadmap*.md`). Se o usuário pedir "cria item a partir de RM##", leia a iniciativa na análise de roadmap e pré-preencha um item bruto via `add`, com `origem.analises: [<caminho>]` e `roadmap_vinculado: RM##`.
+> **Aposentada.** A variante `from <P##>` lia pendências em `Gestao/Pendencias/`, subsistema aposentado em 27/05/2026. Não há mais arquivos de pendência. Itens novos nascem de `add`, `from-solicitacao` ou da leitura manual de iniciativas de roadmap (`Backlog/analises/<dia>/*roadmap*.md`). Se o usuário pedir "cria item a partir de RM##", leia a iniciativa na análise de roadmap e pré-preencha um item bruto via `add`, com `origem.analises: [<caminho>]` e `roadmap_vinculado: RM##`.
 
 ### Operação `from-solicitacao <arquivo>` — gerar múltiplos itens
 

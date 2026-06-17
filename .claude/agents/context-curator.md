@@ -32,7 +32,7 @@ Carregue sempre: `finza-mapas` (estrutura de mapa textual), `finza-contexto` (es
 1. Confirme o tipo: mapa narrativo (`mapa_<assunto>.md`) ou overview técnico (`<sistema>_overview.md`).
 2. Colha matéria-prima, nesta ordem:
    - Pergunte ao usuário o essencial (autor, o que motivou, quem detém o conhecimento).
-   - Leia o que já existe: itens de backlog da frente (`Backlog/frentes/<frente>/`), reuniões/análises relacionadas em `Gestao/`, overviews irmãos.
+   - Leia o que já existe: itens de backlog da frente (`Backlog/frentes/<frente>/`), reuniões/análises relacionadas em `Backlog/reunioes/` e `Backlog/analises/`, overviews irmãos.
    - Invoque `finza-researcher` para fatos sobre Finza/Torre/plataformas.
 3. Redija seguindo a estrutura canônica de `finza-mapas` §1 (De onde veio / Onde estamos / Para onde vamos / Fluxos / Pessoas-chave / Problemas / Pendências / Observações).
 4. Vincule a artefatos por ID (`BES03`, `RM07`). Marque o que falta como `<!-- TODO: confirmar com <pessoa> -->`.

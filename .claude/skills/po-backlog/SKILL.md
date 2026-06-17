@@ -206,7 +206,7 @@ A partir do refinement-pass de **25/05/2026**, todo item refinado carrega uma se
 | **Prioridade** | urgente · alta · media · baixa (urgente = RICE ≥ 7.0 + sponsor declara restrição temporal) |
 | **RICE** | Reach × Impact × Confidence / Effort × 10. Score 1-100. |
 | **Camiseta** | Escala de esforço XS/S/M/L/XL. |
-| **P##** | ID histórico de pendência tática (subsistema `Gestao/Pendencias/` **aposentado em 27/05/2026**). Sobrevive só como rótulo de origem em `origem.pendencias` — não há mais arquivo. Tático agora é subtarefa do item. |
+| **P##** | ID histórico de pendência tática (subsistema `Gestao/Pendencias/` **aposentado em 27/05/2026**; `Gestao/` migrada para `Backlog/` em 2026-06-15). Sobrevive só como rótulo de origem em `origem.pendencias` — não há mais arquivo. Tático agora é subtarefa do item. |
 | **RM##** | ID de iniciativa do Roadmap original (RM01..RM24). Itens de backlog podem materializar uma iniciativa via campo `roadmap_vinculado`. |
 | **B<prefix>##** | ID de item de backlog. Prefixes: BBT (Bitrix), BAU (Automações), BTR (Torre), BCL (Clara), BES (Esperanza), BVA (Valentina), BLV (Lívia), BST (Estratégica). |
 

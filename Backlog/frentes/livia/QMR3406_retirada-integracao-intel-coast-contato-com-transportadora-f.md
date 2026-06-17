@@ -2,7 +2,7 @@
 id: QMR3406
 title: Retirada — Integração Intel Coast + contato com transportadora (Flávia)
 frente: livia
-status: refinado
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3406
@@ -11,9 +11,9 @@ categoria: TI
 deliverable_type: Outros
 story_points: 2
 tipo_origem: Subtarefa
-responsavel: João Pedro
+responsavel: João Pedro da Silva Neto
 criada: 2026-04-27
-concluida: null
+concluida: 2026-06-05
 prazo: null
 prazo_estimado: False
 rice: null
@@ -52,3 +52,4 @@ Conectar com Intel Coast para cotação/agendamento da transportadora. Flávia �
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3406: entregue. Concluída 2026-06-05. Responsável: João Pedro da Silva Neto.

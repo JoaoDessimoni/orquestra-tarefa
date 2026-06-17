@@ -1,4 +1,4 @@
----
+﻿---
 id: BES06
 title: Resgatar relatório pré-Torre sobre redirecionamento IA→humano
 frente: esperanza
@@ -18,7 +18,7 @@ origem:
   reunioes: []
   solicitacoes: []
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM05
 owner: João Vinícius
 implementador: null
@@ -76,7 +76,7 @@ Complementa BES03 (dashboard de transferências) e alimenta BST03 (narrativa IA)
 - [ ] Relatório original localizado OU aborto documentado em 1 semana
 - [ ] Metodologia documentada
 - [ ] Número de referência publicado (se viável)
-- [ ] Documento publicado em `Gestao/Analises/`
+- [ ] Documento publicado em `Backlog/analises/`
 
 ## Histórico
 

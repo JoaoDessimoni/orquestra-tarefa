@@ -2,7 +2,7 @@
 id: QMR3287
 title: [Bitrix ID-957] Atualização Bitrix - mover casos pós-recompra FIDC para fila normal
 frente: bitrix-automacoes
-status: refinado
+status: cancelado
 prioridade: media
 fonte: quimera+jira
 quimera: 3287
@@ -11,7 +11,7 @@ categoria: Cobrança
 deliverable_type: Outros
 story_points: 3
 tipo_origem: Bug
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-03-06
 concluida: null
 prazo: null
@@ -83,3 +83,4 @@ Observações:
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3287: cancelado. Responsável: Joao Lucas Pontes Freitas.

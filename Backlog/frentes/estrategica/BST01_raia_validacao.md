@@ -1,4 +1,4 @@
----
+﻿---
 id: BST01
 title: Definir raia para tickets em validação no board Kanban
 frente: estrategica
@@ -18,7 +18,7 @@ origem:
   reunioes: []
   solicitacoes: []
   analises:
-    - Gestao/Analises/18-05-2026/2026-05-18_demandas-cobranca-time-negocio.md
+    - Backlog/analises/18-05-2026/2026-05-18_demandas-cobranca-time-negocio.md
 roadmap_vinculado: null
 owner: João Vinícius
 implementador: null

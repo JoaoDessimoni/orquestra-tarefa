@@ -2,7 +2,7 @@
 id: QMR3690
 title: Fallback ação pontual torre
 frente: torre
-status: em-curso
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3690
@@ -11,9 +11,9 @@ categoria: Cobrança
 deliverable_type: Aplicação/Sistema
 story_points: 3
 tipo_origem: ticket
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-06-02
-concluida: null
+concluida: 2026-06-07
 prazo: 2026-06-12
 prazo_estimado: True
 rice: null
@@ -44,3 +44,4 @@ Liberar todas as campanhas pontuais do fallback que impede enviar a campanha aos
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3690: entregue. Concluída 2026-06-07. Responsável: Joao Lucas Pontes Freitas.

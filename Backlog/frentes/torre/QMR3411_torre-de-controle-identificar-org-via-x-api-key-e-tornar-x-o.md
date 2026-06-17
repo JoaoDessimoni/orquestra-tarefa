@@ -2,7 +2,7 @@
 id: QMR3411
 title: Torre de Controle: identificar org via x-api-key e tornar x-org-slug opcional em integrações/webhooks
 frente: torre
-status: em-curso
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3411
@@ -13,7 +13,7 @@ story_points: 5
 tipo_origem: Tarefa
 responsavel: Marcos Rodrigues
 criada: 2026-04-29
-concluida: null
+concluida: 2026-06-05
 prazo: 2026-06-17
 prazo_estimado: True
 rice: null
@@ -94,3 +94,4 @@ Atualizar o sistema de **Integrações e Webhooks** da Torre de Controle para qu
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3411: entregue. Concluída 2026-06-05. Responsável: Marcos Rodrigues.

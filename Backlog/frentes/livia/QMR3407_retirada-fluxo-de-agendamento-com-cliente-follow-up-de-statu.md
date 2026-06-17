@@ -2,7 +2,7 @@
 id: QMR3407
 title: Retirada — Fluxo de agendamento com cliente + follow-up de status
 frente: livia
-status: bloqueado
+status: cancelado
 prioridade: media
 fonte: quimera+jira
 quimera: 3407
@@ -11,7 +11,7 @@ categoria: Operação
 deliverable_type: Outros
 story_points: 2
 tipo_origem: Subtarefa
-responsavel: Leandro Marques
+responsavel: Leandro Marques Gontijo
 criada: 2026-04-27
 concluida: null
 prazo: null
@@ -53,3 +53,4 @@ A parte mais difícil da operação atual (segundo Jéssica): manter cliente inf
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3407: cancelado. Responsável: Leandro Marques Gontijo.

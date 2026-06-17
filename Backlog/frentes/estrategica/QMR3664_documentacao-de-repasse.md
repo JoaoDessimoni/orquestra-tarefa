@@ -2,7 +2,7 @@
 id: QMR3664
 title: Documentação de Repasse
 frente: estrategica
-status: em-curso
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3664
@@ -11,9 +11,9 @@ categoria: TI
 deliverable_type: Informação
 story_points: 8
 tipo_origem: ticket
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-06-01
-concluida: null
+concluida: 2026-06-12
 prazo: 2026-06-26
 prazo_estimado: True
 rice: null
@@ -80,3 +80,4 @@ Documentar acessos:
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3664: entregue. Concluída 2026-06-12. Responsável: Joao Lucas Pontes Freitas.

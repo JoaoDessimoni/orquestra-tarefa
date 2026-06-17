@@ -1,4 +1,4 @@
----
+﻿---
 id: BES05
 title: Investigar fluxo Esperanza — escopo, casos atendidos e domínio
 frente: esperanza
@@ -16,12 +16,12 @@ valor_negocio: alto
 origem:
   pendencias: [P20]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-revisao-geral.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
     - Backlog/solicitacoes/Perguntas a serem respondidas & melhorias_correções IA's.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM04
 owner: João Vinícius
 implementador: null
@@ -61,7 +61,7 @@ Pré-requisito de várias outras iniciativas (5 itens bloqueados). **RICE 36.45 
 ## Critérios de aceite
 
 - **CA-1** — Given 1h+ agendada com lead técnico Esperanza, When sessão acontece, Then é estruturada por template (não conversa aberta).
-- **CA-2** — Given documento publicado em `Gestao/Analises/`, When supervisor revisa em isolamento, Then consegue responder com clareza: "que casos a Esperanza atende?", "que casos NÃO atende?", "qual o domínio conversacional?", "quais pontos cegos?".
+- **CA-2** — Given documento publicado em `Backlog/analises/`, When supervisor revisa em isolamento, Then consegue responder com clareza: "que casos a Esperanza atende?", "que casos NÃO atende?", "qual o domínio conversacional?", "quais pontos cegos?".
 - **CA-3** — Given documento, When squad referencia em discussão de outro item (ex: BES03), Then é citado como fonte (não como "ah, achei que era assim").
 - **CA-4** — Given casos NÃO atendidos identificados, When listados, Then cada um vem com razão (limite técnico / decisão de produto / risco / falta de integração).
 
@@ -81,7 +81,7 @@ Pré-requisito de várias outras iniciativas (5 itens bloqueados). **RICE 36.45 
 ## Definição de pronto
 
 - [ ] Sessão executada (gravada idealmente)
-- [ ] Documento publicado em `Gestao/Analises/<data>/`
+- [ ] Documento publicado em `Backlog/analises/<data>/`
 - [ ] Validação com lead técnico concluída
 - [ ] Squad referencia o documento em ao menos 1 outra discussão
 

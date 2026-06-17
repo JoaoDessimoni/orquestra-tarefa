@@ -2,7 +2,7 @@
 id: QMR3421
 title: Refatorar CLUADE.MD e SKILLS da torre e limpar repo.
 frente: torre
-status: validacao
+status: entregue
 prioridade: alta
 fonte: quimera+jira
 quimera: 3421
@@ -11,9 +11,9 @@ categoria: TI
 deliverable_type: Outros
 story_points: 13
 tipo_origem: Tarefa
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-05-11
-concluida: null
+concluida: 2026-06-05
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -45,3 +45,4 @@ Ao abrir o Claude ele mstra que estmaos com problema pois nosso arquivo está mt
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3421: entregue. Concluída 2026-06-05. Responsável: Joao Lucas Pontes Freitas.

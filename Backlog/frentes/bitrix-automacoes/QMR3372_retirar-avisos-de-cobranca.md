@@ -2,7 +2,7 @@
 id: QMR3372
 title: [Bitrix ID-1789] Retirar avisos de cobrança.
 frente: bitrix-automacoes
-status: validacao
+status: entregue
 prioridade: baixa
 fonte: quimera+jira
 quimera: 3372
@@ -13,7 +13,7 @@ story_points: 5
 tipo_origem: Tarefa
 responsavel: Marcos Rodrigues
 criada: 2026-04-22
-concluida: null
+concluida: 2026-06-11
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -51,3 +51,4 @@ Descrição detalhada: Ajustar o fluxo/regra de comunicação de cobrança para 
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3372: entregue. Concluída 2026-06-11. Responsável: Marcos Rodrigues.

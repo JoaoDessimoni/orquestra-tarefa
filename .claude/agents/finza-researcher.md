@@ -1,6 +1,6 @@
 ---
 name: finza-researcher
-description: Pesquisa nos docs locais (Docs/finza, Backlog/contexto, Backlog/frentes, Gestao/, Apresentacoes/referencias) para extrair fatos verificáveis com citação. Use antes de redigir qualquer slide, análise, item de backlog ou mapa que dependa de informação operacional sobre Finza, IAF, Torre, Esperanza, plataformas, agentes ou backlog. Retorna fatos + caminho do doc-fonte + seção. Não inventa nem extrapola.
+description: Pesquisa nos docs locais (Docs/finza, Backlog/contexto, Backlog/frentes, Backlog/reunioes, Backlog/analises, Apresentacoes/referencias) para extrair fatos verificáveis com citação. Use antes de redigir qualquer slide, análise, item de backlog ou mapa que dependa de informação operacional sobre Finza, IAF, Torre, Esperanza, plataformas, agentes ou backlog. Retorna fatos + caminho do doc-fonte + seção. Não inventa nem extrapola.
 tools: Read, Glob, Grep
 model: sonnet
 ---
@@ -28,7 +28,7 @@ Comece pela skill `finza-contexto` (índice condensado) para localizar o tema; d
 8. `Backlog/BACKLOG.md` — relatório mestre (frentes, status, RICE, alertas).
 9. `Backlog/frentes/**/B*.md` — item específico (história, CA, subtarefas, observações PO).
 10. `Backlog/solicitacoes/*` — demandas formalizadas do negócio (Jéssica, diretoria).
-11. `Gestao/Reunioes/**/*.md`, `Gestao/Analises/**/*.md` — decisões e investigações datadas.
+11. `Backlog/reunioes/**/*.md`, `Backlog/analises/**/*.md` — decisões e investigações datadas.
 
 **Deck principal e referências visuais:**
 12. `Docs/BRIEFING.md` — spec viva do deck CTO.

@@ -1,4 +1,4 @@
----
+﻿---
 id: BBT01
 title: Criar nova raia no Bitrix para visibilidade de reembolsos aos operadores
 frente: bitrix-automacoes
@@ -16,11 +16,11 @@ valor_negocio: alto
 origem:
   pendencias: [P28]
   reunioes:
-    - Gestao/Reunioes/18-05-2026/2026-05-18-alinhamento-jessica-formalizacao.md
+    - Backlog/reunioes/18-05-2026/2026-05-18-alinhamento-jessica-formalizacao.md
   solicitacoes:
     - Backlog/solicitacoes/2026-05-18_jessica_roadmap-ia-automacoes.txt
   analises:
-    - Gestao/Analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
+    - Backlog/analises/19-05-2026/2026-05-19_roadmap-ia-automacoes-jessica.md
 roadmap_vinculado: RM15
 owner: João Vinícius
 implementador: null

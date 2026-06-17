@@ -2,7 +2,7 @@
 id: QMR3659
 title: Curadoria Valentina
 frente: valentina
-status: refinado
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3659
@@ -11,9 +11,9 @@ categoria: Cobrança
 deliverable_type: Informação
 story_points: 1
 tipo_origem: ticket
-responsavel: João Pedro
+responsavel: João Pedro da Silva Neto
 criada: 2026-06-01
-concluida: null
+concluida: 2026-06-09
 prazo: null
 prazo_estimado: False
 rice: null
@@ -47,3 +47,4 @@ Grato J
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3659: entregue. Concluída 2026-06-09. Responsável: João Pedro da Silva Neto.

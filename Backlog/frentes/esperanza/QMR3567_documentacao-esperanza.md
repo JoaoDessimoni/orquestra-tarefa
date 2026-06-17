@@ -2,7 +2,7 @@
 id: QMR3567
 title: Documentação Esperanza
 frente: esperanza
-status: validacao
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3567
@@ -11,9 +11,9 @@ categoria: TI
 deliverable_type: Informação
 story_points: 2
 tipo_origem: ticket
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-05-27
-concluida: null
+concluida: 2026-06-03
 prazo: 2026-06-09
 prazo_estimado: True
 rice: null
@@ -50,3 +50,4 @@ Pendencias
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3567: entregue. Concluída 2026-06-03. Responsável: Joao Lucas Pontes Freitas.

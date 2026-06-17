@@ -2,7 +2,7 @@
 id: QMR3358
 title: Flags PNP a nível de contrato e de cliente (derivadas da flag por parcela)
 frente: clara
-status: bloqueado
+status: entregue
 prioridade: alta
 fonte: quimera+jira
 quimera: 3358
@@ -13,7 +13,7 @@ story_points: 8
 tipo_origem: Tarefa
 responsavel: Marcos Rodrigues
 criada: 2026-04-15
-concluida: null
+concluida: 2026-06-11
 prazo: null
 prazo_estimado: False
 rice: null
@@ -113,3 +113,4 @@ tags: [fonte-quimera-jira, cat-formalizacao]
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3358: entregue. Concluída 2026-06-11. Responsável: Marcos Rodrigues.

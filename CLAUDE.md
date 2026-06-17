@@ -2,7 +2,7 @@
 
 Esta pasta é o **workspace gerencial** do João Vinícius (Supervisor IAF, Finza). Ela serve a dois propósitos centrais, apoiados por uma base de contexto viva:
 
-1. **Gestão do backlog do squad IAF** — backlog estratégico por frente (`Backlog/`), alimentado por reuniões/análises (`Gestao/`) e pelos sistemas de tickets (Quimera interno + Jira/Confluence Atlassian via MCP).
+1. **Gestão do backlog do squad IAF** — backlog estratégico por frente (`Backlog/`), alimentado por reuniões/análises (`Backlog/reunioes/`, `Backlog/analises/`) e pelos sistemas de tickets (Quimera interno + Jira/Confluence Atlassian via MCP).
 2. **Produção de decks/apresentações** no padrão visual Finza — pipeline de agentes especializados.
 
 Apoio: **base de contexto viva** — `Docs/finza/` e `Backlog/contexto/` são a fonte da verdade sobre IAF, Torre, Esperanza e plataformas Finza.
@@ -27,10 +27,10 @@ Sequência obrigatória no início de cada turno:
 |---|---|
 | tarefa, bloqueio, "preciso lembrar de…", demanda, história, épico, item, refinar, priorizar, solicitação da Jéssica | `/backlog` (skill `backlog`) ou agente `po-backlog`. **Pendências táticas foram aposentadas** — tudo vira item ou subtarefa de backlog. |
 | anexo formalizado, doc do gestor, transcrição de reunião com demandas | `/backlog from-solicitacao <arquivo>` |
-| reunião, ata, alinhamento (2+ pessoas) | `/reuniao` (skill `reuniao`) |
-| 1:1, 1on1, conversa individual com pessoa do squad | `/reuniao` com tipo `1on1` (move depois para `1on1s/`) |
-| análise, investigação, comparativo, RFC, post-mortem | `/analise` (skill `analise`) |
-| relatório, report, status para terceiros, devolutiva | `/relatorio` (skill `relatorio`) |
+| reunião, ata, alinhamento (2+ pessoas) | `/reuniao` (skill `reuniao`) → grava em `Backlog/reunioes/` |
+| 1:1, 1on1, conversa individual com pessoa do squad | `/reuniao` com tipo `1on1` → grava em `Backlog/1on1s/` |
+| análise, investigação, comparativo, RFC, post-mortem | `/analise` (skill `analise`) → grava em `Backlog/analises/` |
+| relatório, report, status para terceiros, devolutiva | `/relatorio` (skill `relatorio`) → grava em `Backlog/analises/<dd>/relatorios/` |
 | status semanal, resumo da semana, "como tá o squad" | `/status` |
 | deck, slide, apresentação | pipeline `/novo-deck`, `/novo-slide`, `/revisar-deck` |
 | mapa mental, mapa do agente, "história da Esperanza", narrativa de uma frente | `/mapa <assunto>` (textual) ou `/mapa regenerar` (visual) — agente `context-curator` / `mapa-updater` |
@@ -80,7 +80,7 @@ orquestra-tarefa/
 │   │   ├── organizar.md              # Roda folder-organizer
 │   │   ├── backlog.md                # CRUD/refinement de backlog estratégico
 │   │   ├── reuniao.md                # Registra nota de reunião (em pasta datada)
-│   │   ├── analise.md                # Cria análise em Gestao/Analises/<dd-mm-aaaa>/
+│   │   ├── analise.md                # Cria análise em Backlog/analises/<dd-mm-aaaa>/
 │   │   ├── relatorio.md              # Cria relatório em Analises/<dd-mm-aaaa>/Relatorio/
 │   │   ├── status.md                 # Gera status semanal do squad
 │   │   ├── sync.md                   # Regenera as projeções do backlog (backlog + mapa)
@@ -123,36 +123,36 @@ orquestra-tarefa/
 │   │   └── status-demandas-cobranca_time-negocio_18-05-2026.html
 │   └── referencias/                  # PDFs/PPTX de referência (Boas-vindas Finza, Roadmap, Régua)
 │
-├── Backlog/                          # Backlog ESTRATÉGICO do squad IAF (8 frentes)
-│   ├── README.md
-│   ├── BACKLOG.md                    # Relatório mestre (regenerado por /backlog regenerate)
-│   ├── frentes/
-│   │   ├── bitrix-automacoes/        # BBT## (Bitrix) + BAU## (Automações) — frente unificada
-│   │   ├── torre/                    # BTR## — Torre de Controle (multi-org, refatoração)
-│   │   ├── clara/                    # BCL## — agente Clara (formalização)
-│   │   ├── esperanza/                # BES## — agente Esperanza (renegociação)
-│   │   ├── valentina/                # BVA## — agente Valentina (SAC)
-│   │   ├── livia/                    # BLV## — agente Lívia (jurídico/distrato)
-│   │   ├── estrategica/              # BST## — transversal (NPS, narrativa, processo)
-│   │   └── sustentacao/              # Bugs/infra/correções operacionais (itens QMR#### do Quimera)
-│   ├── solicitacoes/                 # Docs formalizados pelo negócio (.txt, .pdf)
-│   ├── prints/                       # Screenshots de consulta
-│   └── contexto/                     # Referência viva do backlog
-│       ├── mapa_esperanza.md         # MAPA TEXTUAL (narrativa: de onde veio/onde estamos/pra onde vamos)
-│       ├── torre_de_controle_overview.md   # overview da Torre (migrou de Docs/finza/)
-│       └── esperanza_agent_overview.md     # overview da Esperanza (migrou de Docs/agentes/)
-│
-└── Gestao/                           # Painel TÁTICO do supervisor (alimentador do backlog)
-    ├── Reunioes/                     # DATADA — Reunioes/<dd-mm-aaaa>/<arquivo>.md
-    ├── Analises/                     # DATADA — Analises/<dd-mm-aaaa>/<arquivo>.md
+└── Backlog/                          # Backlog + histórico tático unificado do squad IAF
+    ├── README.md
+    ├── BACKLOG.md                    # Relatório mestre (regenerado por /backlog regenerate)
+    ├── frentes/
+    │   ├── bitrix-automacoes/        # BBT## (Bitrix) + BAU## (Automações) — frente unificada
+    │   ├── torre/                    # BTR## — Torre de Controle (multi-org, refatoração)
+    │   ├── clara/                    # BCL## — agente Clara (formalização)
+    │   ├── esperanza/                # BES## — agente Esperanza (renegociação)
+    │   ├── valentina/                # BVA## — agente Valentina (SAC)
+    │   ├── livia/                    # BLV## — agente Lívia (jurídico/distrato)
+    │   ├── estrategica/              # BST## — transversal (NPS, narrativa, processo)
+    │   └── sustentacao/              # Bugs/infra/correções operacionais (itens QMR#### do Quimera)
+    ├── solicitacoes/                 # Docs formalizados pelo negócio (.txt, .pdf)
+    ├── contexto/                     # Referência viva do backlog
+    │   ├── mapa_esperanza.md         # MAPA TEXTUAL (narrativa: de onde veio/onde estamos/pra onde vamos)
+    │   ├── torre_de_controle_overview.md   # overview da Torre
+    │   └── esperanza_agent_overview.md     # overview da Esperanza
+    │
+    │   ─── HISTÓRICO TÁTICO (reuniões, análises, 1on1s, referências) ───
+    ├── reunioes/                     # DATADA — reunioes/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md
+    ├── analises/                     # DATADA — analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md
     │   └── <dd-mm-aaaa>/
-    │       └── Relatorio/            # Relatórios derivados das análises do dia
-    └── 1on1s/                        # DATADA — 1on1s/<dd-mm-aaaa>/<arquivo>.md
+    │       └── relatorios/           # Relatórios derivados das análises do dia
+    ├── 1on1s/                        # DATADA — 1on1s/<dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md
+    └── referencias/                  # Artefatos não-markdown (sql/, csv/, json/, prints/, pdf/, docx/)
 ```
 
-> **Pasta datada** = `dd-mm-aaaa/` (ex: `18-05-2026/`). **Arquivos internos** seguem ISO `YYYY-MM-DD_<slug>.md` (ex: `2026-05-18_demandas-cobranca.md`). Cada análise pode gerar 1 ou mais relatórios em `Relatorio/`.
+> **Pasta datada** = `dd-mm-aaaa/` (ex: `18-05-2026/`). **Arquivos internos** seguem ISO `YYYY-MM-DD_<slug>.md` (ex: `2026-05-18_demandas-cobranca.md`). Cada análise pode gerar 1 ou mais relatórios em `relatorios/`.
 
-> **Backlog vs Gestao/** — `Backlog/` é estratégico (histórias por frente, RICE, sponsor); `Gestao/` é tático (reuniões, análises, 1on1s do dia a dia) e funciona como **alimentador**: o que sai de uma reunião/análise vira item de backlog. A pendência tática (`Gestao/Pendencias/`) foi **aposentada em 27/05/2026**: virou item/subtarefa de backlog. IDs `Pnn` sobrevivem só como rótulo de origem.
+> **Tudo em Backlog/** — `Backlog/frentes/` é estratégico (histórias, RICE, sponsor); `Backlog/reunioes/`, `analises/`, `1on1s/` são o painel tático (alimentadores do backlog). O que sai de uma reunião/análise vira item de backlog. A pasta `Gestao/` foi **aposentada em 2026-06-15** e seu conteúdo migrado para `Backlog/`. A pendência tática (`Gestao/Pendencias/`) foi **aposentada em 27/05/2026**: virou subtarefa de item de backlog. IDs `Pnn` sobrevivem só como rótulo de origem.
 
 > **Dois esquemas de ID no backlog** — itens **internos** nascem `B<prefix><nn>` (ex.: `BES03`); itens **importados do Quimera** mantêm a key de origem `QMR####` (ex.: `QMR3415`). Ambos vivem em `Backlog/frentes/<frente>/`.
 
@@ -193,7 +193,7 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - Cite a fonte. Toda afirmação técnica deve poder ser ancorada em algum doc em `Docs/` ou `Backlog/contexto/`.
 - Atualize `Docs/BRIEFING.md` a cada mudança estrutural do deck principal.
 - **Acoplamento de projeções é regra dura (hook-enforced).** Toda operação que mexe em `Backlog/frentes/**/*.md` deve disparar `/backlog regenerate` — que reescreve `BACKLOG.md` + `backlog.html` (`id="backlog-data"`, kanban) **e** aciona o `mapa-updater` para o `mapa-mental.html` (`id="map-data"`, canvas). As duas são **projeções da mesma fonte**: nunca atualize uma sem a outra. Um hook `PostToolUse` (`.claude/hooks/check-backlog-sync.ps1`) vigia essas fontes/projeções e injeta lembrete automático quando você esquece — ele **não** regenera (isso exige seu raciocínio). Projeção é espelho da realidade — defasagem é bug.
-- **Estratégico vs tático vive no mesmo lugar.** Item de backlog (`Backlog/frentes/`) tem história + critérios de aceite + subtarefas + RICE — dura semanas/meses. O tático curto é **subtarefa do item** (responsável + status próprios), não artefato separado. O subsistema de pendências (`Gestao/Pendencias/`) foi **aposentado em 27/05/2026** — não recrie sem decisão explícita.
+- **Estratégico vs tático vive em Backlog/.** Item de backlog (`Backlog/frentes/`) tem história + critérios de aceite + subtarefas + RICE — dura semanas/meses. O tático curto é **subtarefa do item** (responsável + status próprios), não artefato separado. Reuniões/análises/1on1s vivem em `Backlog/reunioes/`, `analises/`, `1on1s/`. O subsistema de pendências (`Gestao/Pendencias/`) foi **aposentado em 27/05/2026**; a pasta `Gestao/` foi **aposentada em 2026-06-15** — não recrie sem decisão explícita.
 - **Mapa textual ≠ projeção.** `Backlog/contexto/mapa_*.md` é narrativa institucional curada à mão (`context-curator`), com história imutável. `mapa-mental.html` é projeção mecânica do backlog (`mapa-updater`). Nunca edite o JSON de uma projeção à mão — mude o `.md`-fonte e regenere.
 - **Três sistemas de demanda distintos.** `Backlog/` (estratégia interna `.md`, RICE) ≠ **Quimera** (tickets internos Finza, MCP `quimera`) ≠ **Jira/Confluence** (Atlassian externo, MCP `claude_ai_Atlassian`). Um item pode *referenciar* um ticket dos outros dois, mas não são a mesma coisa. Não cruze IDs nem confunda os comandos (`/backlog` · `/quimera` · `/jira`).
 
@@ -260,20 +260,20 @@ Cada item interno vira `.md` em `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.m
 ```
 /reuniao <título>
 ```
-Cria template em `Gestao/Reunioes/<dd-mm-aaaa>/YYYY-MM-DD-<slug>.md` (pasta do dia criada automaticamente).
+Cria template em `Backlog/reunioes/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md` (pasta do dia criada automaticamente). Para 1on1, grava em `Backlog/1on1s/<dd-mm-aaaa>/`.
 
 ### Criar análise
 ```
 /analise <título>
 ```
-Cria documento individual em `Gestao/Analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`. Cada pergunta de investigação vira uma análise separada.
+Cria documento individual em `Backlog/analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`. Cada pergunta de investigação vira uma análise separada.
 
 ### Criar relatório derivado
 ```
 /relatorio from <análise.md>      # deriva de análise existente
 /relatorio new <título>           # cria do zero
 ```
-Grava em `Gestao/Analises/<dd-mm-aaaa>/Relatorio/YYYY-MM-DD_<slug>.md`. Cada destinatário/recorte vira um relatório individual.
+Grava em `Backlog/analises/<dd-mm-aaaa>/relatorios/YYYY-MM-DD_<slug>.md`. Cada destinatário/recorte vira um relatório individual.
 
 ### Operar tickets — Quimera (interno) e Jira (Atlassian)
 ```
@@ -293,7 +293,7 @@ Roda `folder-organizer`: detecta arquivos fora do lugar, duplicatas, READMEs des
 ```
 /status
 ```
-Lê `Backlog/frentes/` e `Gestao/` e gera resumo executivo: itens de backlog em curso/bloqueados, reuniões da semana, análises produzidas, foco da próxima semana.
+Lê `Backlog/frentes/`, `Backlog/reunioes/`, `Backlog/analises/`, `Backlog/1on1s/` e gera resumo executivo: itens de backlog em curso/bloqueados, reuniões da semana, análises produzidas, foco da próxima semana.
 
 ### Sincronizar projeções
 ```
@@ -319,29 +319,31 @@ Mapa **visual** = projeção do Backlog (agente `mapa-updater`). Mapa **textual*
 /contexto new <assunto>         # cria doc novo
 /contexto sync-skill            # re-condensa a skill finza-contexto a partir dos docs
 ```
-Agente `context-curator`. Mantém `Docs/finza/`, `Backlog/contexto/` e a skill `finza-contexto` vivos e sem referência quebrada. Não inventa — colhe do usuário, de `Gestao/` e do `finza-researcher`.
+Agente `context-curator`. Mantém `Docs/finza/`, `Backlog/contexto/` e a skill `finza-contexto` vivos e sem referência quebrada. Não inventa — colhe do usuário, de `Backlog/reunioes/`, `Backlog/analises/` e do `finza-researcher`.
 
 ---
 
 ## 5 · Convenções de arquivo
 
-**Pastas datadas (Analises, Reunioes, 1on1s):**
+**Pastas datadas (analises, reunioes, 1on1s):**
 - Formato da **pasta de dia**: `dd-mm-aaaa/` (ex: `18-05-2026/`).
-- Formato dos **arquivos dentro**: ISO `YYYY-MM-DD_<slug>.md` ou `YYYY-MM-DD-<slug>.md`.
-- Dentro de `Gestao/Analises/<dd-mm-aaaa>/` existe `Relatorio/` para relatórios derivados.
+- Formato dos **arquivos dentro**: ISO `YYYY-MM-DD_<slug>.md`.
+- Dentro de `Backlog/analises/<dd-mm-aaaa>/` existe `relatorios/` para relatórios derivados.
 
 **Nomes de arquivo:**
 - Decks: `<tema>_<destinatario>_DD-MM-YYYY.html` (ex: `apresentacao_cto_13-05-2026.html`)
-- Notas de reunião: `Gestao/Reunioes/<dd-mm-aaaa>/YYYY-MM-DD-<slug>.md`
-- 1on1s: `Gestao/1on1s/<dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md`
-- Análises: `Gestao/Analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`
-- Relatórios: `Gestao/Analises/<dd-mm-aaaa>/Relatorio/YYYY-MM-DD_<slug>.md`
+- Notas de reunião: `Backlog/reunioes/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`
+- 1on1s: `Backlog/1on1s/<dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md`
+- Análises: `Backlog/analises/<dd-mm-aaaa>/YYYY-MM-DD_<slug>.md`
+- Relatórios: `Backlog/analises/<dd-mm-aaaa>/relatorios/YYYY-MM-DD_<slug>.md`
 - Itens de backlog internos: `Backlog/frentes/<frente>/B<prefix><nn>_<slug>.md` (ex: `Backlog/frentes/esperanza/BES03_volume_transferencias.md`). Prefixes: BBT (Bitrix), BAU (Automações) — ambos em `bitrix-automacoes/`; BTR (Torre); BCL (Clara); BES (Esperanza); BVA (Valentina); BLV (Lívia); BST (Estratégica).
 - Itens importados do Quimera: `Backlog/frentes/<frente>/QMR<nnnn>_<slug>.md` (mantêm a key de origem).
 - Mapas textuais: `Backlog/contexto/mapa_<assunto>.md` (snake/kebab minúsculo, ASCII — ex: `mapa_esperanza.md`). Overview técnico: `Backlog/contexto/<sistema>_overview.md`.
 - Solicitações formalizadas: `Backlog/solicitacoes/YYYY-MM-DD_<autor>_<assunto>.<ext>`.
-- Prints: `Backlog/prints/YYYY-MM-DD_<sistema>_<assunto>.<ext>`.
+- Referências (artefatos não-markdown): `Backlog/referencias/<tipo>/YYYY-MM-DD_<sistema>_<assunto>.<ext>`.
+- ~~Prints em `Backlog/prints/`~~ → **migrado para `Backlog/referencias/prints/`** (2026-06-15).
 - Pendências: ~~`Gestao/Pendencias/Pnn_<slug>.md`~~ — **aposentado em 27/05/2026.** Não criar. Tático = subtarefa de item de backlog.
+- ~~`Gestao/`~~ — **aposentado em 2026-06-15.** Não criar. Tudo migrou para `Backlog/`.
 
 **Datas:**
 - Sempre absolutas no conteúdo (`2026-05-15`, não "hoje" nem "Thursday").
@@ -361,9 +363,9 @@ esforco: M                                 # XS | S | M | L | XL (camisetas)
 valor_negocio: alto                        # alto | medio | baixo
 origem:
   pendencias: [P19]                        # IDs de pendências táticas (rótulo de origem, se houver)
-  reunioes: [...]
-  solicitacoes: [...]
-  analises: [...]
+  reunioes: [Backlog/reunioes/<dd-mm-aaaa>/<arquivo>.md]
+  solicitacoes: [Backlog/solicitacoes/<arquivo>]
+  analises: [Backlog/analises/<dd-mm-aaaa>/<arquivo>.md]
   quimera: [QMR3415]                       # ticket(s) Quimera de origem, se importado
 roadmap_vinculado: RM03                    # null se não materializa iniciativa do roadmap
 owner: João Vinícius
@@ -387,7 +389,7 @@ tags: [esperanza, tabulacoes]
 - Adicionou novo agente, command ou skill → adicione na seção 1 (e atualize as contagens em §0).
 - Mudou o pipeline de slides → atualize seção 2.
 - Mudou convenção de nome ou frontmatter → atualize seção 5.
-- Aposentou/criou um subsistema (como pendências em 27/05) → reflita em §0, §1, §3, §5.
+- Aposentou/criou um subsistema (como pendências em 27/05, ou a migração de Gestao/ em 2026-06-15) → reflita em §0, §1, §3, §5.
 - Adicionou/alterou um hook em `.claude/settings.json` ou `.claude/hooks/` → reflita em §1 (árvore) e §3 (regra que ele enforça).
 - Adicionou/mudou um conector MCP (Quimera, Jira) → reflita na tabela de gatilhos §0, na árvore §1 e na regra "três sistemas de demanda" §3.
 - Não atualize por mudança de conteúdo (uso normal) — só por mudança estrutural.

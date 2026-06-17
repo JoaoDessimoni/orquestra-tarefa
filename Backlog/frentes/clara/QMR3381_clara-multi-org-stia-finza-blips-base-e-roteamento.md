@@ -2,7 +2,7 @@
 id: QMR3381
 title: [Sprint 1] Clara multi-org STIA (Finza + Blips) — base e roteamento
 frente: clara
-status: bloqueado
+status: entregue
 prioridade: media
 fonte: quimera+jira
 quimera: 3381
@@ -11,9 +11,9 @@ categoria: Formalização
 deliverable_type: Outros
 story_points: 5
 tipo_origem: Tarefa
-responsavel: João Pedro
+responsavel: João Pedro da Silva Neto
 criada: 2026-04-27
-concluida: null
+concluida: 2026-06-08
 prazo: null
 prazo_estimado: False
 rice: null
@@ -73,3 +73,4 @@ IAF-130
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3381: entregue. Concluída 2026-06-08. Responsável: João Pedro da Silva Neto.

@@ -65,7 +65,7 @@ O trabalho do squad é organizado em **8 frentes** no backlog estratégico (`Bac
 
 > **Dois esquemas de ID convivem:** itens **internos** nascem `B<prefix><nn>` (ex.: `BES03`); itens **importados do Quimera** mantêm a key de origem `QMR####` (ex.: `QMR3415`). Ambos vivem em `Backlog/frentes/<frente>/`.
 
-Estado mestre vive em `Backlog/BACKLOG.md`. Priorização por RICE (skill `po-backlog`). Iniciativas de alto nível agregam itens no **roadmap** (análise `tipo: roadmap` em `Gestao/Analises/`).
+Estado mestre vive em `Backlog/BACKLOG.md`. Priorização por RICE (skill `po-backlog`). Iniciativas de alto nível agregam itens no **roadmap** (análise `tipo: roadmap` em `Backlog/analises/`).
 
 ---
 
@@ -137,7 +137,7 @@ P01–P05 dependem de decisão arquitetural/processo **fora do squad**. P06 é o
 
 **Chave de leitura:** o supervisor vai rodar este plano, não substituí-lo. Ajustes onde a realidade exigir, mas direção mantida.
 
-O plano herdado foi **desdobrado** no backlog estratégico (8 frentes) e no roadmap de iniciativas (`Gestao/Analises/<dia>/*roadmap*.md`), alimentado pelas reuniões de priorização com Jéssica (18-19/05) e pela reunião de jornada com a diretoria (15/05).
+O plano herdado foi **desdobrado** no backlog estratégico (8 frentes) e no roadmap de iniciativas (`Backlog/analises/<dia>/*roadmap*.md`), alimentado pelas reuniões de priorização com Jéssica (18-19/05) e pela reunião de jornada com a diretoria (15/05).
 
 ---
 

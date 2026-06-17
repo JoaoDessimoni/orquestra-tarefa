@@ -2,7 +2,7 @@
 id: QMR3367
 title: [Bitrix ID-1775] Inclusão da organização Finza no AuditorIA
 frente: bitrix-automacoes
-status: bloqueado
+status: cancelado
 prioridade: baixa
 fonte: quimera+jira
 quimera: 3367
@@ -11,7 +11,7 @@ categoria: Cobrança
 deliverable_type: Outros
 story_points: 5
 tipo_origem: Tarefa
-responsavel: João Lucas Freitas
+responsavel: Joao Lucas Pontes Freitas
 criada: 2026-04-20
 concluida: null
 prazo: null
@@ -52,3 +52,4 @@ Descrição: Demanda original: inclusão da organização Finza no AuditorIA, re
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera+jira.
+- 2026-06-15 — Status sincronizado do Quimera #3367: cancelado. Responsável: Joao Lucas Pontes Freitas.

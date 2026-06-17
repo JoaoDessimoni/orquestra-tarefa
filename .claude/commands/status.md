@@ -1,5 +1,5 @@
 ---
-description: Gera resumo executivo da semana — lê Backlog/frentes/, Gestao/Reunioes/, Analises/, 1on1s/ e produz overview de itens de backlog em curso, reuniões realizadas, análises produzidas. Sem agente externo — leitura direta + síntese.
+description: Gera resumo executivo da semana — lê Backlog/frentes/, Backlog/reunioes/, Backlog/analises/, Backlog/1on1s/ e produz overview de itens de backlog em curso, reuniões realizadas, análises produzidas. Sem agente externo — leitura direta + síntese.
 ---
 
 # /status — status semanal do supervisor
@@ -29,19 +29,19 @@ Use Glob + Read para juntar:
    - Itens criados/refinados na janela (sinaliza vazão de refinement).
 
 3. **Reuniões na janela**
-   - `Glob Gestao/Reunioes/**/*.md` (recursivo — pasta datada).
+   - `Glob Backlog/reunioes/**/*.md` (recursivo — pasta datada).
    - Filtrar por nome do arquivo (`YYYY-MM-DD-*.md`) onde data >= data-corte.
 
 4. **Análises na janela**
-   - `Glob Gestao/Analises/**/*.md` (recursivo).
+   - `Glob Backlog/analises/**/*.md` (recursivo).
    - Ignorar arquivos em subpasta `Relatorio/` quando o objetivo é listar análises.
 
 5. **Relatórios na janela** (opcional, se janela for ≤7 dias)
-   - `Glob Gestao/Analises/**/Relatorio/*.md`.
+   - `Glob Backlog/analises/**/relatorios/*.md`.
    - Lista separada no status: "Relatórios enviados".
 
 6. **1:1s na janela**
-   - `Glob Gestao/1on1s/**/*.md` (recursivo) filtrado por data no nome.
+   - `Glob Backlog/1on1s/**/*.md` (recursivo) filtrado por data no nome.
 
 7. **Decks produzidos na janela**
    - `Glob Apresentacoes/executando/*.html` + `Apresentacoes/entregues/*.html`.
@@ -103,7 +103,7 @@ Produza o status no formato canônico:
 Pergunte ao usuário se quer salvar o status como arquivo:
 
 ```
-Salvar este status em Gestao/Analises/YYYY-MM-DD_status-semanal.md?
+Salvar este status em Backlog/analises/YYYY-MM-DD_status-semanal.md?
 ```
 
 Se sim, Write o markdown acima nesse caminho.

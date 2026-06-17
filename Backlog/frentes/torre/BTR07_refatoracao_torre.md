@@ -1,4 +1,4 @@
----
+﻿---
 id: BTR07
 title: Refatoração da Torre — backend FastAPI/Postgres + arquitetura enterprise
 frente: torre
@@ -16,7 +16,7 @@ valor_negocio: alto
 origem:
   pendencias: []
   reunioes:
-    - Gestao/Reunioes/19-05-2026/2026-05-19-alinhamento-torre-multi-org.md
+    - Backlog/reunioes/19-05-2026/2026-05-19-alinhamento-torre-multi-org.md
   solicitacoes:
     - Backlog/solicitacoes/Alinhamento Torre - 2026_05_19 15_47 GMT-03_00 - Anotações do Gemini.txt
   analises: []

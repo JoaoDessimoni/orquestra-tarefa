@@ -2,7 +2,7 @@
 id: QMR3457
 title: Envio de Email Hyper
 frente: bitrix-automacoes
-status: refinado
+status: entregue
 prioridade: media
 fonte: quimera
 quimera: 3457
@@ -11,9 +11,9 @@ categoria: Cobrança
 deliverable_type: Liberação de acessos
 story_points: 3
 tipo_origem: ticket
-responsavel: João Lucas Freitas
+responsavel: João Pedro da Silva Neto
 criada: 2026-05-21
-concluida: null
+concluida: 2026-06-12
 prazo: null
 prazo_estimado: False
 rice: null
@@ -49,3 +49,4 @@ Importante:  Os e-mails de retorno de erro, com o título "Delivery Status Notif
 ## Histórico
 
 - 2026-06-02 — Item importado por espelhamento Quimera/Jira (reconciliação de backlog). fonte=quimera.
+- 2026-06-15 — Status sincronizado do Quimera #3457: entregue. Concluída 2026-06-12. Responsável: João Pedro da Silva Neto.
