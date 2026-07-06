@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roadmap · Torre de Controle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --finza-blue:#1A1AFF;--finza-dark:#0A0A2E;
+  --bg:#F4F5F7;--surface:#FFFFFF;--ghost:#C8C8D4;
+  --text:#0F1226;--text-muted:#5C5C7A;--text-subtle:#9498AD;
+  --border:#E4E6EE;--border-soft:#EEF0F5;
+  /* status */
+  --st-entregue:#10B981;--st-backlog:#64748B;--st-a-refinar:#9CA3AF;--st-adiado:#94A3B8;--st-cancelado:#EF4444;
+  /* dev */
+  --dev-marcos:#EAB308;--dev-leandro:#3B82F6;--dev-joao:#F97316;
+  /* prioridade */
+  --p-urgente:#DC2626;--p-alta:#D97706;--p-media:#2563EB;--p-baixa:#64748B;
+  /* tipo */
+  --t-bug:#E11D48;--t-melhoria:#0EA5E9;
+  --font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',monospace;
+  --sidebar-w:250px;--topbar-h:52px;--radius:10px;
+  --shadow-sm:0 1px 2px rgba(15,18,38,.05);--shadow-md:0 4px 16px rgba(15,18,38,.08);--shadow-lg:0 24px 48px rgba(15,18,38,.18);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font-sans);font-size:13.5px;line-height:1.55;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--finza-blue);outline-offset:2px;border-radius:4px}
+
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--finza-dark);color:#fff;display:flex;flex-direction:column;padding:18px 12px;overflow-y:auto;z-index:10}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:99px}
+.brand{display:flex;align-items:baseline;gap:8px;padding:6px 10px 16px}
+.brand .mark{color:#6E6EFF;font-size:14px;font-weight:700}
+.brand .name{font-size:14px;font-weight:700;letter-spacing:.04em}
+.brand .tag{margin-left:auto;font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase}
+.side-section{font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.4);text-transform:uppercase;padding:14px 12px 6px;font-weight:700}
+.side-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;color:rgba(255,255,255,.72);font-size:13px;width:100%;text-align:left;transition:background .12s,color .12s;margin-bottom:1px}
+.side-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.side-item.active{background:var(--finza-blue);color:#fff;font-weight:500}
+.side-item .ico{font-size:11px;width:14px;text-align:center}
+.side-item .lbl{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-item .count{font-family:var(--font-mono);font-size:10px;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:99px;color:rgba(255,255,255,.7);min-width:22px;text-align:center}
+.side-item.active .count{background:rgba(255,255,255,.22);color:#fff}
+.side-item .dot-frente{width:8px;height:8px;border-radius:50%;flex:none}
+.sidebar-footer{margin-top:auto;padding:14px 10px 4px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}
+.sidebar-footer .who strong{color:#fff;font-weight:500;display:block;font-size:12px;margin-bottom:2px}
+.sidebar-footer .src{font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,.32);margin-top:6px;line-height:1.5}
+
+.main{min-width:0;display:flex;flex-direction:column;position:relative}
+.topbar{position:sticky;top:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 26px;z-index:20}
+.crumb{display:flex;align-items:center;gap:8px;font-size:13px}
+.crumb .seg{color:var(--text-muted)}.crumb .seg.cur{color:var(--text);font-weight:500}
+.crumb .sep{color:var(--text-subtle);font-size:10px}
+.topbar-spacer{flex:1}
+.iaf-mark{font-size:11px;font-weight:700;color:var(--finza-blue);letter-spacing:.1em}
+.view{padding:28px 34px 90px;width:100%;max-width:1680px;margin:0 auto}
+.ghost{font-weight:300;color:var(--ghost);font-size:32px;line-height:1.1;letter-spacing:-.015em;margin:0 0 6px}
+.ghost .accent{font-weight:700;color:var(--finza-blue)}
+.sub{color:var(--text-muted);font-size:13.5px;margin:0 0 22px;max-width:860px}
+.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between}
+.section-title .extra{font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-subtle)}
+
+/* hero slim */
+.hero{background:var(--finza-dark);color:#fff;padding:20px 26px;border-radius:14px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-40%;right:-6%;width:320px;height:320px;background:radial-gradient(circle,rgba(46,46,255,.3) 0%,transparent 70%);pointer-events:none}
+.hero .label{font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.5);text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.hero .title{font-size:20px;font-weight:300;line-height:1.3;margin:0;max-width:760px}
+.hero .title b{font-weight:700;color:#B9B9FF}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:8px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;position:relative}
+.kpi::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--kc,var(--finza-blue))}
+.kpi .lab{font-size:10px;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.kpi .num{font-size:26px;font-weight:700;line-height:1;font-family:var(--font-mono);color:var(--text)}
+.kpi.k-total{--kc:var(--finza-blue)}.kpi.k-entregue{--kc:var(--st-entregue)}.kpi.k-backlog{--kc:var(--st-backlog)}
+.kpi.k-arefinar{--kc:var(--st-a-refinar)}.kpi.k-adiado{--kc:var(--st-adiado)}.kpi.k-cancelado{--kc:var(--st-cancelado)}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+@media (max-width:1200px){.grid3{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:820px){.grid3{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.panel h3{margin:0 0 14px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)}
+.donut-wrap{display:flex;align-items:center;gap:16px}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:12px;flex:1;min-width:0}
+.legend .row{display:flex;align-items:center;gap:8px}
+.legend .sw{width:10px;height:10px;border-radius:3px;flex:none}
+.legend .ll{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend .lv{font-family:var(--font-mono);font-weight:700;color:var(--text-muted)}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 30px;gap:10px;align-items:center;font-size:12px}
+.bar-row.wide{grid-template-columns:150px 1fr 30px}
+.bar-row .bl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:8px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px}
+.bar-row .bv{font-family:var(--font-mono);font-weight:700;text-align:right;color:var(--text-muted)}
+
+/* legend chips (colors reference) */
+.legendbar{display:flex;flex-wrap:wrap;gap:14px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:18px;font-size:11.5px;color:var(--text-muted)}
+.legendbar .grp{display:flex;align-items:center;gap:8px}
+.legendbar .grp .t{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:9.5px;color:var(--text-subtle)}
+.legendbar .lg{display:inline-flex;align-items:center;gap:5px}
+.legendbar .lg .d{width:9px;height:9px;border-radius:50%}
+
+/* board */
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:14px}
+.search{flex:1;min-width:210px;max-width:340px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
+.search input{border:0;outline:0;width:100%;background:none}
+.search .mag{color:var(--text-subtle)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{padding:5px 11px;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-size:12px;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.chip:hover{border-color:var(--text-subtle);color:var(--text)}
+.chip.on{background:var(--finza-dark);color:#fff;border-color:var(--finza-dark)}
+.chip .d{width:8px;height:8px;border-radius:50%}
+.chip-clear{font-size:12px;color:var(--text-subtle);text-decoration:underline}
+.filter-lab{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-subtle);margin:8px 0 5px}
+
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(230px,1fr));gap:13px}
+@media (max-width:1100px){.kanban:not(.kstatus){grid-template-columns:repeat(2,1fr)}}
+.kanban.kstatus{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.kanban.kstatus .kcol{flex:0 0 clamp(192px,13.5vw,240px)}
+.kcol{background:#EBECF1;border-radius:11px;padding:9px;min-height:100px}
+.kcol-head{display:flex;align-items:center;gap:8px;padding:5px 6px 10px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.kcol-head .kc-dot{width:9px;height:9px;border-radius:50%}
+.kcol-head .kc-count{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);background:var(--surface);padding:1px 7px;border-radius:99px}
+.kcol-body{display:flex;flex-direction:column;gap:8px}
+.kcol-empty{font-size:11px;color:var(--text-subtle);text-align:center;padding:14px 0;font-style:italic}
+
+.ci{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--ci-accent,var(--st-backlog));border-radius:8px;padding:10px 12px;cursor:pointer;transition:box-shadow .12s,transform .12s}
+.ci:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.ci.done{opacity:.72}.ci.dropped{opacity:.6}
+.ci-top{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ci-id{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--text-subtle)}
+.ci-esf{margin-left:auto;font-size:10px;color:var(--text-subtle);font-family:var(--font-mono)}
+.ci-title{font-size:12.8px;font-weight:500;line-height:1.35;margin-bottom:9px;color:var(--text)}
+.ci.dropped .ci-title{text-decoration:line-through;text-decoration-color:var(--text-subtle)}
+.ci-bot{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:4px}
+.pbadge{font-family:var(--font-mono);font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:4px;color:#fff}
+.pbadge.urgente{background:var(--p-urgente)}.pbadge.alta{background:var(--p-alta)}.pbadge.media{background:var(--p-media)}.pbadge.baixa{background:var(--p-baixa)}
+.tipo{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px}
+.tipo.bug{background:#FFE4E9;color:var(--t-bug)}.tipo.melhoria{background:#E0F2FE;color:#0284C7}
+.frente-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:99px;max-width:100%}
+.frente-pill .d{width:7px;height:7px;border-radius:50%;flex:none}
+.frente-pill .fl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-pill{color:#fff}
+.status-pill.entregue{background:var(--st-entregue)}.status-pill.backlog{background:var(--st-backlog)}
+.status-pill.a-refinar{background:#fff;color:var(--st-a-refinar);border:1px dashed var(--st-a-refinar)}
+.status-pill.adiado{background:var(--st-adiado)}.status-pill.cancelado{background:var(--st-cancelado)}
+.dev-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text);padding:1px 8px 1px 6px;border-radius:99px;background:var(--bg)}
+.dev-chip .d{width:8px;height:8px;border-radius:50%;background:var(--dc)}
+.dep-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;color:#9333EA;background:#F3E8FF;padding:1px 6px;border-radius:4px}
+.ci-obs{margin-top:8px;padding-top:7px;border-top:1px dashed var(--border);font-size:10.5px;line-height:1.4;color:var(--text-muted);font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci-obs .oic{font-style:normal;color:var(--text-subtle);margin-right:4px}
+.refino-pill{font-size:9.5px;font-weight:700;padding:1px 8px;border-radius:99px;color:#fff}
+.exec-pill{font-size:9.5px;font-weight:700;color:#fff;background:#10B981;padding:1px 7px;border-radius:99px;letter-spacing:.02em}
+.qkey{font-family:var(--font-mono);font-size:9.5px;color:var(--text-subtle);background:var(--bg);padding:1px 6px;border-radius:4px}
+.src-q{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6366F1;background:#EEF2FF;padding:1px 6px;border-radius:4px}
+
+/* segmented toggle */
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:2px}
+.seg button{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap}
+.seg button.on{background:var(--finza-dark);color:#fff}
+
+/* filter bar — uma linha */
+.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.fbar .search{flex:0 1 260px;min-width:180px}
+.fdrop{position:relative}
+.fdrop-btn{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;color:var(--text-muted)}
+.fdrop-btn:hover{border-color:var(--text-subtle);color:var(--text)}
+.fdrop-btn .cnt{font-family:var(--font-mono);font-size:10px;background:var(--finza-blue);color:#fff;border-radius:99px;padding:0 5px;min-width:15px;text-align:center}
+.fdrop-btn .car{font-size:8px;color:var(--text-subtle)}
+.fdrop-menu{position:absolute;top:calc(100% + 4px);left:0;z-index:30;background:var(--surface);border:1px solid var(--border);border-radius:9px;box-shadow:var(--shadow-md);padding:6px;min-width:200px;max-height:300px;overflow:auto;display:none}
+.fdrop.open .fdrop-menu{display:block}
+.fopt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap}
+.fopt:hover{background:var(--bg)}
+.fopt input{margin:0;accent-color:var(--finza-blue)}
+.fopt .d{width:9px;height:9px;border-radius:50%;flex:none}
+.fchip-exec{padding:6px 11px;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--st-entregue);font-weight:600;display:inline-flex;align-items:center;gap:6px;background:var(--surface)}
+.fchip-exec.on{background:var(--st-entregue);color:#fff;border-color:var(--st-entregue)}
+.fbar .clr{font-size:12px;color:var(--text-subtle);text-decoration:underline;margin-left:2px}
+
+/* frente dashboard */
+.fdash{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:1000px){.fdash{grid-template-columns:repeat(3,1fr)}}
+.fdash .fd{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;position:relative}
+.fdash .fd::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--kc,var(--border))}
+.fdash .fd .l{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:700;margin-bottom:4px}
+.fdash .fd .n{font-size:21px;font-weight:700;font-family:var(--font-mono);line-height:1;color:var(--kc,var(--text))}
+.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 16px;margin-bottom:16px}
+.progress-wrap .pl{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-muted);margin-bottom:7px}
+.progress-wrap .pl .pct{font-family:var(--font-mono);font-weight:700;font-size:16px;color:var(--st-entregue)}
+.progress-track{height:10px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#10B981,#34D399);border-radius:99px;transition:width .3s}
+
+/* Finza — matriz de pesos */
+.wmatrix{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 22px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:6px}
+@media(max-width:820px){.wmatrix{grid-template-columns:1fr}}
+.wm{display:grid;grid-template-columns:150px 1fr 42px;gap:10px;align-items:center;font-size:12px}
+.wm-l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.wm-l .pen-t{font-size:9px;color:#EF4444;font-weight:700;text-transform:uppercase}
+.wm-bar{height:8px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.wm-fill{height:100%;border-radius:99px}
+.wm-w{font-family:var(--font-mono);font-weight:700;text-align:right;color:var(--text-muted)}
+/* Finza — ranking */
+.rank{display:flex;flex-direction:column;gap:8px}
+.rk{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px;cursor:pointer;transition:box-shadow .12s,transform .12s}
+.rk:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.rk-main{flex:1;min-width:0}
+.rk-sub{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--finza-blue)}
+.rk-t{font-size:13.5px;font-weight:600;color:var(--text);margin:2px 0 7px;line-height:1.3}
+.rk-t .mand{font-size:10px;font-weight:700;color:#DC2626;background:#FEE2E2;padding:1px 7px;border-radius:99px}
+.rk-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.crit{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:#fff;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.rk-meta{font-size:10.5px;color:var(--text-subtle);margin-left:4px}
+.rk-score{width:110px;flex:none;text-align:right}
+.rk-num{font-family:var(--font-mono);font-size:19px;font-weight:700;color:var(--finza-blue);line-height:1}
+.rk-bar{height:6px;background:var(--border-soft);border-radius:99px;overflow:hidden;margin-top:6px}
+.rk-fill{height:100%;background:linear-gradient(90deg,#1A1AFF,#6E6EFF);border-radius:99px}
+/* Finza — matriz no drawer */
+.cmatrix{display:flex;flex-direction:column;gap:8px}
+.cmx{display:grid;grid-template-columns:120px 1fr 22px;gap:10px;align-items:center;font-size:12px}
+.cmx-l{color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmx-bar{height:8px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.cmx-fill{height:100%;border-radius:99px}
+.cmx-v{font-family:var(--font-mono);font-weight:700;text-align:right;color:var(--text)}
+
+/* lançamento — demandas selecionadas p/ o board da diretoria */
+.launch-intro{font-size:12.5px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:6px}
+.launch-list{display:flex;flex-direction:column;gap:12px}
+.lc{display:flex;gap:14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--finza-blue);border-radius:var(--radius);padding:15px 17px}
+.lc-num{flex:none;width:26px;height:26px;border-radius:7px;background:var(--finza-dark);color:#fff;font-family:var(--font-mono);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.lc-main{flex:1;min-width:0}
+.lc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.lc-id{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--finza-blue);letter-spacing:.02em}
+.lc-meta{margin-left:auto;display:flex;gap:5px;flex-wrap:wrap}
+.lc-chip{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--text-muted);background:var(--bg);border:1px solid var(--border);padding:1px 7px;border-radius:99px}
+.lc-title{font-size:15px;font-weight:700;line-height:1.3;color:var(--text);margin-bottom:6px}
+.lc-desc{font-size:12.5px;color:var(--text-muted);line-height:1.5;margin-bottom:10px}
+.lc-why{background:#EEF0FF;border:1px solid #D6D9FF;border-radius:8px;padding:9px 12px;font-size:12px;color:#26268A;line-height:1.5}
+.lc-why-lab{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--finza-blue);margin-bottom:3px}
+.lc-copy{margin-top:11px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--finza-blue);background:var(--surface);border:1px solid var(--finza-blue);border-radius:8px;padding:6px 12px;transition:background .12s,color .12s,border-color .12s}
+.lc-copy:hover{background:var(--finza-blue);color:#fff}
+.lc-copy.ok{background:var(--st-entregue);border-color:var(--st-entregue);color:#fff}
+@media(max-width:820px){.lc-meta{margin-left:0}}
+
+/* frente header */
+.frente-head{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:16px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:13px}
+.frente-head .fh-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;font-family:var(--font-mono);flex:none}
+.frente-head .fh-label{font-size:20px;font-weight:700;line-height:1.1}
+.fh-kpis{margin-left:auto;display:flex;gap:20px;flex-wrap:wrap}
+.fh-kpis .k{text-align:center;min-width:44px}
+.fh-kpis .k .n{font-family:var(--font-mono);font-weight:700;font-size:20px;line-height:1;color:var(--kc,var(--text))}
+.fh-kpis .k .l{font-size:8.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-weight:700;margin-top:4px;white-space:nowrap}
+
+/* analise */
+.obs-prio{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:8px}
+@media (max-width:900px){.obs-prio{grid-template-columns:1fr}}
+.obs-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--oc);border-radius:var(--radius);padding:14px 16px}
+.obs-card .oh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:6px}
+.obs-card .oh .cnt{margin-left:auto;font-family:var(--font-mono);font-size:12px;color:var(--text-muted)}
+.obs-card p{margin:0;font-size:12.5px;color:var(--text-muted);line-height:1.55}
+.top10{display:flex;flex-direction:column;gap:7px}
+.top-row{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--finza-blue);border-radius:8px;padding:11px 13px}
+.top-row .tn{font-family:var(--font-mono);font-size:17px;font-weight:700;color:var(--finza-blue);line-height:1.1}
+.top-row .ti{font-weight:600;margin-bottom:3px}
+.top-row .tw{font-size:12px;color:var(--text-muted);line-height:1.45}
+.top-row .tags{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.gerais{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.gerais li{position:relative;padding-left:18px;font-size:13px;color:var(--text);line-height:1.5}
+.gerais li::before{content:'▸';position:absolute;left:0;color:var(--finza-blue);font-weight:700}
+.refino-summary{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.refino-summary .rs{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:12px}
+.refino-summary .rs .rn{font-family:var(--font-mono);font-weight:700}
+.refino-summary .rs .rd{width:9px;height:9px;border-radius:50%}
+.refino-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media (max-width:900px){.refino-grid{grid-template-columns:1fr}}
+.refino-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--rc);border-radius:var(--radius);padding:14px 16px}
+.refino-card .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:3px}
+.refino-card .rh .rcount{margin-left:auto;font-family:var(--font-mono);font-size:13px;color:var(--rc)}
+.refino-card .rhint{font-size:11.5px;color:var(--text-muted);line-height:1.45;margin-bottom:10px}
+.refino-list{display:flex;flex-direction:column;gap:3px}
+.refino-list .rli{display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:baseline;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:12px}
+.refino-list .rli:hover{background:var(--bg)}
+.refino-list .rli .rid{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--text-subtle)}
+.refino-list .rli .rtt{color:var(--text)}
+.refino-list .rli .robs{display:block;font-size:10.5px;color:var(--text-muted);font-style:italic;margin-top:1px;line-height:1.35}
+
+/* drawer */
+.overlay{position:fixed;inset:0;background:rgba(15,18,38,.42);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.overlay.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(560px,94vw);background:var(--surface);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);z-index:50;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:22px 26px 16px;border-bottom:1px solid var(--border-soft);display:flex;align-items:flex-start;gap:12px}
+.drawer-head .dh-id{font-family:var(--font-mono);font-size:11px;color:var(--text-subtle);font-weight:700}
+.drawer-head .dh-title{font-size:18px;font-weight:700;line-height:1.28;margin-top:4px}
+.drawer-close{margin-left:auto;font-size:22px;color:var(--text-subtle);line-height:1;flex:none}
+.drawer-close:hover{color:var(--text)}
+.drawer-body{padding:18px 26px 60px;overflow-y:auto;flex:1}
+.d-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.d-meta{display:grid;grid-template-columns:1fr 1fr;gap:13px 18px;margin:0 0 20px;padding:15px 16px;background:var(--bg);border-radius:var(--radius)}
+.d-meta .mlab{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-subtle);font-weight:700;margin-bottom:3px}
+.d-meta .mval{font-size:13px;font-weight:500}
+.d-block{margin-bottom:18px}
+.d-block h4{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);font-weight:700;margin:0 0 8px}
+.d-desc{font-size:14px;line-height:1.62;color:var(--text);border-left:3px solid var(--finza-blue);padding-left:14px}
+.d-obs{font-size:13.5px;line-height:1.6;color:var(--text);background:#F0F4FF;border-left:3px solid #6E6EFF;border-radius:0 8px 8px 0;padding:11px 14px}
+.d-nota{font-size:13px;line-height:1.55;color:#92400E;background:#FEF3C7;border-radius:8px;padding:12px 14px}
+.d-nota .nl{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#B45309;margin-bottom:5px}
+.empty{color:var(--text-subtle);font-style:italic;padding:26px 0;text-align:center}
+
+@media (max-width:880px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:0;top:0;width:240px;transform:translateX(-100%);transition:transform .2s}
+  .sidebar.open{transform:translateX(0)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb" id="crumb"></div>
+      <div class="topbar-spacer"></div>
+      <span class="iaf-mark">◆ iaf</span>
+    </div>
+    <div class="view" id="view"></div>
+  </main>
+</div>
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer"></aside>
+
+<script type="application/json" id="roadmap-data">{"owner":"João Vinícius","squad":"Roadmap · Torre de Controle","generated_at":"2026-07-02","source":"meu-roadmap.xlsx · aba IA Esboço","frentes":[{"key":"dashboard","label":"Dashboard","color":"#2563EB","code":"DS","count":24},{"key":"finza","label":"Finza","color":"#1A1AFF","code":"FZ","count":17},{"key":"agentes-ia","label":"Agentes de IA","color":"#7C3AED","code":"IA","count":12},{"key":"acoes","label":"Ações","color":"#EA580C","code":"AC","count":9},{"key":"configuracoes","label":"Configurações","color":"#6366F1","code":"CF","count":9},{"key":"regua","label":"Régua","color":"#DB2777","code":"RG","count":8},{"key":"integracoes","label":"Integrações","color":"#E11D48","code":"IN","count":6},{"key":"dados-infra","label":"Dados / Infra","color":"#0891B2","code":"DI","count":5},{"key":"gestao-carteira","label":"Gestão de Carteira","color":"#059669","code":"GC","count":5},{"key":"filtros","label":"Filtros","color":"#CA8A04","code":"FT","count":4},{"key":"campanha","label":"Campanha","color":"#0D9488","code":"CP","count":1}],"items":[{"id":"R01","frente":"dados-infra","menu":"Atualização das Informações","title":"Sincronização Torre x Módulo Financeiro","desc":"Garantir que toda fonte de dados da Torre atualize, no mínimo, junto com o BigQuery do Módulo Financeiro. Hoje há desincronização entre Torre e MF — e até internamente entre as abas Gestão de Carteira e Fonte de Dados. Como a vw_titles_live é servida pela materialized view mv_titles_base (refresh ~12h), o dado exibido pode ficar defasado frente ao MF; alinhar a cadência de refresh à do BigQuery e monitorar a defasagem.","nota_negocio":"Definir qual é a janela aceitável de atraso Torre×MF.","prioridade":"urgente","status":"entregue","dev":null,"tipo":"bug","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":"4275","quimera_status":"finalizado","executando":false,"and_status":"finalizado"},{"id":"R02","frente":"dados-infra","menu":"Fonte de Dados","title":"Padronizar a query de títulos pagos","desc":"Na query de títulos pagos há registros com payment_date preenchido e outros sem. Padronizar o tratamento: quando existe data de pagamento o status deve inferir 'Pago' (a ETL já corrige status='Disponível' com payment_date). Uniformizar o critério na fonte que alimenta a vw_titles_live para não haver dois entendimentos de 'pago'.","nota_negocio":null,"prioridade":"urgente","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"precisa ser analisado todas as queires da fonte de dados, aproveite e melhore performance dessas queries","refino_tag":"tecnico","source":"roadmap","quimera_key":"4276","quimera_status":"fila_exec","executando":false,"and_status":"fila_exec"},{"id":"R03","frente":"dados-infra","menu":"Fonte de Dados","title":"IA Esperanza lendo da Torre (janela de 20 dias)","desc":"A Esperanza passou a ler da Torre (não mais do BigQuery). O dado diverge do BQ e, por enxergar só ~20 dias de vencimento futuro, a IA chega a dizer ao cliente que ele está quitando. Corrigir a fonte consultada e parametrizar/ampliar a janela de vencimentos considerada, mantendo a diretriz de não expor títulos futuros como quitação.","nota_negocio":"Definir a janela de vencimento futuro correta que a IA deve enxergar.","prioridade":"urgente","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"estudar a sumarização das informações de contratos como parcelas restante, valor restante, valor de quitação e outras informações que hoje a esperanza não vê que deveria olhar, coloca tudo isso na tabela de contratos","refino_tag":"tecnico","source":"roadmap","quimera_key":"4277","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R04","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Revalidar o conceito de pago","desc":"Revalidar o que é considerado 'pago' (fonte: BigQuery MF), pois já houve gap nesse indicador e o risco é deixar de cobrar quem deve. Cancelado neste ciclo — coberto pela padronização da query de títulos pagos (R02) e pela sincronização Torre×MF (R01).","nota_negocio":null,"prioridade":"urgente","status":"cancelado","dev":null,"tipo":"bug","esforco":null,"dep":false,"obs_refino":"ja contemplado em outro card","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"cancelado"},{"id":"R05","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Conciliar carteira Torre x Dash Inadimplência","desc":"Na carteira Ideal (multi-org Finza + Blips) a Torre mostra > R$ 2 mi, mas o dash de inadimplência, no mesmo status de título, mostra R$ 1.788.000. Reconciliar as duas fontes: mesmo recorte de status/cedente e mesma base (vw_titles_live) para eliminar a divergência de ~R$ 200 mil.","nota_negocio":null,"prioridade":"urgente","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"necessário analisar o dashboard com o J e consultar a query que monta o dash junto com o time de dados, determinar qual erro e normalizar os dois dash","refino_tag":"tecnico","source":"roadmap","quimera_key":"4285","quimera_status":"finalizado","executando":false,"and_status":"finalizado"},{"id":"R06","frente":"configuracoes","menu":"Configurações - Valores Padrão","title":"Monitoramento preventivo de novos valores padrão","desc":"Quando um novo valor padrão é criado sem avisar a Torre, gera-se um gap descoberto só de forma reativa. Criar monitoramento/tratamento preventivo que detecte valores padrão novos e sinalize antes de virar acionamento indevido.","nota_negocio":"Definir quais campos de 'valor padrão' devem ser monitorados e o canal do alerta.","prioridade":"urgente","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário refinar melhor com o João Pedro qual impacto e qual resultado esperado.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R07","frente":"dados-infra","menu":"Infraestrutura","title":"Capacidade e estabilidade da Torre","desc":"Há gargalos e picos de lentidão mesmo sem disparos massivos e fora do horário de pico. Aumentar capacidade/estabilidade da Torre (infra e queries) para eliminar esse comportamento no uso diário.","nota_negocio":null,"prioridade":"urgente","status":"entregue","dev":null,"tipo":"bug","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"R08","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Filtro de período personalizado não é respeitado","desc":"No dashboard de Performance de IA, o filtro de período personalizado não é respeitado (ex.: ao filtrar 15/06 o dia não aparece). Corrigir o filtro de data para refletir exatamente o intervalo escolhido.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"coisa simples, necessário corrigir e validar filtros, confirmar antes com o negocio","refino_tag":"pronto","source":"roadmap","quimera_key":"4399","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R09","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Classificação de motivo de transbordo incorreta","desc":"As classificações de motivo de transbordo vêm incorretas. Aprimorar o tracking do transfer_reason (registrado no log de interação da IA) para que o motivo exibido corresponda ao motivo real da transferência para humano.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R10","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Apresentar por granularidade de protocolo","desc":"O indicador não apresenta por granularidade de protocolo. Ajustar para permitir a visão por protocolo de atendimento, não só consolidada.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R11","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Revisar os cards do topo","desc":"Revisar todos os cards do topo (Atendimentos iniciados, Taxa de retenção, Promessas de IA, Transbordo), conforme apontado pelo Leandro — validar fonte, cálculo e período de cada um.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R12","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Divergência de transbordo (dia x últimas 24h)","desc":"O card Transbordo e o indicador Motivo de transbordo mostram quantidades diferentes para o mesmo filtro: um considera o dia, o outro as últimas 24h. Alinhar o conceito de janela entre os dois.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R13","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Funil de cobrança com time out","desc":"O funil de cobrança quase não carrega (time out) e a nomenclatura dos indicadores não está clara. Otimizar a consulta que monta o funil (paginação/materialização) e renomear os indicadores para leitura clara.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"necessário validar performace de consulta e arquitetura de serviço, coisa simples que não deveria acontecer","refino_tag":"tecnico","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R14","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Indicador de frequência de acionamento","desc":"Segundo o Leandro, o indicador de frequência de acionamento nunca funcionou. Revisar a fonte e o cálculo (nº de ações por contrato/título ao longo do tempo) e corrigir.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R15","frente":"dashboard","menu":"Dashboard","title":"Filtros do dashboard carregam incorretamente","desc":"Os filtros aplicados na aba de dashboard não carregam corretamente: alguns dados corrompem, não carregam ou filtram diferente. Validar e padronizar o comportamento dos filtros do dashboard.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"ajuste slimpes, garantir que filtros estejam alterando corretamente e chamando o endpoint get com os query params","refino_tag":"tecnico","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R16","frente":"acoes","menu":"Ações","title":"Métrica de transbordo para humano","desc":"O indicador 'Solicitou atendimento' conta quem clicou no botão, mas precisamos da quantidade efetivamente transferida ao humano — alinhada ao relatório de Performance de IA (status Respondido/Em Atendimento). Expor a métrica de transbordo efetivo.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R17","frente":"acoes","menu":"Ações","title":"Filtros da aba com bugs","desc":"Os filtros da aba de Ações não performam bem, têm bug visual e nem sempre aplicam à página inteira. Corrigir performance, o bug visual e garantir que o filtro valha para toda a aba.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"necessário validar performace de consulta e arquitetura de serviço, coisa simples que não deveria acontecer","refino_tag":"tecnico","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R18","frente":"acoes","menu":"Ações","title":"Scorização de telefones","desc":"Criar modelo estatístico de scorização de telefones com base nos status retornados pela Meta e pelo Hyper: indicar se o número nos bloqueou, qual número, e quais não são WhatsApp. Disponibilizar a base no front da Torre e no banco. Obs.: scorização de telefone não é hoje uma feature documentada da Torre — desenhar do zero.","nota_negocio":"Definir os status/sinais da Meta e do Hyper que entram no score e como será usado na régua.","prioridade":"alta","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"necessário entender e refinar melhor sobre os pesos de scorização, fonte de dados analisada, qual modelo estatistico e sua visualização de dentro da torre, isso aqui é uma demanda enorme","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R19","frente":"regua","menu":"Régua","title":"Bloqueio e desbloqueio em massa","desc":"Integração para desbloquear em confiança/exceção em massa e bloquear em massa por X tempo (com desbloqueio posterior) ou por tempo indeterminado até a quitação. Atua sobre o blocklist (por documento CPF/CNPJ), que já impede acionamento enquanto ativo.","nota_negocio":"Definir os motivos/perfis que autorizam bloqueio/desbloqueio em massa.","prioridade":"alta","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"em teoria é simples, necessário entender onde será feito a ação pela torre e integrar com o serviço responsável.","refino_tag":"tecnico","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R20","frente":"regua","menu":"Régua","title":"Deduplicação de réguas","desc":"Relatório de contratos em duplicidade de réguas programadas (por falha de filtro) para corrigir antes do disparo. No disparo, aplicar deduplicação automática com prioridade configurável e, como 2º critério, o maior atraso do contrato (decrescente). Encaixa no cross_dedup do Pipeline v2.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário refinar examente as informações do relatorio, refinar melhor com solicitante","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R21","frente":"regua","menu":"Régua","title":"Troca de canal em massa na régua","desc":"No topo da régua, permitir trocar o canal/integração de todos os steps de um mesmo tipo (ex.: todos os WhatsApp) de uma vez — facilitando migrar de Blips 1 para Blips 2 sem ajustar step a step.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário entender melhor com negócio sobre visualização e expectativa.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R22","frente":"regua","menu":"Régua","title":"Filtros múltiplos quebrando na régua","desc":"Ao usar dois ou mais filtros, a régua quebra e não exibe os filtros habilitados. Corrigir a combinação de múltiplos filtros na régua.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"João Pedro","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"simples, deve apenas entender com negocio antes","refino_tag":"pronto","source":"roadmap","quimera_key":"4400","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R23","frente":"regua","menu":"Régua","title":"Excluir ações de disparo avulsas","desc":"Hoje não é possível excluir ações de disparo criadas fora de uma régua/campanha (só desabilitar). Permitir a exclusão dessas ações avulsas.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, deve apenas entender com negocio antes","refino_tag":"pronto","source":"roadmap","quimera_key":"4401","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R24","frente":"filtros","menu":"Filtros","title":"Revisar e padronizar filtros","desc":"Padronizar filtros: permitir ativar, desativar, excluir e alterar, com uma flag no topo para ver ativos/desativados/todos, com o mesmo comportamento entre as abas. Base para a revisão global de filtros (R33).","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"hoje tudo isso já é possivel menos desativar o filtro.","refino_tag":"pronto","source":"roadmap","quimera_key":"4402","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R25","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Função de excluir cadastro","desc":"A função de deletar cadastro não está funcional (testado com cadastro de teste). Corrigir a exclusão de cadastro na Gestão de Carteira.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"simples, deve apenas entender com negocio antes","refino_tag":"pronto","source":"roadmap","quimera_key":"4403","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R26","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Blocklist automático por marcação jurídica","desc":"Contratos com marcação de etapa judicial/jurídico/Procon entram automaticamente no blocklist; ao sair a marcação, voltam a ser cobrados na régua. Implementado via tag persistente com auditoria.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":"3424","quimera_status":"finalizado","executando":false,"and_status":"finalizado"},{"id":"R27","frente":"configuracoes","menu":"Configurações - Valores Padrão","title":"Tratar a marcação jurídica de atrito","desc":"O Jurídico, junto com a plataforma, criou uma marcação para clientes em etapa jurídica de atrito (não acionar). A Torre passou a tratar esse novo valor no filtro de acionamento.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"R28","frente":"configuracoes","menu":"Configurações - Datas Bloqueadas","title":"Datas bloqueadas com criação automática","desc":"A Torre não possui datas bloqueadas na Finza; hoje é manual e depende do humano. Adicionar datas bloqueadas org-level (ações não disparam nesses dias) com fluxo de criação automática e monitoramento para evitar acionamento indevido.","nota_negocio":"Definir a fonte do calendário de datas bloqueadas (feriados/datas especiais).","prioridade":"alta","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"ja temos isso na torre, tem que entender a necessidade exata e se não possui mesmo.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R29","frente":"agentes-ia","menu":"Agentes de IA","title":"Métricas do agente não refletem a realidade","desc":"As informações da tela de métricas do agente não refletem a realidade. Validar de ponta a ponta a fonte e o cálculo das métricas da IA (logs de interação, estágios do funil) e corrigir.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"muito genérico, isso aqui precisa de refinamento maior com o negócio, quais métricas não refletem realidade?","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R30","frente":"agentes-ia","menu":"Maestro IA","title":"Corrigir o Maestro IA","desc":"O Maestro IA (orquestrador interno do operador: modos plan/semi_auto/full_auto) não funciona hoje. Seria útil, p.ex., para alterar todas as variáveis de uma régua por comando em vez de manual. Adiado neste ciclo (esforço alto).","nota_negocio":null,"prioridade":"alta","status":"adiado","dev":null,"tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"esforço enorme, vai ficar para próxima depois de refatorar torre","refino_tag":"posrefac","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R31","frente":"integracoes","menu":"Template/BM","title":"Saúde de template e BM (Meta)","desc":"Coletar da Meta as informações de saúde de template e BM (impactado, banido, reprovado, step ofensor) para saber o que está sendo afetado. Provável origem upstream (Hyperflow/Meta Business Manager); a Torre consome templates validados. Adiado neste ciclo.","nota_negocio":"Confirmar se a saúde de BM/template é exposta pela Meta/Hyperflow para consumo da Torre.","prioridade":"alta","status":"adiado","dev":null,"tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"esforço enorme, vai ficar para próxima depois de refatorar torre","refino_tag":"posrefac","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R32","frente":"acoes","menu":"Torre de Controle","title":"Botões sem funcionamento","desc":"Vários botões não funcionam em telas da Torre (próxima página, atualizar, exportar — clica e não abre). Validar todas as funções/botões das grids e corrigir os quebrados.","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"quais botões? necessário refinar melhor mas ta facil, necessário entender oque funciona e não funciona e homologar direito","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R33","frente":"filtros","menu":"Torre de Controle","title":"Filtros e busca globais","desc":"Os filtros da Torre não funcionam por completo: alguns bugados, filtram incorreto, e há filtros presentes em umas abas e ausentes em outras. Revisar todos, criar um padrão único e melhorar a busca global (por documento, telefone, contrato, e-mail).","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"muito genérico, isso aqui precisa de refinamento maior com o negócio, quais filtros não funcionam exatamente?","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R34","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Filtro por data de ação","desc":"Adicionar filtro por data de ação para distinguir os atendimentos da IA de hoje das ações remanescentes (fila que sobrou de dias anteriores).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R35","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Dashboard mais visual (linha C16)","desc":"Construir um dashboard mais visual (conforme a linha C16 da planilha) somado ao filtro de data de ação — leitura mais rápida do que a visão atual.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"muito generico, falta refinamento do negocio","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R36","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Diferenciar transbordo por falha x por escopo","desc":"Diferenciar o transbordo por falha de fluxo daquele previsto no prompt (ex.: transferência por pedido de renegociação é escopo esperado). Marcar a origem do transbordo para não penalizar a IA por transferências intencionais.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R37","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Trackear a Esperanza como sub-agente","desc":"Quando a Esperanza atua como sub-agente de outras IAs não há tracking. Trackear e diferenciar quando ela é a IA principal vs sub-agente, para as métricas não misturarem os dois papéis.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R38","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Atendimentos iniciados por protocolo","desc":"O indicador 'Atendimentos iniciados' mostra visão única (não por protocolo), passando impressão de baixo volume. Permitir a visão por protocolo.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"genérico, precisa de refinar melhor com negócio","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R39","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Card Carteira Total (valor atualizado x original)","desc":"O card Carteira Total usa o valor atualizado (com juros/multa). Informar isso na legenda e adicionar um card com o valor original, para não confundir os dois conceitos.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, confirmar com negócio","refino_tag":"pronto","source":"roadmap","quimera_key":"4404","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R40","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Separar vencidos de vincendas no card Em aberto","desc":"O card 'Em aberto' soma vencidos e vincendas. Separar os dois (título-a-título por days_overdue) ou, no mínimo, explicar na legenda que agrega ambos.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, confirmar com negócio","refino_tag":"pronto","source":"roadmap","quimera_key":"4405","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R41","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Acionamentos ao longo do tempo (espontâneo x ação)","desc":"No indicador de acionamentos ao longo do tempo, separar pagamento espontâneo do pagamento por ação da Torre (regra D+2) e documentar os conceitos de 'Pago Torre' e 'Cancelado Pago'.","nota_negocio":"'Pago Torre' e 'Cancelado Pago' não são status canônicos — definir a regra exata (janela D+2 e o que conta como atribuível à Torre).","prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"em teoria o negocio deveria conseguir fazer isso sozinho, precisa avaliar, caso negocio não consiga a demanda será para permitir esse ajuste para o negocio","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R42","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Eficiência por step comparativa","desc":"Criar visão comparativa de eficiência por step entre períodos; hoje só há o consolidado, o que dificulta comparar a evolução de cada step da régua.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"não é dificil de fazer, mas quem dita isso é o negócio, precisa de refinar melhor, oque é para comparar? oque se trata de eficiencia? quais steps?","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R43","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Diagnóstico do dado","desc":"Permitir entender a causa por trás do número (ex.: por que a taxa de resposta está baixa) — um diagnóstico do dado. Cancelado neste ciclo.","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"não faz sentido, isso é obrigação do analista","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"cancelado"},{"id":"R44","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Granularidade da transferência para humano","desc":"Permitir visualizar em detalhe as transferências para humano e o funil completo do que foi ao humano, do início ao fim (motivo → conversa → mensagens).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R45","frente":"dashboard","menu":"Dashboard","title":"Refatorar dashboards contando a história ponta a ponta","desc":"Refatorar os dashboards contando a história ponta a ponta e mapeando cada etapa (da base elegível ao pagamento), para o conjunto de indicadores narrar o processo de forma coerente.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"extremamente genérico, que história? quais etapas? qual inicio? qual fim? quem dita isso é negócio, falta eles refinarem melhor","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R46","frente":"acoes","menu":"Ações","title":"Exportar relatório de ações","desc":"Botão para extrair relatório das ações, permitindo comprovar acionamentos (evidência de contato com o cliente).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"funcionalidade em si não tem segredo, necessário apenas validar e consolidar os relatórios exatamente","refino_tag":"tecnico","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R47","frente":"acoes","menu":"Ações","title":"Funil completo na aba de Ações","desc":"Na aba de Ações, enxergar o funil completo: base elegível, quem caiu em cada step da régua, enviados, recebidos, responderam/interagiram, transferidos por prompt, transferidos por falha da IA, resolvidos na IA, travados e demais steps.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"demanda colossal, precisa de entender melhor qual visão que o negócio quer ter aqui, falta refinamento deles.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R48","frente":"acoes","menu":"Ações","title":"Acesso à Gestão de Carteira pelo detalhe da ação","desc":"No pop-up de detalhes da ação, permitir abrir a Gestão de Carteira do contrato — navegação direta da ação para o cadastro.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, confirmar com o negocio","refino_tag":"pronto","source":"roadmap","quimera_key":"4406","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R49","frente":"regua","menu":"Régua","title":"Variáveis mais robustas","desc":"Permitir variáveis mais robustas na régua, como a lista de contratos (não só variáveis simples). Cancelado neste ciclo (sobrepõe-se às variáveis aninhadas, R57).","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"ja contemplado em outro card","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"cancelado"},{"id":"R50","frente":"regua","menu":"Régua","title":"HTML no e-mail com pré-visualização","desc":"Permitir cadastrar HTML no e-mail e pré-visualizar, como já ocorre no WhatsApp, melhorando a comunicação visual dos e-mails.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"necessário refinar melhor com o negócio e entender necessidade, após isso é arquitetar bem o serviço, os templates e então executar","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R51","frente":"regua","menu":"Régua","title":"Recurso melhorar com IA","desc":"A opção 'melhorar o texto com IA' não funciona. Corrigir e explorar o potencial (melhorar redação, validar e revisar ortografia do conteúdo dos steps).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"entender melhor com negocio usabilidade e implementar","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R52","frente":"filtros","menu":"Filtros","title":"Filtros aninhados (union all)","desc":"Aprimorar a filtragem permitindo combinar filtros dentro de filtros (union all). Hoje é tudo AND ou tudo OR, o que impede esse tipo de combinação.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessario entender melhor a necessidade do negocio sobre esse filtro e aplicar.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R53","frente":"filtros","menu":"Filtros","title":"Colunas personalizáveis na exportação","desc":"Ao visualizar/exportar contratos de um filtro, permitir adicionar colunas (ex.: telefone, nº do contrato), personalizar por perfil de usuário e salvar a preferência (como em Gestão de Carteira), além de ordenar e pesquisar.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário entender melhor a necessidade do negocio e expectativa","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R54","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Filtros por tipo de ação e dimensões","desc":"Permitir filtrar por tipo de ação (negativação, WhatsApp, e-mail, step de régua) e ampliar os filtros da Gestão de Carteira (Segmento, Equipamento).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"muito generico, negocio precisa ditar exatamente quais filtros precisam","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R55","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Tornar o +6 réguas clicável","desc":"Ao abrir o cliente, a lista de réguas mostra '+6' quando há muitas, mas não é clicável — não dá para ver em quais outras réguas ele está. Tornar o '+N' clicável e navegável.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"necessario entender melhor a necessidade do negocio sobre esse filtro e aplicar.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R56","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Exportar histórico de ações do cliente","desc":"No histórico de ações do cliente, permitir exportar as ações com nível de detalhe micro (linha a linha) ou macro (resumo).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessario entender melhor a necessidade do negocio sobre esse filtro e aplicar.","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R57","frente":"configuracoes","menu":"Configurações - Variáveis","title":"Variáveis aninhadas","desc":"Permitir variáveis dentro de variáveis (como a lista de contratos), não apenas simples, e permitir quebra de texto — ampliando o conjunto das 86+ variáveis de template.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"não é tão simples a forma de catar os valores e montar as variaveis, necessário entender exatamente quais variáveis seram colocadas aqui, esta muito generico, precisa refinar melhor","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R58","frente":"configuracoes","menu":"Configurações - TAGs","title":"Mapear TAGs","desc":"Mapear e descrever as TAGs (catálogo por org, com auditoria de adição/remoção). Falta refinamento do negócio para definir o catálogo de tags e seus significados.","nota_negocio":"Negócio precisa listar as tags e o que cada uma significa/dispara.","prioridade":"baixa","status":"a-refinar","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R59","frente":"configuracoes","menu":"Configurações - Matriz de Permissões","title":"Permissões personalizáveis","desc":"Permitir personalizar permissões, criar novos cargos etc. — flexibilizar a matriz (hoje 5 papéis: Owner>Admin>Manager>Operator>Viewer, com RBAC no front e RLS no backend).","nota_negocio":"Definir quais permissões finas devem ser configuráveis por cargo.","prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"necessário refinar melhor com o joão vinicius","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R60","frente":"configuracoes","menu":"Configurações - Relatórios","title":"Envio automático do relatório da Torre","desc":"O relatório da Torre não é enviado automaticamente; automatizar o envio (recorrência/e-mail) como diferencial.","nota_negocio":"Definir destinatários, recorte e periodicidade do envio automático.","prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, necessário apenas avaliar o relatorio em si","refino_tag":"pronto","source":"roadmap","quimera_key":"4407","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R61","frente":"agentes-ia","menu":"Agentes de IA","title":"IA omnicanal (N1 em todos os canais)","desc":"Hoje a IA atende só no WhatsApp; torná-la o N1 de todos os canais possíveis (e-mail, RCS, telefone, SMS, push de app). A Esperanza é otimizada para canal síncrono — expandir exige adaptar por canal.","nota_negocio":"Priorizar quais canais entram primeiro no omnichannel.","prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"avaliar a necessidade e aplicar, falta refinamento do negocio","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R62","frente":"agentes-ia","menu":"Agentes de IA","title":"Migrar as IAs da Finza para a Torre","desc":"Migrar todas as IAs da Finza para a Torre de Controle e permitir a criação por lá (versionagem draft→published→archived, playground de teste). Consolida a gestão de agentes num só lugar.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"já em execução a primeira parte, essa demanda será divida em 3 demandas, a primeira parte será entregue na semana do dia","refino_tag":"execucao","source":"roadmap","quimera_key":"3989","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R63","frente":"agentes-ia","menu":"Agentes de IA","title":"Playground com busca de contato","desc":"No Playground, permitir pesquisar um contato dentro da Gestão de Carteira para auxiliar a simulação com dados reais.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples","refino_tag":"pronto","source":"roadmap","quimera_key":"4408","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R64","frente":"agentes-ia","menu":"Agentes de IA","title":"Prompts com diretrizes básicas","desc":"Refazer o prompt apenas com as diretrizes básicas, sem aplicação de regras (Layer 1/2 do prompt, sem as regras de negócio de Layer 4). Falta refinamento do negócio.","nota_negocio":"Negócio define quais diretrizes básicas ficam e quais regras saem do prompt.","prioridade":"baixa","status":"a-refinar","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R65","frente":"agentes-ia","menu":"Agentes de IA","title":"Base de exemplos","desc":"Aprimorar a base de conhecimento de exemplos (RAG) com as novas regras de negócio. Falta refinamento do negócio para fornecer os exemplos atualizados.","nota_negocio":"Negócio precisa entregar os exemplos/casos atualizados.","prioridade":"baixa","status":"a-refinar","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R66","frente":"agentes-ia","menu":"Agentes de IA","title":"Mapear regras de negócio","desc":"Mapear as regras de negócio e onde cada uma se aplica no item adequado (guidelines/business_rules do agente). Falta refinamento do negócio.","nota_negocio":"Negócio precisa mapear as regras e onde entram.","prioridade":"baixa","status":"a-refinar","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R67","frente":"agentes-ia","menu":"Agentes de IA","title":"Mapear o funil","desc":"Mapear e descrever as etapas do funil (os 8 estágios do funil da Esperanza: contact_initiated → … → conversation_ended). Falta refinamento do negócio.","nota_negocio":"Negócio precisa descrever cada etapa do funil e critérios de transição.","prioridade":"baixa","status":"a-refinar","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R68","frente":"integracoes","menu":"Integrações - RCS","title":"RCS multimídia","desc":"Adicionar imagens, carrossel, botões e conteúdo multimídia no RCS. Aguardando dependência externa (João Neto: esforço e prazo). RCS ainda é exploração de menor prioridade (WhatsApp+SMS cobrem a maioria dos casos).","nota_negocio":"Depende do retorno do João Neto sobre esforço/prazo do RCS.","prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":true,"obs_refino":"ja em execução, essa demanda também foi divida em 3 entregas, estamos já no desenvolvimento da terceira entraga.","refino_tag":"execucao","source":"roadmap","quimera_key":"4297","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R69","frente":"integracoes","menu":"Template","title":"Criar, aprovar e vincular template de WhatsApp","desc":"Permitir ao negócio criar, aprovar e vincular template de WhatsApp — nem que seja enviar a solicitação e o time dar sequência via backlog. Templates são sincronizados da Meta (cron ~06:00 BRT). Adiado neste ciclo.","nota_negocio":null,"prioridade":"media","status":"adiado","dev":null,"tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"orientação é para não criamos templates apenas para exceções.","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R70","frente":"integracoes","menu":"Template","title":"Template RCS personalizado","desc":"Criar template RCS personalizado, com todas as opções da ferramenta RCS, pelo negócio.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"ja em execução, essa demanda também foi divida em 3 entregas, estamos já no desenvolvimento da terceira entraga.","refino_tag":"execucao","source":"roadmap","quimera_key":"4297","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R71","frente":"configuracoes","menu":"Notificações","title":"Notificar alterações da Torre","desc":"Criar notificações das alterações feitas na Torre — há muitas novidades, correções e mudanças de regra que passam despercebidas. Entregue.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"R72","frente":"configuracoes","menu":"Auditoria","title":"Logs de auditoria","desc":"Logs de auditoria de toda a Torre, visíveis para o nível proprietário (modelo semelhante ao do Discord). Adiado neste ciclo.","nota_negocio":null,"prioridade":"media","status":"adiado","dev":null,"tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"esforço enorme, vai ficar para próxima depois de refatorar torre","refino_tag":"posrefac","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R73","frente":"dashboard","menu":"Sumário/Docs","title":"Sumário documentado de indicadores","desc":"Sumário documentado de cada indicador (público, fonte, tratamento, cálculo e cards), com navegação clicável entre o sumário e a página correspondente. Já existe documentação; foi completada/ajustada. Entregue.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"R74","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Legenda do card Vencida","desc":"Informar na legenda que o card 'Vencida' representa o valor vencido em aberto, não pago (inadimplente), para não confundir com carteira total ou em aberto.","nota_negocio":null,"prioridade":"baixa","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples","refino_tag":"pronto","source":"roadmap","quimera_key":"4409","quimera_status":"backlog","executando":false,"and_status":"backlog"},{"id":"R75","frente":"dados-infra","menu":"Módulo Financeiro","title":"Credencial Rhino para negativação","desc":"Definir a credencial Rhino para negativação em caso de atraso — ou será a mesma da Finza? Depende de definição do Módulo Financeiro/negócio antes de qualquer implementação.","nota_negocio":"Módulo Financeiro precisa definir a credencial de negativação (Rhino x Finza).","prioridade":"alta","status":"a-refinar","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"backlog"},{"id":"R76","frente":"acoes","menu":"Ações","title":"Documentar indicadores (Taxa de Envio e Interação)","desc":"Explicar o conceito dos indicadores Taxa de Envio e Taxa de Interação (o que entra em cada um). Entregue.","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"R77","frente":"acoes","menu":"Ações","title":"Documentar status dos cards","desc":"Explicar os status apresentados dentro dos cards (ex.: Cancelado, Cancelado Pago) para leitura sem ambiguidade. Entregue.","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"R78","frente":"agentes-ia","menu":"Agentes de IA","title":"Nome do agente dinâmico","desc":"Permitir alterar o nome do agente; o prompt precisa enxergar o nome vindo da Torre para ser dinâmico (hoje 'Esperanza' é fixo em produção).","nota_negocio":null,"prioridade":"baixa","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento"},{"id":"R79","frente":"campanha","menu":"Campanhas","title":"Documentar conceitos do monitoramento","desc":"Na aba de monitoramento, o histórico de execuções traz um gráfico com termos técnicos cujos conceitos ficaram pendentes de explicação. Documentado. Entregue.","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":"finalizado"},{"id":"QMR4368","frente":"agentes-ia","menu":"Quimera #4368","title":"Timeout Esperanza","desc":"Timeouts na Esperanza (agente de IA da cobrança). Investigar e corrigir as respostas que estouram o tempo limite. Ticket sinalizado como intruder (não planejado).","nota_negocio":null,"prioridade":"alta","status":"backlog","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4368","quimera_status":"fila_exec","executando":false,"and_status":"fila_exec"},{"id":"QMR4266","frente":"integracoes","menu":"Quimera #4266","title":"Configuração de novo canal Hyperflow – Webchat","desc":"Configurar um novo canal Webchat no Hyperflow — habilita mais um ponto de entrada de atendimento além do WhatsApp (passo em direção ao omnichannel).","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4266","quimera_status":"fila_exec","executando":false,"and_status":"fila_exec"},{"id":"QMR4175","frente":"agentes-ia","menu":"Quimera #4175","title":"Renegociação | IA","desc":"Fluxo de renegociação conduzido pela IA (Esperanza) — negociar/renegociar o débito com o cliente dentro do atendimento.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4175","quimera_status":"fila_exec","executando":false,"and_status":"fila_exec"},{"id":"QMR4147","frente":"integracoes","menu":"Quimera #4147","title":"Documentar Templates","desc":"Documentar os templates (WhatsApp/e-mail) usados na cobrança — catálogo, uso e vínculo com os steps. Em validação.","nota_negocio":null,"prioridade":"media","status":"backlog","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4147","quimera_status":"em_validacao","executando":false,"and_status":"em_validacao"},{"id":"F01","frente":"finza","menu":"IA & Automação","title":"Esperanza MCP — renegociação assistida (faixa D+20)","desc":"Rascunhos de proposta visíveis e editáveis pela Torre. Fluxo até conclusão com o cliente via IA generativa - Funcionamento obrigatório no chat do APP","prioridade":"alta","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Esperanza MCP","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.51,"crit":{"valor":4.0,"nps":5.0,"reducao":4.0,"risco_nf":3.0,"risco_exec":2.0,"custo":3.0},"persona":"Interno","jornada":"Cobrança & Arrecadação","step":"Renegociação — Faixa D+20","ciclo":"Q4","dependencias":"Hiperflow, MF, Torre","notas":"Depende de repasse do fluxo de renegociação. Alinhar sobre a demanda de No Comando","ok_adolfo":"1.0"},{"id":"F02","frente":"finza","menu":"IA & Automação","title":"Adicionar template de RCS na torre de controle","desc":"Permitir configurar réguas de comunicação na torre via template RSC (SMS Inteligente) com transbordo p/ atendimento humano","prioridade":"media","status":"backlog","and_status":"em_andamento","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Torre de Controle","estagio":"Desenvolvimento","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.0,"crit":{"valor":4.0,"nps":3.0,"reducao":3.0,"risco_nf":3.0,"risco_exec":3.0,"custo":3.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"","ok_adolfo":"1.0"},{"id":"F03","frente":"finza","menu":"IA & Automação","title":"Criar novo canal/número de WhatsApp dedicado p/ cobrança para não ter concorrência com número oficial Blips e revisar todos os fluxo de antedimento p/ contemplar o novo número","desc":"Hyper disponiblizou novo canal de comunicação e precisa ser integrado na torre para automação da régua","prioridade":"media","status":"backlog","and_status":"em_andamento","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Novo Número Dedicado Cobrança","estagio":"Desenvolvimento","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.2,"crit":{"valor":4.0,"nps":3.0,"reducao":5.0,"risco_nf":3.0,"risco_exec":3.0,"custo":3.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"MKT Blips fazer comunicação com os clientes p/ apresentar a Finza como agente de cobrança","notas":"Usar número FINZA","ok_adolfo":"1.0"},{"id":"F04","frente":"finza","menu":"IA & Automação","title":"Automação de fluxos — Hiperflow + canais de comunicação - Obrigatóriamente uso chat no APP - Notas notificações devem ser Push App Nativo","desc":"Automação das réguas de comunicação (D-10 a D+87) via Hiperflow integrado ao MF e ao score G/H.","prioridade":"alta","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Automação Hiperflow","estagio":"Refinamento","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.51,"crit":{"valor":4.0,"nps":4.0,"reducao":5.0,"risco_nf":2.0,"risco_exec":4.0,"custo":4.0},"persona":"Interno","jornada":"Cobrança & Arrecadação","step":"Régua de Comunicação Automatizada","ciclo":"Q3","dependencias":"Hiperflow, MF, Score G/H","notas":"","ok_adolfo":"2.0"},{"id":"F05","frente":"finza","menu":"IA & Automação","title":"Valentina — agent de onboarding do originador","desc":"IA para onboarding do originador: negociação inicial, condições comerciais, integração, homologação de equipamentos.","prioridade":"baixa","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Valentina","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":1.83,"crit":{"valor":3.0,"nps":4.0,"reducao":4.0,"risco_nf":3.0,"risco_exec":3.0,"custo":2.0},"persona":"Originador","jornada":"Onboarding do Originador","step":"Negociação & Contratos","ciclo":"Q4","dependencias":"Hiperflow, Portal Originador","notas":"","ok_adolfo":"2.0"},{"id":"F06","frente":"finza","menu":"IA & Automação","title":"Revisar script de atendimento da Clara para atender fluxo de formalização integrado com Stia. Clara vai passar também para a Torre, não ficará no Stia","desc":"A agente Clara foi desenvolvida de acordo com o processo antigo de formalização previsa ser remodelada para novo fluxo de formalização","prioridade":"baixa","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Revisão Agente Clara","estagio":"Descoberta","prioridade_txt":"Poderia fazer","mandatorio":false,"score":1.47,"crit":{"valor":3.0,"nps":2.0,"reducao":4.0,"risco_nf":2.0,"risco_exec":3.0,"custo":1.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"","ok_adolfo":"2.0"},{"id":"F07","frente":"finza","menu":"IA & Automação","title":"Adequar AuditorIA para contemplar auditoria do número  de WhasApp Finza FINZA","desc":"Fazer auditoria dos atendimentos Finza via AuditorIA","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"AuditorIA Hyper Finza","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.25,"crit":{"valor":3.0,"nps":4.0,"reducao":5.0,"risco_nf":3.0,"risco_exec":4.0,"custo":3.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"","ok_adolfo":"2.0"},{"id":"F08","frente":"finza","menu":"IA & Automação","title":"Score de cobrança G/H — modelo ML de propensão","desc":"Define canal (WhatsApp/Email/RCS), timing e abordagem por faixa da régua. Alimenta Torre de Cobrança.","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Score ML","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.27,"crit":{"valor":4.0,"nps":2.0,"reducao":4.0,"risco_nf":4.0,"risco_exec":3.0,"custo":4.0},"persona":"Interno","jornada":"Cobrança & Arrecadação","step":"Régua de Comunicação","ciclo":"Q3","dependencias":"Hiperflow, Torre, MF","notas":"Duplicado com Falcon/Score — mesma iniciativa","ok_adolfo":"3.0"},{"id":"F09","frente":"finza","menu":"IA & Automação","title":"Torre de Cobrança — visão completa por cluesterização de clientes","desc":"Hub central histórico de comunicação, canal ativo, score G/H, bloqueios, historico de pagamento ações disponíveis.","prioridade":"media","status":"backlog","and_status":"em_andamento","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Torre de Controle","estagio":"Desenvolvimento","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.27,"crit":{"valor":4.0,"nps":2.0,"reducao":5.0,"risco_nf":3.0,"risco_exec":3.0,"custo":4.0},"persona":"Interno","jornada":"Cobrança & Arrecadação","step":"Gestão da Régua","ciclo":"Q3","dependencias":"MF, Hiperflow, Serasa","notas":"Self-service para time de cobrança","ok_adolfo":"3.0"},{"id":"F10","frente":"finza","menu":"IA & Automação","title":"Criar automação responsável por realizar mesa de crédito","desc":"Criar automação responsável por realizar mesa de crédito","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Criar automação responsável por realizar mesa de crédito","estagio":"","prioridade_txt":"","mandatorio":false,"score":null,"crit":{"valor":null,"nps":null,"reducao":null,"risco_nf":null,"risco_exec":null,"custo":null},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"2027.0","ok_adolfo":"3.0"},{"id":"F11","frente":"finza","menu":"IA & Automação","title":"Fluxo sistêmico de distrato — D+91 (liquidação financeira) - DEPENDÊNCIA PLATAFORMA BLIPS","desc":"Definir gatilho sistêmico e processo para baixa de pendências e lançamento em prejuízo quando não há recuperação de crédito ou ativo após o esgotamento da régua.\nFluxo integrado: cobrança, jurídico, mkt e produto. Obrigações contratuais, valores rescisórios, última oportunidade amigável.","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Enorme","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Distrato","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.06,"crit":{"valor":4.0,"nps":2.0,"reducao":5.0,"risco_nf":4.0,"risco_exec":3.0,"custo":3.0},"persona":"Interno","jornada":"Distrato & Retirada","step":"Distrato D+91→D+99","ciclo":"Q4","dependencias":"Motor de Estado, MF, Sankhya","notas":"","ok_adolfo":"Apenas régua de comunicação"},{"id":"F12","frente":"finza","menu":"IA & Automação","title":"Identificação dos Tipos de Contrato (Condição Comercial)","desc":"Criar variável na torre referente tipo de contrato e condição comercial","prioridade":"baixa","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Pequeno","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Torre de Controle","estagio":"Refinamento","prioridade_txt":"Poderia fazer","mandatorio":false,"score":1.08,"crit":{"valor":2.0,"nps":1.0,"reducao":1.0,"risco_nf":1.0,"risco_exec":1.0,"custo":1.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"","ok_adolfo":"Débito técnico"},{"id":"F13","frente":"finza","menu":"IA & Automação","title":"Criar carteira de títulos Distratos e Suprimentos que são criados e gerenciados via SK","desc":"Hoje a torre permitir cobrar apenas títulos do MF porém é possível criar novas carteiras","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Grande","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Torre de Controle","estagio":"Refinamento","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.1,"crit":{"valor":5.0,"nps":1.0,"reducao":5.0,"risco_nf":4.0,"risco_exec":3.0,"custo":1.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"","ok_adolfo":"Débito técnico"},{"id":"F14","frente":"finza","menu":"IA & Automação","title":"Ajustar os gatilhos do Hyperflow utilizados na cobrança para contemplar o cenário de MF","desc":"Atualmente existe alguns gatilhos utilizado na cobrança que tem fortes dependências do SK","prioridade":"baixa","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Gatilhos Hyperflow","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":1.84,"crit":{"valor":2.0,"nps":2.0,"reducao":5.0,"risco_nf":2.0,"risco_exec":2.0,"custo":2.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"APIs MF","notas":"","ok_adolfo":"Débito técnico"},{"id":"F15","frente":"finza","menu":"IA & Automação","title":"Revisar fluxos de envio de email para torre de controle","desc":"Permitir gerar protocolos de atendimentos e uso de email na torre de controle","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Pequeno","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Torre de Controle","estagio":"Refinamento","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.12,"crit":{"valor":2.0,"nps":3.0,"reducao":5.0,"risco_nf":2.0,"risco_exec":2.0,"custo":2.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"A torre e o time manualmente faz ação de e-mail esse retorno não está sendo direcionado para o nosso time tratar. Antigamente foi incluído e por algum motivo desativado pelo Alberone.","ok_adolfo":"Débito técnico"},{"id":"F16","frente":"finza","menu":"IA & Automação","title":"Permitir customizar a regra de bloqueio de equipamento na torre por exemplo por clusterização de cliente ou originador","desc":"Hoje o bloqueio é automático a partir da faixa D+8 da régua time de cobrança quer ter o poder de customizar","prioridade":"media","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Enorme","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"Bloqueio & Desbloqueio","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":2.22,"crit":{"valor":4.0,"nps":3.0,"reducao":5.0,"risco_nf":1.0,"risco_exec":2.0,"custo":4.0},"persona":"Empreendedor / Interno","jornada":"Cobrança & Arrecadação","step":"Bloqueio — Faixa D+8","ciclo":"Q3","dependencias":"Garantia IoT","notas":"Não terá customização de regra de bloqueio na torre, porém a torre terá acesso data de expiração do bloqueio p/ customizar a comunicação","ok_adolfo":"Definir regra"},{"id":"F17","frente":"finza","menu":"IA & Automação","title":"Criar CRM Dedicado p/ Cobrança","desc":"Operação precisa ter CRM integrado com o Módulo Financeiro + Dados cadastrais com todas as informações necessárias pra realizar a negociação.","prioridade":"baixa","status":"a-refinar","and_status":"backlog","dev":null,"tipo":"melhoria","esforco":"Enorme","dep":false,"obs_refino":"","refino_tag":"semobs","nota_negocio":null,"source":"proposta","quimera_key":null,"quimera_status":null,"executando":false,"subproduto":"CRM - Visão 360º do Cliente","estagio":"Descoberta","prioridade_txt":"Deveria fazer","mandatorio":false,"score":1.85,"crit":{"valor":3.0,"nps":3.0,"reducao":5.0,"risco_nf":3.0,"risco_exec":5.0,"custo":3.0},"persona":"","jornada":"","step":"","ciclo":"","dependencias":"","notas":"","ok_adolfo":"Solicitar Especificação Completa"}],"observacoes":{"prioridades":[{"p":"urgente","label":"P0 · Crítico","nota":"Confiabilidade do dado e risco de deixar de cobrar (ou comunicar errado ao cliente). É a base de tudo: enquanto Torre e Módulo Financeiro não convergem, todo indicador fica sob suspeita. Já entregamos a sincronização Torre×MF e a capacidade da Torre; segue em aberto conciliar carteira×inadimplência, padronizar títulos pagos e a janela da Esperanza."},{"p":"alta","label":"P1 · Alta","nota":"Bugs que travam a operação e temas de compliance. Aqui moram os filtros/botões quebrados, o Maestro e as métricas que não batem — além de blocklist jurídico e marcação de atrito (entregues) e datas bloqueadas automáticas."},{"p":"media","label":"P2 · Média","nota":"Melhorias e novas funcionalidades: granularidade dos dashboards, funil completo de ações, deduplicação, omnichannel, variáveis mais ricas. Ganho real de produto depois que a base de dado estiver confiável."},{"p":"baixa","label":"P3 · Baixa","nota":"Documentação e mapeamentos — boa parte já concluída (indicadores, status dos cards, conceitos de monitoramento). O que resta depende de refinamento do negócio (tags, prompt, funil, regras)."}],"top10":[{"n":"1","item":"Sincronização Torre x Módulo Financeiro","prio":"P0","status":"entregue","why":"Raiz da maioria das inconsistências. Sem isso, todo indicador fica pouco confiável. Entregue — abre caminho para o resto."},{"n":"2","item":"Padronizar a query de títulos pagos","prio":"P0","status":"backlog","why":"Risco direto de deixar de cobrar quem deve; impacta receita. 'Revalidar conceito de pago' foi cancelado por ser coberto aqui."},{"n":"3","item":"IA Esperanza lendo da Torre (janela de 20 dias)","prio":"P0","status":"backlog","why":"A IA informa quitação errada ao cliente — risco de imagem e de não cobrar. Corrigir fonte e janela de vencimentos."},{"n":"4","item":"Conciliar carteira Torre x Dash Inadimplência","prio":"P0","status":"backlog","why":"Divergência de ~R$ 200 mil (2 mi × 1,788 mi) tira a credibilidade do painel na diretoria."},{"n":"5","item":"Monitoramento preventivo de valores padrão","prio":"P0","status":"backlog","why":"Gap silencioso que faz a Torre deixar de acionar contratos. Trocar o descobrir-reativo por um alerta preventivo."},{"n":"6","item":"Capacidade e estabilidade da Torre","prio":"P0","status":"entregue","why":"Lentidão e gargalos travavam o uso diário. Entregue."},{"n":"7","item":"Blocklist automático por marcação jurídica","prio":"P1","status":"entregue","why":"Compliance: evita acionar cliente em juízo/Procon (risco legal). Entregue."},{"n":"8","item":"Datas bloqueadas com criação automática","prio":"P1","status":"backlog","why":"Compliance: evita acionamento indevido em datas vedadas. Hoje é manual e depende do humano."},{"n":"9","item":"Deduplicação de réguas","prio":"P1","status":"backlog","why":"Evita disparar a mesma cobrança duplicada ao cliente (experiência e custo). Encaixa no cross_dedup do Pipeline v2."},{"n":"10","item":"Filtros e botões globais da Torre","prio":"P1","status":"backlog","why":"Destrava o uso diário: hoje filtros e botões falham em várias abas. Padronizar filtros e validar todos os botões."}],"gerais":["Refinamento é responsabilidade do negócio: 6 itens seguem 'a refinar' porque dependem de definição do negócio (mapear tags, regras, funil, prompt; credencial Rhino) — o que dava do nosso lado já está descrito.","3 itens foram cancelados por sobreposição/absorção (revalidar conceito de pago → coberto por títulos pagos + sync; variáveis robustas → variáveis aninhadas; diagnóstico do dado).","4 itens foram adiados (Maestro IA, saúde de template/BM, template WhatsApp pelo negócio, logs de auditoria) — esforço alto e/ou dependência externa.","9 itens já foram entregues — a maioria de dado/compliance (sync Torre×MF, capacidade, blocklist jurídico, marcação de atrito) e de documentação.","Sequência sã: primeiro fechar o P0 de dado (títulos pagos, janela da Esperanza, conciliação, valores padrão), depois os bugs P1 de uso (filtros/botões, métricas, Maestro), e só então as melhorias P2 de produto."]},"refino_meta":[{"tag":"negocio","label":"Falta refino do negócio","color":"#D97706","hint":"Genéricos/subespecificados — o negócio precisa detalhar (o quê, quais campos, qual expectativa) antes de estimar."},{"tag":"pronto","label":"Pronto p/ execução · confirmar","color":"#10B981","hint":"Simples; só depende de um alinhamento rápido com o negócio para seguir."},{"tag":"tecnico","label":"Escopo técnico definido","color":"#0891B2","hint":"Caminho técnico claro do nosso lado (query, performance, integração) — executar/validar."},{"tag":"stia","label":"Absorvido pelo STIA na Torre","color":"#7C3AED","hint":"Já endereçado pela migração do STIA para dentro da Torre (em desenvolvimento ou na 2ª etapa)."},{"tag":"execucao","label":"Em execução (fatiado)","color":"#2563EB","hint":"Já em desenvolvimento, dividido em entregas."},{"tag":"posrefac","label":"Pós-refatoração da Torre","color":"#64748B","hint":"Esforço alto — fica para depois da refatoração da Torre."},{"tag":"coberto","label":"Coberto / decidido fora","color":"#94A3B8","hint":"Já contemplado em outro card, ou resolvido por decisão/fora do escopo de dev."},{"tag":"semobs","label":"Sem observação de refinamento","color":"#CBD5E1","hint":"Sem nota de refinamento — em geral já entregues ou ainda aguardando refino."}],"quimera_meta":[{"key":"backlog","label":"Backlog","color":"#94A3B8"},{"key":"fila_exec","label":"Fila de Execução","color":"#6366F1"},{"key":"em_andamento","label":"Execução","color":"#2563EB"},{"key":"bloqueado","label":"Bloqueado","color":"#EF4444"},{"key":"em_validacao","label":"Validação","color":"#A855F7"},{"key":"finalizado","label":"Entregue","color":"#10B981"},{"key":"cancelado","label":"Cancelado","color":"#9CA3AF"}],"finza_weights":[{"key":"valor","label":"Valor Negócio","weight":0.3},{"key":"custo","label":"Custo do Atraso","weight":0.2},{"key":"reducao","label":"Redução Ops","weight":0.15},{"key":"risco_nf","label":"Risco Não Fazer","weight":0.15},{"key":"nps","label":"NPS","weight":0.1},{"key":"risco_exec","label":"Risco Execução","weight":0.1},{"key":"esforco","label":"Esforço","weight":0.1,"penalidade":true}]}</script>
+<script>
+const DATA=JSON.parse(document.getElementById('roadmap-data').textContent);
+const FRENTES=Object.fromEntries(DATA.frentes.map(f=>[f.key,f]));
+const ALL_ITEMS=DATA.items;
+const ITEMS=ALL_ITEMS.filter(i=>i.source!=='proposta');   // roadmap Torre+Quimera (board/overview/análise)
+const FINZA_ITEMS=ALL_ITEMS.filter(i=>i.source==='proposta');
+const FINZA_WEIGHTS=DATA.finza_weights||[];
+const TORRE_FRENTES=DATA.frentes.filter(f=>f.key!=='finza');   // frentes Torre (overview/análise/board excluem Finza)
+
+const PRIO_ORDER=['urgente','alta','media','baixa'];
+const PRIO_LABELS={urgente:'Urgente',alta:'Alta',media:'Média',baixa:'Baixa'};
+const PRIO_PCODE={urgente:'P0',alta:'P1',media:'P2',baixa:'P3'};
+const PRIO_COLOR={urgente:'#DC2626',alta:'#D97706',media:'#2563EB',baixa:'#64748B'};
+const STATUS_ORDER=['backlog','a-refinar','entregue','adiado','cancelado'];
+const STATUS_LABELS={'backlog':'Backlog','a-refinar':'A refinar','entregue':'Entregue','adiado':'Adiado','cancelado':'Cancelado'};
+const STATUS_COLOR={'backlog':'#64748B','a-refinar':'#9CA3AF','entregue':'#10B981','adiado':'#94A3B8','cancelado':'#EF4444'};
+const STATUS_ICON={'entregue':'✓ ','cancelado':'✕ ','adiado':'⏸ ','a-refinar':'✎ ','backlog':''};
+const DEV_COLOR={'Marcos':'#EAB308','Leandro':'#3B82F6','João Pedro':'#F97316'};
+const TIPO_LABELS={bug:'Bug',melhoria:'Melhoria'};
+const REFINO_META=DATA.refino_meta||[];
+const REFINO=Object.fromEntries(REFINO_META.map(r=>[r.tag,r]));
+const QMETA=DATA.quimera_meta||[];
+const QORDER=QMETA.map(q=>q.key);
+const QLABEL=Object.fromEntries(QMETA.map(q=>[q.key,q.label]));
+const QCOLOR=Object.fromEntries(QMETA.map(q=>[q.key,q.color]));
+const ANDAMENTO=new Set(['fila_exec','em_andamento','em_validacao','bloqueado']);
+let boardMode='prio';   // 'prio' | 'status' — compartilhado por Board e Frente
+
+let currentView='overview',currentFrente=null;
+
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function byFrente(k){return k==='finza'?FINZA_ITEMS.slice():ITEMS.filter(i=>i.frente===k);}
+function byStatus(s){return ITEMS.filter(i=>i.status===s);}
+function byPrio(p){return ITEMS.filter(i=>i.prioridade===p);}
+function accentOf(it){return it.dev?DEV_COLOR[it.dev]:STATUS_COLOR[it.status];}
+
+/* donut */
+function donut(segs,size){
+  size=size||116;const r=size/2,inner=r*0.62;const total=segs.reduce((a,s)=>a+s.value,0)||1;let acc=0;
+  const paths=segs.map(s=>{const frac=s.value/total;if(frac<=0)return'';const a0=acc*2*Math.PI-Math.PI/2;acc+=frac;const a1=acc*2*Math.PI-Math.PI/2;const lg=frac>0.5?1:0;
+    const x0=r+r*Math.cos(a0),y0=r+r*Math.sin(a0),x1=r+r*Math.cos(a1),y1=r+r*Math.sin(a1);
+    const xi0=r+inner*Math.cos(a1),yi0=r+inner*Math.sin(a1),xi1=r+inner*Math.cos(a0),yi1=r+inner*Math.sin(a0);
+    return `<path d="M${x0} ${y0} A${r} ${r} 0 ${lg} 1 ${x1} ${y1} L${xi0} ${yi0} A${inner} ${inner} 0 ${lg} 0 ${xi1} ${yi1} Z" fill="${s.color}"/>`;}).join('');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex:none">${paths}
+    <text x="${r}" y="${r-2}" text-anchor="middle" font-family="var(--font-mono)" font-size="21" font-weight="700" fill="var(--text)">${total}</text>
+    <text x="${r}" y="${r+13}" text-anchor="middle" font-size="9" fill="var(--text-subtle)">itens</text></svg>`;
+}
+function legend(segs){return `<div class="legend">`+segs.filter(s=>s.value>0).map(s=>`<div class="row"><span class="sw" style="background:${s.color}"></span><span class="ll">${esc(s.label)}</span><span class="lv">${s.value}</span></div>`).join('')+`</div>`;}
+function bars(rows,max,wide){max=max||Math.max(1,...rows.map(r=>r.value));return `<div class="bars">`+rows.map(r=>`<div class="bar-row${wide?' wide':''}"><span class="bl">${esc(r.label)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(r.value/max*100)}%;background:${r.color}"></div></div><span class="bv">${r.value}</span></div>`).join('')+`</div>`;}
+
+/* sidebar */
+function buildSidebar(){
+  const sb=document.getElementById('sidebar');
+  let h=`<div class="brand"><span class="mark">◆</span><span class="name">roadmap</span><span class="tag">torre</span></div>`;
+  h+=`<div class="side-section">Visões</div>`;
+  [['overview','◆','Visão geral'],['board','▦','Board'],['analise','◈','Análise'],['lancamento','▲','Lançamento']].forEach(([v,ic,lb])=>{
+    h+=`<button class="side-item ${currentView===v?'active':''}" onclick="render('${v}')"><span class="ico">${ic}</span><span class="lbl">${lb}</span></button>`;});
+  h+=`<div class="side-section">Frentes (${DATA.frentes.length})</div>`;
+  DATA.frentes.forEach(f=>{const act=currentView==='frente'&&currentFrente===f.key;
+    h+=`<button class="side-item ${act?'active':''}" onclick="render('frente','${f.key}')" title="${esc(f.label)}"><span class="dot-frente" style="background:${f.color}"></span><span class="lbl">${esc(f.label)}</span><span class="count">${f.count}</span></button>`;});
+  h+=`<div class="sidebar-footer"><div class="who"><strong>${esc(DATA.owner)}</strong>Supervisor IAF · Finza</div><div class="src">fonte: ${esc(DATA.source)}<br>gerado ${esc(DATA.generated_at)}</div></div>`;
+  sb.innerHTML=h;
+}
+
+/* router */
+function render(view,frente){
+  currentView=view;currentFrente=frente||null;buildSidebar();
+  const v=document.getElementById('view');
+  if(view==='overview')v.innerHTML=renderOverview();
+  else if(view==='board'){v.innerHTML=renderBoard();attachBoard();}
+  else if(view==='analise')v.innerHTML=renderAnalise();
+  else if(view==='lancamento')v.innerHTML=renderLancamento();
+  else if(view==='frente'){v.innerHTML=renderFrente(frente);attachFrente(frente);}
+  const map={overview:'Visão geral',board:'Board',analise:'Análise',lancamento:'Lançamento'};
+  document.getElementById('crumb').innerHTML=`<span class="seg">Roadmap Torre</span><span class="sep">›</span><span class="seg cur">${view==='frente'?esc(FRENTES[frente].label):map[view]}</span>`;
+  window.scrollTo(0,0);
+}
+
+/* legend bar (colors reference) */
+function legendBar(){
+  const st=STATUS_ORDER.map(s=>`<span class="lg"><span class="d" style="background:${STATUS_COLOR[s]}"></span>${STATUS_LABELS[s]}</span>`).join('');
+  const dv=Object.entries(DEV_COLOR).map(([n,c])=>`<span class="lg"><span class="d" style="background:${c}"></span>${n}</span>`).join('');
+  return `<div class="legendbar"><div class="grp"><span class="t">Status</span>${st}</div><div class="grp"><span class="t">Dev</span>${dv}</div></div>`;
+}
+
+/* overview */
+function renderOverview(){
+  const total=ITEMS.length;
+  const cnt=s=>byStatus(s).length;
+  const stSeg=STATUS_ORDER.map(s=>({label:STATUS_LABELS[s],value:cnt(s),color:STATUS_COLOR[s]}));
+  const devSeg=Object.keys(DEV_COLOR).map(d=>({label:d,value:ITEMS.filter(i=>i.dev===d).length,color:DEV_COLOR[d]}));
+  const tipoSeg=[{label:'Melhoria',value:ITEMS.filter(i=>i.tipo==='melhoria').length,color:'#0EA5E9'},{label:'Bug',value:ITEMS.filter(i=>i.tipo==='bug').length,color:'#E11D48'}];
+  const frSeg=TORRE_FRENTES.map(f=>({label:f.label,value:f.count,color:f.color}));
+  let h=`<div class="hero"><div class="label">Roadmap · Torre de Controle</div>
+    <div class="title">${total} demandas em <b>${DATA.frentes.length} frentes</b> — <b>${cnt('entregue')} entregues</b>, ${cnt('backlog')} em backlog, ${cnt('a-refinar')} a refinar.</div></div>`;
+  h+=`<div class="kpis">
+    <div class="kpi k-total"><div class="lab">Total</div><div class="num">${total}</div></div>
+    <div class="kpi k-entregue"><div class="lab">Entregue</div><div class="num">${cnt('entregue')}</div></div>
+    <div class="kpi k-backlog"><div class="lab">Backlog</div><div class="num">${cnt('backlog')}</div></div>
+    <div class="kpi k-arefinar"><div class="lab">A refinar</div><div class="num">${cnt('a-refinar')}</div></div>
+    <div class="kpi k-adiado"><div class="lab">Adiado</div><div class="num">${cnt('adiado')}</div></div>
+    <div class="kpi k-cancelado"><div class="lab">Cancelado</div><div class="num">${cnt('cancelado')}</div></div>
+  </div>`;
+  h+=`<div class="grid3">
+    <div class="panel"><h3>Por status</h3><div class="donut-wrap">${donut(stSeg)}${legend(stSeg)}</div></div>
+    <div class="panel"><h3>Carga por dev</h3>${bars(devSeg)}<div style="margin-top:14px;font-size:11.5px;color:var(--text-subtle)">${ITEMS.filter(i=>!i.dev).length} itens sem dev (entregue/cancelado/adiado/a refinar).</div></div>
+    <div class="panel"><h3>Bug × Melhoria</h3><div class="donut-wrap">${donut(tipoSeg,104)}${legend(tipoSeg)}</div></div>
+  </div>`;
+  h+=`<div class="section-title">Distribuição por frente</div><div class="panel">${bars(frSeg,Math.max(...frSeg.map(s=>s.value)),true)}</div>`;
+  return h;
+}
+
+/* board */
+let F={frentes:new Set(),status:new Set(),devs:new Set(),tipos:new Set(),exec:false,query:''};
+function filtered(){
+  let a=ITEMS.slice();
+  if(F.frentes.size)a=a.filter(i=>F.frentes.has(i.frente));
+  if(F.status.size)a=a.filter(i=>F.status.has(i.status));
+  if(F.devs.size)a=a.filter(i=>i.dev&&F.devs.has(i.dev));
+  if(F.tipos.size)a=a.filter(i=>F.tipos.has(i.tipo));
+  if(F.exec)a=a.filter(i=>i.executando);
+  if(F.query){const q=F.query.toLowerCase();a=a.filter(i=>(i.title+' '+i.id+' '+i.desc).toLowerCase().includes(q));}
+  return a;
+}
+function tog(set,v){set.has(v)?set.delete(v):set.add(v);}
+function segToggle(){return `<div class="seg" id="vseg"><button data-mode="prio" class="${boardMode==='prio'?'on':''}">Prioridade</button><button data-mode="status" class="${boardMode==='status'?'on':''}">Status</button></div>`;}
+function fdrop(id,label,opts,sel){
+  const n=sel.size;
+  const rows=opts.map(o=>`<label class="fopt"><input type="checkbox" data-f="${id}" value="${esc(o.val)}" ${sel.has(o.val)?'checked':''}>${o.color?`<span class="d" style="background:${o.color}"></span>`:''}${esc(o.label)}</label>`).join('');
+  return `<div class="fdrop" data-drop="${id}"><button class="fdrop-btn" data-dropbtn="${id}">${label}${n?`<span class="cnt">${n}</span>`:''}<span class="car">▼</span></button><div class="fdrop-menu">${rows}</div></div>`;
+}
+function renderBoard(){
+  const active=F.frentes.size||F.status.size||F.devs.size||F.tipos.size||F.exec||F.query;
+  const frOpts=TORRE_FRENTES.map(f=>({val:f.key,label:f.label,color:f.color}));
+  const stOpts=STATUS_ORDER.map(s=>({val:s,label:STATUS_LABELS[s],color:STATUS_COLOR[s]}));
+  const dvOpts=Object.keys(DEV_COLOR).map(d=>({val:d,label:d,color:DEV_COLOR[d]}));
+  const tpOpts=[{val:'bug',label:'Bug'},{val:'melhoria',label:'Melhoria'}];
+  let h=`<h1 class="ghost">Board <span class="accent">${boardMode==='prio'?'por prioridade':'por status · Quimera'}</span></h1>
+    <p class="sub">Alterne entre <b>Prioridade</b> (P0–P3) e o <b>kanban de status do Quimera</b>. A tag <span class="exec-pill">▶ Executando</span> marca o que está em execução no Quimera.</p>`;
+  h+=`<div class="fbar">${segToggle()}<div class="search"><span class="mag">⌕</span><input id="q" placeholder="Buscar…" value="${esc(F.query)}"></div>`+
+     fdrop('frentes','Frente',frOpts,F.frentes)+fdrop('status','Status',stOpts,F.status)+fdrop('devs','Dev',dvOpts,F.devs)+fdrop('tipos','Tipo',tpOpts,F.tipos)+
+     `<button class="fchip-exec ${F.exec?'on':''}" id="execchip">▶ Executando</button>${active?`<button class="clr" id="clearf">limpar</button>`:''}</div>`;
+  h+=`<div id="kboard"></div>`;
+  return h;
+}
+function sortCards(a,b){return (PRIO_ORDER.indexOf(a.prioridade)-PRIO_ORDER.indexOf(b.prioridade))||a.id.localeCompare(b.id);}
+function kcol(label,color,col){
+  return `<div class="kcol"><div class="kcol-head"><span class="kc-dot" style="background:${color}"></span>${esc(label)}<span class="kc-count">${col.length}</span></div><div class="kcol-body">${col.length?col.map(card).join(''):'<div class="kcol-empty">—</div>'}</div></div>`;
+}
+function renderKanban(items,mode){
+  mode=mode||'prio';
+  let h=`<div class="kanban${mode==='status'?' kstatus':''}">`;
+  if(mode==='status'){
+    QORDER.forEach(s=>{h+=kcol(QLABEL[s],QCOLOR[s],items.filter(i=>i.and_status===s).sort(sortCards));});
+  }else{
+    PRIO_ORDER.forEach(p=>{h+=kcol(PRIO_PCODE[p]+' · '+PRIO_LABELS[p],PRIO_COLOR[p],items.filter(i=>i.prioridade===p).sort(sortCards));});
+  }
+  return h+`</div>`;
+}
+function card(it){
+  const f=FRENTES[it.frente];const done=it.status==='entregue';const drop=it.status==='cancelado'||it.status==='adiado';
+  return `<article class="ci ${done?'done':''} ${drop?'dropped':''}" style="--ci-accent:${accentOf(it)}" onclick="openItem('${it.id}')">
+    <div class="ci-top"><span class="ci-id">${it.id}</span><span class="pbadge ${it.prioridade}">${PRIO_PCODE[it.prioridade]}</span><span class="tipo ${it.tipo}">${TIPO_LABELS[it.tipo]}</span>${it.executando?'<span class="exec-pill">▶ Executando</span>':''}${it.esforco?`<span class="ci-esf">${it.esforco}</span>`:''}</div>
+    <div class="ci-title">${esc(it.title)}</div>
+    <div class="ci-bot"><span class="frente-pill"><span class="d" style="background:${f.color}"></span><span class="fl">${esc(f.label)}</span></span>
+      <span class="pill status-pill ${it.status}">${STATUS_ICON[it.status]}${STATUS_LABELS[it.status]}</span>
+      ${it.dev?`<span class="dev-chip" style="--dc:${DEV_COLOR[it.dev]}"><span class="d"></span>${esc(it.dev)}</span>`:''}
+      ${it.quimera_key?`<span class="qkey">#${esc(it.quimera_key)}</span>`:''}
+      ${it.source==='quimera'?'<span class="src-q">Quimera</span>':''}
+      ${it.dep?'<span class="dep-tag">dep</span>':''}
+    </div>
+    ${it.obs_refino?`<div class="ci-obs"><span class="oic">✎</span>${esc(it.obs_refino)}</div>`:''}
+    </article>`;
+}
+function wireToggle(paint){
+  document.querySelectorAll('#vseg [data-mode]').forEach(b=>b.onclick=()=>{boardMode=b.dataset.mode;
+    document.querySelectorAll('#vseg [data-mode]').forEach(x=>x.classList.toggle('on',x.dataset.mode===boardMode));paint();});
+}
+function wireDrops(paint){
+  const M={frentes:F.frentes,status:F.status,devs:F.devs,tipos:F.tipos};
+  document.querySelectorAll('[data-dropbtn]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const d=b.closest('.fdrop');const open=d.classList.contains('open');
+    document.querySelectorAll('.fdrop.open').forEach(x=>x.classList.remove('open'));if(!open)d.classList.add('open');});
+  document.querySelectorAll('.fdrop-menu input[data-f]').forEach(inp=>inp.onchange=()=>{
+    const set=M[inp.dataset.f];tog(set,inp.value);
+    const btn=document.querySelector('[data-dropbtn="'+inp.dataset.f+'"]');let cnt=btn.querySelector('.cnt');const n=set.size;
+    if(n){if(!cnt){cnt=document.createElement('span');cnt.className='cnt';btn.insertBefore(cnt,btn.querySelector('.car'));}cnt.textContent=n;}
+    else if(cnt){cnt.remove();}
+    paint();});
+}
+function attachBoard(){
+  wireToggle(paintBoard);wireDrops(paintBoard);
+  const ex=document.getElementById('execchip');if(ex)ex.onclick=()=>{F.exec=!F.exec;ex.classList.toggle('on',F.exec);paintBoard();};
+  const cl=document.getElementById('clearf');if(cl)cl.onclick=()=>{F={frentes:new Set(),status:new Set(),devs:new Set(),tipos:new Set(),exec:false,query:''};refresh();};
+  const q=document.getElementById('q');if(q){let t;q.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{F.query=q.value;paintBoard();},170);};}
+  paintBoard();
+}
+function paintBoard(){const el=document.getElementById('kboard');if(el)el.innerHTML=renderKanban(filtered(),boardMode);}
+function refresh(){document.getElementById('view').innerHTML=renderBoard();attachBoard();}
+
+/* frente */
+function dashOf(items){
+  const entregue=items.filter(i=>i.and_status==='finalizado').length;
+  const andamento=items.filter(i=>ANDAMENTO.has(i.and_status)).length;
+  const backlog=items.filter(i=>i.and_status==='backlog').length;
+  const cancel=items.filter(i=>i.and_status==='cancelado').length;
+  const exec=items.filter(i=>i.executando).length;
+  const base=items.length-cancel;const pct=base>0?Math.round(entregue/base*100):0;
+  return {total:items.length,entregue,andamento,backlog,cancel,exec,pct};
+}
+function renderFrente(key){
+  if(key==='finza')return renderFinza();
+  const f=FRENTES[key];const items=byFrente(key);const d=dashOf(items);
+  const kpi=(l,n,c)=>`<div class="k" style="--kc:${c}"><div class="n">${n}</div><div class="l">${l}</div></div>`;
+  let h=`<div class="frente-head"><div class="fh-icon" style="background:${f.color}">${esc(f.code)}</div>
+    <div class="fh-label">${esc(f.label)}</div>
+    <div class="fh-kpis">${kpi('Total',d.total,'var(--finza-blue)')}${kpi('Entregue',d.entregue,'#10B981')}${kpi('Em andamento',d.andamento,'#2563EB')}${kpi('Executando',d.exec,'#10B981')}${kpi('Backlog',d.backlog,'#94A3B8')}${kpi('Cancelado',d.cancel,'#9CA3AF')}</div></div>`;
+  h+=`<div class="progress-wrap"><div class="pl"><span>Conclusão da frente <b>(${d.entregue}/${d.total-d.cancel})</b></span><span class="pct">${d.pct}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${d.pct}%"></div></div></div>`;
+  h+=`<div class="fbar" style="justify-content:flex-end">${segToggle()}</div>`;
+  h+=`<div id="kboard"></div>`;
+  return h;
+}
+function attachFrente(key){wireToggle(()=>paintFrente(key));paintFrente(key);}
+function paintFrente(key){const el=document.getElementById('kboard');if(el)el.innerHTML=renderKanban(byFrente(key),boardMode);}
+
+/* frente Finza — dashboard de score + ranking */
+const EST_COLOR={'descoberta':'#9CA3AF','refinamento':'#F59E0B','desenvolvimento':'#2563EB','produção':'#10B981','producao':'#10B981','concluído':'#10B981','backlog':'#94A3B8','cancelado':'#EF4444'};
+const CRIT_DEFS=[['valor','VN','Valor Negócio'],['nps','NPS','NPS'],['reducao','RO','Redução Ops'],['risco_nf','RNF','Risco Não Fazer'],['risco_exec','RE','Risco Execução'],['custo','CA','Custo do Atraso']];
+function critColor(v){return {1:'#EF4444',2:'#F59E0B',3:'#EAB308',4:'#84CC16',5:'#10B981'}[v]||'#CBD5E1';}
+function fkpi(l,n,c){return `<div class="k" style="--kc:${c}"><div class="n">${n}</div><div class="l">${l}</div></div>`;}
+function grpBars(items,key,colorer){const m={};items.forEach(i=>{const k=i[key]||'—';m[k]=(m[k]||0)+1;});
+  const rows=Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({label:k,value:v,color:colorer?colorer(k):'#6366F1'}));return bars(rows,null,true);}
+function rankRow(i,maxs){
+  const chips=CRIT_DEFS.map(([k,l])=>{const v=i.crit?i.crit[k]:null;return `<span class="crit" style="background:${critColor(v)}" title="${l[2]||l}">${l} ${v==null?'–':v}</span>`;}).join('');
+  const sc=i.score;const w=sc!=null&&maxs?Math.round(sc/maxs*100):0;
+  return `<div class="rk" onclick="openItem('${i.id}')">
+    <div class="rk-main">${i.subproduto?`<span class="rk-sub">${esc(i.subproduto)}</span>`:''}
+      <div class="rk-t">${i.mandatorio?'<span class="mand">★ Mandatório</span> ':''}${esc(i.title)}</div>
+      <div class="rk-chips">${chips}<span class="rk-meta">${esc(i.estagio||'')}${i.esforco?' · '+esc(i.esforco):''}${i.ciclo?' · '+esc(i.ciclo):''}${i.jornada?' · '+esc(i.jornada):''}</span></div></div>
+    <div class="rk-score"><div class="rk-num">${sc!=null?sc.toFixed(2):(i.mandatorio?'★':'–')}</div><div class="rk-bar"><div class="rk-fill" style="width:${w}%"></div></div></div>
+  </div>`;
+}
+function renderFinza(){
+  const items=FINZA_ITEMS;const ws=items.filter(i=>i.score!=null);
+  const avg=ws.length?ws.reduce((a,i)=>a+i.score,0)/ws.length:0;
+  const mand=items.filter(i=>i.mandatorio).length;
+  const emdev=items.filter(i=>(i.estagio||'').toLowerCase()==='desenvolvimento').length;
+  const maxw=Math.max(...FINZA_WEIGHTS.map(w=>w.weight),0.01);
+  const maxs=Math.max(...ws.map(i=>i.score),1);
+  let h=`<div class="frente-head"><div class="fh-icon" style="background:#1A1AFF">FZ</div>
+    <div class="fh-label">Finza · IA & Automação</div>
+    <div class="fh-kpis">${fkpi('Iniciativas',items.length,'var(--finza-blue)')}${fkpi('Mandatórios',mand,'#DC2626')}${fkpi('Em dev',emdev,'#2563EB')}${fkpi('Score médio',avg.toFixed(2),'#10B981')}</div></div>`;
+  h+=`<div class="grid3">
+    <div class="panel"><h3>Por estágio</h3>${grpBars(items,'estagio',k=>EST_COLOR[(k||'').toLowerCase()]||'#6366F1')}</div>
+    <div class="panel"><h3>Por prioridade</h3>${grpBars(items,'prioridade_txt')}</div>
+    <div class="panel"><h3>Por jornada</h3>${grpBars(items,'jornada')}</div>
+  </div>`;
+  h+=`<div class="section-title">Kanban <span class="extra">alterne prioridade ⇄ status</span></div>`;
+  h+=`<div class="fbar" style="justify-content:flex-end">${segToggle()}</div><div id="kboard"></div>`;
+  h+=`<div class="section-title">Matriz de pesos <span class="extra">critérios que compõem o Score de Prioridade</span></div>`;
+  h+=`<div class="wmatrix">`+FINZA_WEIGHTS.map(w=>`<div class="wm"><div class="wm-l">${esc(w.label)}${w.penalidade?' <span class="pen-t">penalidade</span>':''}</div><div class="wm-bar"><div class="wm-fill" style="width:${Math.round(w.weight/maxw*100)}%;background:${w.penalidade?'#EF4444':'var(--finza-blue)'}"></div></div><div class="wm-w">${Math.round(w.weight*100)}%</div></div>`).join('')+`</div>`;
+  const ranked=items.slice().sort((a,b)=>(a.mandatorio!==b.mandatorio)?(a.mandatorio?-1:1):((b.score||0)-(a.score||0)));
+  h+=`<div class="section-title">Ranking por Score de Prioridade <span class="extra">${items.length} iniciativas · clique para o detalhe</span></div>`;
+  h+=`<div class="rank">`+ranked.map(i=>rankRow(i,maxs)).join('')+`</div>`;
+  return h;
+}
+
+/* analise */
+function renderPanorama(){
+  const g={};ITEMS.forEach(i=>{(g[i.refino_tag]=g[i.refino_tag]||[]).push(i);});
+  const summary=REFINO_META.filter(r=>(g[r.tag]||[]).length&&r.tag!=='semobs').map(r=>`<span class="rs"><span class="rd" style="background:${r.color}"></span>${esc(r.label)} <span class="rn">${g[r.tag].length}</span></span>`).join('');
+  let cards='';
+  REFINO_META.forEach(r=>{const list=(g[r.tag]||[]).slice().sort((a,b)=>a.id.localeCompare(b.id));if(!list.length)return;
+    if(r.tag==='semobs'){cards+=`<div class="refino-card" style="--rc:${r.color}"><div class="rh">${esc(r.label)}<span class="rcount">${list.length}</span></div><div class="rhint">${esc(r.hint)}</div></div>`;return;}
+    const li=list.map(i=>`<div class="rli" onclick="openItem('${i.id}')"><span class="rid">${i.id}</span><span><span class="rtt">${esc(i.title)}</span>${i.obs_refino?`<span class="robs">✎ ${esc(i.obs_refino)}</span>`:''}</span></div>`).join('');
+    cards+=`<div class="refino-card" style="--rc:${r.color}"><div class="rh">${esc(r.label)}<span class="rcount">${list.length}</span></div><div class="rhint">${esc(r.hint)}</div><div class="refino-list">${li}</div></div>`;});
+  return `<div class="refino-summary">${summary}</div><div class="refino-grid">${cards}</div>`;
+}
+function renderAnalise(){
+  const O=DATA.observacoes;
+  const devSeg=Object.keys(DEV_COLOR).map(d=>({label:d,value:ITEMS.filter(i=>i.dev===d).length,color:DEV_COLOR[d]}));
+  const stSeg=STATUS_ORDER.map(s=>({label:STATUS_LABELS[s],value:byStatus(s).length,color:STATUS_COLOR[s]}));
+  let h=`<h1 class="ghost">Análise <span class="accent">& observações</span></h1>
+    <p class="sub">Minhas observações do Excel, refinadas e reconciliadas com os status atuais. Onde o refinamento depende do negócio, está sinalizado.</p>`;
+  h+=`<div class="section-title">Racional por prioridade</div><div class="obs-prio">`+
+    O.prioridades.map(p=>`<div class="obs-card" style="--oc:${PRIO_COLOR[p.p]}"><div class="oh"><span class="pbadge ${p.p}">${PRIO_PCODE[p.p]}</span>${esc(p.label)}<span class="cnt">${byPrio(p.p).length} itens</span></div><p>${esc(p.nota)}</p></div>`).join('')+`</div>`;
+  h+=`<div class="section-title">Panorama de refinamento <span class="extra">a partir da coluna “Observação de refinamento” · clique num item para abrir</span></div>`+renderPanorama();
+  h+=`<div class="grid3">
+    <div class="panel"><h3>Funil de status</h3>${bars(stSeg)}</div>
+    <div class="panel"><h3>Carga por dev</h3>${bars(devSeg)}</div>
+    <div class="panel"><h3>Bug × Melhoria por frente</h3>${bars(TORRE_FRENTES.map(f=>({label:f.label,value:byFrente(f.key).filter(i=>i.tipo==='bug').length,color:'#E11D48'})).filter(r=>r.value),null,true)}<div style="margin-top:10px;font-size:11.5px;color:var(--text-subtle)">Barras = nº de bugs por frente.</div></div>
+  </div>`;
+  h+=`<div class="section-title">Top 10 de ataque <span class="extra">ordem sugerida · reconciliada com o status atual</span></div><div class="top10">`+
+    O.top10.map(t=>{const pc=({P0:'urgente',P1:'alta',P2:'media',P3:'baixa'})[t.prio]||'media';
+      return `<div class="top-row"><div class="tn">${esc(t.n)}</div><div><div class="ti">${esc(t.item)}</div><div class="tw">${esc(t.why)}</div></div>
+        <div class="tags"><span class="pbadge ${pc}">${esc(t.prio)}</span><span class="pill status-pill ${t.status}">${STATUS_ICON[t.status]||''}${STATUS_LABELS[t.status]}</span></div></div>`;}).join('')+`</div>`;
+  h+=`<div class="section-title">Observações gerais</div><ul class="gerais">`+O.gerais.map(g=>`<li>${esc(g)}</li>`).join('')+`</ul>`;
+  return h;
+}
+
+/* lançamento — curadoria editorial (não vem do roadmap-data) */
+const LANCAMENTO=[
+  {id:'F04',sub:'Automação Hiperflow',score:2.51,esforco:'Médio',ciclo:'Q3',
+   title:'Automação da régua de cobrança (D-10 a D+87) via Hiperflow',
+   desc:'Automatizar todos os disparos da régua de comunicação (D-10 a D+87) integrando o Hiperflow ao Módulo Financeiro e ao score G/H. Notificações via push nativo do app e atendimento no chat do app.',
+   why:'Maior redução de esforço operacional do roadmap. Tira a régua do disparo manual e conecta comunicação ↔ score ↔ MF, escalando a cobrança sem aumentar o time. Diretoria acompanha o ganho de escala.'},
+  {id:'F08',sub:'Score ML',score:2.27,esforco:'Grande',ciclo:'Q3',
+   title:'Score de cobrança G/H — modelo de propensão de pagamento',
+   desc:'Modelo de ML que define canal (WhatsApp/Email/RCS), timing e abordagem por faixa da régua, alimentando a Torre de Cobrança.',
+   why:'É o cérebro da régua — prioriza quem cobrar, como e quando. Diferencial competitivo e base da automação (F04). Diretoria vê a cobrança orientada a dados evoluindo.'},
+  {id:'F01',sub:'Esperanza MCP',score:2.51,esforco:'Grande',ciclo:'Q4',
+   title:'Esperanza — renegociação assistida por IA (faixa D+20)',
+   desc:'Agente de IA generativa que monta rascunhos de proposta (visíveis e editáveis pela Torre) e conduz a renegociação até a conclusão com o cliente, direto no chat do app.',
+   why:'Iniciativa de IA de maior impacto na recuperação de crédito. Escala a renegociação sem depender de headcount. Diretoria acompanha a maturidade dos agentes de IA da Finza.'},
+  {id:'F09',sub:'Torre de Controle',score:2.27,esforco:'Grande',ciclo:'Q3',
+   title:'Torre de Cobrança — visão 360 do cliente por clusterização',
+   desc:'Hub central com histórico de comunicação, canal ativo, score G/H, bloqueios, histórico de pagamento e ações disponíveis — self-service para o time de cobrança.',
+   why:'Transforma a Torre no cockpit único da operação. Reduz dependência de planilhas e dá autonomia ao time. Diretoria vê a operação consolidada num só lugar.'},
+  {id:'F03',sub:'Novo Número Dedicado',score:2.20,esforco:'Grande',ciclo:'',
+   title:'Canal/número de WhatsApp dedicado à cobrança Finza',
+   desc:'Criar número dedicado de cobrança com a marca Finza, sem concorrer com o número oficial Blips, e revisar os fluxos de atendimento para contemplar o novo canal.',
+   why:'Separa a marca de cobrança da Blips e libera capacidade de disparo, com melhor entregabilidade e proteção da reputação do número oficial. Diretoria acompanha a construção do canal próprio Finza.'},
+  {id:'F07',sub:'AuditorIA Hyper Finza',score:2.25,esforco:'Médio',ciclo:'',
+   title:'AuditorIA — auditoria dos atendimentos do WhatsApp Finza',
+   desc:'Estender a AuditorIA para auditar os atendimentos realizados no número/canal Finza.',
+   why:'Garante qualidade e conformidade dos atendimentos de cobrança em escala, sustentando a operação automatizada com controle de risco. Diretoria vê o pilar de governança.'},
+  {id:'F16',sub:'Bloqueio & Desbloqueio',score:2.22,esforco:'Enorme',ciclo:'Q3',
+   title:'Customização da comunicação de bloqueio de equipamento',
+   desc:'Dar à Torre acesso à data de expiração do bloqueio (faixa D+8) para customizar a comunicação por clusterização de cliente/originador.',
+   why:'Alavanca direta de conversão na faixa crítica D+8, com controle fino da comunicação de bloqueio por perfil de cliente. Diretoria acompanha a personalização da régua.'}
+];
+function renderLancamento(){
+  let h=`<div class="hero"><div class="label">Lançamento no board · diretoria</div>
+    <p class="title">${LANCAMENTO.length} demandas selecionadas para <b>lançar no board da Finza</b> — as mais relevantes e impactantes do roadmap, prontas para a diretoria acompanhar a área.</p></div>`;
+  h+=`<div class="launch-intro">Cada card traz <b>título</b> e <b>descrição</b> prontos para colar em “Nova Atividade”, mais o <b>porquê</b> de estar no board. Copie o par título + descrição com um clique.</div>`;
+  h+=`<div class="section-title">Demandas para lançar <span class="extra">${LANCAMENTO.length} selecionadas · ordem = arco da operação de cobrança</span></div>`;
+  h+=`<div class="launch-list">`+LANCAMENTO.map((it,i)=>{
+    const meta=[`Score ${it.score.toFixed(2)}`,it.esforco?'Esforço '+esc(it.esforco):'',it.ciclo?esc(it.ciclo):'']
+      .filter(Boolean).map(m=>`<span class="lc-chip">${m}</span>`).join('');
+    return `<div class="lc">
+      <div class="lc-num">${i+1}</div>
+      <div class="lc-main">
+        <div class="lc-top"><span class="lc-id">${esc(it.id)} · ${esc(it.sub)}</span><div class="lc-meta">${meta}</div></div>
+        <div class="lc-title">${esc(it.title)}</div>
+        <div class="lc-desc">${esc(it.desc)}</div>
+        <div class="lc-why"><span class="lc-why-lab">Por que no board</span>${esc(it.why)}</div>
+        <button class="lc-copy" onclick="copyLaunch(${i},this)">⧉ Copiar título + descrição</button>
+      </div>
+    </div>`;}).join('')+`</div>`;
+  return h;
+}
+function copyLaunch(i,btn){
+  const it=LANCAMENTO[i];if(!it)return;
+  const txt=it.title+'\n\n'+it.desc;
+  const done=()=>{const o=btn.textContent;btn.textContent='✓ copiado';btn.classList.add('ok');setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},1500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(()=>fallbackCopy(txt,done));
+  }else{fallbackCopy(txt,done);}
+}
+function fallbackCopy(txt,cb){
+  const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.top='0';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');cb();}catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* drawer */
+function openItem(id){
+  const it=ALL_ITEMS.find(i=>i.id===id);if(!it)return;const f=FRENTES[it.frente];
+  if(it.source==='proposta'){openFinza(it,f);return;}
+  const d=document.getElementById('drawer');
+  d.innerHTML=`<div class="drawer-head"><div><div class="dh-id">${it.id}</div><div class="dh-title">${esc(it.title)}</div></div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
+  <div class="drawer-body">
+    <div class="d-badges"><span class="pbadge ${it.prioridade}">${PRIO_PCODE[it.prioridade]} · ${PRIO_LABELS[it.prioridade]}</span>
+      <span class="pill status-pill ${it.status}">${STATUS_ICON[it.status]}${STATUS_LABELS[it.status]}</span>
+      <span class="tipo ${it.tipo}">${TIPO_LABELS[it.tipo]}</span>
+      ${it.executando?'<span class="exec-pill">▶ Executando</span>':''}
+      ${it.refino_tag&&REFINO[it.refino_tag]?`<span class="refino-pill" style="background:${REFINO[it.refino_tag].color}">${esc(REFINO[it.refino_tag].label)}</span>`:''}
+      ${it.dep?'<span class="dep-tag">aguardando dependência</span>':''}</div>
+    <div class="d-meta">
+      <div><div class="mlab">Frente</div><div class="mval"><span class="frente-pill"><span class="d" style="background:${f.color}"></span>${esc(f.label)}</span></div></div>
+      <div><div class="mlab">Responsável</div><div class="mval">${it.dev?`<span class="dev-chip" style="--dc:${DEV_COLOR[it.dev]}"><span class="d"></span>${esc(it.dev)}</span>`:'—'}</div></div>
+      <div><div class="mlab">Esforço</div><div class="mval">${it.esforco||'—'}</div></div>
+      <div><div class="mlab">Menu de origem</div><div class="mval">${esc(it.menu)}</div></div>
+      ${it.quimera_key?`<div><div class="mlab">Quimera</div><div class="mval">#${esc(it.quimera_key)} · <span class="status-pill ${it.and_status}" style="background:${QCOLOR[it.and_status]||'#64748B'};color:#fff">${esc(QLABEL[it.and_status]||it.and_status)}</span></div></div>`:''}
+    </div>
+    <div class="d-block"><h4>Descrição refinada</h4><div class="d-desc">${esc(it.desc)}</div></div>
+    ${it.obs_refino?`<div class="d-block"><h4>Observação de refinamento</h4><div class="d-obs">${esc(it.obs_refino)}</div></div>`:''}
+    ${it.nota_negocio?`<div class="d-block"><div class="d-nota"><div class="nl">Depende do negócio</div>${esc(it.nota_negocio)}</div></div>`:''}
+  </div>`;
+  d.classList.add('open');document.getElementById('overlay').classList.add('open');
+}
+function openFinza(it,f){
+  const d=document.getElementById('drawer');
+  const crit=CRIT_DEFS.map(([k,l,full])=>{const v=it.crit?it.crit[k]:null;return `<div class="cmx"><div class="cmx-l">${full}</div><div class="cmx-bar"><div class="cmx-fill" style="width:${v?v/5*100:0}%;background:${critColor(v)}"></div></div><div class="cmx-v">${v==null?'–':v}</div></div>`;}).join('');
+  d.innerHTML=`<div class="drawer-head"><div><div class="dh-id">${it.id}${it.subproduto?' · '+esc(it.subproduto):''}</div><div class="dh-title">${esc(it.title)}</div></div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
+  <div class="drawer-body">
+    <div class="d-badges"><span class="pbadge ${it.prioridade}">${PRIO_PCODE[it.prioridade]} · ${PRIO_LABELS[it.prioridade]}</span>
+      <span class="pill status-pill ${it.status}">${STATUS_ICON[it.status]}${STATUS_LABELS[it.status]}</span>
+      ${it.mandatorio?'<span class="exec-pill" style="background:#DC2626">★ Mandatório</span>':''}
+      ${it.estagio?`<span class="tipo melhoria">${esc(it.estagio)}</span>`:''}
+      ${it.score!=null?`<span class="refino-pill" style="background:#1A1AFF">Score ${it.score.toFixed(2)}</span>`:''}</div>
+    <div class="d-meta">
+      <div><div class="mlab">Subproduto</div><div class="mval">${esc(it.subproduto||'—')}</div></div>
+      <div><div class="mlab">Prioridade (planilha)</div><div class="mval">${esc(it.prioridade_txt||'—')}</div></div>
+      <div><div class="mlab">Esforço</div><div class="mval">${esc(it.esforco||'—')}</div></div>
+      <div><div class="mlab">Ciclo</div><div class="mval">${esc(it.ciclo||'—')}</div></div>
+      <div><div class="mlab">Persona</div><div class="mval">${esc(it.persona||'—')}</div></div>
+      <div><div class="mlab">Jornada</div><div class="mval">${esc(it.jornada||'—')}${it.step?' · '+esc(it.step):''}</div></div>
+    </div>
+    <div class="d-block"><h4>Matriz de critérios (1–5)</h4><div class="cmatrix">${crit}</div></div>
+    ${it.desc?`<div class="d-block"><h4>Descrição / Previsão</h4><div class="d-desc">${esc(it.desc)}</div></div>`:''}
+    ${it.dependencias?`<div class="d-block"><h4>Dependências</h4><div class="d-obs">${esc(it.dependencias)}</div></div>`:''}
+    ${it.notas?`<div class="d-block"><div class="d-nota"><div class="nl">Notas</div>${esc(it.notas)}</div></div>`:''}
+  </div>`;
+  d.classList.add('open');document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+document.addEventListener('click',e=>{if(!e.target.closest('.fdrop'))document.querySelectorAll('.fdrop.open').forEach(x=>x.classList.remove('open'));});
+
+render('overview');
+</script>
+</body>
+</html>

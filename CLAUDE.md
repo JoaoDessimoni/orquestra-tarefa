@@ -4,6 +4,7 @@ Esta pasta é o **workspace gerencial** do João Vinícius (Supervisor IAF, Finz
 
 1. **Gestão do backlog do squad IAF** — backlog estratégico por frente (`Backlog/`), alimentado por reuniões/análises (`Backlog/reunioes/`, `Backlog/analises/`) e pelos sistemas de tickets (Quimera interno + Jira/Confluence Atlassian via MCP).
 2. **Produção de decks/apresentações** no padrão visual Finza — pipeline de agentes especializados.
+3. **Operação técnica via subprojetos acoplados** — os repositórios `N8N-AGENT/` (conhecimento de n8n da empresa) e `cobranca-finza/` (Torre de Controle) vivem aqui dentro. O agente principal opera em **modelo roteador + leitura**: reconhece a tarefa, faz leituras read-only seguras e, para trabalho pesado, manda entrar no subprojeto (`/n8n`, `/torre`).
 
 Apoio: **base de contexto viva** — `Docs/finza/` e `Backlog/contexto/` são a fonte da verdade sobre IAF, Torre, Esperanza e plataformas Finza.
 
@@ -17,8 +18,8 @@ Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é
 
 Sequência obrigatória no início de cada turno:
 
-1. Ler a lista de skills disponíveis no `<system-reminder>` (7 skills de conhecimento: finza-contexto, finza-design-system, finza-tom-voz, po-backlog, finza-mapas, quimera, jira + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, etc.).
-2. Considerar os **12 agentes** em `.claude/agents/` e os **15 comandos** em `.claude/commands/`.
+1. Ler a lista de skills disponíveis no `<system-reminder>` (9 skills de conhecimento: finza-contexto, finza-design-system, finza-tom-voz, po-backlog, finza-mapas, quimera, jira, n8n-projeto, torre-projeto + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, etc.).
+2. Considerar os **14 agentes** em `.claude/agents/` e os **17 comandos** em `.claude/commands/`.
 3. Se o pedido do usuário se encaixar em um comando/skill, **invoque-o automaticamente** via a ferramenta Skill — não execute manualmente nem peça pro usuário digitar o comando.
 
 ### Gatilhos diretos
@@ -43,6 +44,8 @@ Sequência obrigatória no início de cada turno:
 | Quimera, ticket interno, card, demanda (no sistema interno), chamado, indicadores do squad (Conclusão/Cycle Time/Intruders/CSAT), "o que tá aberto no Quimera" | `/quimera` (skill `quimera`) → agente `quimera-ops` via MCP `quimera`. **Não confundir com `/backlog`** (estratégia `.md`) **nem com `/jira`** (Atlassian externo). Default = time `ia_automacao_finza`. |
 | "demandas do time/da equipe", "o que cada um tá fazendo", status do time inteiro, carga da equipe, visão de gestor sobre o Quimera | `/equipe` (skill `equipe`) → agente `quimera-ops`. Recorte fixo da equipe direta (João Lucas, João Pedro, Leandro, Marcos + supervisor), agrupado por pessoa → status. **Só leitura.** Para agir num ticket, `/quimera`. |
 | Jira, issue, JQL, projeto Jira, Confluence, página/espaço, "abre a issue ABC-123", "busca no Jira/Confluence" | `/jira` (skill `jira`) → agente `jira-ops` via MCP `claude_ai_Atlassian`. **Convive com o Quimera** (são sistemas distintos). Descobre site/projetos ao vivo — não inventa cloudId/key/accountId. |
+| n8n, workflow, automação, node, execução com falha, "o que esse workflow faz", workflow do Bitrix/Hyperflow, métrica/erro de n8n, auditar instância n8n | `/n8n` (skill `n8n-projeto`) → agente `n8n-bridge` via MCP dos 6 ambientes n8n + grafana. **Somente leitura daqui** — criar/alterar workflow é DENTRO do subprojeto `N8N-AGENT/` (`/n8n entrar`). Não confundir com `/quimera`/`/jira`. |
+| Torre **código** (campanha/ETL/filtro implementação, Supabase/edge function/migration/RPC, bug da Torre, schema multi-tenant, `vw_titles_live`, Pipeline v2), "como a Torre faz X", consultar o banco da Torre | `/torre` (skill `torre-projeto`) → agente `torre-bridge`. **Contexto + leitura daqui** (Supabase read-only); dev pesado é DENTRO do subprojeto `cobranca-finza/` (`/torre entrar`, 8 agentes próprios). **Não confundir** com a frente de backlog **BTR** (`/backlog`) nem com o overview narrativo (`/contexto`). |
 
 ### Encadeamento
 
@@ -60,7 +63,7 @@ Quando o pedido cruza 2+ domínios (ex: "analisa essas demandas e gera relatóri
 ```
 orquestra-tarefa/
 ├── .claude/                          # Configuração do agente
-│   ├── agents/                       # Sub-agentes especializados (12)
+│   ├── agents/                       # Sub-agentes especializados (14)
 │   │   ├── finza-researcher.md       # Pesquisa fatos com citação (Docs/, Backlog/contexto)
 │   │   ├── slide-architect.md        # Estrutura outline do deck
 │   │   ├── slide-writer.md           # Redige texto no tom Finza
@@ -72,8 +75,10 @@ orquestra-tarefa/
 │   │   ├── mapa-updater.md           # Reescreve JSON de mapa-mental.html (projeção do Backlog/)
 │   │   ├── context-curator.md        # Cura mapas textuais + Docs/finza + overviews
 │   │   ├── quimera-ops.md            # Opera o Quimera (tickets internos Finza) via MCP — squad IAF
-│   │   └── jira-ops.md               # Opera o Jira & Confluence (Atlassian) via MCP — convive c/ Quimera
-│   ├── commands/                     # Slash commands (15)
+│   │   ├── jira-ops.md               # Opera o Jira & Confluence (Atlassian) via MCP — convive c/ Quimera
+│   │   ├── n8n-bridge.md             # Ponte read-only p/ subprojeto N8N-AGENT (6 ambientes n8n + grafana)
+│   │   └── torre-bridge.md           # Ponte contexto+leitura p/ subprojeto cobranca-finza (Torre)
+│   ├── commands/                     # Slash commands (17)
 │   │   ├── novo-deck.md              # Orquestra deck completo
 │   │   ├── novo-slide.md             # Adiciona slide a deck existente
 │   │   ├── revisar-deck.md           # Roda reviewer em deck existente
@@ -88,21 +93,30 @@ orquestra-tarefa/
 │   │   ├── contexto.md               # Curadoria da base de contexto viva
 │   │   ├── quimera.md                # Opera tickets Quimera via MCP (consultar/criar card, indicadores)
 │   │   ├── equipe.md                 # Visão de gestor: demandas de toda a equipe no Quimera (só leitura)
-│   │   └── jira.md                   # Opera Jira & Confluence (Atlassian) via MCP
-│   ├── skills/                       # Conhecimento canônico (7)
+│   │   ├── jira.md                   # Opera Jira & Confluence (Atlassian) via MCP
+│   │   ├── n8n.md                    # Ponte read-only p/ N8N-AGENT (workflows, execuções, métricas)
+│   │   └── torre.md                  # Ponte contexto+leitura p/ cobranca-finza (Torre)
+│   ├── skills/                       # Conhecimento canônico (9)
 │   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
 │   │   ├── finza-contexto/           # Resumo do negócio Finza, frentes
 │   │   ├── po-backlog/               # INVEST, Given/When/Then, frentes, RICE
 │   │   ├── finza-mapas/              # Estrutura do mapa textual + contrato do mapa visual
 │   │   ├── quimera/                  # Catálogo MCP Quimera, status, times, membros, indicadores
-│   │   └── jira/                     # Catálogo MCP Atlassian (Jira+Confluence), JQL/CQL, descoberta
+│   │   ├── jira/                     # Catálogo MCP Atlassian (Jira+Confluence), JQL/CQL, descoberta
+│   │   ├── n8n-projeto/              # Mapa do subprojeto N8N-AGENT (ambientes, skills locais, read-only, setup MCP)
+│   │   └── torre-projeto/            # Mapa do subprojeto cobranca-finza (stack, 8 agentes, invariantes, guardrails)
 │   ├── hooks/                        # Hooks do harness (registrados em settings.json)
 │   │   └── check-backlog-sync.ps1    # PostToolUse: lembra de regenerar projeções do backlog
 │   ├── settings.json                 # Config do projeto — registra o hook PostToolUse
 │   └── settings.local.json           # Overrides locais (permissions)
 │
 ├── CLAUDE.md                         # ← Este arquivo
+│
+│   ─── CONFIG MCP DO PARENT (gitignored o real; commitado só o .example) ───
+├── .mcp.json.example                 # Template: 6 n8n + grafana + supabase (copiar p/ .mcp.json e preencher)
+├── .env.example                      # Template das chaves (copiar p/ .env e preencher) — guia na skill n8n-projeto
+├── .gitignore                        # Protege .mcp.json/.env e ignora os subprojetos aninhados
 │
 │   ─── PROJEÇÕES (raiz, single-file, descartáveis — fonte é sempre o .md) ───
 ├── backlog.html                      # Projeção do Backlog/ em kanban (po-backlog regenerate · id="backlog-data")
@@ -148,6 +162,21 @@ orquestra-tarefa/
     │       └── relatorios/           # Relatórios derivados das análises do dia
     ├── 1on1s/                        # DATADA — 1on1s/<dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md
     └── referencias/                  # Artefatos não-markdown (sql/, csv/, json/, prints/, pdf/, docx/)
+
+─── SUBPROJETOS ACOPLADOS (repos git próprios — NÃO são parte deste repo) ───
+
+N8N-AGENT/                            # Repo github.com/blips-ai/N8N-AGENT — conhecimento de n8n da empresa
+├── .claude/                          #   .claude PRÓPRIO (5 skills, 1 comando, 0 agentes) — só ativo rodando claude DE DENTRO
+│   └── skills/                       #   bitrix24-api, hyperflow-blips, n8n-db, n8n-metrics-grafana, fantasmas-blips
+├── .mcp.json.example                 #   6 ambientes n8n + grafana (read-only estrito)
+├── patterns/ · workflows/ · bitrix/  #   padrões, exemplos reais, cache de schema Bitrix
+└── CLAUDE.md                         #   lei read-only + heurística de ambiente
+
+cobranca-finza/                       # Repo github.com/blips-ai/cobranca-finza — Torre de Controle v2
+├── .claude/                          #   .claude PRÓPRIO (8 agentes, 4 comandos, 24 skills) — só ativo rodando claude DE DENTRO
+├── src/ · supabase/ · docs/          #   React+Vite ; Edge Functions+migrations ; 13 guias
+├── .mcp.example.json                 #   supabase-prod/dev (read-only ; escrita via CI/CD)
+└── CLAUDE.md · ARCHITECTURE.md        #   21 invariantes críticas + C4/ADRs
 ```
 
 > **Pasta datada** = `dd-mm-aaaa/` (ex: `18-05-2026/`). **Arquivos internos** seguem ISO `YYYY-MM-DD_<slug>.md` (ex: `2026-05-18_demandas-cobranca.md`). Cada análise pode gerar 1 ou mais relatórios em `relatorios/`.
@@ -159,6 +188,18 @@ orquestra-tarefa/
 > **Duas projeções, uma fonte** — `backlog.html` e `mapa-mental.html` projetam o **mesmo** `Backlog/frentes/` (kanban vs canvas). Toda projeção é descartável: a verdade está nos `.md`. `/sync` regenera as duas de uma vez. Mapas **textuais** (`Backlog/contexto/mapa_*.md`) são curadoria humana, não projeção — não entram no `/sync`.
 
 > **Hook de coerência do backlog (`PostToolUse`)** — registrado em `.claude/settings.json`, roda `.claude/hooks/check-backlog-sync.ps1` após todo `Edit`/`Write`/`MultiEdit`. Quando o arquivo tocado é fonte de backlog (`Backlog/frentes/**/*.md`), uma das projeções (`backlog.html` / `mapa-mental.html`) ou o mestre (`Backlog/BACKLOG.md`), ele injeta no contexto um lembrete para rodar `/backlog regenerate` (ou `/sync --backlog`) e regravar **as duas** projeções + `BACKLOG.md`. Para fonte de item, lembra ainda de revisar mapas textuais defasados via `/contexto`. O hook **só lembra** — quem regenera é o agente. Ele se cala durante uma regeneração legítima e ignora `README.md` e arquivos fora do backlog. Editar o `.ps1` ou o `settings.json` muda o comportamento.
+
+### 1.1 · Subprojetos acoplados (N8N-AGENT e Torre)
+
+`N8N-AGENT/` e `cobranca-finza/` são **repositórios git independentes** clonados dentro do workspace. Cada um tem seu **próprio `.claude/`** (agentes, skills, comandos) e seu **próprio `.mcp.json`**. No Claude Code, isso **só fica ativo quando se roda `claude` de dentro da pasta** — o parent **não herda** automaticamente os agentes nem os MCP servers de uma subpasta.
+
+Por isso o modelo aqui é **roteador + leitura (híbrido)**:
+
+1. **O parent enxerga os subprojetos via skill-catálogo** (`n8n-projeto`, `torre-projeto`) e os agentes-ponte (`n8n-bridge`, `torre-bridge`), acionados por `/n8n` e `/torre`. As pontes **leem** os arquivos dos subprojetos e fazem **consultas read-only via MCP**.
+2. **Os MCP dos subprojetos são replicados no parent** (`.mcp.json` na raiz, a partir do `.mcp.json.example`) para que as leituras funcionem daqui — com as **deny-rules de escrita portadas** para o `.claude/settings.json` do parent (n8n write tools, Supabase migration/deploy/branch, curl POST/PUT/PATCH/DELETE). Sem o `.mcp.json` real preenchido, as tools não aparecem (ver setup nas skills `n8n-projeto`/`torre-projeto`).
+3. **Trabalho pesado entra no subprojeto.** Criar/alterar workflow n8n, ou desenvolver na Torre (migration, EF, campanha, UI, bug) → `cd <subprojeto>` e rodar `claude` lá, onde vivem os agentes especialistas e os guardrails completos. As pontes nomeiam qual agente de lá usar.
+
+**Fronteiras read-only:** n8n é **somente leitura** sempre (daqui e de lá — criação é JSON local + import manual pelo usuário). Na Torre, Claude **nunca** commita/push/PR e **nunca** escreve no Supabase (migrations/EF via CI/CD). Os subprojetos continuam versionados nos seus próprios GitHub — o `.gitignore` da raiz os exclui do repo do orquestra-tarefa.
 
 ---
 
@@ -196,6 +237,8 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - **Estratégico vs tático vive em Backlog/.** Item de backlog (`Backlog/frentes/`) tem história + critérios de aceite + subtarefas + RICE — dura semanas/meses. O tático curto é **subtarefa do item** (responsável + status próprios), não artefato separado. Reuniões/análises/1on1s vivem em `Backlog/reunioes/`, `analises/`, `1on1s/`. O subsistema de pendências (`Gestao/Pendencias/`) foi **aposentado em 27/05/2026**; a pasta `Gestao/` foi **aposentada em 2026-06-15** — não recrie sem decisão explícita.
 - **Mapa textual ≠ projeção.** `Backlog/contexto/mapa_*.md` é narrativa institucional curada à mão (`context-curator`), com história imutável. `mapa-mental.html` é projeção mecânica do backlog (`mapa-updater`). Nunca edite o JSON de uma projeção à mão — mude o `.md`-fonte e regenere.
 - **Três sistemas de demanda distintos.** `Backlog/` (estratégia interna `.md`, RICE) ≠ **Quimera** (tickets internos Finza, MCP `quimera`) ≠ **Jira/Confluence** (Atlassian externo, MCP `claude_ai_Atlassian`). Um item pode *referenciar* um ticket dos outros dois, mas não são a mesma coisa. Não cruze IDs nem confunda os comandos (`/backlog` · `/quimera` · `/jira`).
+- **Subprojetos acoplados têm fronteira (read-only).** `N8N-AGENT/` (n8n) e `cobranca-finza/` (Torre) são repos próprios — o parent é **roteador + leitura** (`/n8n` · `/torre`), não cockpit de dev. **n8n é sempre read-only** (daqui e de lá): criar/alterar workflow = JSON local + import manual pelo usuário, nunca escrita via MCP/curl. **Na Torre, Claude nunca commita/push/abre PR e nunca escreve no Supabase** (migrations/EF só via CI/CD); leitura/`SELECT` é livre. Dev pesado entra no subprojeto. Essas proteções estão portadas como `deny` no `.claude/settings.json` — não as remova.
+- **Torre tem 3 camadas — não as cruze.** Código (`cobranca-finza/`, via `/torre`) ≠ frente de backlog **BTR** (`Backlog/frentes/torre/`, via `/backlog`) ≠ overview narrativo (`Backlog/contexto/torre_de_controle_overview.md`, via `/contexto`).
 
 **Visual:**
 - Paleta Finza exata. Sem cores fora dos tokens em `.claude/skills/finza-design-system/`.
@@ -282,6 +325,13 @@ Grava em `Backlog/analises/<dd-mm-aaaa>/relatorios/YYYY-MM-DD_<slug>.md`. Cada d
 /jira [issues|show|criar|status|comentar|worklog|projetos|confluence|...]  # Atlassian externo (MCP claude_ai_Atlassian)
 ```
 Leitura é livre nos dois; **escrita confirma antes** (dispara notificação/e-mail). Os dois convivem — não confunda com `/backlog` (estratégia `.md`).
+
+### Operar os subprojetos acoplados — n8n e Torre
+```
+/n8n [workflows|show|execucoes|validar|auditar|nodes|metricas|padroes|entrar]   # N8N-AGENT (read-only)
+/torre [contexto|arquitetura|agentes|skills|db|guia|ef|entrar]                  # cobranca-finza (contexto+leitura)
+```
+`/n8n` consulta os 6 ambientes n8n + grafana **em somente leitura** (agente `n8n-bridge`); criar/alterar workflow é dentro do `N8N-AGENT/`. `/torre` dá contexto/arquitetura e consulta o Supabase read-only (agente `torre-bridge`); dev pesado é dentro do `cobranca-finza/` (8 agentes próprios). **Pré-requisito:** copiar `.mcp.json.example`→`.mcp.json` e `.env.example`→`.env`, preencher as chaves (guia nas skills `n8n-projeto`/`torre-projeto`) e reiniciar o Claude Code.
 
 ### Manter arquitetura organizada
 ```
@@ -391,7 +441,8 @@ tags: [esperanza, tabulacoes]
 - Mudou convenção de nome ou frontmatter → atualize seção 5.
 - Aposentou/criou um subsistema (como pendências em 27/05, ou a migração de Gestao/ em 2026-06-15) → reflita em §0, §1, §3, §5.
 - Adicionou/alterou um hook em `.claude/settings.json` ou `.claude/hooks/` → reflita em §1 (árvore) e §3 (regra que ele enforça).
-- Adicionou/mudou um conector MCP (Quimera, Jira) → reflita na tabela de gatilhos §0, na árvore §1 e na regra "três sistemas de demanda" §3.
+- Adicionou/mudou um conector MCP (Quimera, Jira, n8n, Supabase) → reflita na tabela de gatilhos §0, na árvore §1, no `.mcp.json.example`/`settings.json` e na regra de fronteiras §3.
+- Adicionou/removeu/moveu um **subprojeto acoplado** (ou mudou seu MCP/guardrails) → reflita em §0 (gatilhos), §1.1 (modelo), §3 (fronteiras), no `.gitignore` e nas skills `n8n-projeto`/`torre-projeto`.
 - Não atualize por mudança de conteúdo (uso normal) — só por mudança estrutural.
 
 ---

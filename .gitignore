@@ -1,0 +1,10 @@
+# Segredos / config local de MCP (nunca comitar)
+.mcp.json
+.env
+.env.local
+
+# Subprojetos acoplados — repos git proprios, versionados nos seus proprios GitHub.
+# Ignorados aqui para o repo do orquestra-tarefa nao engolir o conteudo deles.
+# (N8N-AGENT -> github.com/blips-ai/N8N-AGENT ; cobranca-finza -> github.com/blips-ai/cobranca-finza)
+/N8N-AGENT/
+/cobranca-finza/

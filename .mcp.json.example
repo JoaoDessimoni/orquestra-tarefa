@@ -1,0 +1,87 @@
+{
+  "_comment": "Template do MCP do workspace orquestra-tarefa. Copie para .mcp.json (gitignored) e preencha as chaves: cp .mcp.json.example .mcp.json. Depois reinicie o Claude Code (enableAllProjectMcpServers=true em .claude/settings.json sobe estes servers). Os n8n usam .env (ver .env.example) ou as chaves inline abaixo. Uso e SOMENTE LEITURA — escrita esta bloqueada por deny em .claude/settings.json (n8n write tools, curl POST/PUT/PATCH/DELETE, Supabase apply_migration/deploy_edge_function/branch ops). Os servers quimera e claude_ai_Atlassian sao configurados a nivel de usuario (~/.claude.json), nao aqui. Onde obter as chaves: skill n8n-projeto (n8n+grafana) e torre-projeto (supabase).",
+  "mcpServers": {
+    "n8n-dev": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n-dev.blips-labs.com",
+        "N8N_API_KEY": ""
+      }
+    },
+    "n8n-prod-assistants": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n-assistants.blips-labs.com",
+        "N8N_API_KEY": ""
+      }
+    },
+    "n8n-prod-auditoria": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://n8n-auditoria.blips-labs.com",
+        "N8N_API_KEY": ""
+      }
+    },
+    "n8n-prod-salesops": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://salesops.blips-labs.com",
+        "N8N_API_KEY": ""
+      }
+    },
+    "n8n-prod-automacao": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://automacao.blips-labs.com",
+        "N8N_API_KEY": ""
+      }
+    },
+    "n8n-prod-monitoria": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true",
+        "N8N_API_URL": "https://monitoria.blips-labs.com",
+        "N8N_API_KEY": ""
+      }
+    },
+    "grafana": {
+      "command": "uvx",
+      "args": ["mcp-grafana"],
+      "env": {
+        "GRAFANA_URL": "https://blipsdata.grafana.net/",
+        "GRAFANA_SERVICE_ACCOUNT_TOKEN": ""
+      }
+    },
+    "supabase-prod": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=<PROJECT_REF_PROD>"
+    },
+    "supabase-dev": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=<PROJECT_REF_DEV>"
+    }
+  }
+}
