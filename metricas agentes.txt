@@ -1,0 +1,151 @@
+Esperanza
+
+blips:
+protocolos: 677 
+transbordo: 192 
+transferências: 88
+
+taxa de transbordo = 192/677 = 28%
+taxa de encaminhamentos humanos = (192+88)/677 = 41%
+taxa de acurácia = 72%
+
+motivos de transferência por tag na blips:
+Erro de Fluxo = 123 (transbordo)
+Transferência por solicitação = 108 (transbordo)
+suporte técnico (máquina) = 46 (transferencia)
+Equipamento não encontrado = 1 (transbordo)
+Transferencia por distrato = 1 (transferencia)
+Transferencia por renegociação = 1 (transferencia)
+
+sentimentos do cliente blips:
+Positivo = 45%
+Neutro = 52%
+Negativo = 3%
+
+ranking por tag:
+Solicitação de Link ou Boleto = 317
+Transbordo para Humano = 231
+Confirmação e Comprovante de Pagamento = 208
+Interesse em Pagar e Negociação = 139
+Inadimplência, Vencimentos e Bloqueios = 45
+Dúvidas sobre Formas de Pagamento = 36
+Contato Inválido ou Sem Resolução = 20
+Reclamações e Cobrança Indevida = 19
+Outros (Apresentação, Jurídico e Vulnerabilidade) = 14
+Cancelamento e Devolução de Equipamento = 13
+
+---------------------------------------------------------------------------------------------------------------
+
+Esperanza
+
+finza:
+protocolos: 67
+transbordo: 15
+transferências: 18
+
+taxa de transbordo = 15/67 = 22%
+taxa de encaminhamentos humanos = (15+18)/67 = 49%
+taxa de acurácia = 78%
+
+motivos de transferência por tag na finza:
+Transferencia por erro de fluxo = 9 (transbordo)
+Transferencia por suporte técnico (máquina) = 8 (transferencia)
+Transferencia por renegociação = 5 (transferencia)
+Transferência por solicitação = 5 (transbordo)
+Transferencia por contrato não encontrado = 1 (transbordo)
+Transferencia por distrato = 1 (transferencia)
+
+sentimentos do cliente finza:
+Positivo = 45%
+Neutro = 52%
+Negativo = 3%
+
+ranking por tag:
+Solicitação de Link ou Boleto = 20
+Transbordo para Humano = 11
+Confirmação e Comprovante de Pagamento = 10
+Interesse em Pagar e Negociação = 10
+Inadimplência, Vencimentos e Bloqueios = 10
+Contestação de Cobrança e Fraude = 7
+Início de Contato = 7
+Contato Inválido ou Sem Resolução = 5
+Dúvidas sobre Status do Contrato = 2
+Ação Judicial = 1
+
+---------------------------------------------------------------------------------------------------------------
+
+Valentina
+
+finza:
+protocolos: 218
+transbordo: 46
+transferências: 24
+
+taxa de transbordo = 46/218 = 21%
+taxa de encaminhamentos humanos = (24+46)/218 = 32%
+taxa de acurácia = 79%
+
+motivos de transferência por tag na finza:
+Transferência por solicitação = 25 (transbordo)
+Transferencia por erro de fluxo = 19 (transbordo)
+Transferencia por renegociação = 13 (transferencia)
+Transferencia por suporte técnico (máquina) = 5 (transferencia)
+Transferencia por contrato não encontrado = 2 (transbordo)
+Transferencia por distrato = 6 (transferencia)
+
+sentimentos do cliente finza:
+Positivo = 25%
+Neutro = 62%
+Negativo = 13%
+
+ranking por tag:
+Transbordo para Humano = 65
+Solicitação de Link, Boleto ou 2ª Via = 45
+Contato Inválido, Sem Resolução ou Reclamação = 34
+Interesse em Pagar e Negociação = 31
+Onboarding, Triagem e Início de Contato = 28
+Status Financeiro, Vencimentos e Inadimplência = 27
+Direcionamento e Assuntos Técnicos do Equipamento = 24
+Confirmação e Comprovante de Pagamento = 23
+Consulta de Contrato e Equipamento = 19
+Cancelamento e Distrato = 10
+
+---------------------------------------------------------------------------------------------------------------
+
+total:
+protocolos: 677+67+218=962
+transbordo: 192+15+46=253 
+transferências: 88+18+24=130
+
+taxa de transbordo = 253/962 = 26%
+taxa de encaminhamentos humanos = (253+130)/962 = 39%
+taxa de acurácia = 79%
+
+motivos de transferência por tag: (soma)
+Erro de fluxo = 123+9+19 = 151 (transbordo)
+Transferência por solicitação = 108+5+25 = 138 (transbordo)
+Suporte técnico (máquina) = 46+8+5 = 59 (transferencia)
+Renegociação = 1+5+13 = 19 (transferencia)
+Distrato = 1+1+6 = 8 (transferencia)
+Contrato/Equipamento não encontrado = 1+1+2 = 4 (transbordo)
+
+sentimentos do cliente: (média)
+Positivo = (45+45+25)/3 = 38%
+Neutro = (52+52+62)/3 = 55%
+Negativo = (3+3+13)/3 = 6%
+
+ranking por tag: (soma)
+Solicitação de Link ou Boleto (2ª Via) = 317+20+45 = 382
+Transbordo para Humano = 231+11+65 = 307
+Confirmação e Comprovante de Pagamento = 208+10+23 = 241
+Interesse em Pagar e Negociação = 139+10+31 = 180
+Inadimplência, Vencimentos e Status Financeiro = 45+10+27 = 82
+Contato Inválido, Sem Resolução ou Reclamação = 20+5+34 = 59
+Dúvidas sobre Formas de Pagamento = 36 (só blips)
+Onboarding, Triagem e Início de Contato = 7+28 = 35
+Reclamações, Contestação de Cobrança e Fraude = 19+7 = 26
+Cancelamento, Devolução e Distrato = 13+10 = 23
+Assuntos Técnicos do Equipamento = 24 (só Valentina)
+Consulta de Contrato e Status = 2+19 = 21
+Outros (Apresentação, Jurídico, Vulnerabilidade) = 14 (só blips)
+Ação Judicial = 1
