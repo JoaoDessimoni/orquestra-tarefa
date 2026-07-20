@@ -15,7 +15,9 @@
       "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
       "mcp__quimera__list_teams",
       "mcp__quimera__list_users",
-      "mcp__claude_ai_Atlassian__getVisibleJiraProjects"
+      "mcp__claude_ai_Atlassian__getVisibleJiraProjects",
+      "mcp__quimera__get_ticket",
+      "PowerShell($f = \"C:\\\\Users\\\\João Vinicius\\\\Documents\\\\Finza\\\\Projetos\\\\orquestra-tarefa\\\\roadmap.html\"; \\(Get-Item $f\\).Length; \\(Get-Content $f | Measure-Object -Line\\).Lines)"
     ]
   }
 }

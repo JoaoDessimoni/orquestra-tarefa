@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerta CCB · Console de Operações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Finza — base (tema claro canônico) */
+  --void:#F2F2F2; --deep:#EAEAF2; --panel:#FFFFFF; --panel-2:#FFFFFF;
+  --ink:#0A0A2E; --muted:#5C5C7A; --faint:#8A8AA0; --ghost:#B7B7C6;
+  /* azul cirúrgico Finza */
+  --finza-blue:#1A1AFF; --finza-blue-deep:#0F0F8C; --finza-blue-soft:#E8E8FF;
+  /* acentos mapeados ao sistema Finza */
+  --mint:#1A1AFF; --mint-rgb:26,26,255;
+  --azure:#1A1AFF; --azure-rgb:26,26,255;
+  --iris:#0F0F8C; --iris-rgb:15,15,140;
+  --amber:#F59E0B; --amber-rgb:245,158,11;
+  --coral:#EF4444; --coral-rgb:239,68,68;
+  --success:#10B981; --success-rgb:16,185,129;
+  --accent:var(--mint); --accent-rgb:var(--mint-rgb);
+  /* superfícies */
+  --glass:rgba(26,26,255,.03);
+  --glass-2:rgba(26,26,255,.06);
+  --stroke:#D8D8E5;
+  --stroke-2:#C8C8D8;
+  --blur:8px;
+  --hi:0 0 transparent;
+  --lift:0 10px 26px -20px rgba(10,10,46,.28);
+  --code-bg:#0A0A2E;
+  --r:12px; --r-lg:14px; --r-sm:9px;
+  --max:1160px;
+  --f-disp:"Inter",system-ui,-apple-system,sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,sans-serif;
+  --f-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+:root[data-theme="dark"]{
+  --void:#0A0A2E; --deep:#101034; --panel:#17173F; --panel-2:#1C1C48;
+  --ink:#ECECFF; --muted:#B0B0D0; --faint:#7C7CA0; --ghost:#3A3A6A;
+  --finza-blue:#6E6EFF; --finza-blue-deep:#4A4AE0; --finza-blue-soft:#20205C;
+  --mint:#6E6EFF; --mint-rgb:110,110,255;
+  --azure:#6E6EFF; --azure-rgb:110,110,255;
+  --iris:#9A9AFF; --iris-rgb:154,154,255;
+  --amber:#F5B942; --amber-rgb:245,185,66;
+  --coral:#FF6B6B; --coral-rgb:255,107,107;
+  --success:#2EE6A0; --success-rgb:46,230,160;
+  --glass:rgba(255,255,255,.03);
+  --glass-2:rgba(255,255,255,.06);
+  --stroke:rgba(255,255,255,.10);
+  --stroke-2:rgba(255,255,255,.18);
+  --hi:0 0 transparent;
+  --lift:0 16px 34px -22px rgba(0,0,0,.55);
+  --code-bg:#05051A;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;color:var(--ink);background:var(--void);
+  font-family:var(--f-body);font-size:16px;line-height:1.7;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;min-height:100vh;
+}
+/* ---------- ambient background (sóbrio Finza) ---------- */
+.bg{position:fixed;inset:0;z-index:-3;overflow:hidden;
+  background:
+    radial-gradient(900px 620px at 15% -10%, rgba(var(--azure-rgb),.05), transparent 60%),
+    var(--void);}
+:root[data-theme="dark"] .bg{background:
+    radial-gradient(900px 620px at 15% -10%, rgba(var(--azure-rgb),.10), transparent 60%),
+    var(--void);}
+.blob{display:none}
+.bggrid{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:linear-gradient(rgba(10,10,46,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(10,10,46,.04) 1px,transparent 1px);
+  background-size:56px 56px;mask-image:radial-gradient(ellipse 100% 100% at 50% 0%,#000,transparent 82%)}
+:root[data-theme="dark"] .bggrid{background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)}
+@media (prefers-reduced-motion:reduce){.blob{animation:none}}
+
+/* ---------- glass primitive ---------- */
+.glass,.card,.metric,.callout,.drawer,.email,.phone,.codewrap,.tab,.pill,.themetgl,.faixa{
+  background:var(--panel);
+  border:1px solid var(--stroke);box-shadow:var(--hi),var(--lift);
+}
+h1,h2,h3,h4,h5{font-family:var(--f-disp);font-weight:700;line-height:1.08;letter-spacing:-.01em;margin:0}
+a{color:var(--azure);text-decoration:none}
+a:hover{color:var(--mint);text-decoration:underline}
+a:focus-visible,button:focus-visible,.node:focus-visible,.tab:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:6px}
+code,pre,kbd{font-family:var(--f-mono)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 26px}
+.section{padding:96px 0;position:relative}
+.section::before{content:"";position:absolute;top:0;left:26px;right:26px;height:1px;background:linear-gradient(90deg,transparent,var(--stroke) 12%,var(--stroke) 88%,transparent)}
+.section:first-of-type::before{display:none}
+.eyebrow{font-family:var(--f-body);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--finza-blue);font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--finza-blue)}
+.section h2{font-size:clamp(1.9rem,4.2vw,2.9rem);max-width:20ch}
+.lede{color:var(--muted);font-size:1.1rem;max-width:66ch;margin:18px 0 0}
+p{margin:0 0 14px}
+.mono{font-family:var(--f-mono)}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(242,242,242,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--stroke)}
+:root[data-theme="dark"] .topbar{background:rgba(10,10,46,.92)}
+.iaf-mark{flex:none;font-family:var(--f-disp);font-weight:700;font-size:.72rem;color:var(--finza-blue);letter-spacing:.08em}
+.topbar .row{display:flex;align-items:center;gap:16px;height:62px}
+.brand{font-family:var(--f-disp);font-weight:700;font-size:.98rem;letter-spacing:.02em;white-space:nowrap;display:flex;align-items:center;gap:10px;text-transform:uppercase}
+.brand .dot{width:9px;height:9px;border-radius:2px;background:var(--coral);box-shadow:0 0 0 4px rgba(var(--coral-rgb),.16);flex:none;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4}}
+@media (prefers-reduced-motion:reduce){.brand .dot{animation:none}}
+nav.spy{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav.spy::-webkit-scrollbar{display:none}
+nav.spy a{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);padding:7px 11px;border-radius:8px;white-space:nowrap;font-weight:500;letter-spacing:.02em}
+nav.spy a:hover{color:var(--ink);background:var(--glass-2);text-decoration:none}
+nav.spy a.active{color:var(--mint);background:rgba(var(--mint-rgb),.12)}
+.themetgl{flex:none;color:var(--ink);width:40px;height:40px;border-radius:10px;cursor:pointer;display:grid;place-items:center;font-size:1rem}
+.themetgl:hover{border-color:var(--stroke-2)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:96px 0 72px}
+.hero .grid-bg{display:none}
+.hero .inner{position:relative;z-index:1}
+.tagrow{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:26px}
+.anim-up{opacity:0;transform:translateY(20px);animation:up .8s cubic-bezier(.2,.7,.2,1) forwards}
+.anim-up:nth-child(1){animation-delay:.05s}.anim-up:nth-child(2){animation-delay:.14s}
+.anim-up:nth-child(3){animation-delay:.24s}.anim-up:nth-child(4){animation-delay:.34s}.anim-up:nth-child(5){animation-delay:.44s}
+@keyframes up{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.anim-up{opacity:1;transform:none;animation:none}}
+.pill{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.06em;padding:6px 13px;border-radius:999px;color:var(--finza-blue);background:var(--finza-blue-soft);border-color:transparent;display:inline-flex;align-items:center;gap:7px}
+.pill.prod{color:var(--success);border-color:rgba(var(--success-rgb),.4);background:rgba(var(--success-rgb),.12)}
+.pill.paused{color:var(--amber);border-color:rgba(var(--amber-rgb),.4);background:rgba(var(--amber-rgb),.12)}
+.hero h1{font-size:clamp(2.7rem,7.4vw,5.4rem);font-weight:300;color:var(--ghost);max-width:15ch;margin-bottom:4px;letter-spacing:-.02em;line-height:1.02}
+.hero h1 .g{font-weight:700;color:var(--finza-blue)}
+.hero .sub{font-size:1.2rem;color:var(--muted);max-width:62ch;margin-top:24px}
+.hero .sub b{color:var(--ink)}
+.hero .meta{display:flex;flex-wrap:wrap;gap:26px;margin-top:28px;font-family:var(--f-mono);font-size:.82rem;color:var(--faint)}
+.hero .meta b{color:var(--ink);font-weight:600}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:48px}
+.metric{position:relative;border-radius:var(--r);padding:20px 18px;overflow:hidden}
+.metric::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--mint);opacity:.5}
+.metric.c-crit::after{background:var(--coral)} .metric.c-warn::after{background:var(--amber)} .metric.c-accent::after{background:var(--azure)}
+.metric .n{font-family:var(--f-disp);font-size:1.95rem;font-weight:700;line-height:1;letter-spacing:-.01em}
+.metric.c-accent .n{color:var(--finza-blue)}
+.metric.c-crit .n{color:var(--coral)} .metric.c-warn .n{color:var(--amber)}
+.metric .l{font-size:.78rem;color:var(--muted);margin-top:10px;letter-spacing:.01em}
+.metric .src{font-family:var(--f-mono);font-size:.63rem;color:var(--faint);margin-top:6px}
+
+/* ---------- cards / callouts ---------- */
+.card{border-radius:var(--r-lg);padding:28px;border:2px dotted var(--finza-blue);box-shadow:none}
+.card h3{font-family:var(--f-disp)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.callout{border-radius:var(--r);padding:18px 22px;margin:22px 0;border-left:3px solid var(--finza-blue)}
+.callout.warn{border-left-color:var(--amber)} .callout.crit{border-left-color:var(--coral)} .callout.ok{border-left-color:var(--success)}
+.callout h4{font-family:var(--f-disp);font-weight:700;font-size:.98rem;margin-bottom:6px;color:var(--ink)}
+.callout.warn h4{color:var(--amber)} .callout.crit h4{color:var(--coral)} .callout.ok h4{color:var(--success)}
+.callout p{margin:0;font-size:.95rem;color:var(--muted)}
+.kv{font-family:var(--f-mono);font-size:.8rem;background:rgba(var(--azure-rgb),.12);border:1px solid rgba(var(--azure-rgb),.25);border-radius:5px;padding:1px 6px;color:var(--azure);white-space:nowrap}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* ---------- faixas (signature: threat levels) ---------- */
+.faixas{margin-top:36px;display:grid;gap:16px}
+.faixa{display:grid;grid-template-columns:130px 1fr auto;align-items:center;gap:22px;border-radius:var(--r);padding:20px 22px;position:relative;overflow:hidden}
+.faixa::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.faixa .tag{font-family:var(--f-disp);font-size:1.7rem;font-weight:800;color:var(--c);letter-spacing:-.02em}
+.faixa .bar-wrap{height:12px;background:var(--deep);border-radius:3px;overflow:hidden;border:1px solid var(--stroke)}
+.faixa .bar{height:100%;width:0;border-radius:3px;background:var(--c);transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.faixa.in .bar{width:var(--w)}
+@media (prefers-reduced-motion:reduce){.faixa .bar{transition:none;width:var(--w)}}
+.faixa .stat{text-align:right;font-size:.85rem;color:var(--muted);min-width:140px}
+.faixa .stat b{display:block;font-family:var(--f-disp);font-size:1.4rem;color:var(--ink);font-weight:700}
+.faixa .who{font-size:.8rem;color:var(--faint);margin-top:4px}
+.faixa .who b{color:var(--muted)}
+
+/* ---------- flow diagram (rebuild) ---------- */
+.flowlegend{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0 26px}
+.flowlegend span{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.71rem;color:var(--muted);background:var(--panel);border:1px solid var(--stroke);border-radius:8px;padding:6px 11px}
+.flowlegend i{width:11px;height:11px;border-radius:3px;display:inline-block;background:var(--nc)}
+.t-trigger{--nc:#0F0F8C} .t-bq{--nc:#1A1AFF} .t-code{--nc:#10B981} .t-sheets{--nc:#0891B2} .t-file{--nc:#B45309} .t-http{--nc:#EA580C} .t-mail{--nc:#EF4444} .t-merge{--nc:#7C7CE0} .t-loop{--nc:#0EA5E9} .t-if{--nc:#F59E0B}
+.flow{display:flex;flex-direction:column;gap:0}
+.stage{border:1px solid var(--stroke);background:var(--deep);border-radius:14px;padding:15px 17px 17px}
+.stage-head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.stage-head .ix{font-family:var(--f-mono);font-size:.72rem;font-weight:700;color:#fff;background:var(--azure);width:24px;height:24px;border-radius:7px;display:grid;place-items:center;flex:none}
+.stage-label{font-family:var(--f-mono);font-size:.71rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0}
+.stage-nodes{display:flex;flex-wrap:wrap;gap:11px}
+.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.lane{border:1px solid var(--stroke);background:var(--void);border-radius:12px;padding:13px}
+.lane h5{font-family:var(--f-disp);font-weight:600;font-size:.83rem;margin:0 0 12px;color:var(--ink);display:flex;align-items:center;gap:8px;padding-bottom:11px;border-bottom:1px solid var(--stroke)}
+.lane .stage-nodes{flex-direction:column;gap:9px}
+.node{display:flex;align-items:center;gap:11px;text-align:left;cursor:pointer;min-width:198px;background:var(--panel-2);border:1px solid var(--stroke-2);border-left:3px solid var(--nc);border-radius:10px;padding:10px 13px;transition:transform .15s,border-color .15s,box-shadow .15s}
+.lane .node{width:100%;min-width:0}
+.node:hover{transform:translateY(-2px);border-color:var(--nc);box-shadow:0 10px 24px -14px #000}
+.node[aria-pressed="true"]{border-color:var(--nc);box-shadow:0 0 0 1px var(--nc),0 10px 24px -14px #000}
+.node .chip{flex:none;width:31px;height:31px;border-radius:8px;background:var(--nc);color:#fff;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:.72rem}
+.node .ninfo{display:flex;flex-direction:column;min-width:0}
+.node .nm{font-family:var(--f-disp);font-weight:600;font-size:.87rem;line-height:1.2;color:var(--ink)}
+.node .ty{font-family:var(--f-mono);font-size:.63rem;color:var(--faint);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}
+.arrow{display:flex;justify-content:center;padding:8px 0;color:var(--faint)}
+.arrow svg{width:20px;height:20px}
+:root[data-theme="dark"] .lane{background:#0C0C28}
+/* stage / node / flowlegend herdam as superfícies pelos tokens */
+@media (prefers-reduced-motion:reduce){.node{transition:none}}
+
+/* drawer */
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);z-index:80;transform:translateX(100%);transition:transform .34s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;border-left:1px solid var(--stroke-2);border-radius:0}
+.drawer.open{transform:none}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+.drawer header{padding:22px;border-bottom:1px solid var(--stroke);display:flex;align-items:flex-start;gap:12px}
+.drawer header .ic{flex:none;width:34px;height:34px;border-radius:8px;background:var(--finza-blue);display:grid;place-items:center;color:#fff;font-family:var(--f-mono);font-weight:700;font-size:.78rem}
+.drawer h3{font-size:1.18rem}
+.drawer .ty{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);margin-top:4px}
+.drawer .body{padding:22px;overflow-y:auto}
+.drawer .body h4{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);margin:18px 0 6px}
+.drawer .body h4:first-child{margin-top:0}
+.drawer .body p{font-size:.93rem;color:var(--muted)}
+.drawer .close{margin-left:auto;background:var(--glass-2);border:1px solid var(--stroke);color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem}
+.drawer .close:hover{color:var(--ink)}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.open{opacity:1;pointer-events:auto}
+
+/* ---------- code blocks ---------- */
+.codewrap{border-radius:var(--r);overflow:hidden;margin:18px 0;padding:0;background:var(--code-bg);border-color:var(--stroke)}
+.codebar{background:rgba(255,255,255,.05);padding:11px 16px;font-family:var(--f-mono);font-size:.76rem;color:#B0B0D0;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.09)}
+.codebar .dots{display:flex;gap:6px}
+.codebar .dots i{width:9px;height:9px;border-radius:50%}
+.codebar .dots i:nth-child(1){background:#EF4444}.codebar .dots i:nth-child(2){background:#F5B942}.codebar .dots i:nth-child(3){background:#10B981}
+.codebar .fn{color:#9A9AFF;font-weight:600}
+.codebar .badge{margin-left:auto;font-size:.64rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:5px;padding:2px 8px;color:#8A8AA0}
+pre.code{margin:0;background:var(--code-bg);color:#D6E2F0;padding:20px;overflow-x:auto;font-size:.82rem;line-height:1.7;tab-size:2}
+pre.code .kw{color:#9A9AFF;font-weight:500} pre.code .str{color:#F5B942} pre.code .com{color:#7C7CA0;font-style:italic}
+pre.code .num{color:#FF8A8A} pre.code .fn2{color:#7FB0FF} pre.code .tbl{color:#4FD6A0}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tab{font-family:var(--f-disp);font-size:.84rem;font-weight:600;padding:10px 17px;border-radius:9px;color:var(--muted);cursor:pointer;transition:.16s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--finza-blue);color:#fff;border-color:transparent;box-shadow:none}
+.panel{display:none} .panel.show{display:block;animation:fade .45s}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.panel.show{animation:none}}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--stroke);border-radius:var(--r);margin:16px 0;background:var(--panel);box-shadow:var(--hi),var(--lift)}
+table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:540px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--stroke)}
+thead th{background:var(--finza-blue-soft);font-family:var(--f-disp);font-weight:700;color:var(--finza-blue-deep);font-size:.76rem;letter-spacing:.03em;text-transform:uppercase}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(var(--azure-rgb),.06)}
+.colname{font-family:var(--f-mono);font-size:.8rem;color:var(--finza-blue);font-weight:500}
+
+/* ---------- status pills ---------- */
+.st{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:6px;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.st::before{content:"";width:6px;height:6px;border-radius:2px}
+.st.id{color:var(--success);background:rgba(var(--success-rgb),.14)} .st.id::before{background:var(--success)}
+.st.ad{color:var(--azure);background:rgba(var(--azure-rgb),.12)} .st.ad::before{background:var(--azure)}
+.st.pe{color:var(--amber);background:rgba(var(--amber-rgb),.16)} .st.pe::before{background:var(--amber)}
+.st.no{color:var(--coral);background:rgba(var(--coral-rgb),.12)} .st.no::before{background:var(--coral)}
+
+/* ---------- mockups ---------- */
+.mockrow{display:grid;grid-template-columns:350px 1fr;gap:30px;align-items:start}
+.phone{border-radius:30px;padding:12px;border:1px solid var(--stroke-2)}
+.wa{background:#0A1014;border-radius:20px;overflow:hidden}
+.wa .wbar{background:#141D22;color:#E9EDEF;padding:12px 15px;display:flex;align-items:center;gap:11px;font-size:.85rem}
+.wa .wbar .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--mint),var(--azure));display:grid;place-items:center;color:#fff;font-weight:700;font-size:.8rem;flex:none}
+.wa .wbody{padding:18px 13px;background:#0A1014;min-height:210px}
+.bubble{background:#0B3D33;color:#E9EDEF;padding:10px 12px 8px;border-radius:10px 10px 10px 2px;max-width:94%;font-size:.83rem;line-height:1.5;border:1px solid rgba(var(--mint-rgb),.2)}
+.bubble .hdr{font-family:var(--f-disp);font-weight:600;margin-bottom:3px}
+.bubble b{color:#fff}
+.bubble .btn{margin-top:10px;border-top:1px solid rgba(255,255,255,.14);padding-top:8px;text-align:center;color:#7FB0FF;font-weight:600}
+.bubble .foot{color:#8FB0A6;font-size:.72rem;margin-top:7px}
+.bubble .time{text-align:right;color:#7C9A90;font-size:.66rem;margin-top:3px}
+.email{border-radius:var(--r-lg);overflow:hidden}
+.email .ehead{padding:16px 20px;border-bottom:1px solid var(--stroke);background:var(--deep)}
+.email .ehead .subj{font-family:var(--f-disp);font-weight:600}
+.email .ehead .fromline{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);margin-top:5px}
+.email .ebody{padding:22px}
+.email .ebody h2{color:var(--azure);font-size:1.35rem;margin:8px 0 4px}
+.email .attach{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.att{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--stroke-2);border-radius:9px;padding:9px 13px;font-size:.8rem;background:var(--glass-2)}
+.att .xi{width:26px;height:26px;border-radius:6px;background:var(--finza-blue);color:#fff;display:grid;place-items:center;font-size:.6rem;font-weight:700;font-family:var(--f-mono)}
+.varmap{font-family:var(--f-mono);font-size:.8rem;display:grid;gap:8px;margin-top:14px}
+.varmap div{display:flex;gap:10px;align-items:center}
+.varmap .v{color:var(--finza-blue);font-weight:700}
+.varmap .arrow2{color:var(--faint)}
+
+/* footer */
+footer{border-top:1px solid var(--stroke);padding:52px 0 68px;color:var(--faint);font-size:.85rem;margin-top:40px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer b{color:var(--ink)}
+
+@media (max-width:920px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .lanes{grid-template-columns:1fr}
+  .mockrow{grid-template-columns:1fr}
+  .faixa{grid-template-columns:90px 1fr}
+  .faixa .stat{grid-column:1/3;text-align:left;display:flex;gap:24px;align-items:baseline}
+  .faixa .stat b{display:inline}
+}
+@media (max-width:600px){
+  .section{padding:64px 0}
+  .metrics{grid-template-columns:1fr 1fr}
+  .metric .n{font-size:1.55rem}
+}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="bggrid"></div>
+
+<!-- ===================== TOP BAR ===================== -->
+<div class="topbar">
+  <div class="wrap row">
+    <div class="brand"><span class="dot"></span>Alerta&nbsp;CCB</div>
+    <nav class="spy" id="spy">
+      <a href="#visao">Visão</a>
+      <a href="#indice">Índice</a>
+      <a href="#faixas">Faixas</a>
+      <a href="#dados">Dados</a>
+      <a href="#fluxo">Fluxo</a>
+      <a href="#queries">Queries</a>
+      <a href="#mapa">Mapa de fontes</a>
+      <a href="#logica">Lógica</a>
+      <a href="#templates">Templates</a>
+      <a href="#planilha">Planilha</a>
+      <a href="#governanca">Governança</a>
+      <a href="#pedido">Pedido × Feito</a>
+      <a href="#pendencias">Pendências</a>
+    </nav>
+    <span class="iaf-mark">◆ iaf</span>
+    <button class="themetgl glass" id="themeBtn" aria-label="Alternar tema claro/escuro" title="Alternar tema">◐</button>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap inner">
+    <div class="tagrow">
+      <span class="pill prod anim-up">● em produção · n8n</span>
+      <span class="pill paused anim-up">⏸ inativo — aguardando ativação</span>
+      <span class="pill anim-up">automacao.blips-labs.com</span>
+      <span class="pill anim-up">id 9O4XGF8L89TAcHDK</span>
+      <span class="pill anim-up">40 nós</span>
+    </div>
+    <h1 class="anim-up">Alerta de CCB<br>perto do <span class="g">vencimento</span></h1>
+    <p class="sub anim-up">Automação proativa que avisa os responsáveis quando uma CCB assinada está perto do
+      vencimento (data de desembolso) e <b>ainda não foi cedida ao FIDC</b> — a tempo de fazer a cessão dentro do prazo.
+      Dispara por <b>e-mail</b> e <b>WhatsApp</b>, toda quinta 09:00, segmentado por faixa de antecedência e por operação.</p>
+    <div class="meta anim-up">
+      <span>demanda · <b>Leonardo Caixeta</b></span>
+      <span>módulo · <b>Financeiro</b></span>
+      <span>spec · <b>26/06/2026</b></span>
+      <span>stack · <b>n8n · BigQuery · Hyperflow</b></span>
+    </div>
+
+    <div class="metrics" id="metrics">
+      <div class="metric c-accent"><div class="n" data-count="77">0</div><div class="l">CCBs em alerta</div><div class="src">painel · 07/07/2026</div></div>
+      <div class="metric"><div class="n" data-money="1776728.80">R$ 0</div><div class="l">Valor total exposto</div><div class="src">soma requisitado</div></div>
+      <div class="metric c-warn"><div class="n" data-count="33">0</div><div class="l">Críticas (≤5 dias)</div><div class="src">faixa crítica</div></div>
+      <div class="metric c-crit"><div class="n" data-count="3">0</div><div class="l">Já atrasadas</div><div class="src">dias &lt; 0</div></div>
+      <div class="metric c-accent"><div class="n" data-count="3">0</div><div class="l">Queries BigQuery</div><div class="src">+ e-mail &amp; WhatsApp</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== VISÃO ===================== -->
+<section class="section" id="visao">
+  <div class="wrap">
+    <div class="eyebrow reveal">O que é · como funciona · por quê</div>
+    <h2 class="reveal">Um relógio sobre cada CCB não cedida</h2>
+    <p class="lede reveal">Quando uma CCB é assinada, começa a contar o prazo para cedê-la ao FIDC. Passar do
+      prazo significa perder a janela de cessão. A rotina varre diariamente a base, encontra as CCBs que estão
+      entrando na zona de risco e avisa quem precisa agir — com listas prontas e valores somados.</p>
+
+    <div class="grid3" style="margin-top:32px">
+      <div class="card reveal">
+        <h3 style="font-size:1.15rem">O gatilho: o vencimento</h3>
+        <p style="color:var(--muted);font-size:.94rem;margin-top:12px">O “vencimento” da CCB é a
+          <span class="kv">DATA_LIMITE_DESEMBOLSO</span> (equivalente a
+          <span class="kv">celcoin…disbursement_date</span>). É a âncora do cálculo — não confundir com o
+          cronograma de parcelas.</p>
+        <p style="color:var(--muted);font-size:.94rem"><b>Dias restantes</b> = vencimento − hoje
+          (fuso <span class="kv">America/Sao_Paulo</span>).</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.15rem">O universo</h3>
+        <p style="color:var(--muted);font-size:.94rem;margin-top:12px">CCBs <b>assinadas</b>
+          (proposal com <span class="kv">signed_at</span>), com negociação ativa, das duas operações,
+          <b>ainda não cedidas</b> ao FIDC e <b>não canceladas</b>.</p>
+        <p style="color:var(--muted);font-size:.94rem">Também exclui as que já foram efetivamente
+          desembolsadas (<span class="kv">DATA_DESEMBOLSO_EFETIVO IS NULL</span>).</p>
+        <p style="color:var(--muted);font-size:.94rem">O universo Celcoin monitorado tem <b>~974 CCBs</b>
+          (gold_ccb_celcoin); o funil de regras afunila para as <b>~77</b> em alerta hoje.</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.15rem">As duas operações</h3>
+        <p style="color:var(--muted);font-size:.94rem;margin-top:12px"><b>Ideal</b> — negociação na
+          Plataforma Blips (produto <span class="kv">a119c37e…</span>).</p>
+        <p style="color:var(--muted);font-size:.94rem"><b>Outros Originadores</b> — Portal de Negócios /
+          Finza Start (demais produtos). Cada faixa gera <b>dois XLSX</b>: um por operação.</p>
+      </div>
+    </div>
+
+    <div class="callout ok reveal">
+      <h4>▲ Contexto: por que existe este projeto</h4>
+      <p>A demanda nasceu de um script legado em Google Apps Script (<span class="kv">script-ccb.js</span>) que
+        puxava CCBs da API da Flow para uma planilha e mandava e-mails de status. O objetivo foi <b>recriar e
+        elevar</b> essa ideia em n8n — com dados direto do BigQuery, segmentação por faixa/operação, WhatsApp
+        oficial (HSM) e log auditável de envios.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ÍNDICE ===================== -->
+<section class="section" id="indice">
+  <div class="wrap">
+    <div class="eyebrow reveal">Índice</div>
+    <h2 class="reveal">Navegue pelo dossiê</h2>
+    <p class="lede reveal">Doze seções, do panorama à execução — clique para pular.</p>
+    <div class="reveal" style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:16px">
+      <a class="card" href="#visao" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">01</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Visão</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">O que é o alerta, como funciona e por que recriar o script legado em n8n.</div></a>
+      <a class="card" href="#faixas" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">02</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Faixas</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">As faixas de antecedência (15–10 / 9–7 / ≤5 dias) e quem cada uma aciona.</div></a>
+      <a class="card" href="#dados" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">03</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Dados</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">Arquitetura no BigQuery: camadas, fontes das CCBs, Kanastra e Plataforma.</div></a>
+      <a class="card" href="#fluxo" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">04</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Fluxo</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">O workflow n8n interativo (40 nós): gatilho, gate de freshness e fan-out em 3 trilhas.</div></a>
+      <a class="card" href="#queries" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">05</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Queries</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">As consultas SQL explicadas: referência/freshness, alerta, destinatários, acompanhamento.</div></a>
+      <a class="card" href="#mapa" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">06</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Mapa de fontes</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">Cada query → tabelas → colunas usadas, e o porquê de cada fonte.</div></a>
+      <a class="card" href="#logica" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">07</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Lógica</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">Os nós Code: estruturação <b>por contato</b>, formatação da planilha e preparo dos canais.</div></a>
+      <a class="card" href="#templates" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">08</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Templates</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">O que o destinatário vê: 3 HSM de WhatsApp (por nº de faixas) + o e-mail HTML.</div></a>
+      <a class="card" href="#planilha" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">09</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Planilha</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">As 5 abas: painel Ideal/Outros, Acompanhamento (board vivo), Log Envios e Dashboard.</div></a>
+      <a class="card" href="#governanca" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">10</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Governança</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">Gate de freshness (§9), data de referência e a segurança (token) do WhatsApp.</div></a>
+      <a class="card" href="#pedido" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">11</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Pedido × Feito</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">Item a item da demanda de 26/06 vs. o que foi implementado (e o que mudou).</div></a>
+      <a class="card" href="#pendencias" style="display:block;padding:16px 18px;text-decoration:none;color:inherit"><div style="font-family:var(--f-mono);font-size:.7rem;color:var(--mint);letter-spacing:.12em">12</div><div style="font-family:var(--f-disp);font-weight:600;margin:4px 0 6px">Pendências</div><div style="color:var(--muted);font-size:.85rem;line-height:1.5">O que falta para ligar em produção: destinatários reais, validações de negócio, ativação.</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAIXAS ===================== -->
+<section class="section" id="faixas">
+  <div class="wrap">
+    <div class="eyebrow reveal">Faixas de antecedência</div>
+    <h2 class="reveal">Quanto mais perto do prazo, mais gente é avisada</h2>
+    <p class="lede reveal">O alerta é escalonado em três faixas de dias restantes. A diretoria, por exemplo, só
+      entra na faixa crítica. As barras abaixo mostram a distribuição real do painel em 07/07/2026.</p>
+
+    <div class="faixas" id="faixasBox">
+      <div class="faixa reveal" style="--c:var(--success);--w:100%">
+        <div class="tag">15–10</div>
+        <div><div class="bar-wrap"><div class="bar"></div></div>
+          <div class="who">Operação · responsáveis pela cessão — folga confortável</div></div>
+        <div class="stat"><b>33 CCBs</b><span>R$ 807.397,55</span></div>
+      </div>
+      <div class="faixa reveal" style="--c:var(--amber);--w:33%">
+        <div class="tag">9–7</div>
+        <div><div class="bar-wrap"><div class="bar"></div></div>
+          <div class="who">Operação · responsáveis pela cessão — atenção</div></div>
+        <div class="stat"><b>11 CCBs</b><span>R$ 180.652,66</span></div>
+      </div>
+      <div class="faixa reveal" style="--c:var(--coral);--w:100%">
+        <div class="tag">≤5</div>
+        <div><div class="bar-wrap"><div class="bar"></div></div>
+          <div class="who">Operação + <b>Diretoria</b> — crítico (inclui atrasadas)</div></div>
+        <div class="stat"><b>33 CCBs</b><span>R$ 788.678,59</span></div>
+      </div>
+    </div>
+
+    <div class="callout warn reveal">
+      <h4>⚠ Lacuna conhecida das faixas — validar com a área</h4>
+      <p>As faixas cobrem <b>10–15</b>, <b>7–9</b> e <b>≤5</b> dias. Sobram lacunas no <b>dia 6</b> (nenhuma faixa
+        captura) e a faixa crítica virou <b>“≤5”</b> — ou seja, captura 5, 4, 3… e também <b>dias negativos
+        (atrasadas)</b>. Isso foi uma decisão de implementação para não deixar CCB sem alerta abaixo de 5 dias, mas
+        precisa de confirmação: (a) o dia 6 deve entrar em alguma faixa? (b) atrasadas devem continuar sendo alertadas?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DADOS ===================== -->
+<section class="section" id="dados">
+  <div class="wrap">
+    <div class="eyebrow reveal">Arquitetura de dados · BigQuery</div>
+    <h2 class="reveal">De onde vem cada informação</h2>
+    <p class="lede reveal">A spec original apontava um bloqueio: “<i>finza-prod.proposal não está no BigQuery</i>”.
+      Na investigação, descobriu-se que <b>tudo já estava no BQ</b> — o que destravou construir a rotina inteira em
+      SQL, sem tocar no MongoDB.</p>
+
+    <div class="tablewrap reveal">
+      <table>
+        <thead><tr><th>Papel</th><th>Fonte (BigQuery)</th><th>O que entrega</th></tr></thead>
+        <tbody>
+          <tr><td><b>Universo das CCBs</b></td><td class="colname">gold_flow_finance.gold_ccb_celcoin</td>
+            <td>Deduplicado por contrato. Tem <span class="kv">DATA_LIMITE_DESEMBOLSO</span> (vencimento),
+              <span class="kv">ID_SEQUENCIAL</span>, valor, cliente, <span class="kv">ID_PRODUTO</span>, status.</td></tr>
+          <tr><td><b>Assinatura</b></td><td class="colname">bronze.proposal</td>
+            <td>JSON cru: <span class="kv">document_signature_info.signed_at</span> (assinatura real) e
+              <span class="kv">status</span> da proposta. Deduplicado por <span class="kv">contract_number</span>.</td></tr>
+          <tr><td><b>Já cedida (FIDC)</b></td><td class="colname">blips-bigdata.kanastra.repository_finza</td>
+            <td>Estoque Kanastra (grão parcela, ~804k linhas). Presença aqui = CCB já cedida → <b>não alertada</b> (filtro no WHERE; some das abas de alerta, mas permanece no Acompanhamento).</td></tr>
+          <tr><td><b>Cancelamento Ideal</b></td><td class="colname">blips-bigdata.PLATAFORMA.negotiation</td>
+            <td><span class="kv">phase.status</span> ∈ CANCELLED / CANCELLATION_REQUESTED → exclui.</td></tr>
+          <tr><td><b>Cancelamento Outros</b></td><td class="colname">bronze.proposal.status</td>
+            <td>= <span class="kv">CANCELLED</span> → exclui.</td></tr>
+          <tr><td><b>Destinatários</b></td><td class="colname">gold_flow_finance.param_alerta_ccb_destinatarios</td>
+            <td>Tabela de parâmetros (quem recebe cada faixa/canal/operação). Sem front-end.</td></tr>
+          <tr><td><b>Freshness</b></td><td class="colname">HORARIO_ULTIMA_CARGA · reference_dt</td>
+            <td>Data de referência dos dados, exibida em todo alerta.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid2" style="margin-top:8px">
+      <div class="callout ok reveal">
+        <h4>✔ Descoberta que destravou tudo: a chave da Kanastra</h4>
+        <p>A spec dizia que <span class="kv">contract_number = document_number</span> — mas isso dava <b>0 de 964</b>
+          matches. A chave real é <b><span class="kv">gold.ID_SEQUENCIAL</span> = <span class="kv">kanastra…document_number</span></b>.
+          Validado por correlação: dos “Cedidos”, 705/741 estão na Kanastra; dos “Não Cedidos”, 0/92. Por isso a
+          exclusão de “já cedida” usa <span class="kv">ID_SEQUENCIAL NOT IN (SELECT document_number …)</span>.</p>
+      </div>
+      <div class="callout ok reveal">
+        <h4>✔ Cancelamento Ideal: a spec também errou</h4>
+        <p>A spec afirmava que o <span class="kv">contract_number</span> da Plataforma <i>não</i> casa com o do Finza
+          Start. Falso: <b>916 de 927</b> CCBs Ideal batem em
+          <span class="kv">PLATAFORMA.negotiation.contract_number = gold.NUMERO_CONTRATO</span>. Usa-se só
+          <span class="kv">phase.status</span> (limpo). <span class="kv">customer_withdrawal</span> foi <b>descartado</b>
+          por ser ruidoso (92 deals ativos tinham a flag = true).</p>
+      </div>
+    </div>
+
+    <div class="callout crit reveal">
+      <h4>◆ A validar com a área: “Endosso Assinado” ≠ cessão concluída</h4>
+      <p>126 CCBs com status “Endosso Assinado” <b>não</b> aparecem na Kanastra — logo, seriam alertadas. Se
+        “endosso assinado” já significar cessão fechada, elas deveriam ser excluídas. Ponto aberto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FLUXO ===================== -->
+<section class="section" id="fluxo">
+  <div class="wrap">
+    <div class="eyebrow reveal">O fluxo n8n · interativo</div>
+    <h2 class="reveal">35 nós no fluxo de alerta, um gate de freshness e três trilhas de saída</h2>
+    <p class="lede reveal">Clique em qualquer nó para ver o que ele faz, por quê, e os detalhes técnicos.
+      O fluxo parte de um gatilho único, resolve a data de referência, <b>checa se as bases estão atualizadas</b> (gate §9), extrai as CCBs e os destinatários,
+      estrutura os envios <b>por contato</b> e então <b>fan-out</b> em três trilhas: painel (planilha), e-mail (XLSX anexos) e WhatsApp (HSM).</p>
+
+    <div class="flowlegend reveal">
+      <span><i class="t-trigger" style="color:#B08CFF"></i>Gatilho</span>
+      <span><i class="t-if"></i>IF (gate)</span>
+      <span><i class="t-bq" style="color:#6FA0FF"></i>BigQuery</span>
+      <span><i class="t-code" style="color:#5BF2A6"></i>Code (JS)</span>
+      <span><i class="t-sheets" style="color:#3DDB8A"></i>Google Sheets</span>
+      <span><i class="t-file" style="color:#FFC24B"></i>Arquivo XLSX</span>
+      <span><i class="t-merge" style="color:#C9B27A"></i>Merge</span>
+      <span><i class="t-loop" style="color:#57E0E0"></i>Loop</span>
+      <span><i class="t-http" style="color:#FF8A5B"></i>HTTP</span>
+      <span><i class="t-mail" style="color:#FF5D73"></i>Gmail</span>
+    </div>
+
+    <div class="flow reveal" id="flow"></div>
+  </div>
+</section>
+
+<!-- drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawerTitle">
+  <header>
+    <div class="ic" id="drawerIc">n8</div>
+    <div><h3 id="drawerTitle">Nó</h3><div class="ty" id="drawerType">tipo</div></div>
+    <button class="close" id="drawerClose" aria-label="Fechar">✕</button>
+  </header>
+  <div class="body" id="drawerBody"></div>
+</aside>
+
+<!-- ===================== QUERIES ===================== -->
+<section class="section" id="queries">
+  <div class="wrap">
+    <div class="eyebrow reveal">As queries · explicadas</div>
+    <h2 class="reveal">Todo o negócio mora no SQL</h2>
+    <p class="lede reveal">Três queries BigQuery sustentam a rotina. A principal é a “Buscar CCBs em alerta” —
+      ela concentra 100% das regras de negócio (universo, exclusões, faixas, operação).</p>
+
+    <div class="tabs reveal" role="tablist" id="qtabs">
+      <button class="tab glass" role="tab" aria-selected="true" data-t="q1">1 · CCBs em alerta</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="q2">2 · Destinatários</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="q3">3 · Data de referência</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="q5">4 · Acompanhamento</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="q4">DDL · tabela de parâmetros</button>
+    </div>
+
+    <div class="panel show" id="q1">
+      <div class="codewrap">
+        <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">Buscar CCBs em alerta</span> · node BigQuery
+          <span class="badge">retryOnFail ×3</span></div>
+<pre class="code">WITH prop AS (
+  SELECT contract_number, signed_at, proposal_status FROM (
+    SELECT JSON_VALUE(data,'$.contract_number') AS contract_number,
+      SAFE_CAST(JSON_VALUE(data,'$.document_signature_info.signed_at') AS TIMESTAMP) AS signed_at,
+      JSON_VALUE(data,'$.status') AS proposal_status,
+      ROW_NUMBER() OVER (PARTITION BY JSON_VALUE(data,'$.contract_number') ORDER BY _airbyte_extracted_at DESC) rn
+    FROM `finza-prod-481500.bronze.proposal`
+    WHERE JSON_VALUE(data,'$.contract_number') IS NOT NULL
+  ) WHERE rn = 1
+),
+cedidas AS (
+  SELECT DISTINCT CAST(document_number AS INT64) seq
+  FROM `blips-bigdata.kanastra.repository_finza` WHERE document_number IS NOT NULL
+),
+canc_blips AS (
+  SELECT DISTINCT contract_number FROM `blips-bigdata.PLATAFORMA.negotiation`
+  WHERE phase.status IN ('CANCELLED','CANCELLATION_REQUESTED') AND contract_number IS NOT NULL
+),
+base AS (
+  SELECT g.*,
+    DATE_DIFF(g.DATA_LIMITE_DESEMBOLSO, CURRENT_DATE('America/Sao_Paulo'), DAY) AS dias
+  FROM `finza-prod-481500.gold_flow_finance.gold_ccb_celcoin` g
+)
+SELECT
+  b.NUMERO_CONTRATO, b.ID_SEQUENCIAL, b.NOME_CLIENTE, b.CNPJ_CLIENTE,
+  b.VALOR_REQUISITADO, b.NOME_EQUIPAMENTO,
+  DATE(p.signed_at) AS DATA_ASSINATURA,
+  b.DATA_LIMITE_DESEMBOLSO AS DATA_VENCIMENTO,
+  b.dias AS DIAS_RESTANTES,
+  CASE WHEN b.ID_PRODUTO='a119c37e-db4b-4462-bb60-a2a32fccc025' THEN 'IDEAL' ELSE 'OUTROS' END AS OPERACAO,
+  CASE
+    WHEN b.dias BETWEEN 10 AND 15 THEN '15_10'
+    WHEN b.dias BETWEEN 7 AND 9 THEN '9_7'
+    WHEN b.dias &lt;= 5 THEN '5'
+  END AS FAIXA
+FROM base b
+LEFT JOIN prop p ON b.NUMERO_CONTRATO = p.contract_number
+WHERE p.signed_at IS NOT NULL
+  AND b.ID_SEQUENCIAL NOT IN (SELECT seq FROM cedidas)
+  AND b.STATUS_ORIGINAL &lt;&gt; 'CANCELED'
+  AND COALESCE(p.proposal_status,'') &lt;&gt; 'CANCELLED'
+  AND b.NUMERO_CONTRATO NOT IN (SELECT contract_number FROM canc_blips)
+  AND b.DATA_DESEMBOLSO_EFETIVO IS NULL
+  AND (
+    b.dias BETWEEN 10 AND 15
+    OR b.dias BETWEEN 7 AND 9
+    OR b.dias &lt;= 5
+  )
+ORDER BY OPERACAO, FAIXA, DIAS_RESTANTES</pre>
+      </div>
+      <div class="grid2">
+        <div class="card reveal">
+          <h4 style="font-size:1rem">As 4 CTEs</h4>
+          <ul style="color:var(--muted);font-size:.92rem;padding-left:18px;margin:8px 0 0">
+            <li><b>prop</b> — lê o JSON cru do <span class="kv">bronze.proposal</span>, extrai
+              <span class="kv">signed_at</span> e status, e <b>deduplica por contrato</b> (ROW_NUMBER pela carga mais
+              recente). Evita o fan-out do join.</li>
+            <li><b>cedidas</b> — todos os <span class="kv">document_number</span> da Kanastra = CCBs já cedidas.</li>
+            <li><b>canc_blips</b> — contratos cancelados na Plataforma (operação Ideal).</li>
+            <li><b>base</b> — o <span class="kv">gold_ccb_celcoin</span> + cálculo de <span class="kv">dias</span>.</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <h4 style="font-size:1rem">As exclusões (o WHERE)</h4>
+          <ul style="color:var(--muted);font-size:.92rem;padding-left:18px;margin:8px 0 0">
+            <li>Só <b>assinadas</b>: <span class="kv">signed_at IS NOT NULL</span>.</li>
+            <li>Fora as <b>já cedidas</b> (Kanastra) e as <b>canceladas</b> (Ideal + Outros).</li>
+            <li>Fora as já <b>desembolsadas</b>: <span class="kv">DATA_DESEMBOLSO_EFETIVO IS NULL</span>.</li>
+            <li>Só quem cai em <b>alguma faixa</b>.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout warn reveal">
+        <h4>⚠ Duas armadilhas de SQL tratadas aqui</h4>
+        <p>(1) <b><span class="kv">NOT IN</span> com NULL zera o resultado</b> — por isso todo subquery de exclusão tem
+          <span class="kv">IS NOT NULL</span>. (2) o join com <span class="kv">bronze.proposal</span> causaria
+          <b>fan-out</b> (linhas duplicadas) — resolvido deduplicando por contrato via <span class="kv">ROW_NUMBER</span>
+          antes do join.</p>
+      </div>
+    </div>
+
+    <div class="panel" id="q2">
+      <div class="codewrap">
+        <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">Buscar destinatarios</span> · node BigQuery
+          <span class="badge">executeOnce</span></div>
+<pre class="code">SELECT nome, email, numero, faixas, canais, operacoes, ativo
+FROM `finza-prod-481500.gold_flow_finance.param_alerta_ccb_destinatarios`
+WHERE ativo = TRUE</pre>
+      </div>
+      <p style="color:var(--muted)">Query simples, mas central para a <b>parametrização sem front-end</b>: lê apenas os
+        destinatários ativos. O modelo é <b>por pessoa</b> — cada linha é um responsável, com arrays de
+        <span class="kv">faixas</span>, <span class="kv">canais</span> e <span class="kv">operacoes</span> que ele
+        acompanha. Roda <span class="kv">executeOnce</span> porque a lista de destinatários é a mesma para todas as CCBs.</p>
+    </div>
+
+    <div class="panel" id="q3">
+      <div class="codewrap">
+        <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">Buscar data referencia</span> · node BigQuery
+          <span class="badge">executeOnce · ancestral</span></div>
+<pre class="code">WITH datas AS (
+  SELECT
+    (SELECT DATE(MAX(HORARIO_ULTIMA_CARGA)) FROM `finza-prod-481500.gold_flow_finance.gold_ccb_celcoin`) AS gold_dt,
+    (SELECT MAX(SAFE.PARSE_DATE('%Y-%m-%d', reference_dt)) FROM `blips-bigdata.kanastra.repository_finza`) AS kanastra_dt
+),
+lm AS (
+  SELECT
+    (SELECT TIMESTAMP_MILLIS(last_modified_time) FROM `finza-prod-481500.gold_flow_finance.__TABLES__` WHERE table_id='gold_ccb_celcoin') AS gold_lm,
+    (SELECT TIMESTAMP_MILLIS(last_modified_time) FROM `blips-bigdata.kanastra.__TABLES__` WHERE table_id='repository_finza') AS kanastra_lm,
+    (SELECT TIMESTAMP_MILLIS(last_modified_time) FROM `blips-bigdata.PLATAFORMA.__TABLES__` WHERE table_id='negotiation') AS plataforma_lm
+)
+SELECT
+  COALESCE(kanastra_dt, gold_dt) AS DATA_REFERENCIA,
+  FORMAT_DATE('%d/%m/%Y', COALESCE(kanastra_dt, gold_dt)) AS DATA_REFERENCIA_BR,
+  FORMAT_DATE('%d/%m/%Y', gold_dt) AS GOLD_CARGA_BR,
+  FORMAT_DATE('%d/%m/%Y', kanastra_dt) AS KANASTRA_REF_BR,
+  FORMAT_TIMESTAMP('%d/%m/%Y %H:%M', gold_lm, 'America/Sao_Paulo') AS GOLD_LM_BR,
+  FORMAT_TIMESTAMP('%d/%m/%Y %H:%M', kanastra_lm, 'America/Sao_Paulo') AS KANASTRA_LM_BR,
+  FORMAT_TIMESTAMP('%d/%m/%Y %H:%M', plataforma_lm, 'America/Sao_Paulo') AS PLATAFORMA_LM_BR,
+  IFNULL(DATE_DIFF(CURRENT_DATE('America/Sao_Paulo'), DATE(gold_lm,'America/Sao_Paulo'), DAY),999) AS gold_lm_dias,
+  IFNULL(DATE_DIFF(CURRENT_DATE('America/Sao_Paulo'), DATE(kanastra_lm,'America/Sao_Paulo'), DAY),999) AS kanastra_lm_dias,
+  IFNULL(DATE_DIFF(CURRENT_DATE('America/Sao_Paulo'), DATE(plataforma_lm,'America/Sao_Paulo'), DAY),999) AS plataforma_lm_dias,
+  GREATEST(
+    IFNULL(DATE_DIFF(CURRENT_DATE('America/Sao_Paulo'), DATE(gold_lm,'America/Sao_Paulo'), DAY),999),
+    IFNULL(DATE_DIFF(CURRENT_DATE('America/Sao_Paulo'), DATE(kanastra_lm,'America/Sao_Paulo'), DAY),999),
+    IFNULL(DATE_DIFF(CURRENT_DATE('America/Sao_Paulo'), DATE(plataforma_lm,'America/Sao_Paulo'), DAY),999)
+  ) AS MAX_DIAS_DESATUALIZADO
+FROM datas, lm</pre>
+      </div>
+      <p style="color:var(--muted)">Faz <b>duas</b> coisas. (1) <b>Data de referência exibida</b> = a
+        <span class="kv">reference_dt</span> do estoque da <b>Kanastra</b> (exatamente a fonte que o docx §9 indica; o
+        <span class="kv">gold_dt</span> entra só como guarda contra nulo, via <span class="kv">COALESCE</span>). A Kanastra
+        atrasa ~4 dias, então é ela que define “de quando” é o dado; vai
+        para e-mail, WhatsApp e log. (2) <b>Sinal de freshness do gate</b> = o <b>maior atraso</b> de
+        <span class="kv">last_modified</span> (quando a TABELA foi escrita, via <span class="kv">__TABLES__</span>) entre
+        gold, Kanastra e Plataforma → <span class="kv">MAX_DIAS_DESATUALIZADO</span>, comparado a 2 dias no nó
+        “Fontes atualizadas?”. Atenção: <b>reference_dt</b> (data do conteúdo) ≠ <b>last_modified</b> (escrita da tabela)
+        — o gate mede a saúde do pipeline, não a data do dado.</p>
+      <div class="callout reveal">
+        <h4>⚙ Detalhe de arquitetura: por que é um nó <i>ancestral</i>, não paralelo</h4>
+        <p>Vários nós fazem <span class="kv">$('Buscar data referencia')</span>. Se esse nó fosse um ramo paralelo do
+          gatilho, ele rodaria fora de ordem e quebraria com <i>“node hasn't been executed”</i>. A solução foi
+          encadeá-lo como <b>ancestral</b>: <span class="kv">Gatilho → Buscar data referencia → Buscar CCBs → …</span></p>
+      </div>
+    </div>
+
+    <div class="panel" id="q4">
+      <div class="codewrap">
+        <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">param_alerta_ccb_destinatarios</span> · DDL BigQuery</div>
+<pre class="code">CREATE OR REPLACE TABLE `finza-prod-481500.gold_flow_finance.param_alerta_ccb_destinatarios` (
+  nome      STRING        OPTIONS(description="Nome do responsavel"),
+  email     STRING        OPTIONS(description="E-mail (NULL se nao recebe por e-mail)"),
+  numero    STRING        OPTIONS(description="Telefone E.164 +55... (NULL se nao recebe WhatsApp)"),
+  faixas    ARRAY&lt;STRING&gt; OPTIONS(description="['15_10','9_7','5'] ou subconjunto"),
+  canais    ARRAY&lt;STRING&gt; OPTIONS(description="['email','whatsapp']"),
+  operacoes ARRAY&lt;STRING&gt; OPTIONS(description="['IDEAL','OUTROS']"),
+  ativo     BOOL          OPTIONS(description="Liga/desliga o destinatario")
+);
+
+-- Exemplo de povoamento:
+INSERT INTO `finza-prod-481500.gold_flow_finance.param_alerta_ccb_destinatarios`
+  (nome, email, numero, faixas, canais, operacoes, ativo)
+VALUES
+  ('Fulano',    'fulano@finza.com.br',    '+5511999999999', ['15_10','9_7','5'], ['email','whatsapp'], ['IDEAL','OUTROS'], TRUE),
+  ('Diretoria', 'diretoria@finza.com.br', NULL,             ['5'],               ['email'],            ['IDEAL','OUTROS'], TRUE);</pre>
+      </div>
+      <p style="color:var(--muted)">Modelo <b>por pessoa</b> (uma linha por responsável), diferente do schema
+        coluna-a-coluna que a spec sugeria. Cada pessoa declara em quais faixas, canais e operações quer ser avisada.
+        Para a diretoria receber só na crítica, basta <span class="kv">faixas = ['5']</span>.</p>
+
+      <div class="callout" style="margin-top:22px">
+        <h3 style="font-size:1.05rem;margin:0 0 8px">➕ Cadastrar sem escrever SQL — raia de formulário</h3>
+        <p style="color:var(--muted);font-size:.94rem;margin:0 0 10px">Há uma raia própria pra popular a tabela sem tocar
+          no BigQuery: <b>Form Trigger</b> <span class="kv">cadastrar-destinatario-ccb</span> → <span class="kv">Montar INSERT
+          destinatário</span> (Code) → <span class="kv">Inserir destinatário</span> (BigQuery). O formulário usa
+          <b>checkboxes</b> pra Faixas/Canais/Operações e <b>radio</b> pra Ativo — opções fixas, sem digitação livre,
+          então é impossível gravar um valor que o alerta não reconheça.</p>
+        <p style="color:var(--muted);font-size:.94rem;margin:0 0 10px"><b>Por que a higienização importa:</b> o cruzamento no
+          <span class="kv">Estruturar envios por faixa</span> é <b>exato e case-sensitive</b> — <span class="kv">operacoes</span>
+          precisa ser exatamente <span class="kv">'IDEAL'/'OUTROS'</span>, <span class="kv">canais</span>
+          <span class="kv">'email'/'whatsapp'</span>. Um cadastro com <span class="kv">"Ideal"</span> (minúsculo) ou
+          <span class="kv">"email. whatsapp"</span> (ponto em vez de vírgula) não bate em nada e a pessoa <b>não recebe</b>.
+          Por isso o <span class="kv">Montar INSERT destinatário</span> <b>blinda</b> a entrada:</p>
+        <ul style="color:var(--muted);font-size:.9rem;margin:0 0 10px;padding-left:20px;line-height:1.7">
+          <li>split por vírgula / espaço / ponto / <span class="kv">;</span> / <span class="kv">|</span>;</li>
+          <li><span class="kv">canais</span> → minúsculo (+ apelidos <span class="kv">wpp/zap→whatsapp</span>); <span class="kv">operacoes</span> → MAIÚSCULO; <span class="kv">faixas</span> normaliza traço→<span class="kv">_</span>;</li>
+          <li>valida contra os conjuntos permitidos e <b>descarta</b> valores inválidos;</li>
+          <li>telefone → só dígitos, prefixa <span class="kv">55</span>, checa 12–13 dígitos; e-mail via regex;</li>
+          <li>se faltar algo essencial, <b>rejeita com mensagem</b> em vez de gravar lixo.</li>
+        </ul>
+        <p style="color:var(--faint);font-size:.82rem;margin:0">Correções pontuais numa linha já existente saem por outra raia
+          manual — <span class="kv">🔧 Atualizar contato (manual)</span> → <span class="kv">Atualizar contato (UPDATE)</span>
+          (BigQuery com a credencial de escrita) — porque a credencial BigQuery do assistente é <b>somente leitura</b>.</p>
+      </div>
+    </div>
+
+    <div class="panel" id="q5">
+      <div class="codewrap">
+        <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">Buscar acompanhamento</span> · node BigQuery
+          <span class="badge">board vivo · alimenta a aba Acompanhamento</span></div>
+<pre class="code">WITH prop AS (
+  SELECT contract_number, signed_at, proposal_status FROM (
+    SELECT JSON_VALUE(data,'$.contract_number') AS contract_number,
+      SAFE_CAST(JSON_VALUE(data,'$.document_signature_info.signed_at') AS TIMESTAMP) AS signed_at,
+      JSON_VALUE(data,'$.status') AS proposal_status,
+      ROW_NUMBER() OVER (PARTITION BY JSON_VALUE(data,'$.contract_number') ORDER BY _airbyte_extracted_at DESC) rn
+    FROM `finza-prod-481500.bronze.proposal`
+    WHERE JSON_VALUE(data,'$.contract_number') IS NOT NULL
+  ) WHERE rn = 1
+),
+cedidas AS (
+  SELECT DISTINCT CAST(document_number AS INT64) seq
+  FROM `blips-bigdata.kanastra.repository_finza` WHERE document_number IS NOT NULL
+),
+canc_blips AS (
+  SELECT DISTINCT contract_number FROM `blips-bigdata.PLATAFORMA.negotiation`
+  WHERE phase.status IN ('CANCELLED','CANCELLATION_REQUESTED') AND contract_number IS NOT NULL
+),
+base AS (
+  SELECT g.*, DATE_DIFF(g.DATA_LIMITE_DESEMBOLSO, CURRENT_DATE('America/Sao_Paulo'), DAY) AS dias
+  FROM `finza-prod-481500.gold_flow_finance.gold_ccb_celcoin` g
+)
+SELECT
+  b.NUMERO_CONTRATO, b.ID_SEQUENCIAL, b.NOME_CLIENTE, b.CNPJ_CLIENTE,
+  b.VALOR_REQUISITADO, b.NOME_EQUIPAMENTO,
+  DATE(p.signed_at) AS DATA_ASSINATURA,
+  b.DATA_LIMITE_DESEMBOLSO AS DATA_VENCIMENTO,
+  b.dias AS DIAS_RESTANTES,
+  b.STATUS_CCB, b.STATUS_CESSAO,
+  (b.ID_SEQUENCIAL IN (SELECT seq FROM cedidas)) AS CEDIDA_KANASTRA,
+  b.DATA_DESEMBOLSO_EFETIVO, b.DATA_CANCELAMENTO, b.DATA_ATUALIZACAO,
+  CASE WHEN b.ID_PRODUTO='a119c37e-db4b-4462-bb60-a2a32fccc025' THEN 'IDEAL' ELSE 'OUTROS' END AS OPERACAO,
+  (b.NUMERO_CONTRATO IN (SELECT contract_number FROM canc_blips)) AS CANCELADA_BLIPS,
+  COALESCE(p.proposal_status,'') AS PROPOSAL_STATUS
+FROM base b
+JOIN prop p ON b.NUMERO_CONTRATO = p.contract_number
+WHERE p.signed_at IS NOT NULL
+  AND b.DATA_LIMITE_DESEMBOLSO BETWEEN DATE_SUB(CURRENT_DATE('America/Sao_Paulo'), INTERVAL 30 DAY)
+                                   AND DATE_ADD(CURRENT_DATE('America/Sao_Paulo'), INTERVAL 15 DAY)
+ORDER BY b.DATA_LIMITE_DESEMBOLSO</pre>
+      </div>
+      <div class="callout reveal">
+        <h4>Como difere da query de alerta (#1)</h4>
+        <p>Mesma “espinha” de CTEs (prop · cedidas · canc_blips · base), mas o <b>WHERE é o oposto no espírito</b>:
+          em vez de <b>excluir</b> pagas/cedidas/canceladas, ela <b>inclui todas</b> numa janela de vencimento de
+          <b>−30 a +15 dias</b> e devolve as colunas de status. É isso que permite registrar <i>quando</i> cada CCB foi
+          paga/cedida. Hoje: <b>314 CCBs</b> na janela (222 pagas · 15 canceladas · 77 em alerta). O nó
+          <span class="kv">Formatar acompanhamento</span> deriva a coluna <b>Situação</b> e a flag <b>Em alerta?</b>, e o
+          resultado vai para a aba <span class="kv">Acompanhamento</span> via <span class="kv">appendOrUpdate</span> (sem clear).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MAPA DE FONTES ===================== -->
+<section class="section" id="mapa">
+  <div class="wrap">
+    <div class="eyebrow reveal">Mapa de fontes · por query</div>
+    <h2 class="reveal">Cada query → tabelas → colunas</h2>
+    <p class="lede reveal">Tudo que a rotina lê, tabela por tabela e coluna por coluna. Leitura sempre no BigQuery
+      (<span class="kv">projeto.dataset.tabela</span>); a escrita vai para Sheets / Hyperflow / Gmail.</p>
+
+    <div class="card reveal" style="margin-top:26px">
+      <h3 style="font-size:1.05rem">1 · Buscar data referencia <span class="mono" style="font-size:.8rem;color:var(--faint)">· freshness + ref</span></h3>
+      <div class="tablewrap"><table style="min-width:600px"><thead><tr><th>Tabela</th><th>Colunas</th><th>Para quê</th></tr></thead><tbody>
+        <tr><td class="colname">finza-prod-481500.gold_flow_finance.gold_ccb_celcoin</td><td><span class="kv">HORARIO_ULTIMA_CARGA</span></td><td>fallback da referência</td></tr>
+        <tr><td class="colname">blips-bigdata.kanastra.repository_finza</td><td><span class="kv">reference_dt</span></td><td><b>data de referência exibida</b></td></tr>
+        <tr><td class="colname">…gold_flow_finance.__TABLES__</td><td><span class="kv">table_id</span> · <span class="kv">last_modified_time</span></td><td>freshness gold (gate)</td></tr>
+        <tr><td class="colname">blips-bigdata.kanastra.__TABLES__</td><td><span class="kv">table_id</span> · <span class="kv">last_modified_time</span></td><td>freshness Kanastra (gate)</td></tr>
+        <tr><td class="colname">blips-bigdata.PLATAFORMA.__TABLES__</td><td><span class="kv">table_id</span> · <span class="kv">last_modified_time</span></td><td>freshness Plataforma (gate)</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="card reveal" style="margin-top:18px">
+      <h3 style="font-size:1.05rem">2 · Buscar CCBs em alerta <span class="mono" style="font-size:.8rem;color:var(--faint)">· universo do alerta</span></h3>
+      <div class="tablewrap"><table style="min-width:640px"><thead><tr><th>Tabela</th><th>Colunas</th><th>Para quê</th></tr></thead><tbody>
+        <tr><td class="colname">finza-prod-481500.bronze.proposal</td><td><span class="kv">data</span> (JSON: <span class="kv">$.contract_number</span>, <span class="kv">$.document_signature_info.signed_at</span>, <span class="kv">$.status</span>) · <span class="kv">_airbyte_extracted_at</span></td><td><b>assinatura real</b> + status proposta + dedup por contrato</td></tr>
+        <tr><td class="colname">blips-bigdata.kanastra.repository_finza</td><td><span class="kv">document_number</span></td><td>exclusão <b>"já cedida"</b></td></tr>
+        <tr><td class="colname">blips-bigdata.PLATAFORMA.negotiation</td><td><span class="kv">contract_number</span> · <span class="kv">phase.status</span></td><td>exclusão <b>cancelamento Ideal</b></td></tr>
+        <tr><td class="colname">finza-prod-481500.gold_flow_finance.gold_ccb_celcoin</td><td><span class="kv">NUMERO_CONTRATO</span>, <span class="kv">ID_SEQUENCIAL</span>, <span class="kv">NOME_CLIENTE</span>, <span class="kv">CNPJ_CLIENTE</span>, <span class="kv">VALOR_REQUISITADO</span>, <span class="kv">NOME_EQUIPAMENTO</span>, <span class="kv">DATA_LIMITE_DESEMBOLSO</span>, <span class="kv">ID_PRODUTO</span>, <span class="kv">STATUS_ORIGINAL</span>, <span class="kv">DATA_DESEMBOLSO_EFETIVO</span></td><td>dados da CCB + faixa/operação + exclusões (cancelada/desembolsada)</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="card reveal" style="margin-top:18px">
+      <h3 style="font-size:1.05rem">3 · Buscar destinatarios <span class="mono" style="font-size:.8rem;color:var(--faint)">· parâmetros</span></h3>
+      <div class="tablewrap"><table style="min-width:600px"><thead><tr><th>Tabela</th><th>Colunas</th><th>Para quê</th></tr></thead><tbody>
+        <tr><td class="colname">finza-prod-481500.gold_flow_finance.param_alerta_ccb_destinatarios</td><td><span class="kv">nome</span>, <span class="kv">email</span>, <span class="kv">numero</span>, <span class="kv">faixas</span>, <span class="kv">canais</span>, <span class="kv">operacoes</span>, <span class="kv">ativo</span></td><td>quem recebe cada faixa/canal/operação</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="card reveal" style="margin-top:18px">
+      <h3 style="font-size:1.05rem">4 · Buscar acompanhamento <span class="mono" style="font-size:.8rem;color:var(--faint)">· board (universo amplo)</span></h3>
+      <p style="color:var(--muted);font-size:.93rem;margin-top:10px">Mesmas tabelas da query 2 (<span class="kv">bronze.proposal</span>, <span class="kv">kanastra.repository_finza</span>, <span class="kv">PLATAFORMA.negotiation</span>, <span class="kv">gold_ccb_celcoin</span>), mas <b>sem os filtros de exclusão</b> (inclui pagas/cedidas/canceladas, janela venc. −30/+15d). Do <span class="kv">gold_ccb_celcoin</span>, além das colunas acima, usa também: <span class="kv">STATUS_CCB</span>, <span class="kv">STATUS_CESSAO</span>, <span class="kv">DATA_CANCELAMENTO</span>, <span class="kv">DATA_ATUALIZACAO</span> (e deriva <span class="kv">CANCELADA_BLIPS</span>, <span class="kv">PROPOSAL_STATUS</span>).</p>
+    </div>
+
+    <div class="card reveal" style="margin-top:18px">
+      <h3 style="font-size:1.05rem">Fontes fora das 4 fontes principais da CCB — e por quê</h3>
+      <p style="color:var(--muted);font-size:.92rem;margin-top:8px">As 4 fontes “canônicas” da CCB no Flow Finance indicadas são
+        <span class="kv">gold_ccb_celcoin</span>, <span class="kv">applications_analytic</span>,
+        <span class="kv">silver_flow_finance.installments</span> e o dataset <span class="kv">silver_flow_finance</span> (inteiro).
+        Dessas, a rotina <b>só lê o <span class="kv">gold_ccb_celcoin</span></b> — <span class="kv">applications_analytic</span>,
+        <span class="kv">installments</span> e o resto do <span class="kv">silver_flow_finance</span> <b>não são usados</b>. Todo o resto que
+        puxamos está <b>fora</b> desse conjunto — segue o porquê de cada uma:</p>
+      <div class="tablewrap"><table style="min-width:660px"><thead><tr><th>Fonte</th><th>O que é</th><th>Por que usamos (fora das 4)</th></tr></thead><tbody>
+        <tr><td class="colname">finza-prod-481500.bronze.proposal</td><td>Camada bronze (JSON cru) da coleção <span class="kv">proposal</span> do Finza Start — espelho Airbyte do Mongo <span class="kv">finza-prod.proposal</span>.</td><td><b>Única fonte com a assinatura REAL</b> (<span class="kv">document_signature_info.signed_at</span>). O gold e a <span class="kv">applications_analytic</span> só têm <span class="kv">issue_date</span> (proxy). Também traz o <span class="kv">status</span> da proposta (cancelamento Outros).</td></tr>
+        <tr><td class="colname">blips-bigdata.kanastra.repository_finza</td><td>Estoque da <b>Kanastra</b> (o FIDC), grão parcela.</td><td><b>Verdade sobre "já cedida"</b> — o docx (§4.5) manda usar a Kanastra, não o status do Celcoin (desatualizado). Não existe no Flow Finance. Chave <span class="kv">document_number = gold.ID_SEQUENCIAL</span>.</td></tr>
+        <tr><td class="colname">blips-bigdata.PLATAFORMA.negotiation</td><td>Negociações da <b>Plataforma Blips</b> (onde a operação Ideal é negociada) — espelho de <span class="kv">blips-db-prod.negotiation</span>.</td><td><b>Cancelamento da operação Ideal</b> acontece na Plataforma, não no Finza Start (<span class="kv">phase.status</span>). Não existe no Flow Finance.</td></tr>
+        <tr><td class="colname">finza-prod-481500.gold_flow_finance.param_alerta_ccb_destinatarios</td><td>Tabela de <b>parâmetros</b> criada por nós (não é dado de CCB).</td><td>Parametrizar destinatários por faixa/canal/operação sem front-end (docx §4.6). É configuração, não fonte de CCB.</td></tr>
+        <tr><td class="colname">__TABLES__ (gold_flow_finance · kanastra · PLATAFORMA)</td><td>Metadados do BigQuery (<span class="kv">last_modified_time</span> de cada tabela).</td><td><b>Gate de freshness</b> (§9): saber se cada fonte foi carregada recentemente antes de disparar. Não é dado de CCB.</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="card reveal" style="margin-top:18px">
+      <h3 style="font-size:1.05rem">bronze.proposal, campo a campo — existe no gold/silver?</h3>
+      <p style="color:var(--muted);font-size:.92rem;margin-top:8px">O <b>único</b> campo que realmente nos obriga a usar o
+        <span class="kv">bronze.proposal</span> é a <b>assinatura real</b>. Os demais já existem (ou têm equivalente) no gold.</p>
+      <div class="tablewrap"><table style="min-width:660px"><thead><tr><th>Campo do bronze.proposal</th><th>No gold/silver?</th><th>Onde / observação</th></tr></thead><tbody>
+        <tr><td class="colname">$.contract_number</td><td><span class="st id">sim</span></td><td><span class="kv">gold_ccb_celcoin.NUMERO_CONTRATO</span> (e <span class="kv">…custom_variables_numero_contrato</span> na applications_analytic/stg_applications)</td></tr>
+        <tr><td class="colname">$.document_signature_info.signed_at <span style="color:var(--faint)">(assinatura real)</span></td><td><span class="st no">não</span></td><td>gold / silver / applications_analytic só têm <span class="kv">issue_date</span> (<b>proxy</b>) — nunca a assinatura real</td></tr>
+        <tr><td class="colname">$.status <span style="color:var(--faint)">(status da proposal)</span></td><td><span class="st pe">parcial</span></td><td>gold tem <span class="kv">STATUS_ORIGINAL</span> / <span class="kv">STATUS_CESSAO</span> (status do <i>application</i> Celcoin), que já checamos; o <span class="kv">status</span> da <i>proposal</i> (Finza Start: APPROVED/CANCELLED/REPROVED) é outro campo/entidade — sobrepõe no "cancelado", mas não é o mesmo</td></tr>
+        <tr><td class="colname">_airbyte_extracted_at</td><td><span class="st ad">n/a</span></td><td>só metadado para <b>dedup</b> — o gold já vem deduplicado</td></tr>
+      </tbody></table></div>
+      <p style="color:var(--muted);font-size:.92rem;margin-top:10px"><b>Conclusão:</b> só o <span class="kv">signed_at</span> não
+        existe fora do bronze. Aceitando <span class="kv">issue_date</span> como proxy de assinatura (e confiando no
+        <span class="kv">STATUS_ORIGINAL</span> do gold para cancelamento), dá para <b>eliminar o <span class="kv">bronze.proposal</span></b>
+        e ler o lado CCB 100% do <span class="kv">gold_ccb_celcoin</span> — é uma decisão de negócio (Q ao demandante).</p>
+    </div>
+
+    <div class="callout reveal">
+      <h4>◆ Lineage & por que o bronze.proposal é necessário</h4>
+      <p><span class="kv">gold_ccb_celcoin</span> ← <span class="kv">gold_flow_finance.applications_analytic</span> (fonte; dedup por contrato + tradução PT-BR). <span class="kv">bronze.proposal</span> ← espelho Airbyte do Mongo <span class="kv">finza-prod.proposal</span> (cluster Finza). <b>A `applications_analytic` (e o gold) NÃO têm a assinatura real</b> — só <span class="kv">issue_date</span> (proxy). Por isso a <b>data de assinatura</b> vem do <span class="kv">bronze.proposal</span>. Consolidar tudo no Flow Finance só seria possível aceitando <span class="kv">issue_date</span> como proxy — e ainda assim Kanastra e Plataforma (<span class="kv">blips-bigdata</span>) permaneceriam.</p>
+    </div>
+
+    <div class="callout ok reveal">
+      <h4>Destinos de escrita (não são leitura BQ)</h4>
+      <p><b>Google Sheets</b> <span class="kv">1ZCy…gPX7E</span>: abas Ideal/Outros (clear+append), Acompanhamento (appendOrUpdate), Log Envios (append), Dashboard (fórmulas/funil). · <b>Hyperflow</b> → WhatsApp HSM. · <b>Gmail</b> (<span class="kv">gmail finza</span>) → e-mail com 2 XLSX.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LÓGICA ===================== -->
+<section class="section" id="logica">
+  <div class="wrap">
+    <div class="eyebrow reveal">Lógica dos nós Code (JavaScript)</div>
+    <h2 class="reveal">Como o SQL vira faixas, listas e mensagens</h2>
+    <p class="lede reveal">Depois do BigQuery, nós Code em JS montam a estrutura de envio, formatam a planilha e
+      preparam cada canal. O coração é o nó “Estruturar envios por faixa”.</p>
+
+    <div class="grid2" style="margin-top:28px">
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">🧩 Estruturar envios por faixa</h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:12px">Emite <b>um item por contato</b> (não mais por faixa).
+          Para cada destinatário, filtra as CCBs do <b>escopo dele</b> (<span class="kv">FAIXA ∈ faixas</span> e
+          <span class="kv">OPERACAO ∈ operacoes</span>) e monta o <span class="kv">breakdown</span> faixa × operação
+          <b>incluindo os zeros</b> ("nenhuma"), as listas <span class="kv">ccbs_ideal</span>/<span class="kv">ccbs_outros</span>,
+          o total, as <span class="kv">faixa_linhas</span> (1 linha por faixa) e <span class="kv">num_faixas</span>. Contato sem
+          nenhuma CCB no escopo é pulado.</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">📋 Formatar p/ planilha · Só Ideal / Só Outros</h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:12px">Traduz cada CCB para colunas legíveis (rótulos em
+          português, datas em dd/mm/aaaa, faixa “15–10 / 9–7 / ≤5”) e carimba “Última atualização”. Depois um filtro
+          por <span class="kv">_op</span> separa nas abas <b>Ideal</b> e <b>Outros Originadores</b>.</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">✉ Preparar e-mail · Contatos c/ e-mail · Loop</h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:12px">Filtra só contatos com e-mail, itera
+          <b>um contato por vez</b> (Loop), gera os XLSX Ideal/Outros do escopo dele, e monta o HTML com uma
+          <b>tabela Faixa × Operação</b> (com "nenhuma" nos zeros) + total. Anexa <b>só os arquivos com linha</b>
+          (a propriedade de anexo do Gmail é dinâmica: <span class="kv">Object.keys($binary)</span>).</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">💬 Preparar WhatsApp</h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:12px">Gera <b>uma mensagem por contato</b>: normaliza o
+          número, monta uma <b>linha por faixa</b> (<span class="kv">*≤5 dias* — Ideal: N CCBs (R$…); Outros: nenhuma</span>)
+          e envia <span class="kv">{numero, nome, faixa1, faixa2, faixa3, num_faixas, total, data_ref, token}</span>. O
+          <span class="kv">num_faixas</span> é o que o Hyperflow usa para escolher o template certo (1/2/3 faixas).</p>
+      </div>
+    </div>
+
+    <div class="codewrap reveal">
+      <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">Estruturar envios por faixa</span> · trecho — 1 item por contato, escopo faixa × operação
+        <span class="badge">Code node</span></div>
+<pre class="code">const has = (arr, v) =&gt; Array.isArray(arr) &amp;&amp; arr.includes(v);
+
+for (const d of dest) {                       // um item POR CONTATO
+  const faixas = ['5','9_7','15_10'].filter(fx =&gt; has(d.faixas, fx));   // mais urgente 1º
+  const ops    = ['IDEAL','OUTROS'].filter(op =&gt; has(d.operacoes, op));
+  if (!faixas.length || !ops.length) continue;
+
+  const mine = alertas.filter(r =&gt; faixas.includes(r.FAIXA) &amp;&amp; ops.includes(r.OPERACAO));
+
+  // 1 linha por faixa, com as operações do contato (inclui "nenhuma"):
+  const faixa_linhas = faixas.map(fx =&gt; {
+    const perOp = ops.map(op =&gt; {
+      const rows = mine.filter(r =&gt; r.FAIXA===fx &amp;&amp; r.OPERACAO===op);
+      return rows.length ? `${oL[op]}: ${rows.length} CCBs (${fmt(soma(rows))})`
+                         : `${oL[op]}: nenhuma`;
+    });
+    return `*${fL[fx]} dias* — ${perOp.join('; ')}`;
+  });
+  // → { nome, email, numero, faixa_linhas, ccbs_ideal, ccbs_outros,
+  //     total_qtd, total_valor, breakdown, faixas_texto }
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEMPLATES ===================== -->
+<section class="section" id="templates">
+  <div class="wrap">
+    <div class="eyebrow reveal">Templates de mensagem</div>
+    <h2 class="reveal">O que o destinatário realmente vê</h2>
+    <p class="lede reveal">Um envio <b>por contato</b>, com o conteúdo no escopo exato dele (faixas × operações). O WhatsApp
+      usa <b>três templates oficiais (HSM)</b> aprovados pela Meta — um para <b>1</b>, um para <b>2</b> e um para <b>3</b>
+      faixas — todos com cabeçalho de imagem e botão. O Hyperflow escolhe qual usar pelo <span class="kv">num_faixas</span>.
+      O e-mail é HTML com uma tabela Faixa × Operação e os XLSX anexos.</p>
+
+    <div class="mockrow" style="margin-top:30px">
+      <div class="phone reveal">
+        <div class="wa">
+          <div class="wbar"><span class="av">F</span><div><div style="font-weight:600">Finza</div>
+            <div style="font-size:.68rem;color:#8FA3AD">+55 34 9913-4193 · oficial</div></div></div>
+          <div class="wbody">
+            <div class="bubble">
+              <div style="margin:-2px -2px 9px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#1A1AFF,#0F0F8C);padding:11px 13px;display:flex;align-items:center;gap:9px">
+                <span style="width:26px;height:26px;background:#fff;border-radius:7px;color:#1A1AFF;font:bold 15px Georgia,serif;display:flex;align-items:center;justify-content:center">F</span>
+                <span style="color:#fff;font-weight:700;letter-spacing:1.5px;font-size:.8rem">FINZA <span style="font-weight:400;color:#c9caff;font-size:.62rem;letter-spacing:1px">ALERTAS DE CCB</span></span>
+              </div>
+              <div class="hdr">Olá, <b>Marcos Rodrigues!</b></div>
+              Há <b>CCBs</b> assinadas próximas do vencimento (desembolso), ainda não cedidas ao FIDC, sob sua responsabilidade:<br><br>
+              • <b>≤5 dias</b> — Ideal: 33 CCBs (R$ 788.678,59); Outros: nenhuma<br>
+              • <b>9–7 dias</b> — Ideal: 16 CCBs (R$ 278.891,84); Outros: nenhuma<br>
+              • <b>15–10 dias</b> — Ideal: 36 CCBs (R$ 821.712,24); Outros: nenhuma<br><br>
+              <b>Total:</b> 85 CCBs · R$ 1.889.282,67<br>
+              <b>Base de dados:</b> 06/07/2026.<br><br>
+              Os detalhes completos estão no <b>painel!</b>
+              <div class="foot">FINZA - alerta automático</div>
+              <div class="btn">🔗 Ver Painel</div>
+              <div class="time">09:00 ✓✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <h3 style="font-size:1.2rem">HSM · <span class="mono" style="font-size:.85rem;color:var(--mint)">3 templates por nº de faixas</span></h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:10px">Três templates aprovados (<b>APPROVED</b>, <b>UTILITY</b>,
+          <b>pt_BR</b>), todos com <b>cabeçalho de imagem</b> (banner), rodapé fixo e botão "Ver Painel":
+          <span class="kv">alerta_ccb_1faixa</span>, <span class="kv">alerta_ccb_2faixas</span> e
+          <span class="kv">alerta_ccb_3faixas</span>. Cada faixa é uma <b>variável própria</b> (1 linha) — assim há
+          <b>quebra de linha real</b> entre as faixas. O Hyperflow escolhe o template pelo <span class="kv">num_faixas</span>.</p>
+        <h4 style="font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.16em;color:var(--mint);margin:16px 0 8px">Variáveis · ex. template de 3 faixas</h4>
+        <div class="varmap">
+          <div><span class="v">{{1}}</span><span class="arrow2">←</span> nome do responsável</div>
+          <div><span class="v">{{2}}</span><span class="arrow2">←</span> linha da faixa 1 (mais urgente)</div>
+          <div><span class="v">{{3}}</span><span class="arrow2">←</span> linha da faixa 2</div>
+          <div><span class="v">{{4}}</span><span class="arrow2">←</span> linha da faixa 3</div>
+          <div><span class="v">{{5}}</span><span class="arrow2">←</span> total (qtd · valor)</div>
+          <div><span class="v">{{6}}</span><span class="arrow2">←</span> data de referência</div>
+        </div>
+        <p style="color:var(--faint);font-size:.78rem;margin:10px 0 0">Nos de 1 e 2 faixas as variáveis de total/data
+          deslocam. Cada "linha da faixa" já vem pronta do n8n — ex.: <span class="kv">*≤5 dias* — Ideal: 33 CCBs (R$ 788.678,59);
+          Outros: nenhuma</span> (só as operações que o contato assina). A Meta <b>não aceita <code>\n</code> dentro de variável</b>
+          (erro #100), então a quebra de linha fica no <b>corpo fixo</b> do template — uma variável por faixa.</p>
+        <div class="callout ok reveal" style="margin-top:18px">
+          <h4>✔ Segurança do webhook — token implementado</h4>
+          <p>O webhook do Hyperflow agora exige um <b>token compartilhado</b>: o n8n envia <span class="kv">token</span> no
+            corpo, e um nó <b>Conditional</b> valida <span class="kv">{{input.token}} = &lt;segredo&gt;</span> — se não bater,
+            cai em <b>“Token errado”</b> (End Flow com erro) e o HSM <b>não</b> dispara; o n8n registra <b>"falha"</b> no log.
+            Assim, só quem tem o segredo aciona o WABA. O flow está <b>publicado</b> (senão responderia 404). O segredo fica
+            como literal nos dois lados (n8n + Hyperflow) — se vazar, é só rotacionar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:42px" class="email reveal">
+      <div class="ehead">
+        <div class="subj">[Alerta CCB] 85 CCB(s) próximas do vencimento — 06/07/2026</div>
+        <div class="fromline">de gmail finza · para Marcos Rodrigues · anexo: 1</div>
+      </div>
+      <div class="ebody">
+        <p style="margin:0">Olá, Marcos Rodrigues!</p>
+        <p style="color:var(--muted);font-size:.9rem;margin:8px 0 14px">CCBs assinadas próximas do vencimento (desembolso),
+          ainda não cedidas ao FIDC, sob sua responsabilidade.</p>
+        <p style="display:inline-block;background:var(--finza-blue-soft);border:1px solid var(--finza-blue);border-radius:8px;padding:8px 13px;margin:0 0 14px;font-size:.85rem">📅 Base de dados (referência): <b style="color:var(--finza-blue)">06/07/2026</b></p>
+        <table style="width:100%;border-collapse:collapse;margin:2px 0 12px;font-size:.82rem">
+          <tr style="color:var(--faint);text-transform:uppercase;font-size:.6rem;letter-spacing:.1em"><td style="padding:6px 8px">Faixa</td><td style="padding:6px 8px">Operação</td><td style="padding:6px 8px;text-align:center">CCBs</td><td style="padding:6px 8px;text-align:right">Valor</td></tr>
+          <tr style="border-top:1px solid var(--stroke)"><td style="padding:6px 8px">≤5 dias</td><td style="padding:6px 8px">Ideal</td><td style="padding:6px 8px;text-align:center"><b>33</b></td><td style="padding:6px 8px;text-align:right">R$ 788.678,59</td></tr>
+          <tr style="border-top:1px solid var(--stroke)"><td style="padding:6px 8px">≤5 dias</td><td style="padding:6px 8px">Outros</td><td style="padding:6px 8px;text-align:center;color:var(--faint)">—</td><td style="padding:6px 8px;text-align:right;color:var(--faint)">nenhuma</td></tr>
+          <tr style="border-top:1px solid var(--stroke)"><td style="padding:6px 8px">9–7 dias</td><td style="padding:6px 8px">Ideal</td><td style="padding:6px 8px;text-align:center"><b>16</b></td><td style="padding:6px 8px;text-align:right">R$ 278.891,84</td></tr>
+          <tr style="border-top:1px solid var(--stroke)"><td style="padding:6px 8px">9–7 dias</td><td style="padding:6px 8px">Outros</td><td style="padding:6px 8px;text-align:center;color:var(--faint)">—</td><td style="padding:6px 8px;text-align:right;color:var(--faint)">nenhuma</td></tr>
+          <tr style="border-top:1px solid var(--stroke)"><td style="padding:6px 8px">15–10 dias</td><td style="padding:6px 8px">Ideal</td><td style="padding:6px 8px;text-align:center"><b>36</b></td><td style="padding:6px 8px;text-align:right">R$ 821.712,24</td></tr>
+          <tr style="border-top:1px solid var(--stroke)"><td style="padding:6px 8px">15–10 dias</td><td style="padding:6px 8px">Outros</td><td style="padding:6px 8px;text-align:center;color:var(--faint)">—</td><td style="padding:6px 8px;text-align:right;color:var(--faint)">nenhuma</td></tr>
+          <tr style="border-top:2px solid var(--stroke-2)"><td colspan="2" style="padding:7px 8px;font-weight:700">TOTAL</td><td style="padding:7px 8px;text-align:center;font-weight:700">85</td><td style="padding:7px 8px;text-align:right;font-weight:700;color:var(--finza-blue)">R$ 1.889.282,67</td></tr>
+        </table>
+        <p style="color:var(--muted);font-size:.9rem;margin:0">Detalhes completos no anexo <b>CCBs_Ideal.xlsx</b> — só as operações com CCB são anexadas (Outros sem CCBs hoje → anexo omitido).</p>
+        <div class="attach">
+          <span class="att"><span class="xi">XLS</span> CCBs_Ideal.xlsx</span>
+        </div>
+        <div style="margin:18px -1px -1px;border-radius:0 0 12px 12px;overflow:hidden;background:linear-gradient(135deg,#1A1AFF,#0F0F8C);padding:16px 20px;display:flex;align-items:center;gap:12px">
+          <span style="width:34px;height:34px;background:#fff;border-radius:8px;color:#1A1AFF;font:bold 20px Georgia,serif;display:flex;align-items:center;justify-content:center">F</span>
+          <span style="color:#fff;font-weight:700;letter-spacing:2px">FINZA <span style="font-weight:400;color:#c9caff;letter-spacing:2px;font-size:.8rem">· ALERTAS DE CCB</span></span>
+        </div>
+        <p style="color:var(--faint);font-size:.72rem;margin:8px 0 0">Rodapé = <b>imagem hospedada no Drive</b> (<span class="kv">drive.google.com/thumbnail?id=…</span>, banner 1200×360). A data de referência agora fica <b>no corpo</b> (badge acima), visível mesmo se o cliente bloquear a imagem remota.</p>
+      </div>
+    </div>
+    <p style="color:var(--faint);font-size:.85rem;margin-top:14px">O envio de e-mail usa o node <b>Gmail (OAuth2)</b> —
+      envia como a própria conta logada. Foi trocado do SMTP genérico do ambiente de dev para evitar depender de um
+      <span class="kv">fromEmail</span> não confirmado.</p>
+  </div>
+</section>
+
+<!-- ===================== PLANILHA ===================== -->
+<section class="section" id="planilha">
+  <div class="wrap">
+    <div class="eyebrow reveal">A planilha · painel + log</div>
+    <h2 class="reveal">Cinco abas, uma fonte de verdade operacional</h2>
+    <p class="lede reveal">A automação escreve numa planilha Google (<span class="kv">1ZCy…gPX7E</span>) que serve tanto
+      de <b>painel</b> quanto de <b>log auditável</b>. Cada aba tem um papel.</p>
+
+    <div class="grid2" style="margin-top:30px">
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">🔄 Painel (Ideal / Outros): limpa e reescreve</h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:12px">A cada execução, os nós
+          <span class="kv">Limpar Ideal</span> / <span class="kv">Limpar Outros</span> (Google Sheets
+          <span class="kv">clear</span> · <span class="kv">executeOnce</span>) zeram a aba, e então
+          <span class="kv">Planilha: Ideal</span> / <span class="kv">Outros</span> (<span class="kv">append</span>)
+          reescrevem cabeçalho e linhas do zero.</p>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:10px">Assim o painel é sempre o <b>retrato fiel do dia</b>:
+          colunas na ordem certa (incluindo as de status) e <b>zero CCB já resolvida sobrando</b>. Como a query traz o
+          universo completo do dia, limpar-e-reescrever é seguro.</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">➕ Log Envios: só adiciona</h3>
+        <p style="color:var(--muted);font-size:.93rem;margin-top:12px">Operação <span class="kv">append</span> puro —
+          <b>nunca atualiza</b>. Cada disparo (e-mail ou WhatsApp) gera <b>uma linha nova</b>, com status real e link para
+          a execução. É o histórico de auditoria, então acumular linhas aqui é o comportamento desejado.</p>
+      </div>
+    </div>
+
+    <div class="callout ok reveal">
+      <h4>✔ Onde mora cada coisa: alerta fiel ao docx, status no board</h4>
+      <p>As abas <b>Ideal</b> e <b>Outros</b> (e os XLSX do e-mail) trazem <b>exatamente as colunas da demanda</b>
+        (nº, cliente/CNPJ, valor, assinatura, vencimento, dias, faixa, originador) — <b>nada de status</b>, para ficar
+        fiel ao docx. Como voltaram às colunas originais, o <b>cabeçalho estilizado</b> que já existe continua válido;
+        o <span class="kv">clear</span> do n8n apaga só os <b>valores</b> (não a formatação nem o congelamento), então o
+        cabeçalho estilizado/frozen se mantém a cada run.<br><br>
+        Já todo o <b>status por CCB</b> — inclusive <i>quando foi paga/cedida</i> — vive na nova aba
+        <span class="kv">Acompanhamento</span> (ver aba abaixo).</p>
+    </div>
+
+    <div class="tabs reveal" role="tablist" id="xtabs">
+      <button class="tab glass" role="tab" aria-selected="true" data-t="x1">📊 Dashboard</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="x2">🟢 Ideal</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="x3">🟠 Outros Originadores</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="x5">📈 Acompanhamento</button>
+      <button class="tab glass" role="tab" aria-selected="false" data-t="x4">🧾 Log Envios</button>
+    </div>
+
+    <div class="panel show" id="x1">
+      <p style="color:var(--muted)">Visão executiva atualizada a cada execução — totais, valor exposto, atrasadas,
+        críticas e as quebras por faixa e por originador. <b>Dados reais em 07/07/2026 19:22:</b></p>
+      <div class="grid3">
+        <div class="card" style="padding:18px"><div class="n" style="font-family:var(--f-disp);font-size:1.7rem;font-weight:700">77</div><div style="color:var(--muted);font-size:.8rem;margin-top:4px">Total de CCBs</div></div>
+        <div class="card" style="padding:18px"><div class="n" style="font-family:var(--f-disp);font-size:1.7rem;font-weight:700">R$ 1.776.728,80</div><div style="color:var(--muted);font-size:.8rem;margin-top:4px">Valor total</div></div>
+        <div class="card" style="padding:18px"><div class="n" style="font-family:var(--f-disp);font-size:1.7rem;font-weight:700;color:var(--coral)">R$ 59.836,69</div><div style="color:var(--muted);font-size:.8rem;margin-top:4px">Valor em atraso (3 CCBs)</div></div>
+      </div>
+      <div class="tablewrap">
+        <table><thead><tr><th>Por faixa</th><th>Qtd</th><th>Valor</th><th>Por originador</th><th>Qtd</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td><span class="st id">15–10</span></td><td>33</td><td>R$ 807.397,55</td><td>Ideal</td><td>77</td><td>R$ 1.776.728,80</td></tr>
+          <tr><td><span class="st pe">9–7</span></td><td>11</td><td>R$ 180.652,66</td><td>Outros Originadores</td><td>0</td><td>R$ 0,00</td></tr>
+          <tr><td><span class="st no">≤5</span></td><td>33</td><td>R$ 788.678,59</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody></table>
+      </div>
+      <div class="callout reveal" style="margin-top:6px">
+        <h4>➕ Dashboard turbinado com o Acompanhamento</h4>
+        <p>Com a aba <span class="kv">Acompanhamento</span>, o painel ganha um <b>funil de situação</b> (fórmulas
+          <span class="kv">COUNTIF/SUMIF</span> sobre a coluna <b>Situação</b>): quantidade e valor em
+          <b>Em alerta</b>, <b>Pagas (desembolsadas)</b>, <b>Cedidas</b> e <b>Canceladas</b> na janela — mais
+          <b>taxa de resolução</b> e <b>valor liberado no período</b>. Como são fórmulas, recalculam sozinhas a cada
+          carga e <b>preservam a formatação</b> do dashboard.</p>
+      </div>
+      <div class="codewrap">
+        <div class="codebar"><span class="dots"><i></i><i></i><i></i></span><span class="fn">Funil — fórmulas p/ colar no Dashboard</span> · pt-BR · fonte: aba Acompanhamento</div>
+<pre class="code">Em alerta    (qtd) =CONT.SE(Acompanhamento!K:K;"Sim")
+Em alerta    (R$)  =SOMASE(Acompanhamento!K:K;"Sim";Acompanhamento!E:E)
+Pagas        (qtd) =CONT.SE(Acompanhamento!J:J;"Paga (desembolsada)")
+Pagas        (R$)  =SOMASE(Acompanhamento!J:J;"Paga (desembolsada)";Acompanhamento!E:E)
+Cedidas      (qtd) =CONT.SE(Acompanhamento!J:J;"Cedida ao FIDC")
+Cedidas      (R$)  =SOMASE(Acompanhamento!J:J;"Cedida ao FIDC";Acompanhamento!E:E)
+Canceladas   (qtd) =CONT.SE(Acompanhamento!J:J;"Cancelada")
+Total board  (qtd) =CONT.VALORES(Acompanhamento!A2:A)
+Valor total  (R$)  =SOMA(Acompanhamento!E2:E)
+Taxa resol.  (%)   =SEERRO((CONT.SE(Acompanhamento!J:J;"Paga (desembolsada)")+CONT.SE(Acompanhamento!J:J;"Cedida ao FIDC"))/(CONT.VALORES(Acompanhamento!A2:A)-CONT.SE(Acompanhamento!J:J;"Cancelada"));0)
+-- colunas do Acompanhamento: E=Valor, J=Situacao, K=Em alerta?
+-- em ingles: CONT.SE->COUNTIF | SOMASE->SUMIF | CONT.VALORES->COUNTA | SEERRO->IFERROR | ; -> ,</pre>
+      </div>
+    </div>
+
+    <div class="panel" id="x2">
+      <p style="color:var(--muted)">Uma linha por CCB da operação <b>Ideal</b> em alerta. Reescrita a cada execução via
+        <span class="kv">clear</span> + <span class="kv">append</span> e exportada como <b>CCBs_Ideal.xlsx</b>.</p>
+      <div class="tablewrap">
+        <table><thead><tr><th>Coluna</th><th>Exemplo</th><th>Origem</th></tr></thead><tbody>
+          <tr><td class="colname">Número da CCB</td><td>0004215</td><td>NUMERO_CONTRATO</td></tr>
+          <tr><td class="colname">Cliente</td><td>Indústria Exemplo Ltda</td><td>NOME_CLIENTE</td></tr>
+          <tr><td class="colname">CNPJ</td><td>12.345.678/0001-90</td><td>CNPJ_CLIENTE</td></tr>
+          <tr><td class="colname">Equipamento</td><td>Painel solar 12kWp</td><td>NOME_EQUIPAMENTO</td></tr>
+          <tr><td class="colname">Valor</td><td>R$ 23.900,00</td><td>VALOR_REQUISITADO</td></tr>
+          <tr><td class="colname">Data de assinatura</td><td>28/06/2026</td><td>proposal.signed_at</td></tr>
+          <tr><td class="colname">Vencimento (desembolso)</td><td>10/07/2026</td><td>DATA_LIMITE_DESEMBOLSO</td></tr>
+          <tr><td class="colname">Dias restantes</td><td>3</td><td>DATE_DIFF</td></tr>
+          <tr><td class="colname">Faixa</td><td>≤5</td><td>CASE dias</td></tr>
+          <tr><td class="colname">Originador</td><td>Ideal</td><td>ID_PRODUTO</td></tr>
+          <tr><td class="colname">Última atualização</td><td>07/07/2026 19:22</td><td>$now</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <div class="panel" id="x3">
+      <p style="color:var(--muted)">Idêntica em estrutura à aba Ideal, mas para a operação <b>Outros Originadores</b>
+        (Portal de Negócios / Finza Start). Exportada como <b>CCBs_Outros.xlsx</b>. Hoje está vazia — todas as 77 CCBs
+        em alerta são Ideal. Quando não há linhas, o XLSX sai com um aviso <i>“Sem CCBs Outros Originadores nesta faixa”</i>.</p>
+      <div class="callout reveal"><h4>Por que duas abas / dois anexos?</h4>
+        <p>Critério de aceite da demanda: o e-mail precisa levar <b>dois XLSX separados</b> — um por operação — para que
+          cada área trabalhe sua própria lista.</p></div>
+    </div>
+
+    <div class="panel" id="x4">
+      <p style="color:var(--muted)">O log auditável de <b>cada envio</b> (e-mail e WhatsApp), com status real e link
+        clicável para a execução no n8n. É a peça que dá rastreabilidade e permite investigar falhas.</p>
+      <div class="tablewrap">
+        <table><thead><tr><th>Coluna</th><th>Conteúdo</th></tr></thead><tbody>
+          <tr><td class="colname">Data/Hora</td><td>Carimbo dd/mm/aaaa HH:mm:ss (America/Sao_Paulo)</td></tr>
+          <tr><td class="colname">Canal</td><td><span class="kv">email</span> ou <span class="kv">whatsapp</span></td></tr>
+          <tr><td class="colname">Destinatário / Contato</td><td>Nome e e-mail/telefone</td></tr>
+          <tr><td class="colname">Faixa · Qtd CCBs · Valor</td><td>Contexto do disparo</td></tr>
+          <tr><td class="colname">Data ref</td><td>Data de referência dos dados</td></tr>
+          <tr><td class="colname">Status</td><td><span class="st id">enviado</span> ou <span class="st no">falha</span> (status real da resposta)</td></tr>
+          <tr><td class="colname">Detalhe</td><td>Corpo cru da resposta: id da msg no sucesso, motivo na falha (300 chars)</td></tr>
+          <tr><td class="colname">Exec ID</td><td><span class="kv">=HYPERLINK(...)</span> → abre a execução no n8n</td></tr>
+        </tbody></table>
+      </div>
+      <div class="callout reveal"><h4>Decisão: sem retry no envio, log tolerante a falha</h4>
+        <p>Os nós de envio usam <span class="kv">onError: continueRegularOutput</span> e <b>não</b> têm retry —
+          de propósito, para nunca duplicar mensagem. Se falhar, a linha do log registra a falha e a execução segue.
+          O retry existe só nos nós de leitura (BigQuery) e de escrita em planilha (Sheets).</p></div>
+    </div>
+
+    <div class="panel" id="x5">
+      <p style="color:var(--muted)">O <b>board vivo</b>: universo amplo (assinadas com vencimento de −30 a +15 dias,
+        <b>incluindo pagas/cedidas/canceladas</b>), gravado por <span class="kv">appendOrUpdate</span> (chave: Número da
+        CCB, <b>sem clear</b>). Cada CCB tem uma linha que <b>evolui</b> e captura o momento em que vira “Desembolsado”.
+        É aqui que se responde <i>“quando foi paga?”</i>.</p>
+      <div class="tablewrap">
+        <table><thead><tr><th>Coluna</th><th>Exemplo</th><th>Origem</th></tr></thead><tbody>
+          <tr><td class="colname">Nº CCB · Cliente · CNPJ · Equipamento · Valor · Originador</td><td>…</td><td>gold Celcoin</td></tr>
+          <tr><td class="colname">Data de assinatura · Vencimento · Dias restantes</td><td>28/06 · 10/07 · 3</td><td>proposal / gold</td></tr>
+          <tr><td class="colname">Situação</td><td>Em alerta · Paga (desembolsada) · Cedida ao FIDC · Cancelada</td><td>derivado</td></tr>
+          <tr><td class="colname">Em alerta?</td><td>Sim / Não</td><td>derivado</td></tr>
+          <tr><td class="colname">Status CCB · Status cessão</td><td>Desembolsado · Cedido</td><td>gold Celcoin</td></tr>
+          <tr><td class="colname">Cedida (Kanastra)</td><td>Sim / Não</td><td>estoque Kanastra</td></tr>
+          <tr><td class="colname">Desembolso efetivo</td><td>04/07/2026</td><td>DATA_DESEMBOLSO_EFETIVO</td></tr>
+          <tr><td class="colname">Cancelamento · Atualizado (Celcoin) · Última atualização</td><td>—</td><td>gold / $now</td></tr>
+        </tbody></table>
+      </div>
+      <div class="callout ok reveal"><h4>Por que é separado do alerta</h4>
+        <p>O alerta, por definição, <b>exclui</b> pagas/cedidas — então “paga” nunca apareceria lá. O board usa uma
+          query mais ampla que as inclui e, por não limpar (<span class="kv">appendOrUpdate</span>), mantém a trilha de
+          cada CCB.</p></div>
+      <div class="callout warn reveal"><h4>Setup único: criar e estilizar o cabeçalho</h4>
+        <p>O n8n escreve <b>valores</b>, não formata células. Então, uma vez só: crie a aba
+          <span class="kv">Acompanhamento</span>, deixe o 1º run preencher as colunas (ou cole os cabeçalhos na ordem) e
+          aplique a <b>mesma formatação da aba Ideal</b> (negrito/cor + congelar linha 1). Como o
+          <span class="kv">appendOrUpdate</span> nunca reescreve o cabeçalho, a formatação <b>persiste</b> nas próximas
+          execuções.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GOVERNANÇA ===================== -->
+<section class="section" id="governanca">
+  <div class="wrap">
+    <div class="eyebrow reveal">Governança de dados · §9 da spec</div>
+    <h2 class="reveal">Nunca alertar sobre base defasada</h2>
+    <div class="grid2" style="margin-top:26px">
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">Data de referência = reference_dt da Kanastra</h3>
+        <p style="color:var(--muted);font-size:.94rem;margin-top:12px">Fiel ao docx §9, a data de referência é a
+          <span class="kv">reference_dt</span> do estoque da <b>Kanastra</b> (<span class="kv">gold_dt</span> só como
+          guarda de nulo). Como a Kanastra atualiza em D+~4, é ela que define “de quando” é o dado. Essa data aparece
+          <b>no e-mail, no WhatsApp e no log</b>, para todo mundo saber a referência.</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.1rem">Robustez operacional</h3>
+        <p style="color:var(--muted);font-size:.94rem;margin-top:12px">Fuso fixo <span class="kv">America/Sao_Paulo</span>;
+          BigQuery/Sheets com <span class="kv">retryOnFail</span>; batching do WhatsApp 1 msg / 1,5s + timeout 20s;
+          nós de visão (“Entradas”, “Resumo da execução”) para inspecionar cada run direto na aba Executions.</p>
+      </div>
+    </div>
+    <div class="callout ok reveal">
+      <h4>✓ Gate de freshness — passo a passo</h4>
+      <p><b>1. Mede o atraso.</b> O nó <span class="kv">Buscar data referencia</span> lê o
+        <span class="kv">last_modified_time</span> (via <span class="kv">__TABLES__</span>) de
+        <span class="kv">gold_ccb_celcoin</span>, <span class="kv">kanastra.repository_finza</span> e
+        <span class="kv">PLATAFORMA.negotiation</span>, calcula há quantos dias cada uma foi <b>escrita</b> e guarda o
+        <b>maior atraso</b> → <span class="kv">MAX_DIAS_DESATUALIZADO</span>.<br>
+        <b>2. Decide.</b> O nó IF <span class="kv">Fontes atualizadas?</span> testa <span class="kv">MAX_DIAS_DESATUALIZADO &lt;= 2</span>:</p>
+      <ul style="color:var(--muted);font-size:.94rem;margin:6px 0 0;padding-left:18px">
+        <li><b>Fresco (≤ 2d):</b> segue para <span class="kv">Buscar CCBs em alerta</span> → dispara e-mail/WhatsApp normalmente.</li>
+        <li><b>Defasado (&gt; 2d):</b> <b>NÃO</b> dispara os alertas; desvia para <span class="kv">Avisar Dados (base defasada)</span>,
+          que manda um e-mail ao time de Dados (hoje <span class="kv">marcos.oliveira@finza.com.br</span>).</li>
+      </ul>
+      <p style="margin-top:10px"><b>O "2 dias" é default nosso, não do docx.</b> A §9 só diz "além do <b>limite aceitável</b>"
+        (sem número) e que as fontes "são atualizadas diariamente" — escolhemos 2 (folga de fim de semana). É parametrizável
+        no nó IF (a confirmar — Q3). E usa <b>last_modified</b> (a tabela foi escrita? = saúde do pipeline), não o
+        <span class="kv">reference_dt</span> (data do conteúdo, que atrasa por natureza).</p>
+    </div>
+
+    <p class="reveal" style="color:var(--muted);font-size:.9rem;margin-top:18px">Exemplo do <b>output</b> quando passa de 2 dias — o alerta é <b>suspenso</b> e chega este e-mail (nó <span class="kv">Avisar Dados</span>):</p>
+    <div class="email reveal">
+      <div class="ehead">
+        <div class="subj">⚠️ [Alerta CCB] Base desatualizada — envio SUSPENSO (4d de atraso)</div>
+        <div class="fromline">de gmail finza · para o time de Dados (marcos.oliveira@finza.com.br)</div>
+      </div>
+      <div class="ebody" style="font-size:.9rem">
+        <p style="margin:0 0 10px">A base do Alerta CCB está desatualizada — o disparo de hoje foi <b>SUSPENSO</b> (critério de governança §9).</p>
+        <p style="margin:0 0 10px"><b>Atraso máximo:</b> 4 dia(s) · limite atual: 2.</p>
+        <p style="margin:0 0 4px"><b>Última carga por fonte:</b></p>
+        <p style="margin:0 0 10px;color:var(--muted)">• gold_ccb_celcoin: 03/07/2026 20:00 (4d)<br>• Kanastra (repository_finza): 03/07/2026 19:33 (4d)<br>• Plataforma (negotiation): 07/07/2026 20:28 (0d)</p>
+        <p style="margin:0;color:var(--faint)">Data de referência dos dados: 03/07/2026 · Verifique o pipeline (Airbyte) antes do próximo disparo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PEDIDO x FEITO ===================== -->
+<section class="section" id="pedido">
+  <div class="wrap">
+    <div class="eyebrow reveal">Pedido × Entregue</div>
+    <h2 class="reveal">O que foi pedido, o que fizemos, o que mudou</h2>
+    <p class="lede reveal">Comparação item a item entre a demanda de 26/06/2026 e a implementação atual em n8n.
+      Legenda: <span class="st id">idêntico</span> <span class="st ad">adaptado</span>
+      <span class="st pe">pendente</span> <span class="st no">não feito / divergente</span>.</p>
+
+    <div class="tablewrap reveal">
+      <table style="min-width:740px">
+        <thead><tr><th style="width:30%">Requisito da demanda</th><th style="width:12%">Status</th><th>Como ficou</th></tr></thead>
+        <tbody>
+          <tr><td>Alerta de CCB assinada, próxima do vencimento (desembolso), não cedida</td><td><span class="st id">idêntico</span></td>
+            <td>Query principal cobre exatamente esse universo, com <span class="kv">signed_at NOT NULL</span> e exclusão de cedidas.</td></tr>
+          <tr><td>Vencimento = data de desembolso (não o cronograma de parcelas)</td><td><span class="st id">idêntico</span></td>
+            <td>Âncora = <span class="kv">DATA_LIMITE_DESEMBOLSO</span> do gold Celcoin.</td></tr>
+          <tr><td>Envio por e-mail <b>e</b> WhatsApp</td><td><span class="st id">idêntico</span></td>
+            <td>Gmail (OAuth2) + HSM oficial via Hyperflow.</td></tr>
+          <tr><td>Quinta-feira às 09:00</td><td><span class="st id">idêntico</span></td>
+            <td>Cron <span class="kv">0 0 9 * * 4</span>, fuso São Paulo.</td></tr>
+          <tr><td>E-mail com <b>dois XLSX</b> anexos (Ideal e Outros)</td><td><span class="st id">idêntico</span></td>
+            <td><span class="kv">CCBs_Ideal.xlsx</span> + <span class="kv">CCBs_Outros.xlsx</span> gerados e anexados.</td></tr>
+          <tr><td>Colunas do XLSX (nº, cliente/CNPJ, valor, assinatura, vencimento, dias, faixa, originador)</td><td><span class="st id">idêntico</span></td>
+            <td>Todas presentes; adicionamos <b>Equipamento</b> e “Última atualização”.</td></tr>
+          <tr><td>Faixas 15–10 / 9–7 / 5 (diretoria só na crítica)</td><td><span class="st ad">adaptado</span></td>
+            <td>Faixa crítica virou <b>“≤5”</b> (captura 5,4,3… e atrasadas) para não deixar buraco. Segmentação da diretoria feita pela tabela de parâmetros.</td></tr>
+          <tr><td>Destinatários parametrizáveis por faixa via tabela BQ, sem front-end</td><td><span class="st ad">adaptado</span></td>
+            <td>Feito — mas com modelo <b>por pessoa</b> (arrays de faixas/canais/operações), mais flexível que o schema linha-por-faixa sugerido.</td></tr>
+          <tr><td>Excluir canceladas (Portal de Negócios e Plataforma Blips)</td><td><span class="st id">idêntico</span></td>
+            <td>Outros via <span class="kv">proposal.status='CANCELLED'</span>; Ideal via <span class="kv">PLATAFORMA.negotiation.phase.status</span>.</td></tr>
+          <tr><td>Excluir já cedidas (estoque Kanastra)</td><td><span class="st ad">adaptado</span></td>
+            <td>“Excluir” = <b>não alertar</b> (filtro no <span class="kv">WHERE</span>, não apagamento): some das abas de alerta/XLSX, mas <b>permanece no Acompanhamento</b> como “Cedida ao FIDC”. Feito com a <b>chave correta</b> (<span class="kv">ID_SEQUENCIAL = document_number</span>), não a que a spec indicava.</td></tr>
+          <tr><td>Cruzamento Ideal via cancelamento “namespace próprio da Plataforma”</td><td><span class="st no">divergente</span></td>
+            <td>A spec dizia que não casava com o Finza Start. Na prática <b>casa</b> (916/927) e o cruzamento foi feito por <span class="kv">contract_number</span>.</td></tr>
+          <tr><td>Classificação Ideal × Outros via organization.path</td><td><span class="st ad">adaptado</span></td>
+            <td>Simplificado para <span class="kv">ID_PRODUTO</span> (a119c37e = Ideal), disponível direto no gold.</td></tr>
+          <tr><td>WhatsApp: mensagem-resumo por faixa (qtd e valor)</td><td><span class="st ad">adaptado</span></td>
+            <td>Uma mensagem <b>por contato</b>, com <b>1 linha por faixa</b> (qtd + valor por operação, incluindo "nenhuma") + total + data. 3 templates HSM (1/2/3 faixas) com header de imagem; o Hyperflow roteia pelo <span class="kv">num_faixas</span>.</td></tr>
+          <tr><td>§9 Governança: data de referência no alerta</td><td><span class="st id">idêntico</span></td>
+            <td>= <span class="kv">reference_dt</span> da Kanastra (docx §9), exibida em todos os canais + log.</td></tr>
+          <tr><td>§9 Governança: bloquear/notificar se base defasada além do limite</td><td><span class="st id">idêntico</span></td>
+            <td>Nó <span class="kv">Fontes atualizadas?</span> (IF, limite 2 dias) desvia para <span class="kv">Avisar Dados</span> — e-mail ao time de Dados — quando gold/Kanastra/Plataforma estão defasadas, em vez de alertar.</td></tr>
+          <tr><td>Carga de <span class="kv">proposal</span> no BQ (pedido ao time de Dados)</td><td><span class="st no">não necessário</span></td>
+            <td>Descobriu-se que já existe (<span class="kv">bronze.proposal</span> + gold Celcoin). O bloqueio da spec caiu.</td></tr>
+          <tr><td>Segurança do disparo de WhatsApp</td><td><span class="st id">implementado</span></td>
+            <td>Token compartilhado: n8n envia no corpo, Conditional do Hyperflow valida (senão "Token errado"). Extra além do docx (que não pedia).</td></tr>
+          <tr><td>Rastrear pagamento/cessão por CCB (não pedido no docx)</td><td><span class="st ad">extra</span></td>
+            <td>Aba <span class="kv">Acompanhamento</span> (board vivo, appendOrUpdate) — registra quando cada CCB foi paga/cedida, algo que o alerta (que exclui pagas) não mostra.</td></tr>
+          <tr><td>Ativação em produção</td><td><span class="st pe">pendente</span></td>
+            <td>Em <span class="kv">automacao.blips-labs.com</span>, credenciais anexadas e <b>já rodou</b> (BQ/Sheets/Gmail OK). Falta run verde end-to-end com destinatários reais e <b>ativar</b> o cron (hoje inativo).</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PENDÊNCIAS ===================== -->
+<section class="section" id="pendencias">
+  <div class="wrap">
+    <div class="eyebrow reveal">Pendências · próximos passos</div>
+    <h2 class="reveal">O que falta para ligar em produção</h2>
+    <div class="grid2" style="margin-top:26px">
+      <div class="card reveal">
+        <h3 style="font-size:1.05rem">✅ Credenciais anexadas — falta validar e ativar</h3>
+        <p style="color:var(--muted);font-size:.92rem;margin-top:10px">Já conectadas e funcionando (o fluxo roda):
+          BigQuery <span class="kv">BQ - João Lucas</span>, Google Sheets <span class="kv">Marcos Rodrigues</span>
+          (service account, 7 nós) e Gmail <span class="kv">gmail finza</span> (envio + aviso de base defasada).
+          Falta: <b>run verde end-to-end</b> com destinatários reais e <b>ativar</b> o agendamento (hoje inativo).</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.05rem">✅ Segurança do WhatsApp — resolvido</h3>
+        <p style="color:var(--muted);font-size:.92rem;margin-top:10px">Token compartilhado validado no Conditional do
+          Hyperflow (flow publicado). Só quem tem o segredo dispara o HSM. Rotacionar o token se vazar.</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.05rem">✅ Validar com a área de negócio</h3>
+        <p style="color:var(--muted);font-size:.92rem;margin-top:10px">(a) dia 6 e atrasadas nas faixas; (b) “Endosso
+          Assinado” conta como cedida? (c) qual o limite de atraso aceitável para o gate de freshness (hoje 2 dias).</p>
+      </div>
+      <div class="card reveal">
+        <h3 style="font-size:1.05rem">⚠ Evitar disparo duplo & SPOF de credenciais</h3>
+        <p style="color:var(--muted);font-size:.92rem;margin-top:10px">O <b>dev já foi aposentado</b> — manter ativo
+          apenas o workflow de produção (automacao). Considerar migrar credenciais pessoais para <b>service accounts</b> dedicadas.</p>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+      <div>
+        <h3 style="font-size:1.1rem">Abrir no n8n</h3>
+        <p style="color:var(--muted);font-size:.9rem;margin:6px 0 0">Workflow “Alerta CCBs” · id 9O4XGF8L89TAcHDK · projeto Blips iA</p>
+      </div>
+      <a href="https://automacao.blips-labs.com/workflow/9O4XGF8L89TAcHDK" target="_blank" rel="noopener"
+        style="background:var(--finza-blue);color:#fff;padding:13px 24px;border-radius:11px;font-family:var(--f-disp);font-weight:600;white-space:nowrap">Abrir workflow →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div style="font-family:var(--f-disp);font-weight:700;color:var(--ink);font-size:1rem;text-transform:uppercase;letter-spacing:.02em">Alerta CCB · Dossiê</div>
+      <div style="margin-top:6px">Gerado a partir do workflow n8n, das queries BigQuery e da demanda de 26/06/2026.</div>
+    </div>
+    <div style="text-align:right">
+      <div><b>FINZA</b> · Módulo Financeiro</div>
+      <div>n8n · BigQuery · Hyperflow · Google Sheets · Gmail</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------------- node dataset ---------------- */
+const NODES=[
+  {s:"gat",l:"Rodar manualmente",t:"manualTrigger",c:"t-trigger",p:"Gatilho manual para testes.",d:"Permite rodar a rotina sob demanda sem esperar a quinta-feira. Vai direto para 'Buscar data referencia'."},
+  {s:"gat",l:"Agendamento",t:"scheduleTrigger",c:"t-trigger",p:"Cron: quinta-feira 09:00.",d:"Expressão <span class='kv'>0 0 9 * * 4</span>, fuso America/Sao_Paulo. É o gatilho de produção."},
+  {s:"ref",l:"Buscar data referencia",t:"BigQuery · executeOnce",c:"t-bq",p:"Calcula a data de referência + o sinal de freshness.",d:"Data de referência = reference_dt da Kanastra (docx §9; gold só como guarda de nulo) para exibição; e o last_modified das 3 fontes (gold/Kanastra/Plataforma) para o gate. É ANCESTRAL de tudo para que $('Buscar data referencia') funcione nos nós seguintes."},
+  {s:"frs",l:"Fontes atualizadas?",t:"IF · gate §9",c:"t-if",p:"Gate: bloqueia o disparo se a base estiver defasada.",d:"Compara MAX_DIAS_DESATUALIZADO (last_modified de gold/Kanastra/Plataforma) com o limite de 2 dias. Verdadeiro → segue para 'Buscar CCBs em alerta'; falso → desvia para 'Avisar Dados' e NÃO envia."},
+  {s:"frs",l:"Avisar Dados (base defasada)",t:"Gmail · OAuth2",c:"t-mail",p:"Notifica o time quando a base está velha.",d:"Só na trilha defasada: e-mail listando qual fonte atrasou, há quantos dias e a última carga. Nesse caso o alerta NÃO é disparado (§9)."},
+  {s:"ext",l:"Buscar CCBs em alerta",t:"BigQuery · retry×3",c:"t-bq",p:"A query mestra — todas as regras de negócio.",d:"4 CTEs (prop, cedidas, canc_blips, base) + WHERE com todas as exclusões + CASE de faixa/operação. Retorna 1 linha por CCB em alerta."},
+  {s:"ext",l:"Buscar destinatarios",t:"BigQuery · executeOnce",c:"t-bq",p:"Lê quem recebe cada faixa/canal/operação.",d:"SELECT ... WHERE ativo = TRUE na tabela de parâmetros. Modelo por pessoa (arrays)."},
+  {s:"vis",l:"Entradas (visao)",t:"Code",c:"t-code",p:"Dump das entradas p/ inspeção.",d:"Consolida CCBs + destinatários com quebras por faixa/operação — visível na aba Executions. Não afeta o envio."},
+  {s:"vis",l:"Resumo da execucao",t:"Code",c:"t-code",p:"Dump da saída p/ inspeção.",d:"Mostra o que a execução enviaria (faixas com alerta, e-mails, whatsapps). Diagnóstico."},
+  {s:"est",l:"Estruturar envios por faixa",t:"Code",c:"t-code",p:"Coração da lógica: 1 item por contato.",d:"Para cada contato: filtra as CCBs do escopo dele (faixas × operações), monta o breakdown com os zeros, as listas ccbs_ideal/ccbs_outros, faixa_linhas (1 por faixa), total e num_faixas. Contato sem CCB no escopo é pulado."},
+  {s:"pl",l:"Limpar Ideal",t:"Google Sheets · clear",c:"t-sheets",p:"Zera a aba Ideal antes de reescrever.",d:"clear wholeSheet, executeOnce. É ancestral do 'Formatar' (encadeado só para ordenar) — garante que o painel seja reescrito do zero a cada execução."},
+  {s:"pl",l:"Limpar Outros",t:"Google Sheets · clear",c:"t-sheets",p:"Zera a aba Outros Originadores.",d:"clear wholeSheet, executeOnce. Encadeado logo após 'Limpar Ideal'."},
+  {s:"pl",l:"Formatar p/ planilha",t:"Code",c:"t-code",p:"CCBs → colunas legíveis (fiel ao docx).",d:"Rótulos pt-BR, datas dd/mm/aaaa, faixa e originador — SEM colunas de status (status vive no Acompanhamento). Carimbo 'Última atualização'. Campo _op separa as abas. Lê via $('Buscar CCBs em alerta')."},
+  {s:"pl",l:"So Ideal",t:"Code",c:"t-code",p:"Filtra _op = IDEAL.",d:"Remove a coluna técnica _op e passa só as CCBs Ideal para a aba Ideal."},
+  {s:"pl",l:"So Outros",t:"Code",c:"t-code",p:"Filtra _op = OUTROS.",d:"Idem para Outros Originadores."},
+  {s:"pl",l:"Planilha: Ideal",t:"Google Sheets · append",c:"t-sheets",p:"Reescreve a aba Ideal (após o clear).",d:"append — a aba foi limpa antes; o clear apaga só valores, então o cabeçalho estilizado/frozen persiste. retry×4. Planilha 1ZCy…gPX7E."},
+  {s:"pl",l:"Planilha: Outros",t:"Google Sheets · append",c:"t-sheets",p:"Reescreve a aba Outros Originadores.",d:"append após 'Limpar Outros'. Mesmo destino, aba 'Outros Originadores'. retry×4."},
+  {s:"em",l:"Faixas c/ e-mail",t:"Code",c:"t-code",p:"Filtra contatos com e-mail.",d:"Só passa adiante contatos com e-mail e CCBs no escopo — cada um vira 1 e-mail."},
+  {s:"em",l:"Loop Faixas",t:"SplitInBatches",c:"t-loop",p:"Itera um contato por vez.",d:"Processa cada contato isoladamente (batch 1): gera os anexos do escopo dele, monta e envia o e-mail, depois volta ao loop."},
+  {s:"em",l:"Itens Ideal",t:"Code",c:"t-code",p:"CCBs Ideal do contato → colunas.",d:"Converte 'ccbs_ideal' do contato nas colunas do XLSX; se vazio, emite aviso (e o anexo vazio não é enviado)."},
+  {s:"em",l:"XLSX Ideal",t:"convertToFile",c:"t-file",p:"Gera CCBs_Ideal.xlsx.",d:"Binário na propriedade 'ideal'."},
+  {s:"em",l:"Itens Outros",t:"Code",c:"t-code",p:"CCBs Outros do contato → colunas.",d:"Idem, a partir de 'ccbs_outros'."},
+  {s:"em",l:"XLSX Outros",t:"convertToFile",c:"t-file",p:"Gera CCBs_Outros.xlsx.",d:"Binário na propriedade 'outros'."},
+  {s:"em",l:"Juntar anexos",t:"Merge",c:"t-merge",p:"Combina os dois XLSX.",d:"combineByPosition — junta os binários 'ideal' e 'outros' num item só, pronto para anexar."},
+  {s:"em",l:"Preparar e-mail",t:"Code",c:"t-code",p:"Monta assunto + HTML + anexos.",d:"Tabela Faixa × Operação (com 'nenhuma' nos zeros) + total, badge da data e rodapé em imagem; to = e-mail do contato; anexa só as operações com linha. Assunto '[Alerta CCB] N CCB(s) próximas do vencimento — data'."},
+  {s:"em",l:"Enviar e-mail",t:"Gmail · OAuth2",c:"t-mail",p:"Dispara o e-mail com o(s) XLSX.",d:"node Gmail v2.2, envia como a conta logada. Anexo DINÂMICO (Object.keys($binary)) → só os XLSX presentes. onError: continua. Volta ao Loop e alimenta o log."},
+  {s:"wa",l:"Preparar WhatsApp",t:"Code",c:"t-code",p:"Uma mensagem por contato.",d:"Normaliza número, monta 1 linha por faixa (faixa1/faixa2/faixa3, *negrito* na faixa, só as operações do contato) e envia {numero,nome,faixa1,faixa2,faixa3,num_faixas,total,data_ref,token}."},
+  {s:"wa",l:"Enviar WhatsApp",t:"HTTP · Hyperflow",c:"t-http",p:"POST no webhook do HSM.",d:"batching 1/1,5s, timeout 20s, neverError. O Hyperflow valida o token e roteia por num_faixas para 1 dos 3 templates (alerta_ccb_1faixa/2faixas/3faixas), todos com header de imagem, no WABA Finza."},
+  {s:"log",l:"Montar log WhatsApp",t:"Code",c:"t-code",p:"Constrói as linhas de log do WhatsApp.",d:"Lê status real da resposta HTTP, monta Data/Hora, canal, status (enviado/falha), Detalhe cru e Exec ID clicável."},
+  {s:"log",l:"Registrar log WhatsApp",t:"Google Sheets · append",c:"t-sheets",p:"Grava na aba Log Envios.",d:"append, retry×4."},
+  {s:"log",l:"Montar log Email",t:"Code",c:"t-code",p:"Constrói a linha de log do e-mail.",d:"Uma linha por contato (canal e-mail), com faixas, total, status e Exec ID."},
+  {s:"log",l:"Registrar log Email",t:"Google Sheets · append",c:"t-sheets",p:"Grava na aba Log Envios.",d:"append, retry×4."},
+  {s:"acomp",l:"Buscar acompanhamento",t:"BigQuery · janela ampla",c:"t-bq",p:"Universo amplo — inclui pagas/cedidas/canceladas.",d:"Assinadas com vencimento de −30 a +15 dias, SEM excluir pagas/cedidas. Fonte do board de status (não do alerta)."},
+  {s:"acomp",l:"Formatar acompanhamento",t:"Code",c:"t-code",p:"Deriva Situação e 'Em alerta?'.",d:"Calcula Situação (Em alerta / Paga / Cedida / Cancelada), flags e todas as colunas de status por CCB."},
+  {s:"acomp",l:"Planilha: Acompanhamento",t:"Google Sheets · appendOrUpdate",c:"t-sheets",p:"Board vivo — NÃO limpa.",d:"appendOrUpdate por 'Número da CCB', sem clear → cada CCB tem 1 linha que evolui e captura quando foi paga/cedida. Aba 'Acompanhamento'."}
+];
+const STAGES=[
+  {k:"gat",label:"Gatilho"},
+  {k:"ref",label:"Data de referência (ancestral)"},
+  {k:"frs",label:"Gate de freshness (§9)"},
+  {k:"ext",label:"Extração BigQuery"},
+  {k:"vis",label:"Visão / diagnóstico"},
+  {k:"est",label:"Estruturação por contato"},
+  {k:"__lanes__",label:"Fan-out · 3 trilhas de saída"},
+  {k:"log",label:"Log auditável (Sheets)"},
+  {k:"acomp",label:"Board de acompanhamento (paralelo, off-gate)"}
+];
+const LANES=[{k:"pl",h:"📋 Painel (planilha)"},{k:"em",h:"✉ E-mail (XLSX)"},{k:"wa",h:"💬 WhatsApp (HSM)"}];
+const ARROW='<div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>';
+
+const CHIP={'t-trigger':'▶','t-bq':'BQ','t-code':'JS','t-sheets':'GS','t-file':'XL','t-merge':'⋈','t-loop':'↻','t-http':'HT','t-mail':'@','t-if':'IF'};
+const flow=document.getElementById('flow');
+let html='';
+STAGES.forEach((st,i)=>{
+  const head=`<div class="stage-head"><span class="ix">${String(i+1).padStart(2,'0')}</span><p class="stage-label">${st.label}</p></div>`;
+  if(st.k==='__lanes__'){
+    html+=`<div class="stage">${head}<div class="lanes">`;
+    LANES.forEach(ln=>{
+      html+=`<div class="lane"><h5>${ln.h}</h5><div class="stage-nodes">`;
+      NODES.filter(n=>n.s===ln.k).forEach(n=>html+=nodeHTML(n));
+      html+=`</div></div>`;
+    });
+    html+=`</div></div>`;
+  }else{
+    html+=`<div class="stage">${head}<div class="stage-nodes">`;
+    NODES.filter(n=>n.s===st.k).forEach(n=>html+=nodeHTML(n));
+    html+=`</div></div>`;
+  }
+  if(i<STAGES.length-1) html+=ARROW;
+});
+flow.innerHTML=html;
+function nodeHTML(n){
+  const idx=NODES.indexOf(n);
+  return `<button class="node ${n.c}" data-i="${idx}" aria-pressed="false"><span class="chip">${CHIP[n.c]||'·'}</span><span class="ninfo"><span class="nm">${n.l}</span><span class="ty">${n.t}</span></span></button>`;
+}
+
+/* drawer */
+const drawer=document.getElementById('drawer'),scrim=document.getElementById('scrim');
+const dTitle=document.getElementById('drawerTitle'),dType=document.getElementById('drawerType'),
+      dBody=document.getElementById('drawerBody'),dIc=document.getElementById('drawerIc');
+let lastNode=null;
+function openNode(i){
+  const n=NODES[i];
+  dTitle.textContent=n.l; dType.textContent=n.t;
+  const nc=getComputedStyle(document.querySelector('.node[data-i="'+i+'"]')).getPropertyValue('--nc').trim();
+  if(nc){dIc.style.background=nc;dIc.style.boxShadow='0 4px 12px -4px rgba(10,10,46,.3)';}
+  dBody.innerHTML=`<h4>O que faz</h4><p>${n.p}</p><h4>Detalhe técnico</h4><p>${n.d}</p>`;
+  drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-modal','true');
+  document.querySelectorAll('.node').forEach(el=>el.setAttribute('aria-pressed', el.dataset.i==i?'true':'false'));
+  lastNode=document.querySelector('.node[data-i="'+i+'"]');
+}
+function closeDrawer(){drawer.classList.remove('open');scrim.classList.remove('open');drawer.setAttribute('aria-modal','false');
+  document.querySelectorAll('.node').forEach(el=>el.setAttribute('aria-pressed','false'));if(lastNode)lastNode.focus();}
+flow.addEventListener('click',e=>{const b=e.target.closest('.node');if(b)openNode(+b.dataset.i);});
+document.getElementById('drawerClose').addEventListener('click',closeDrawer);
+scrim.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+
+/* tabs */
+function wireTabs(tabsId){
+  const box=document.getElementById(tabsId);
+  box.addEventListener('click',e=>{
+    const t=e.target.closest('.tab');if(!t)return;
+    box.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+    t.setAttribute('aria-selected','true');
+    const scope=box.parentElement;
+    scope.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+    document.getElementById(t.dataset.t).classList.add('show');
+  });
+}
+wireTabs('qtabs'); wireTabs('xtabs');
+
+/* SQL/JS highlighter */
+const KW=/\b(WITH|SELECT|FROM|WHERE|AND|OR|NOT|IN|AS|JOIN|LEFT|ON|CASE|WHEN|THEN|ELSE|END|ORDER|BY|GROUP|PARTITION|OVER|DISTINCT|CREATE|REPLACE|TABLE|INSERT|INTO|VALUES|BETWEEN|IS|NULL|TRUE|FALSE|DESC|ASC|const|let|for|of|if|return|filter|map|null)\b/g;
+const FN=/\b(JSON_VALUE|SAFE_CAST|ROW_NUMBER|DATE_DIFF|CURRENT_DATE|COALESCE|LEAST|FORMAT_DATE|MAX|DATE|CAST|SAFE|PARSE_DATE|Array|Number|includes)\b/g;
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+document.querySelectorAll('pre.code').forEach(pre=>{
+  let raw=pre.textContent;let out=esc(raw);
+  out=out.replace(/(--[^\n]*)/g,'§C§$1§/C§');
+  out=out.replace(/('(?:[^'\\]|\\.)*')/g,'§S§$1§/S§');
+  out=out.replace(KW,'§K§$&§/K§');
+  out=out.replace(FN,'§F§$&§/F§');
+  out=out.replace(/\b(\d+(?:\.\d+)?)\b/g,'§N§$1§/N§');
+  out=out.replace(/§C§/g,'<span class="com">').replace(/§\/C§/g,'</span>')
+         .replace(/§S§/g,'<span class="str">').replace(/§\/S§/g,'</span>')
+         .replace(/§K§/g,'<span class="kw">').replace(/§\/K§/g,'</span>')
+         .replace(/§F§/g,'<span class="fn2">').replace(/§\/F§/g,'</span>')
+         .replace(/§N§/g,'<span class="num">').replace(/§\/N§/g,'</span>');
+  pre.innerHTML=out;
+});
+
+/* theme toggle */
+const root=document.documentElement,tb=document.getElementById('themeBtn');
+tb.addEventListener('click',()=>{
+  const cur=root.getAttribute('data-theme')||'dark';
+  root.setAttribute('data-theme',cur==='dark'?'light':'dark');
+});
+
+/* scroll reveal */
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+if(!reduce){
+  const io=new IntersectionObserver((ents)=>{ents.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.12});
+  document.querySelectorAll('.reveal,.faixa').forEach(el=>io.observe(el));
+}else{document.querySelectorAll('.reveal,.faixa').forEach(el=>el.classList.add('in'));}
+
+/* count up */
+function animateCount(el){
+  const money=el.dataset.money,cnt=el.dataset.count;
+  const target=money?parseFloat(money):parseInt(cnt,10);
+  if(reduce){el.textContent=money?('R$ '+target.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})):target;return;}
+  let t0=null;const dur=1200;
+  function step(ts){if(!t0)t0=ts;const p=Math.min((ts-t0)/dur,1);const e=1-Math.pow(1-p,3);const v=target*e;
+    el.textContent=money?('R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})):Math.round(v);
+    if(p<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+const mio=new IntersectionObserver((ents)=>{ents.forEach(en=>{if(en.isIntersecting){animateCount(en.target);mio.unobserve(en.target);}});},{threshold:.5});
+document.querySelectorAll('#metrics .n[data-count],#metrics .n[data-money]').forEach(el=>mio.observe(el));
+
+/* scroll-spy */
+const spy=document.getElementById('spy'),links=[...spy.querySelectorAll('a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const sio=new IntersectionObserver((ents)=>{ents.forEach(en=>{if(en.isIntersecting){
+  const id='#'+en.target.id;links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===id));
+}});},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>{if(s)sio.observe(s);});
+</script>
+</body>
+</html>
