@@ -18,7 +18,7 @@ Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é
 
 Sequência obrigatória no início de cada turno:
 
-1. Ler a lista de skills disponíveis no `<system-reminder>` (9 skills de conhecimento: finza-contexto, finza-design-system, finza-tom-voz, po-backlog, finza-mapas, quimera, jira, n8n-projeto, torre-projeto + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, etc.).
+1. Ler a lista de skills disponíveis no `<system-reminder>` (10 skills de conhecimento: finza-contexto, finza-design-system, finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, jira, n8n-projeto, torre-projeto + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, etc.).
 2. Considerar os **14 agentes** em `.claude/agents/` e os **17 comandos** em `.claude/commands/`.
 3. Se o pedido do usuário se encaixar em um comando/skill, **invoque-o automaticamente** via a ferramenta Skill — não execute manualmente nem peça pro usuário digitar o comando.
 
@@ -34,6 +34,7 @@ Sequência obrigatória no início de cada turno:
 | relatório, report, status para terceiros, devolutiva | `/relatorio` (skill `relatorio`) → grava em `Backlog/analises/<dd>/relatorios/` |
 | status semanal, resumo da semana, "como tá o squad" | `/status` |
 | deck, slide, apresentação | pipeline `/novo-deck`, `/novo-slide`, `/revisar-deck` |
+| dossiê, documento/relatório HTML de rolagem, "one-pager", "documento da IA X igual ao da Clara", "no padrão do clara.html/dossiê" | skill `finza-dossie` → produz `.html` single-file de scroll (topbar+spy, hero, cards, tabelas, tema claro/escuro). **Não confundir** com slides (`/novo-deck`) nem relatório `.md` de backlog (`/relatorio`). |
 | mapa mental, mapa do agente, "história da Esperanza", narrativa de uma frente | `/mapa <assunto>` (textual) ou `/mapa regenerar` (visual) — agente `context-curator` / `mapa-updater` |
 | atualizar contexto, doc de negócio defasado, overview de sistema, "documenta isso" | `/contexto` (agente `context-curator`) |
 | "atualiza tudo", sincronizar projeções, backlog+mapa de uma vez | `/sync` |
@@ -96,8 +97,9 @@ orquestra-tarefa/
 │   │   ├── jira.md                   # Opera Jira & Confluence (Atlassian) via MCP
 │   │   ├── n8n.md                    # Ponte read-only p/ N8N-AGENT (workflows, execuções, métricas)
 │   │   └── torre.md                  # Ponte contexto+leitura p/ cobranca-finza (Torre)
-│   ├── skills/                       # Conhecimento canônico (9)
-│   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais
+│   ├── skills/                       # Conhecimento canônico (10)
+│   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais (slides)
+│   │   ├── finza-dossie/             # Documentos/relatórios HTML de rolagem única (template.html + fontes Montserrat)
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
 │   │   ├── finza-contexto/           # Resumo do negócio Finza, frentes
 │   │   ├── po-backlog/               # INVEST, Given/When/Then, frentes, RICE

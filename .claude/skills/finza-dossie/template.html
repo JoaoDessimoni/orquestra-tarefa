@@ -1,0 +1,2611 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clara · Agente de Formalização — Finza</title>
+    <style id="montserrat">/*__FONTS__*/</style>
+    <style>
+      :root {
+        /* Finza — base (tema claro canônico) */
+        --void: #f2f2f2;
+        --deep: #eaeaf2;
+        --panel: #ffffff;
+        --panel-2: #ffffff;
+        --ink: #0a0a2e;
+        --muted: #5c5c7a;
+        --faint: #8a8aa0;
+        --ghost: #b7b7c6;
+        /* azul cirúrgico Finza */
+        --finza-blue: #1a1aff;
+        --finza-blue-deep: #0f0f8c;
+        --finza-blue-soft: #e8e8ff;
+        /* acentos mapeados ao sistema Finza */
+        --mint: #1a1aff;
+        --mint-rgb: 26, 26, 255;
+        --azure: #1a1aff;
+        --azure-rgb: 26, 26, 255;
+        --iris: #0f0f8c;
+        --iris-rgb: 15, 15, 140;
+        --amber: #f59e0b;
+        --amber-rgb: 245, 158, 11;
+        --coral: #ef4444;
+        --coral-rgb: 239, 68, 68;
+        --success: #10b981;
+        --success-rgb: 16, 185, 129;
+        --accent: var(--mint);
+        --accent-rgb: var(--mint-rgb);
+        --glass: rgba(26, 26, 255, 0.03);
+        --glass-2: rgba(26, 26, 255, 0.06);
+        --stroke: #d8d8e5;
+        --stroke-2: #c8c8d8;
+        --hi: 0 0 transparent;
+        --lift: 0 10px 26px -20px rgba(10, 10, 46, 0.28);
+        --r: 12px;
+        --r-lg: 14px;
+        --r-sm: 9px;
+        --max: 1160px;
+        --f-disp: "Montserrat", system-ui, -apple-system, sans-serif;
+        --f-body: "Montserrat", system-ui, -apple-system, sans-serif;
+        --f-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+      :root[data-theme="dark"] {
+        --void: #0a0a2e;
+        --deep: #101034;
+        --panel: #17173f;
+        --panel-2: #1c1c48;
+        --ink: #ececff;
+        --muted: #b0b0d0;
+        --faint: #7c7ca0;
+        --ghost: #3a3a6a;
+        --finza-blue: #6e6eff;
+        --finza-blue-deep: #4a4ae0;
+        --finza-blue-soft: #20205c;
+        --mint: #6e6eff;
+        --mint-rgb: 110, 110, 255;
+        --azure: #6e6eff;
+        --azure-rgb: 110, 110, 255;
+        --iris: #9a9aff;
+        --iris-rgb: 154, 154, 255;
+        --amber: #f5b942;
+        --amber-rgb: 245, 185, 66;
+        --coral: #ff6b6b;
+        --coral-rgb: 255, 107, 107;
+        --success: #2ee6a0;
+        --success-rgb: 46, 230, 160;
+        --glass: rgba(255, 255, 255, 0.03);
+        --glass-2: rgba(255, 255, 255, 0.06);
+        --stroke: rgba(255, 255, 255, 0.1);
+        --stroke-2: rgba(255, 255, 255, 0.18);
+        --hi: 0 0 transparent;
+        --lift: 0 16px 34px -22px rgba(0, 0, 0, 0.55);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--void);
+        font-family: var(--f-body);
+        font-size: 16px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        position: relative;
+        min-height: 100vh;
+      }
+      /* ---------- ambient background ---------- */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+        overflow: hidden;
+        background:
+          radial-gradient(
+            900px 620px at 15% -10%,
+            rgba(var(--azure-rgb), 0.05),
+            transparent 60%
+          ),
+          var(--void);
+      }
+      :root[data-theme="dark"] .bg {
+        background:
+          radial-gradient(
+            900px 620px at 15% -10%,
+            rgba(var(--azure-rgb), 0.1),
+            transparent 60%
+          ),
+          var(--void);
+      }
+      .bggrid {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(10, 10, 46, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10, 10, 46, 0.04) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(
+          ellipse 100% 100% at 50% 0%,
+          #000,
+          transparent 82%
+        );
+      }
+      :root[data-theme="dark"] .bggrid {
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      }
+
+      /* ---------- glass primitive ---------- */
+      .glass,
+      .card,
+      .metric,
+      .callout,
+      .phone,
+      .tab,
+      .pill,
+      .themetgl {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--hi), var(--lift);
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      a {
+        color: var(--azure);
+        text-decoration: none;
+      }
+      a:hover {
+        color: var(--mint);
+        text-decoration: underline;
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--mint);
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 26px;
+      }
+      .section {
+        padding: 92px 0;
+        position: relative;
+      }
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 26px;
+        right: 26px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--stroke) 12%,
+          var(--stroke) 88%,
+          transparent
+        );
+      }
+      .eyebrow {
+        font-family: var(--f-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--finza-blue);
+        font-weight: 700;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 26px;
+        height: 2px;
+        background: var(--finza-blue);
+      }
+      .section h2 {
+        font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+        max-width: 24ch;
+      }
+      .lede {
+        color: var(--muted);
+        font-size: 1.1rem;
+        max-width: 72ch;
+        margin: 18px 0 0;
+      }
+      p {
+        margin: 0 0 14px;
+      }
+
+      /* ---------- icons ---------- */
+      .ico {
+        width: 34px;
+        height: 34px;
+        display: block;
+      }
+      .ico path,
+      .ico circle,
+      .ico rect,
+      .ico line,
+      .ico polyline,
+      .ico polygon,
+      .ico ellipse {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ---------- top bar ---------- */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        background: rgba(242, 242, 242, 0.92);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--stroke);
+      }
+      :root[data-theme="dark"] .topbar {
+        background: rgba(10, 10, 46, 0.92);
+      }
+      .iaf-mark {
+        flex: none;
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.72rem;
+        color: var(--finza-blue);
+        letter-spacing: 0.08em;
+      }
+      .topbar .row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 62px;
+      }
+      .brand {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.98rem;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-transform: uppercase;
+      }
+      .brand .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 2px;
+        background: var(--finza-blue);
+        box-shadow: 0 0 0 4px rgba(var(--azure-rgb), 0.16);
+        flex: none;
+        animation: pulse 2.4s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        50% {
+          opacity: 0.4;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .brand .dot {
+          animation: none;
+        }
+      }
+      nav.spy {
+        display: flex;
+        gap: 2px;
+        margin-left: auto;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      nav.spy::-webkit-scrollbar {
+        display: none;
+      }
+      nav.spy a {
+        font-family: var(--f-mono);
+        font-size: 0.76rem;
+        color: var(--muted);
+        padding: 7px 11px;
+        border-radius: 8px;
+        white-space: nowrap;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+      }
+      nav.spy a:hover {
+        color: var(--ink);
+        background: var(--glass-2);
+        text-decoration: none;
+      }
+      nav.spy a.active {
+        color: var(--mint);
+        background: rgba(var(--mint-rgb), 0.12);
+      }
+      .themetgl {
+        flex: none;
+        color: var(--ink);
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+      }
+      .themetgl:hover {
+        border-color: var(--stroke-2);
+      }
+
+      /* ---------- hero ---------- */
+      .hero {
+        position: relative;
+        padding: 92px 0 68px;
+      }
+      .hero .inner {
+        position: relative;
+        z-index: 1;
+      }
+      .tagrow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-bottom: 26px;
+      }
+      .anim-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: up 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      }
+      .anim-up:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .anim-up:nth-child(2) {
+        animation-delay: 0.14s;
+      }
+      .anim-up:nth-child(3) {
+        animation-delay: 0.24s;
+      }
+      .anim-up:nth-child(4) {
+        animation-delay: 0.34s;
+      }
+      .anim-up:nth-child(5) {
+        animation-delay: 0.44s;
+      }
+      @keyframes up {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .anim-up {
+          opacity: 1;
+          transform: none;
+          animation: none;
+        }
+      }
+      .pill {
+        font-family: var(--f-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        padding: 6px 13px;
+        border-radius: 999px;
+        color: var(--finza-blue);
+        background: var(--finza-blue-soft);
+        border-color: transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .pill.prod {
+        color: var(--success);
+        border-color: rgba(var(--success-rgb), 0.4);
+        background: rgba(var(--success-rgb), 0.12);
+      }
+      .pill.paused {
+        color: var(--amber);
+        border-color: rgba(var(--amber-rgb), 0.4);
+        background: rgba(var(--amber-rgb), 0.12);
+      }
+      .hero h1 {
+        font-size: clamp(2.6rem, 7vw, 5rem);
+        font-weight: 300;
+        color: var(--ghost);
+        max-width: 16ch;
+        margin-bottom: 4px;
+        letter-spacing: -0.02em;
+        line-height: 1.02;
+      }
+      .hero h1 .g {
+        font-weight: 700;
+        color: var(--finza-blue);
+      }
+      .hero .sub {
+        font-size: 1.2rem;
+        color: var(--muted);
+        max-width: 66ch;
+        margin-top: 24px;
+      }
+      .hero .sub b {
+        color: var(--ink);
+      }
+      .hero .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 26px;
+        margin-top: 28px;
+        font-family: var(--f-mono);
+        font-size: 0.82rem;
+        color: var(--faint);
+      }
+      .hero .meta b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-top: 48px;
+      }
+      .metric {
+        position: relative;
+        border-radius: var(--r);
+        padding: 20px 18px;
+        overflow: hidden;
+      }
+      .metric::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--mint);
+        opacity: 0.5;
+      }
+      .metric.c-accent::after {
+        background: var(--azure);
+      }
+      .metric .n {
+        font-family: var(--f-disp);
+        font-size: 1.95rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        color: var(--finza-blue);
+      }
+      .metric .l {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 10px;
+        letter-spacing: 0.01em;
+      }
+      .metric .src {
+        font-family: var(--f-mono);
+        font-size: 0.63rem;
+        color: var(--faint);
+        margin-top: 6px;
+      }
+
+      /* ---------- cards / callouts ---------- */
+      .card {
+        border-radius: var(--r-lg);
+        padding: 28px;
+        border: 2px dotted var(--finza-blue);
+        box-shadow: none;
+        position: relative;
+      }
+      .card .iaf {
+        position: absolute;
+        top: 16px;
+        right: 18px;
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+        color: var(--finza-blue);
+        opacity: 0.65;
+      }
+      .card h3 {
+        font-family: var(--f-disp);
+        font-size: 1.12rem;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .card .ico {
+        width: 28px;
+        height: 28px;
+        color: var(--finza-blue);
+        flex: none;
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .card ul {
+        margin: 6px 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .card li {
+        display: flex;
+        gap: 11px;
+        align-items: flex-start;
+        font-size: 0.96rem;
+        color: var(--ink);
+        line-height: 1.45;
+      }
+      .card li .mk {
+        flex: none;
+        margin-top: 2px;
+      }
+      .card li .mk .ico {
+        width: 20px;
+        height: 20px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+      .mt32 {
+        margin-top: 32px;
+      }
+      .callout {
+        border-radius: var(--r);
+        padding: 18px 22px;
+        margin: 24px 0 0;
+        border-left: 3px solid var(--finza-blue);
+      }
+      .callout.warn {
+        border-left-color: var(--amber);
+      }
+      .callout.crit {
+        border-left-color: var(--coral);
+      }
+      .callout.ok {
+        border-left-color: var(--success);
+      }
+      .callout h4 {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.98rem;
+        margin-bottom: 6px;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .callout.warn h4 {
+        color: var(--amber);
+      }
+      .callout.crit h4 {
+        color: var(--coral);
+      }
+      .callout.ok h4 {
+        color: var(--success);
+      }
+      .callout p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+      .callout .badge {
+        font-family: var(--f-mono);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        background: var(--finza-blue-soft);
+        color: var(--finza-blue);
+        padding: 4px 10px;
+        border-radius: 7px;
+        text-transform: uppercase;
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+          transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+
+      /* ---------- feature card (fucionalidades / segurança / modos) ---------- */
+      .feat {
+        border-radius: var(--r-lg);
+        padding: 24px;
+        border: 1px solid var(--stroke);
+        background: var(--panel);
+        box-shadow: var(--hi), var(--lift);
+        display: flex;
+        flex-direction: column;
+      }
+      .feat .ico {
+        color: var(--finza-blue);
+        margin-bottom: 16px;
+      }
+      .feat.hl {
+        border-color: transparent;
+        background: var(--finza-blue);
+      }
+      .feat.hl .ico {
+        color: #fff;
+      }
+      .feat h4 {
+        font-family: var(--f-disp);
+        font-size: 1.02rem;
+        margin-bottom: 8px;
+        color: var(--ink);
+      }
+      .feat.hl h4 {
+        color: #fff;
+      }
+      .feat p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .feat.hl p {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ---------- arc / stages (contexto) ---------- */
+      .arc {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 26px;
+      }
+      .arcstage {
+        border: 1px solid var(--stroke);
+        background: var(--deep);
+        border-radius: 12px;
+        padding: 22px 20px;
+      }
+      .arcstage .ph {
+        font-family: var(--f-mono);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--finza-blue);
+        margin-bottom: 12px;
+      }
+      .arcstage .h {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--ink);
+        margin-bottom: 9px;
+        line-height: 1.2;
+      }
+      .arcstage .d {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .arcstage.final {
+        background: var(--finza-blue);
+        border-color: transparent;
+      }
+      .arcstage.final .ph {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .arcstage.final .h {
+        color: #fff;
+      }
+      .arcstage.final .d {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ---------- journey ---------- */
+      .journey {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        margin-top: 26px;
+      }
+      .jstep {
+        border: 1px solid var(--stroke);
+        background: var(--panel);
+        border-radius: 12px;
+        padding: 22px 18px;
+        box-shadow: var(--hi), var(--lift);
+      }
+      .jstep .num {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        background: var(--finza-blue-soft);
+        color: var(--finza-blue);
+        font-family: var(--f-disp);
+        font-size: 1.2rem;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        margin-bottom: 18px;
+      }
+      .jstep .h {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--ink);
+        margin-bottom: 8px;
+        line-height: 1.2;
+      }
+      .jstep .d {
+        font-size: 0.83rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .jstep.start,
+      .jstep.end {
+        border-color: transparent;
+      }
+      .jstep.start {
+        background: var(--finza-blue);
+      }
+      .jstep.end {
+        background: var(--finza-blue-deep);
+      }
+      .jstep.start .num,
+      .jstep.end .num {
+        background: rgba(255, 255, 255, 0.16);
+        color: #fff;
+      }
+      .jstep.start .h,
+      .jstep.end .h {
+        color: #fff;
+      }
+      .jstep.start .d,
+      .jstep.end .d {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ---------- pipeline (arquitetura) ---------- */
+      .pipe {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .pnode {
+        flex: 1 1 175px;
+        min-width: 165px;
+        background: var(--panel-2);
+        border: 1px solid var(--stroke-2);
+        border-left: 3px solid var(--finza-blue);
+        border-radius: 11px;
+        padding: 16px 15px;
+      }
+      .pnode.accent {
+        border-left-color: var(--iris);
+        background: rgba(var(--azure-rgb), 0.07);
+      }
+      .pnode.io {
+        border-style: dashed;
+        border-left-style: solid;
+        background: var(--deep);
+      }
+      .pnode .ico {
+        width: 26px;
+        height: 26px;
+        color: var(--finza-blue);
+        margin-bottom: 11px;
+      }
+      .pnode.accent .ico {
+        color: var(--iris);
+      }
+      .pnode .pt {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: var(--ink);
+        line-height: 1.2;
+      }
+      .pnode .ps {
+        font-size: 0.76rem;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.4;
+      }
+      .tools {
+        margin-top: 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        background: var(--glass-2);
+        border: 1px solid var(--stroke);
+        border-radius: var(--r);
+        padding: 16px 20px;
+      }
+      .tools .lbl {
+        font-family: var(--f-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--finza-blue);
+        font-weight: 700;
+      }
+      .chip {
+        font-family: var(--f-mono);
+        font-size: 0.78rem;
+        color: var(--muted);
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 8px;
+        padding: 7px 13px;
+      }
+
+      /* ---------- debounce (mockrow + mechanics) ---------- */
+      .mockrow {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 30px;
+        align-items: start;
+        margin-top: 26px;
+      }
+      .phone {
+        border-radius: 30px;
+        padding: 12px;
+        border: 1px solid var(--stroke-2);
+      }
+      .wa {
+        background: #0a1014;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+      .wa .wbar {
+        background: #141d22;
+        color: #e9edef;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-size: 0.85rem;
+      }
+      .wa .wbar .av {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--mint), var(--azure));
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.8rem;
+        flex: none;
+        font-family: var(--f-disp);
+      }
+      .wa .wbody {
+        padding: 16px 13px;
+        background: #0a1014;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .wbubble {
+        background: #1e2a30;
+        color: #e9edef;
+        padding: 9px 12px;
+        border-radius: 11px 11px 11px 3px;
+        max-width: 82%;
+        font-size: 0.83rem;
+        line-height: 1.45;
+        align-self: flex-start;
+      }
+      .wbubble.out {
+        background: #0b3d33;
+        border-radius: 11px 11px 3px 11px;
+        align-self: flex-end;
+        border: 1px solid rgba(var(--mint-rgb), 0.25);
+      }
+      .consolidate {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 4px 0;
+        color: #7fb0ff;
+        font-family: var(--f-mono);
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .consolidate .line {
+        flex: 1;
+        height: 1px;
+        background: rgba(127, 176, 255, 0.35);
+      }
+      .mech {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .m {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .m .mi {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        background: var(--finza-blue-soft);
+        color: var(--finza-blue);
+        display: grid;
+        place-items: center;
+        flex: none;
+      }
+      .m .mi .ico {
+        width: 22px;
+        height: 22px;
+      }
+      .m .mt {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--ink);
+        margin-bottom: 3px;
+      }
+      .m .md {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .statrow {
+        display: flex;
+        gap: 14px;
+        margin-top: 22px;
+      }
+      .stattile {
+        flex: 1;
+        border: 1px solid var(--stroke);
+        background: var(--deep);
+        border-radius: var(--r);
+        padding: 18px;
+        text-align: center;
+      }
+      .stattile .big {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1.9rem;
+        color: var(--finza-blue);
+        line-height: 1;
+      }
+      .stattile .cap {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 7px;
+      }
+
+      /* ---------- accept / reject ---------- */
+      .accept {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 24px;
+      }
+      .ac {
+        border-radius: var(--r);
+        padding: 20px 22px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        border: 1px solid var(--stroke);
+      }
+      .ac.yes {
+        background: var(--finza-blue-soft);
+        border-color: transparent;
+      }
+      .ac.no {
+        background: rgba(var(--coral-rgb), 0.1);
+        border-color: transparent;
+      }
+      .ac .mk {
+        flex: none;
+        margin-top: 2px;
+      }
+      .ac.yes .mk {
+        color: var(--finza-blue);
+      }
+      .ac.no .mk {
+        color: var(--coral);
+      }
+      .ac .txt {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--ink);
+      }
+      .ac .txt span {
+        display: block;
+        font-family: var(--f-body);
+        font-weight: 400;
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* ---------- tables + status pills ---------- */
+      .tablewrap {
+        overflow-x: auto;
+        border: 1px solid var(--stroke);
+        border-radius: var(--r);
+        margin: 26px 0 0;
+        background: var(--panel);
+        box-shadow: var(--hi), var(--lift);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+        min-width: 560px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--stroke);
+        vertical-align: top;
+      }
+      thead th {
+        background: var(--finza-blue-soft);
+        font-family: var(--f-disp);
+        font-weight: 700;
+        color: var(--finza-blue-deep);
+        font-size: 0.72rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: rgba(var(--azure-rgb), 0.06);
+      }
+      td .tt {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        color: var(--ink);
+      }
+      td .td {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .st {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--f-mono);
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 4px 11px;
+        border-radius: 6px;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .st::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 2px;
+      }
+      .st.stub {
+        color: var(--amber);
+        background: rgba(var(--amber-rgb), 0.16);
+      }
+      .st.stub::before {
+        background: var(--amber);
+      }
+      .st.prod {
+        color: var(--finza-blue);
+        background: rgba(var(--azure-rgb), 0.12);
+      }
+      .st.prod::before {
+        background: var(--finza-blue);
+      }
+      .legend {
+        margin-top: 18px;
+        font-family: var(--f-mono);
+        font-size: 0.78rem;
+        color: var(--muted);
+        display: flex;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+      .legend b {
+        color: var(--ink);
+      }
+
+      /* ---------- event chain (acionamento) ---------- */
+      .chain {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 26px;
+      }
+      .ev {
+        border: 1px solid var(--stroke);
+        background: var(--panel);
+        border-radius: 12px;
+        padding: 22px 20px;
+        box-shadow: var(--hi), var(--lift);
+      }
+      .ev .n {
+        font-family: var(--f-mono);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--finza-blue);
+        margin-bottom: 12px;
+      }
+      .ev .h {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--ink);
+        margin-bottom: 9px;
+      }
+      .ev .d {
+        font-size: 0.86rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .ev.fire {
+        background: var(--finza-blue);
+        border-color: transparent;
+      }
+      .ev.fire .n {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .ev.fire .h {
+        color: #fff;
+      }
+      .ev.fire .d {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ---------- version steps (evolução) ---------- */
+      .vsteps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 26px;
+      }
+      .vstep {
+        border: 1px solid var(--stroke);
+        background: var(--panel);
+        border-left: 4px solid var(--finza-blue);
+        border-radius: 12px;
+        padding: 22px 20px;
+        box-shadow: var(--hi), var(--lift);
+      }
+      .vstep .v {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1.35rem;
+        color: var(--finza-blue);
+        letter-spacing: -0.02em;
+        margin-bottom: 12px;
+      }
+      .vstep .h {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--ink);
+        margin-bottom: 8px;
+      }
+      .vstep .d {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .vstep.cur {
+        background: var(--finza-blue);
+        border-left-color: #fff;
+      }
+      .vstep.cur .v,
+      .vstep.cur .h {
+        color: #fff;
+      }
+      .vstep.cur .d {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .qstats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 20px;
+      }
+      .qstat {
+        border: 1px solid var(--stroke);
+        background: var(--deep);
+        border-radius: var(--r);
+        padding: 24px 20px;
+      }
+      .qstat .big {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: var(--finza-blue);
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+      .qstat .t {
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--ink);
+        margin: 14px 0 6px;
+      }
+      .qstat .d {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .qstat.hl {
+        background: var(--finza-blue);
+        border-color: transparent;
+      }
+      .qstat.hl .big {
+        color: #fff;
+      }
+      .qstat.hl .t {
+        color: #fff;
+      }
+      .qstat.hl .d {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ---------- futuro lists ---------- */
+      .flist {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .flist li {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        font-size: 0.96rem;
+        color: var(--ink);
+        line-height: 1.45;
+      }
+      .flist li .mk {
+        flex: none;
+        margin-top: 2px;
+        color: var(--finza-blue);
+        font-weight: 700;
+      }
+      .flist li .mk .ico {
+        width: 20px;
+        height: 20px;
+      }
+      .goal {
+        margin-top: 22px;
+        background: var(--finza-blue);
+        color: #fff;
+        border-radius: var(--r);
+        padding: 22px 26px;
+        font-family: var(--f-disp);
+        font-weight: 600;
+        font-size: 1.05rem;
+        line-height: 1.45;
+      }
+
+      /* ---------- resumo ---------- */
+      .resumo {
+        border-radius: var(--r-lg);
+        border: 2px dotted var(--finza-blue);
+        padding: 44px 40px;
+        position: relative;
+      }
+      .resumo .iaf {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        font-family: var(--f-disp);
+        font-weight: 700;
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+        color: var(--finza-blue);
+        opacity: 0.65;
+      }
+      .resumo h2 {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        max-width: 20ch;
+      }
+      .resumo p {
+        color: var(--muted);
+        font-size: 1.12rem;
+        max-width: 70ch;
+        margin: 18px 0 0;
+      }
+      .points {
+        margin-top: 28px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .points .p {
+        background: var(--finza-blue-soft);
+        color: var(--finza-blue);
+        border-radius: 999px;
+        padding: 10px 20px;
+        font-family: var(--f-disp);
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      /* footer */
+      footer {
+        border-top: 1px solid var(--stroke);
+        padding: 52px 0 68px;
+        color: var(--faint);
+        font-size: 0.85rem;
+        margin-top: 40px;
+      }
+      footer .wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      footer b {
+        color: var(--ink);
+      }
+      footer .mono {
+        font-family: var(--f-mono);
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 980px) {
+        .metrics {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .arc,
+        .journey,
+        .chain,
+        .vsteps,
+        .qstats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .grid3 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .mockrow {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .section {
+          padding: 64px 0;
+        }
+        .metrics,
+        .grid2,
+        .grid3,
+        .arc,
+        .journey,
+        .chain,
+        .vsteps,
+        .qstats,
+        .accept {
+          grid-template-columns: 1fr;
+        }
+        .statrow {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="bggrid"></div>
+
+    <!-- ===================== TOP BAR ===================== -->
+    <div class="topbar">
+      <div class="wrap row">
+        <div class="brand"><span class="dot"></span>Clara</div>
+        <nav class="spy" id="spy">
+          <a href="#visao">O que é</a>
+          <a href="#contexto">Contexto</a>
+          <a href="#fucionalidades">O que faz</a>
+          <a href="#jornada">Jornada</a>
+          <a href="#arquitetura">Arquitetura</a>
+          <a href="#debounce">Debounce</a>
+          <a href="#multimodal">Multimodal</a>
+          <a href="#seguranca">Segurança</a>
+          <a href="#integracoes">Integrações</a>
+          <a href="#acionamento">Acionamento</a>
+          <a href="#evolucao">Evolução</a>
+          <a href="#futuro">Futuro</a>
+          <a href="#resumo">Resumo</a>
+        </nav>
+        <span class="iaf-mark">◆ iaf</span>
+        <button
+          class="themetgl glass"
+          id="themeBtn"
+          aria-label="Alternar tema claro/escuro"
+          title="Alternar tema"
+        >
+          ◐
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================== HERO ===================== -->
+    <header class="hero">
+      <div class="wrap inner">
+        <div class="tagrow">
+          <span class="pill anim-up">◆ agente de IA · Finza</span>
+          <span class="pill anim-up">formalização por WhatsApp</span>
+          <span class="pill prod anim-up">● versão atual v3.0</span>
+          <span class="pill paused anim-up"
+            >⏸ validada em ambiente de teste</span
+          >
+          <span class="pill anim-up">stack n8n · LLM · WhatsApp</span>
+        </div>
+        <h1 class="anim-up">
+          Clara — Agente de <span class="g">Formalização</span>
+        </h1>
+        <p class="sub anim-up">
+          A atendente de IA que conduz a formalização de contratos por WhatsApp
+          — <b>humana, guiada e sem atrito</b>. Depois que o cliente paga o
+          sinal, é a Clara quem puxa a conversa, explica o que falta e recolhe
+          os comprovantes exigidos, uma etapa por vez, operando dentro da Finza.
+          <b>A validação final é sempre de uma pessoa.</b>
+        </p>
+        <div class="meta anim-up">
+          <span>apresentação · <b>15/07/2026</b></span>
+          <span>autor · <b>João Pedro</b></span>
+          <span>área · <b>IA &amp; Automação</b></span>
+          <span>canal · <b>WhatsApp</b></span>
+        </div>
+
+        <div class="metrics" id="metrics">
+          <div class="metric c-accent">
+            <div class="n" data-count="7">0</div>
+            <div class="l">Fucionalidades</div>
+            <div class="src">o que a Clara faz</div>
+          </div>
+          <div class="metric">
+            <div class="n" data-count="10">0</div>
+            <div class="l">Experimentos em paralelo</div>
+            <div class="src">arquiteturas testadas</div>
+          </div>
+          <div class="metric">
+            <div class="n" data-count="5">0</div>
+            <div class="l">Rodadas de revisão</div>
+            <div class="src">conformidade → UX</div>
+          </div>
+          <div class="metric">
+            <div class="n" data-count="5">0</div>
+            <div class="l">Avaliadores no painel</div>
+            <div class="src">conduta + regras</div>
+          </div>
+          <div class="metric c-accent">
+            <div class="n">v3.0</div>
+            <div class="l">Versão atual</div>
+            <div class="src">áudio · imagem · encerramento</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ===================== O QUE É ===================== -->
+      <section class="section" id="visao">
+        <div class="wrap">
+          <div class="eyebrow reveal">O que é</div>
+          <h2 class="reveal">
+            Um agente de IA que formaliza contratos conversando
+          </h2>
+          <p class="lede reveal">
+            Depois que o cliente paga o sinal, é a Clara quem puxa a conversa no
+            WhatsApp, explica o que falta e recolhe os comprovantes exigidos —
+            de forma humana, uma etapa por vez, operando dentro da Finza. A
+            validação final é sempre de uma pessoa.
+          </p>
+
+          <div class="grid2 mt32">
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3>
+                <svg class="ico" viewBox="0 0 24 24">
+                  <polyline points="4 12 10 18 20 6" /></svg
+                >O que ela é
+              </h3>
+              <ul>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--finza-blue)"
+                    >
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Um agente de IA que entende texto, áudio e imagem
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--finza-blue)"
+                    >
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Confere documentos e confirma antes de registrar
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--finza-blue)"
+                    >
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Tira dúvidas de processo com base no conhecimento oficial
+                </li>
+              </ul>
+            </div>
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3>
+                <svg
+                  class="ico"
+                  viewBox="0 0 24 24"
+                  style="color: var(--muted)"
+                >
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="18" y1="6" x2="6" y2="18" /></svg
+                >O que ela não é
+              </h3>
+              <ul>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--faint)"
+                    >
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                      <line x1="18" y1="6" x2="6" y2="18" /></svg></span
+                  >Não é um chatbot de menu com opções fixas
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--faint)"
+                    >
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                      <line x1="18" y1="6" x2="6" y2="18" /></svg></span
+                  >Não despeja a lista inteira de documentos de uma vez
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--faint)"
+                    >
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                      <line x1="18" y1="6" x2="6" y2="18" /></svg></span
+                  >Não decide aprovação — e nunca promete resultado
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg
+                      class="ico"
+                      viewBox="0 0 24 24"
+                      style="color: var(--faint)"
+                    >
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                      <line x1="18" y1="6" x2="6" y2="18" /></svg></span
+                  >Não coleta ou valida documentação de identificação
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout ok reveal">
+            <h4>
+              <svg
+                class="ico"
+                viewBox="0 0 24 24"
+                style="width: 18px; height: 18px"
+              >
+                <polyline points="5 12 10 17 19 7" /></svg
+              >Humana no fim
+            </h4>
+            <p>
+              A Clara conduz e organiza a coleta, mas a decisão final é sempre
+              de uma pessoa — ela nunca decide aprovação nem promete resultado.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== CONTEXTO ===================== -->
+      <section class="section" id="contexto">
+        <div class="wrap">
+          <div class="eyebrow reveal">Contexto e origem</div>
+          <h2 class="reveal">Da formalização manual à automação da Finza</h2>
+          <p class="lede reveal">
+            A coleta de comprovantes começou 100% manual, foi ganhando
+            automações por fase e, por fim, a Finza assumiu a coleta e a análise
+            da documentação — tanto de clientes de origem BLIPS quanto IDEAL. A
+            Clara é a forma conversacional dessa coleta.
+          </p>
+
+          <div class="arc reveal">
+            <div class="arcstage">
+              <div class="ph">Antes</div>
+              <div class="h">100% manual</div>
+              <div class="d">
+                E-mails, cobranças e conferência à mão, cliente a cliente.
+              </div>
+            </div>
+            <div class="arcstage">
+              <div class="ph">Depois</div>
+              <div class="h">Automações por fase</div>
+              <div class="d">
+                Apoio pontual em etapas do processo, ainda fragmentado.
+              </div>
+            </div>
+            <div class="arcstage">
+              <div class="ph">A partir daí</div>
+              <div class="h">Finza assume a coleta</div>
+              <div class="d">
+                Coleta e análise centralizadas na Finza, parceira responsável.
+              </div>
+            </div>
+            <div class="arcstage final">
+              <div class="ph">Hoje</div>
+              <div class="h">Clara conversacional</div>
+              <div class="d">
+                Um agente de IA conduz o cliente pelo WhatsApp, sem atrito.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== O QUE FAZ ===================== -->
+      <section class="section" id="fucionalidades">
+        <div class="wrap">
+          <div class="eyebrow reveal">O que faz</div>
+          <h2 class="reveal">Sete fucionalidades que definem a Clara</h2>
+
+          <div class="grid3 mt32">
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>
+              <h4>Atendimento ativo</h4>
+              <p>
+                A Clara inicia a conversa; o cliente nunca precisa dar o
+                primeiro passo.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M9 11l3 3L22 4" />
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                />
+              </svg>
+              <h4>Uma etapa por vez</h4>
+              <p>
+                Pede os comprovantes na ordem certa, sem listar tudo de uma vez.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <path d="M3 15l5-5 4 4 3-3 6 6" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+              </svg>
+              <h4>Multimodal</h4>
+              <p>Entende texto, transcreve áudios e analisa imagens e PDFs.</p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 10 10" />
+                <polyline points="8 12 11 15 16 8" />
+                <path d="M22 4l-4 4" />
+              </svg>
+              <h4>Handshake do valor</h4>
+              <p>
+                Ecoa o endereço extraído e só registra após o cliente confirmar.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.5" y2="16.5" />
+                <line x1="11" y1="8" x2="11" y2="12" />
+                <circle cx="11" cy="14.5" r="0.6" style="fill: currentColor" />
+              </svg>
+              <h4>Dúvidas via RAG</h4>
+              <p>
+                Responde com base oficial (titularidade, prazos, formatos), sem
+                inventar.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M17 3l4 4-4 4" />
+                <path d="M21 7H8a4 4 0 0 0-4 4v0" />
+                <path d="M7 21l-4-4 4-4" />
+                <path d="M3 17h10" />
+              </svg>
+              <h4>Transferência direcionada</h4>
+              <p>
+                Oferece (não age sozinha) e encaminha ao responsável, citando só
+                o 1º nome.
+              </p>
+            </div>
+            <div class="feat hl reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="2" />
+                <line x1="7" y1="9" x2="17" y2="9" />
+                <line x1="7" y1="13" x2="14" y2="13" />
+              </svg>
+              <h4>Encerra com responsabilidade</h4>
+              <p>
+                Avisa que a documentação seguiu para análise — nunca promete
+                aprovação.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              <h4>Sempre humana no fim</h4>
+              <p>
+                A decisão final é de uma pessoa; a Clara conduz e organiza a
+                coleta.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== JORNADA ===================== -->
+      <section class="section" id="jornada">
+        <div class="wrap">
+          <div class="eyebrow reveal">Jornada do cliente</div>
+          <h2 class="reveal">Coleta guiada, do disparo à conclusão</h2>
+          <p class="lede reveal">
+            O estado da coleta é derivado das etapas do conhecimento menos o que
+            já está no banco — a Clara pede sempre a próxima pendente.
+          </p>
+
+          <div class="journey reveal">
+            <div class="jstep start">
+              <div class="num">1</div>
+              <div class="h">Disparo ativo</div>
+              <div class="d">
+                Evento de "ganho" aciona a Clara, que abre a conversa.
+              </div>
+            </div>
+            <div class="jstep">
+              <div class="num">2</div>
+              <div class="h">Endereço residencial</div>
+              <div class="d">
+                Primeira etapa: comprovante de endereço residencial.
+              </div>
+            </div>
+            <div class="jstep">
+              <div class="num">3</div>
+              <div class="h">Endereço da empresa</div>
+              <div class="d">
+                Comprovante do endereço da empresa do cliente.
+              </div>
+            </div>
+            <div class="jstep">
+              <div class="num">4</div>
+              <div class="h">Endereço de entrega</div>
+              <div class="d">
+                Comprovante do endereço de entrega do equipamento.
+              </div>
+            </div>
+            <div class="jstep end">
+              <div class="num">5</div>
+              <div class="h">Conclusão</div>
+              <div class="d">
+                Documentação segue para análise humana — sem promessa de
+                aprovação.
+              </div>
+            </div>
+          </div>
+
+          <div class="callout reveal">
+            <h4><span class="badge">Construção Civil</span></h4>
+            <p>
+              Para esse segmento, a Clara coleta itens adicionais na sequência,
+              antes de concluir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ARQUITETURA ===================== -->
+      <section class="section" id="arquitetura">
+        <div class="wrap">
+          <div class="eyebrow reveal">Como funciona</div>
+          <h2 class="reveal">Arquitetura: um workflow n8n, ponta a ponta</h2>
+
+          <div class="pipe reveal">
+            <div class="pnode io">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"
+                />
+              </svg>
+              <div class="pt">WhatsApp</div>
+              <div class="ps">Mensagem do cliente</div>
+            </div>
+            <div class="pnode">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M4 12h4l2-8 4 16 2-8h4" />
+              </svg>
+              <div class="pt">Webhook</div>
+              <div class="ps">Recebe o POST</div>
+            </div>
+            <div class="pnode">
+              <svg class="ico" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15 14" />
+              </svg>
+              <div class="pt">Debounce</div>
+              <div class="ps">Espera a rajada terminar</div>
+            </div>
+            <div class="pnode">
+              <svg class="ico" viewBox="0 0 24 24">
+                <ellipse cx="12" cy="5" rx="8" ry="3" />
+                <path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5" />
+                <path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" />
+              </svg>
+              <div class="pt">Estado + Memória</div>
+              <div class="ps">Contexto do turno</div>
+            </div>
+            <div class="pnode accent">
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="4" y="7" width="16" height="12" rx="2" />
+                <path d="M12 7V4" />
+                <circle cx="9" cy="13" r="1.2" style="fill: currentColor" />
+                <circle cx="15" cy="13" r="1.2" style="fill: currentColor" />
+              </svg>
+              <div class="pt">Agente LLM</div>
+              <div class="ps">Decide, analisa, registra + Tools</div>
+            </div>
+            <div class="pnode">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z" />
+              </svg>
+              <div class="pt">Guardrail</div>
+              <div class="ps">Uma etapa por vez</div>
+            </div>
+            <div class="pnode">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>
+              <div class="pt">Quebra de mensagens</div>
+              <div class="ps">Resposta natural no WhatsApp</div>
+            </div>
+          </div>
+
+          <div class="tools reveal">
+            <span class="lbl">Ferramentas do agente</span>
+            <span class="chip">Analisar documento</span>
+            <span class="chip">Registrar endereço</span>
+            <span class="chip">Transferir</span>
+            <span class="chip">Base de conhecimento</span>
+            <span class="chip">Responsável Bitrix</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== DEBOUNCE ===================== -->
+      <section class="section" id="debounce">
+        <div class="wrap">
+          <div class="eyebrow reveal">Debounce · padrão PILHA</div>
+          <h2 class="reveal">Uma rajada, uma resposta</h2>
+          <p class="lede reveal">
+            No WhatsApp, o cliente manda várias mensagens seguidas. O debounce
+            espera a rajada terminar e consolida tudo em um único processamento
+            — nada de respostas atropeladas.
+          </p>
+
+          <div class="mockrow reveal">
+            <div class="phone">
+              <div class="wa">
+                <div class="wbar">
+                  <span class="av">C</span><span>Cliente · WhatsApp</span>
+                </div>
+                <div class="wbody">
+                  <div class="wbubble">Oi, tudo bem?</div>
+                  <div class="wbubble">Recebi sua mensagem</div>
+                  <div class="wbubble">Segue o comprovante em anexo</div>
+                  <div class="consolidate">
+                    <span class="line"></span>consolida<span
+                      class="line"
+                    ></span>
+                  </div>
+                  <div class="wbubble out">
+                    Perfeito! Recebi seu comprovante. O endereço é Rua X, 123?
+                    Pode confirmar?
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="mech">
+                <div class="m">
+                  <div class="mi">
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M12 3v18" />
+                      <path d="M6 8l6-5 6 5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="mt">Versão</div>
+                    <div class="md">
+                      Cada mensagem incrementa a versão do estado; a última
+                      vence.
+                    </div>
+                  </div>
+                </div>
+                <div class="m">
+                  <div class="mi">
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="9" />
+                      <polyline points="12 7 12 12 15 14" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="mt">Janela de silêncio</div>
+                    <div class="md">
+                      A run aguarda o cliente parar antes de processar; versões
+                      antigas abortam.
+                    </div>
+                  </div>
+                </div>
+                <div class="m">
+                  <div class="mi">
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <rect x="5" y="11" width="14" height="9" rx="2" />
+                      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="mt">Lock</div>
+                    <div class="md">
+                      Só a versão vencedora adquire o lock e consolida a rajada.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="statrow">
+                <div class="stattile">
+                  <div class="big">12s</div>
+                  <div class="cap">janela para texto</div>
+                </div>
+                <div class="stattile">
+                  <div class="big">25s</div>
+                  <div class="cap">janela para mídia</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== MULTIMODAL ===================== -->
+      <section class="section" id="multimodal">
+        <div class="wrap">
+          <div class="eyebrow reveal">Multimodal · Visão / OCR</div>
+          <h2 class="reveal">Entende texto, áudio e imagem</h2>
+          <p class="lede reveal">
+            A mídia é roteada por tipo: áudio é transcrito, imagem e PDF passam
+            por visão/OCR e viram um bloco de análise confiável do servidor.
+            Texto segue direto.
+          </p>
+
+          <div class="grid3 mt32">
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M4 7h16" />
+                <path d="M4 12h10" />
+                <path d="M4 17h13" />
+              </svg>
+              <h4>Texto</h4>
+              <p>Interpretado diretamente como fala do cliente no turno.</p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="9" y="3" width="6" height="12" rx="3" />
+                <path d="M5 11a7 7 0 0 0 14 0" />
+                <line x1="12" y1="18" x2="12" y2="21" />
+              </svg>
+              <h4>Áudio</h4>
+              <p>Baixado, convertido e transcrito por modelo multimodal.</p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <circle cx="8.5" cy="8.5" r="1.6" />
+                <path d="M3 16l5-5 4 4 3-3 6 6" />
+              </svg>
+              <h4>Imagem / PDF</h4>
+              <p>Analisado por visão/OCR, gerando o dado do documento.</p>
+            </div>
+          </div>
+
+          <div class="accept reveal">
+            <div class="ac yes">
+              <span class="mk"
+                ><svg class="ico" viewBox="0 0 24 24">
+                  <polyline points="5 12 10 17 19 7" /></svg
+              ></span>
+              <div class="txt">
+                Aceita foto do documento físico ou PDF<span
+                  >Comprovantes legíveis, do documento original</span
+                >
+              </div>
+            </div>
+            <div class="ac no">
+              <span class="mk"
+                ><svg class="ico" viewBox="0 0 24 24">
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="18" y1="6" x2="6" y2="18" /></svg
+              ></span>
+              <div class="txt">
+                Recusa printscreen de tela<span
+                  >Captura de tela não é aceita como comprovante</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SEGURANÇA ===================== -->
+      <section class="section" id="seguranca">
+        <div class="wrap">
+          <div class="eyebrow reveal">Segurança &amp; confiabilidade</div>
+          <h2 class="reveal">Defesas determinísticas, não só prompt</h2>
+
+          <div class="grid3 mt32">
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+              <h4>Confiança-zero</h4>
+              <p>
+                O conteúdo do cliente nunca é tratado como instrução ou comando
+                de sistema.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <line x1="5" y1="5" x2="19" y2="19" />
+              </svg>
+              <h4>Anti-injeção</h4>
+              <p>
+                A única análise válida é a da ferramenta chamada pela própria
+                Clara.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="5" y="11" width="14" height="9" rx="2" />
+                <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+              </svg>
+              <h4>Gate de mídia por host</h4>
+              <p>
+                URL de mídia validada contra allowlist exata; mata bypass de
+                userinfo.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M4 6h16" />
+                <path d="M4 12h16" />
+                <path d="M4 18h10" />
+                <polyline points="17 15 20 18 17 21" />
+              </svg>
+              <h4>Guardrail determinístico</h4>
+              <p>Código, não só prompt, garante uma única etapa por turno.</p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                <line x1="4" y1="20" x2="20" y2="4" />
+              </svg>
+              <h4>Não vaza sistemas</h4>
+              <p>
+                Envelope mínimo: sem IDs internos, prompts ou nomes de
+                ferramentas.
+              </p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+              <h4>Não promete aprovação</h4>
+              <p>
+                A decisão final é sempre humana; a Clara apenas conduz a coleta.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== INTEGRAÇÕES ===================== -->
+      <section class="section" id="integracoes">
+        <div class="wrap">
+          <div class="eyebrow reveal">Integrações</div>
+          <h2 class="reveal">Conectada ao ecossistema Finza</h2>
+          <p class="lede reveal">
+            Todas as integrações externas hoje são stubs em ambiente de teste;
+            entram em produção quando o ambiente for liberado.
+          </p>
+
+          <div class="tablewrap reveal">
+            <table>
+              <thead>
+                <tr>
+                  <th>Integração</th>
+                  <th>Papel</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="tt">Hyperflow / WhatsApp</div></td>
+                  <td>
+                    <div class="td">
+                      Canal de conversa: envio das mensagens e transferência.
+                    </div>
+                  </td>
+                  <td><span class="st stub">Stub em teste</span></td>
+                </tr>
+                <tr>
+                  <td><div class="tt">Bitrix</div></td>
+                  <td>
+                    <div class="td">
+                      Resolve o responsável do card e registra o andamento.
+                    </div>
+                  </td>
+                  <td><span class="st stub">Stub em teste</span></td>
+                </tr>
+                <tr>
+                  <td><div class="tt">API da Plataforma / Finza</div></td>
+                  <td>
+                    <div class="td">
+                      Recebe o arquivo do comprovante e o endereço estruturado.
+                    </div>
+                  </td>
+                  <td><span class="st stub">Stub em teste</span></td>
+                </tr>
+                <tr>
+                  <td><div class="tt">Base de conhecimento (RAG)</div></td>
+                  <td>
+                    <div class="td">
+                      Fornece etapas, instruções e respostas de dúvidas.
+                    </div>
+                  </td>
+                  <td><span class="st stub">Stub em teste</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="legend reveal">
+            <span><b>Stub</b> — simulado em ambiente de teste</span
+            ><span><b>Produção</b> — ativado após liberação do ambiente</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ACIONAMENTO ===================== -->
+      <section class="section" id="acionamento">
+        <div class="wrap">
+          <div class="eyebrow reveal">Como é acionada</div>
+          <h2 class="reveal">
+            Event-driven: disparada quando a negociação é ganha
+          </h2>
+
+          <div class="chain reveal">
+            <div class="ev">
+              <div class="n">Evento</div>
+              <div class="h">"Ganho"</div>
+              <div class="d">
+                Sinal pago / assinatura / negócio ganho no Pipe.
+              </div>
+            </div>
+            <div class="ev">
+              <div class="n">Plataforma</div>
+              <div class="h">Pede à Finza</div>
+              <div class="d">A Plataforma solicita a formalização à Finza.</div>
+            </div>
+            <div class="ev">
+              <div class="n">Finza</div>
+              <div class="h">Dispara a Clara</div>
+              <div class="d">
+                Outro fluxo n8n chama o webhook com o evento <b>início</b>.
+              </div>
+            </div>
+            <div class="ev fire">
+              <div class="n">Clara</div>
+              <div class="h">Abre a conversa</div>
+              <div class="d">
+                Atendimento ativo no WhatsApp; respostas chegam como "mensagem".
+              </div>
+            </div>
+          </div>
+
+          <div class="callout reveal">
+            <h4>
+              <svg
+                class="ico"
+                viewBox="0 0 24 24"
+                style="width: 18px; height: 18px; color: var(--finza-blue)"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <circle
+                  cx="12"
+                  cy="16"
+                  r="0.6"
+                  style="fill: currentColor"
+                /></svg
+              >Um único caminho de execução
+            </h4>
+            <p>
+              Não há agendamento por cron. Tanto o <b>início</b> quanto as
+              <b>mensagens</b> passam pelo mesmo debounce PILHA — sem bypass.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== EVOLUÇÃO ===================== -->
+      <section class="section" id="evolucao">
+        <div class="wrap">
+          <div class="eyebrow reveal">Evolução técnica &amp; qualidade</div>
+          <h2 class="reveal">Construção incremental e disciplinada</h2>
+          <p class="lede reveal">
+            Da primeira versão à v3.0 atual: dez experimentos de arquitetura em
+            paralelo, cinco rodadas de revisão e um roadmap de paridade com a
+            Valentina.
+          </p>
+
+          <div class="vsteps reveal">
+            <div class="vstep">
+              <div class="v">v1</div>
+              <div class="h">Baseline</div>
+              <div class="d">
+                Primeira versão do agente de formalização, ponto de partida.
+              </div>
+            </div>
+            <div class="vstep">
+              <div class="v">×10</div>
+              <div class="h">Experimentos</div>
+              <div class="d">
+                Dez arquiteturas em paralelo, testadas e comparadas.
+              </div>
+            </div>
+            <div class="vstep">
+              <div class="v">v2 · 2.1 · 2.2</div>
+              <div class="h">Consolidação</div>
+              <div class="d">
+                Debounce, estado, memória e regras de negócio amadurecem.
+              </div>
+            </div>
+            <div class="vstep cur">
+              <div class="v">v3.0</div>
+              <div class="h">Versão atual</div>
+              <div class="d">
+                Áudio e imagem, quebra de mensagens, encerramento e base de
+                conhecimento.
+              </div>
+            </div>
+          </div>
+
+          <div class="qstats reveal">
+            <div class="qstat">
+              <div class="big">10</div>
+              <div class="t">Experimentos em paralelo</div>
+              <div class="d">
+                Dez arquiteturas testadas e comparadas antes de consolidar a
+                versão.
+              </div>
+            </div>
+            <div class="qstat">
+              <div class="big">5</div>
+              <div class="t">Rodadas de revisão</div>
+              <div class="d">
+                Conformidade, robustez, bugs, segurança e experiência do
+                usuário.
+              </div>
+            </div>
+            <div class="qstat">
+              <div class="big">5</div>
+              <div class="t">Avaliadores no painel</div>
+              <div class="d">
+                Painel de cinco revisores validou conduta e regras de negócio.
+              </div>
+            </div>
+            <div class="qstat hl">
+              <div class="big">✓</div>
+              <div class="t">Paridade com a Valentina</div>
+              <div class="d">
+                Atingiu a experiência do assistente de crédito maduro e vai além
+                em engenharia.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== FUTURO ===================== -->
+      <section class="section" id="futuro">
+        <div class="wrap">
+          <div class="eyebrow reveal">Estado atual e para onde vai</div>
+          <h2 class="reveal">Validada em teste, sólida no que importa</h2>
+
+          <div class="grid2 mt32">
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3>Estado atual</h3>
+              <ul class="flist">
+                <li>
+                  <span class="mk"
+                    ><svg class="ico" viewBox="0 0 24 24">
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Comportamento conversacional e coleta guiada
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg class="ico" viewBox="0 0 24 24">
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Handshake do valor e debounce PILHA
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg class="ico" viewBox="0 0 24 24">
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Gate de mídia e base de dados própria
+                </li>
+                <li>
+                  <span class="mk"
+                    ><svg class="ico" viewBox="0 0 24 24">
+                      <polyline points="5 12 10 17 19 7" /></svg></span
+                  >Veredito: protótipo sólido — bloqueios são de infra, não de
+                  conduta
+                </li>
+              </ul>
+            </div>
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3>Pendências para produção</h3>
+              <ul class="flist">
+                <li>
+                  <span class="mk">→</span>LLM de produção: Grok (xAI) primário
+                  + Gemini fallback
+                </li>
+                <li>
+                  <span class="mk">→</span>Integrações reais: Bitrix, Hyperflow
+                  e API da Plataforma
+                </li>
+                <li>
+                  <span class="mk">→</span>RAG real (vector store) no lugar do
+                  stub atual
+                </li>
+                <li>
+                  <span class="mk">→</span>Análise de documento real (visão/OCR)
+                  e Error Workflow global
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="goal reveal">
+            Concluída essa etapa, a Clara opera como agente da Finza em
+            produção, disparada quando uma negociação é ganha.
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== RESUMO ===================== -->
+      <section class="section" id="resumo">
+        <div class="wrap">
+          <div class="eyebrow reveal">Em resumo</div>
+          <div class="resumo reveal">
+            <span class="iaf">◆ iaf</span>
+            <h2>Clara: coleta guiada, humana e sem atrito.</h2>
+            <p>
+              Um agente de IA que conduz a formalização por WhatsApp, com
+              engenharia robusta e a decisão final sempre nas mãos de uma
+              pessoa.
+            </p>
+            <div class="points">
+              <span class="p">Multimodal</span>
+              <span class="p">Uma etapa por vez</span>
+              <span class="p">Debounce PILHA</span>
+              <span class="p">Confiança-zero</span>
+              <span class="p">Paridade com a Valentina</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div>
+          <b>Clara — Agente de Formalização</b><br />João Pedro · IA &amp;
+          Automação (Finza) · 15/07/2026
+        </div>
+        <div class="mono">
+          documento derivado de<br />apresentacao-clara/ · ◆ iaf
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* theme toggle */
+      const root = document.documentElement,
+        tb = document.getElementById("themeBtn");
+      tb.addEventListener("click", () => {
+        const cur = root.getAttribute("data-theme") || "light";
+        root.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+      });
+
+      /* scroll reveal */
+      const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+      if (!reduce) {
+        const io = new IntersectionObserver(
+          (ents) => {
+            ents.forEach((en) => {
+              if (en.isIntersecting) {
+                en.target.classList.add("in");
+                io.unobserve(en.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+        document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      } else {
+        document
+          .querySelectorAll(".reveal")
+          .forEach((el) => el.classList.add("in"));
+      }
+
+      /* count up (hero metrics) */
+      function animateCount(el) {
+        const target = parseInt(el.dataset.count, 10);
+        if (reduce) {
+          el.textContent = target;
+          return;
+        }
+        let t0 = null;
+        const dur = 1200;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          const p = Math.min((ts - t0) / dur, 1);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * e);
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      const mio = new IntersectionObserver(
+        (ents) => {
+          ents.forEach((en) => {
+            if (en.isIntersecting) {
+              animateCount(en.target);
+              mio.unobserve(en.target);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+      document
+        .querySelectorAll("#metrics .n[data-count]")
+        .forEach((el) => mio.observe(el));
+
+      /* scroll-spy */
+      const spy = document.getElementById("spy"),
+        links = [...spy.querySelectorAll("a")];
+      const secs = links.map((a) =>
+        document.querySelector(a.getAttribute("href")),
+      );
+      const sio = new IntersectionObserver(
+        (ents) => {
+          ents.forEach((en) => {
+            if (en.isIntersecting) {
+              const id = "#" + en.target.id;
+              links.forEach((a) =>
+                a.classList.toggle("active", a.getAttribute("href") === id),
+              );
+            }
+          });
+        },
+        { rootMargin: "-45% 0px -50% 0px" },
+      );
+      secs.forEach((s) => {
+        if (s) sio.observe(s);
+      });
+    </script>
+  </body>
+</html>

@@ -17,7 +17,18 @@
       "mcp__quimera__list_users",
       "mcp__claude_ai_Atlassian__getVisibleJiraProjects",
       "mcp__quimera__get_ticket",
-      "PowerShell($f = \"C:\\\\Users\\\\João Vinicius\\\\Documents\\\\Finza\\\\Projetos\\\\orquestra-tarefa\\\\roadmap.html\"; \\(Get-Item $f\\).Length; \\(Get-Content $f | Measure-Object -Line\\).Lines)"
+      "PowerShell($f = \"C:\\\\Users\\\\João Vinicius\\\\Documents\\\\Finza\\\\Projetos\\\\orquestra-tarefa\\\\roadmap.html\"; \\(Get-Item $f\\).Length; \\(Get-Content $f | Measure-Object -Line\\).Lines)",
+      "mcp__supabase-prod__list_extensions",
+      "mcp__supabase-prod__list_migrations",
+      "mcp__supabase-prod__list_edge_functions",
+      "mcp__supabase-prod__list_tables",
+      "mcp__supabase-prod__list_branches",
+      "mcp__supabase-prod__get_project_url",
+      "mcp__supabase-prod__get_edge_function",
+      "mcp__supabase-prod__get_logs",
+      "mcp__supabase-prod__get_advisors",
+      "mcp__supabase-prod__execute_sql",
+      "mcp__claude_ai_Google_Cloud_BigQuery__execute_sql_readonly"
     ]
   }
 }

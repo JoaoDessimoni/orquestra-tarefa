@@ -1,0 +1,757 @@
+{
+  "object": "page",
+  "has_more": false,
+  "next_page": null,
+  "data": [
+    {
+      "object": "bucket",
+      "start_time": 1780272000,
+      "end_time": 1780358400,
+      "start_time_iso": "2026-06-01T00:00:00",
+      "end_time_iso": "2026-06-02T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "119.0289681000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780358400,
+      "end_time": 1780444800,
+      "start_time_iso": "2026-06-02T00:00:00",
+      "end_time_iso": "2026-06-03T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "131.7716786700000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780444800,
+      "end_time": 1780531200,
+      "start_time_iso": "2026-06-03T00:00:00",
+      "end_time_iso": "2026-06-04T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "92.50619658000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780531200,
+      "end_time": 1780617600,
+      "start_time_iso": "2026-06-04T00:00:00",
+      "end_time_iso": "2026-06-05T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "17.62043435000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780617600,
+      "end_time": 1780704000,
+      "start_time_iso": "2026-06-05T00:00:00",
+      "end_time_iso": "2026-06-06T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "118.0285006800000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780704000,
+      "end_time": 1780790400,
+      "start_time_iso": "2026-06-06T00:00:00",
+      "end_time_iso": "2026-06-07T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "40.12114110000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780790400,
+      "end_time": 1780876800,
+      "start_time_iso": "2026-06-07T00:00:00",
+      "end_time_iso": "2026-06-08T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "14.17010777000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780876800,
+      "end_time": 1780963200,
+      "start_time_iso": "2026-06-08T00:00:00",
+      "end_time_iso": "2026-06-09T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "371.5962720500000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1780963200,
+      "end_time": 1781049600,
+      "start_time_iso": "2026-06-09T00:00:00",
+      "end_time_iso": "2026-06-10T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "225.6581019200000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781049600,
+      "end_time": 1781136000,
+      "start_time_iso": "2026-06-10T00:00:00",
+      "end_time_iso": "2026-06-11T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "300.1315130900000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781136000,
+      "end_time": 1781222400,
+      "start_time_iso": "2026-06-11T00:00:00",
+      "end_time_iso": "2026-06-12T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "180.2536519700000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781222400,
+      "end_time": 1781308800,
+      "start_time_iso": "2026-06-12T00:00:00",
+      "end_time_iso": "2026-06-13T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "130.4977040900000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781308800,
+      "end_time": 1781395200,
+      "start_time_iso": "2026-06-13T00:00:00",
+      "end_time_iso": "2026-06-14T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "36.04234285000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781395200,
+      "end_time": 1781481600,
+      "start_time_iso": "2026-06-14T00:00:00",
+      "end_time_iso": "2026-06-15T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "29.36082242000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781481600,
+      "end_time": 1781568000,
+      "start_time_iso": "2026-06-15T00:00:00",
+      "end_time_iso": "2026-06-16T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "338.8020044200000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781568000,
+      "end_time": 1781654400,
+      "start_time_iso": "2026-06-16T00:00:00",
+      "end_time_iso": "2026-06-17T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "54.19007069000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781654400,
+      "end_time": 1781740800,
+      "start_time_iso": "2026-06-17T00:00:00",
+      "end_time_iso": "2026-06-18T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "42.90159134000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781740800,
+      "end_time": 1781827200,
+      "start_time_iso": "2026-06-18T00:00:00",
+      "end_time_iso": "2026-06-19T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "83.67627111000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781827200,
+      "end_time": 1781913600,
+      "start_time_iso": "2026-06-19T00:00:00",
+      "end_time_iso": "2026-06-20T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "77.79193953000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1781913600,
+      "end_time": 1782000000,
+      "start_time_iso": "2026-06-20T00:00:00",
+      "end_time_iso": "2026-06-21T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "32.17732551000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782000000,
+      "end_time": 1782086400,
+      "start_time_iso": "2026-06-21T00:00:00",
+      "end_time_iso": "2026-06-22T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "4.955902030000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782086400,
+      "end_time": 1782172800,
+      "start_time_iso": "2026-06-22T00:00:00",
+      "end_time_iso": "2026-06-23T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "117.1051901700000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782172800,
+      "end_time": 1782259200,
+      "start_time_iso": "2026-06-23T00:00:00",
+      "end_time_iso": "2026-06-24T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "163.3778717000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782259200,
+      "end_time": 1782345600,
+      "start_time_iso": "2026-06-24T00:00:00",
+      "end_time_iso": "2026-06-25T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "77.55702984000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782345600,
+      "end_time": 1782432000,
+      "start_time_iso": "2026-06-25T00:00:00",
+      "end_time_iso": "2026-06-26T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "116.6131194100000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782432000,
+      "end_time": 1782518400,
+      "start_time_iso": "2026-06-26T00:00:00",
+      "end_time_iso": "2026-06-27T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "84.64539061000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782518400,
+      "end_time": 1782604800,
+      "start_time_iso": "2026-06-27T00:00:00",
+      "end_time_iso": "2026-06-28T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "29.10658776000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782604800,
+      "end_time": 1782691200,
+      "start_time_iso": "2026-06-28T00:00:00",
+      "end_time_iso": "2026-06-29T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "14.78341207000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782691200,
+      "end_time": 1782777600,
+      "start_time_iso": "2026-06-29T00:00:00",
+      "end_time_iso": "2026-06-30T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "57.70295557000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782777600,
+      "end_time": 1782864000,
+      "start_time_iso": "2026-06-30T00:00:00",
+      "end_time_iso": "2026-07-01T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "87.59165850000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Salvador - iA Tecnico",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    }
+  ]
+}
