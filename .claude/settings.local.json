@@ -28,7 +28,8 @@
       "mcp__supabase-prod__get_logs",
       "mcp__supabase-prod__get_advisors",
       "mcp__supabase-prod__execute_sql",
-      "mcp__claude_ai_Google_Cloud_BigQuery__execute_sql_readonly"
+      "mcp__claude_ai_Google_Cloud_BigQuery__execute_sql_readonly",
+      "mcp__supabase-prod__get_publishable_keys"
     ]
   }
 }
