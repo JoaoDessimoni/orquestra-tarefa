@@ -1,0 +1,48 @@
+Assunto: RE: #4953 - Disparo por título x contrato | Torre de Controle - auditoria concluída
+
+Olá a todos,
+
+Concluímos a auditoria técnica do disparo da Torre em 2026. Todos os números vêm de consulta direta ao banco de produção (01/02 a 28/07, 444.724 ações) e a lógica foi lida do código em execução, não de documentação. Nada aqui é estimativa. Vou direto ao ponto.
+
+
+1. O NÚMERO ESTÁ CORRETO - mas ele diz outra coisa
+
+Confirmamos o apontamento: 172.544 comunicações a clientes já vencidos saíram com step diferente do maior atraso do cliente (a thread apontou 171.572 - 0,6% de diferença). O fenômeno existe e tem a magnitude relatada.
+
+O que a auditoria acrescenta muda a natureza do problema. A Torre dispara por título e comunica exatamente o que está configurado na régua. Quando analisamos os casos "indevidos", mais de 95% deles (96,4%) aconteceram por um único motivo: o título mais atrasado do cliente NÃO caía em nenhum degrau da régua configurada. A régua vai só até D+110 e casa por dia exato - então um título de 130, 200 ou 394 dias de atraso simplesmente não tem step para disparar, e a comunicação acaba saindo por uma parcela mais recente do mesmo cliente.
+
+Em outras palavras: não é a Torre decidindo errado. É a régua que não cobre a carteira. O retrato de 14/07 deixa isso explícito - dos 10.045 títulos vencidos, só 6,6% caíam num degrau e 52,4% já estavam acima do teto de D+110. A Torre atende todos esses cenários corretamente DESDE QUE a régua seja configurada para eles. Ela nunca foi.
+
+
+2. ISSO É CONFIGURAÇÃO, E ESTAVA VISÍVEL DESDE O DIA 1
+
+Preciso ser transparente aqui, porque impacta o encaminhamento. A cobertura da régua sobre a carteira é uma definição de negócio/operação, não de tecnologia - é a operação que define qual mensagem vai para cada faixa de atraso e até onde a escada vai. Esse comportamento não é novo nem estava escondido: ele está nos dados desde a primeira semana de produção, com volume altíssimo (dezenas de milhares de ações por mês). Não é o tipo de coisa que deveria levar 8 meses para ser percebida - é justamente o que uma validação operacional nas primeiras semanas teria pego de imediato.
+
+Faço questão de reconhecer o outro lado, com a mesma honestidade: existe sim um ponto a melhorar na Torre. Ela poderia ser mais resiliente e não depender de a régua estar 100% completa para acertar a severidade da comunicação. Esse é o furo técnico que assumimos e que já estamos corrigindo (item 3). Mas a ausência total de degrau para mais de metade da carteira vencida é uma lacuna de configuração da régua, e isso é responsabilidade compartilhada - como o próprio Leonardo colocou, faltou a camada de acompanhamento, não só ajuste técnico.
+
+
+3. O AJUSTE QUE JÁ ESTAMOS IMPLEMENTANDO (#4953)
+
+Estamos entregando exatamente o que o negócio pediu, com uma lógica adicional que fecha o furo de severidade de vez. Como a Torre processa título a título, o ajuste passa a funcionar assim:
+
+- Ao avaliar um título, a Torre verifica se o cliente tem QUALQUER outro título mais atrasado (independente de contrato). Se tiver, ela não comunica por aquele título - busca sempre o de maior atraso do cliente.
+- Se o maior atraso do cliente ultrapassa o último degrau da régua, a comunicação sai por padrão com a mensagem do ÚLTIMO step configurado (o mais severo). Ou seja, um cliente com 300 dias de atraso passa a receber a mensagem mais dura da régua, e não uma preventiva.
+- Resultado: o problema de severidade relatado é resolvido, e não fica brecha para contratos com títulos muito atrasados - mesmo sem a régua ter um degrau exato para cada dia.
+- E mantém o comportamento que já validamos: por padrão, 1 única mensagem por cliente, cobrindo todos os títulos e contratos em atraso.
+
+Sobre a dúvida do Bruno de mensagens simultâneas: medimos por cliente/dia e a deduplicação está efetiva - média de 1,45 a 1,93 ações/cliente/dia (o par WhatsApp + e-mail do mesmo degrau) e, em julho, no máximo 2 WhatsApp para o mesmo cliente no dia. O cliente não recebe uma comunicação por boleto. Continua sendo 1 por cliente.
+
+Vale reforçar: com esse ajuste, a régua ganha ainda mais eficácia se a operação também estender os degraus acima de D+110 e revisar as faixas - mas isso vira granularidade fina, não pré-requisito. A parte técnica que garante a severidade correta é nossa e está sendo feita.
+
+
+4. PARA NÃO SE REPETIR
+
+Concordo integralmente com a proposta de critérios de aceite formais e monitoramento recorrente. A medição que fizemos é reproduzível e pode virar rotina automática - a mesma comparação "atraso real x step disparado", rodando toda semana, teria sinalizado isso no primeiro mês. Coloco a TI à disposição para construir esses critérios e esse monitoramento junto com negócio e operação, para que aderência de régua e comportamento do sistema passem a ser acompanhados continuamente, e não descobertos meses depois.
+
+
+Resumindo: o apontamento está confirmado; a causa dos >95% dos casos é a régua não cobrir a carteira (definição de negócio), não a decisão da Torre; o desvio é sempre no sentido de subcobrar, nunca de sobrecobrar; a deduplicação funciona (1 mensagem por cliente); e o ajuste da #4953 - que já estamos implementando - resolve a severidade inclusive para os títulos acima da régua.
+
+O relatório completo, com as tabelas mês a mês, a tabela cruzada step x atraso real e todas as queries, está à disposição de quem quiser conferir na origem. Fico à disposição para apresentar em call.
+
+Abraço,
+João Vinícius
