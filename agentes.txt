@@ -1,19 +1,21 @@
 Fonte: Supabase de produção da Torre (project idinihcyezkqfarztrdx), MCP supabase-prod (read-only).
-Janela: 2026-07-08 a 2026-07-24 (~15 dias, desde o início do registro confiável de protocolo).
-Protocolos = ai_protocols.started_at na janela · Transbordo/Transferência = ai_funnel_events (transfer_type) · Sentimentos = actions_interaction_logs.sentiment (% dos interações classificados) · Ranking = conversation_tags remapeadas nos buckets curados.
-Acurácia (nova definição): (protocolos - transbordo - transferência) / protocolos. Ou seja, só conta como acurácia da IA o que a IA resolveu sozinha — transferência NÃO é mais considerada "curada".
-Nota Valentina: "renegociação" reclassificada para transferência (type vigente do agente); por isso os eventos de renegociação contam como transferência aqui.
+Janela: 2026-07-08 a 2026-07-31 (24 dias, desde o início do registro confiável de protocolo).
+Reapurado em: 2026-08-04. Substitui a coleta de 2026-07-24, que fechou o dia 24 pela metade.
+Protocolos = ai_protocols.started_at na janela · Transbordo/Transferência = ai_funnel_events (transfer_type) · Sentimentos = actions_interaction_logs.sentiment (% dos interações classificados) · Ranking = conversation_tags agrupadas por família de intenção.
+Acurácia: (protocolos - transbordo - transferência) / protocolos. Só conta como acurácia da IA o que ela resolveu sozinha — transferência NÃO é considerada "curada".
+Validação cruzada: os totais de protocolo batem exatamente com o DAILY_RAW do BigQuery (1790 / 250 / 675).
+Nota sobre o type temporal: transfer_type é por-agente e versionado; os eventos guardam o tipo vigente no momento em que ocorreram. A tag "transferencia_por_solicitacao" da Esperanza·Blips migrou de overflow para transfer por volta de 23/07 — daí o transbordo diário cair para ~1 e a transferência subir a partir dessa data. Não é queda de transbordo real, é reclassificação.
 
 Esperanza
 
 blips:
-protocolos: 1405
-transbordo: 363
-transferências: 249
+protocolos: 1790
+transbordo: 372
+transferências: 453
 
-taxa de transbordo = 363/1405 = 26%
-taxa de encaminhamentos humanos = (363+249)/1405 = 44%
-taxa de acurácia = (1405-363-249)/1405 = 793/1405 = 56%
+taxa de transbordo = 372/1790 = 21%
+taxa de encaminhamentos humanos = (372+453)/1790 = 825/1790 = 46%
+taxa de acurácia = (1790-372-453)/1790 = 965/1790 = 54%
 
 evolução diária [data | protocolos | transbordo | transferências]:
 08/07 | 187 | 45 | 23
@@ -32,49 +34,56 @@ evolução diária [data | protocolos | transbordo | transferências]:
 21/07 |  97 | 32 | 20
 22/07 |  66 | 21 | 14
 23/07 | 125 | 12 | 57
-24/07 |   1 |  0 |  0
+24/07 |  41 |  2 | 22
+25/07 |  10 |  1 |  6
+26/07 |   2 |  0 |  1
+27/07 | 122 |  2 | 63
+28/07 |  51 |  1 | 22
+29/07 |  58 |  1 | 31
+30/07 |  50 |  1 | 29
+31/07 |  52 |  1 | 30
 
 motivos de transferência por tag na Esperanza blips:
 Transferência por solicitação = 199 (transbordo)
-Erro de Fluxo = 157 (transbordo)
-Suporte técnico (máquina) = 118 (transferencia)
-Transferência por solicitação = 57 (transferencia)
-Transferência por renegociação = 44 (transferencia)
-Transferência por distrato = 24 (transferencia)
-Transferência por reparcelamento = 6 (transferencia)
-Transferência por contrato não encontrado = 5 (transbordo)
-Equipamento não encontrado = 2 (transbordo)
+Transferência por solicitação = 169 (transferencia)
+Suporte técnico (máquina) = 162 (transferencia)
+Erro de Fluxo = 161 (transbordo)
+Transferência por renegociação = 69 (transferencia)
+Transferência por distrato = 43 (transferencia)
+Transferência por reparcelamento = 10 (transferencia)
+Transferência por contrato não encontrado = 9 (transbordo)
+Equipamento não encontrado = 3 (transbordo)
 (obs: "Transferência por solicitação" aparece nos dois tipos por reclassificação temporal do type)
 
-sentimentos do cliente blips: (2.739 interações classificadas)
-Positivo = 45%
-Neutro = 52%
-Negativo = 3%
+sentimentos do cliente blips: (3.684 interações classificadas)
+Positivo = 43%  (1.585)
+Neutro   = 54%  (1.995)
+Negativo =  3%  (104)
 
 ranking por tag:
-Solicitação de Link ou Boleto = 472
-Confirmação e Comprovante de Pagamento = 443
-Transbordo para Humano = 441
-Interesse em Pagar e Negociação = 282
-Inadimplência, Vencimentos e Bloqueios = 108
-Dúvidas sobre Formas de Pagamento = 53
-Contato Inválido ou Sem Resolução = 32
-Reclamações e Cobrança Indevida = 29
-Cancelamento e Devolução de Equipamento = 23
-Outros (Apresentação, Jurídico e Vulnerabilidade) = 15
+Solicitação de Link ou Boleto = 599
+Transbordo para Humano = 598
+Confirmação e Comprovante de Pagamento = 585
+Interesse em Pagar e Negociação = 373
+Inadimplência, Vencimentos e Bloqueios = 178
+Dúvidas sobre Formas de Pagamento = 82
+Contato Inválido ou Sem Resolução = 44
+Reclamações e Cobrança Indevida = 39
+Cancelamento e Devolução de Equipamento = 35
+Outros (Apresentação, Jurídico e Vulnerabilidade) = 29
 
 ---------------------------------------------------------------------------------------------------------------
 
 Esperanza
 
 finza:
-protocolos: 162
-transbordo: 48
-transferências: 42
+protocolos: 250
+transbordo: 90
+transferências: 70
 
-taxa de transbordo = 48/162 = 30%
-taxa de encaminhamentos humanos = (48+42)/162 = 56%
-taxa de acurácia = (162-48-42)/162 = 72/162 = 44%
+taxa de transbordo = 90/250 = 36%
+taxa de encaminhamentos humanos = (90+70)/250 = 160/250 = 64%
+taxa de acurácia = (250-90-70)/250 = 90/250 = 36%
 
 evolução diária [data | protocolos | transbordo | transferências]:
 08/07 |  1 |  0 |  0
@@ -93,145 +102,136 @@ evolução diária [data | protocolos | transbordo | transferências]:
 21/07 | 17 |  7 |  5
 22/07 | 10 |  4 |  6
 23/07 | 14 |  4 |  4
-24/07 |  0 |  0 |  0
+24/07 | 10 |  5 |  5
+25/07 |  1 |  1 |  0
+26/07 |  0 |  0 |  1
+27/07 | 14 |  8 |  5
+28/07 | 13 |  3 |  4
+29/07 | 13 |  9 |  2
+30/07 | 14 |  8 |  7
+31/07 | 23 |  8 |  4
 
 motivos de transferência por tag na Esperanza finza:
-Transferência por solicitação = 20 (transbordo)
-Transferência por renegociação = 20 (transferencia)
-Transferência por solicitação técnica = 18 (transferencia)
-Transferência por erro de fluxo = 17 (transbordo)
-Transferência por contrato não encontrado = 11 (transbordo)
+Transferência por solicitação = 39 (transbordo)
+Transferência por solicitação técnica = 35 (transferencia)
+Transferência por erro de fluxo = 31 (transbordo)
+Transferência por renegociação = 31 (transferencia)
+Transferência por contrato não encontrado = 20 (transbordo)
 Transferência por distrato = 4 (transferencia)
 
-sentimentos do cliente finza: (335 interações classificadas)
-Positivo = 32%
-Neutro = 62%
-Negativo = 6%
+sentimentos do cliente finza: (580 interações classificadas)
+Positivo = 33%  (191)
+Neutro   = 62%  (357)
+Negativo =  6%  (32)
 
 ranking por tag:
-Solicitação de Link ou Boleto = 56
-Transbordo para Humano = 45
-Confirmação e Comprovante de Pagamento = 29
-Início de Contato = 22
-Interesse em Pagar e Negociação = 21
-Inadimplência, Vencimentos e Bloqueios = 20
-Contestação de Cobrança e Fraude = 7
-Dúvidas sobre Status do Contrato = 7
-Contato Inválido ou Sem Resolução = 5
+Solicitação de Link ou Boleto = 99
+Transbordo para Humano = 90
+Confirmação e Comprovante de Pagamento = 52
+Interesse em Pagar e Negociação = 45
+Início de Contato = 41
+Inadimplência, Vencimentos e Bloqueios = 30
+Dúvidas sobre Formas de Pagamento = 18
+Contato Inválido ou Sem Resolução = 12
+Contestação de Cobrança e Fraude = 9
+Dúvidas sobre Status do Contrato = 5
 
 ---------------------------------------------------------------------------------------------------------------
 
 Valentina
 
 finza:
-protocolos: 444
-transbordo: 51
-transferências: 97
+protocolos: 675
+transbordo: 112
+transferências: 129
 
-taxa de transbordo = 51/444 = 11%
-taxa de encaminhamentos humanos = (51+97)/444 = 33%
-taxa de acurácia = (444-51-97)/444 = 296/444 = 67%
+taxa de transbordo = 112/675 = 17%
+taxa de encaminhamentos humanos = (112+129)/675 = 241/675 = 36%
+taxa de acurácia = (675-112-129)/675 = 434/675 = 64%
 
 evolução diária [data | protocolos | transbordo | transferências]:
 08/07 |  0 |  0 |  0
 09/07 | 46 |  7 |  2
-10/07 | 39 |  1 | 10
-11/07 |  5 |  0 |  2
+10/07 | 39 |  5 |  6
+11/07 |  5 |  1 |  1
 12/07 |  0 |  0 |  0
-13/07 | 28 |  1 | 12
-14/07 | 28 |  5 |  7
+13/07 | 28 |  3 | 10
+14/07 | 28 |  9 |  3
 15/07 | 32 |  5 |  2
-16/07 | 48 |  6 | 20
+16/07 | 48 |  8 | 18
 17/07 | 38 |  7 |  3
 18/07 |  6 |  1 |  0
 19/07 |  2 |  0 |  0
-20/07 | 39 |  4 | 12
+20/07 | 39 |  5 | 11
 21/07 | 33 |  2 |  8
-22/07 | 56 |  7 | 14
-23/07 | 42 |  5 |  5
-24/07 |  2 |  0 |  0
+22/07 | 56 |  8 | 13
+23/07 | 42 |  7 |  3
+24/07 | 35 |  6 |  6
+25/07 |  0 |  0 |  0
+26/07 |  3 |  0 |  0
+27/07 | 30 |  7 |  7
+28/07 | 41 |  6 | 10
+29/07 | 49 |  5 |  6
+30/07 | 40 |  9 | 12
+31/07 | 35 | 11 |  8
 
 motivos de transferência por tag na Valentina finza:
-Transferência por solicitação = 60 (transferencia)
-Transferência por erro de fluxo = 48 (transbordo)
-Transferência por renegociação = 17 (transferencia)
-Transferência por distrato = 12 (transferencia)
-Transferência por solicitação técnica = 8 (transferencia)
-Transferência por contrato não encontrado = 3 (transbordo)
+Transferência por erro de fluxo = 88 (transbordo)
+Transferência por solicitação = 88 (transferencia)
+Transferência por distrato = 23 (transferencia)
+Transferência por renegociação = 17 (transbordo)
+Transferência por solicitação técnica = 11 (transferencia)
+Transferência por contrato não encontrado = 7 (transbordo)
+Transferência por renegociação = 7 (transferencia)
+(obs: "Transferência por renegociação" aparece nos dois tipos — na Valentina o type vigente é overflow, mas há eventos legados como transfer)
 
-sentimentos do cliente finza: (1.492 interações classificadas)
-Positivo = 7%
-Neutro = 91%
-Negativo = 2%
+sentimentos do cliente finza: (2.355 interações classificadas)
+Positivo =  7%  (170)
+Neutro   = 90%  (2.126)
+Negativo =  3%  (59)
 
 ranking por tag:
-Transbordo para Humano = 109
-Solicitação de Link, Boleto ou 2ª Via = 68
-Contato Inválido, Sem Resolução ou Reclamação = 62
-Confirmação e Comprovante de Pagamento = 49
-Onboarding, Triagem e Início de Contato = 48
-Direcionamento e Assuntos Técnicos do Equipamento = 47
-Interesse em Pagar e Negociação = 37
-Status Financeiro, Vencimentos e Inadimplência = 35
-Consulta de Contrato e Equipamento = 24
-Cancelamento e Distrato = 9
+Transbordo para Humano = 216
+Onboarding, Triagem e Início de Contato = 203
+Contato Inválido, Sem Resolução ou Reclamação = 125
+Solicitação de Link, Boleto ou 2ª Via = 110
+Direcionamento e Assuntos Técnicos do Equipamento = 103
+Confirmação e Comprovante de Pagamento = 88
+Consulta de Contrato e Equipamento = 67
+Status Financeiro, Vencimentos e Inadimplência = 66
+Interesse em Pagar e Negociação = 65
+Cancelamento e Distrato = 22
 
 ---------------------------------------------------------------------------------------------------------------
 
 total:
-protocolos: 1405+162+444 = 2011
-transbordo: 363+48+51 = 462
-transferências: 249+42+97 = 388
+protocolos: 1790+250+675 = 2715
+transbordo: 372+90+112 = 574
+transferências: 453+70+129 = 652
 
-taxa de transbordo = 462/2011 = 23%
-taxa de encaminhamentos humanos = (462+388)/2011 = 42%
-taxa de acurácia = (2011-462-388)/2011 = 1161/2011 = 58%
+taxa de transbordo = 574/2715 = 21%
+taxa de encaminhamentos humanos = (574+652)/2715 = 1226/2715 = 45%
+taxa de acurácia = (2715-574-652)/2715 = 1489/2715 = 55%
 
-evolução diária [data | protocolos | transbordo | transferências]:
-08/07 | 188 | 45 | 23
-09/07 | 111 | 40 | 16
-10/07 |  97 | 16 | 19
-11/07 |  21 |  4 |  3
-12/07 |   5 |  0 |  0
-13/07 |  92 | 25 | 21
-14/07 | 243 | 75 | 39
-15/07 | 272 | 49 | 32
-16/07 | 144 | 26 | 31
-17/07 |  85 | 21 | 11
-18/07 |  15 |  5 |  1
-19/07 |   6 |  1 |  0
-20/07 | 269 | 61 | 59
-21/07 | 147 | 41 | 33
-22/07 | 132 | 32 | 34
-23/07 | 181 | 21 | 66
-24/07 |   3 |  0 |  0
+comparação com a coleta anterior (08–24/07, publicada em 24/07):
+                    antes    agora (08–31/07)
+protocolos          2.011    2.715
+transbordo            462      574
+transferências        388      652
+acurácia              58%      55%
 
-motivos de transferência por tag: (soma)
-Erro de fluxo = 157+17+48 = 222 (transbordo)
-Transferência por solicitação = 199+20 = 219 (transbordo)
-Contrato/Equipamento não encontrado = 7+11+3 = 21 (transbordo)
-Suporte técnico (máquina) = 118+18+8 = 144 (transferencia)
-Transferência por solicitação = 57+60 = 117 (transferencia)
-Renegociação = 44+20+17 = 81 (transferencia)
-Distrato = 24+4+12 = 40 (transferencia)
-Reparcelamento = 6 (transferencia, só blips)
+A diferença NÃO é só o período maior. A janela 08–24/07 também mudou: eram 1.405 protocolos
+na Esperanza·Blips, hoje são 1.445. Os dias 08 a 23/07 conferem um a um; a divergência inteira
+está no dia 24, que a coleta anterior capturou com 1 protocolo quando o dia fechou com 41.
 
-sentimentos do cliente: (média)
-Positivo = (45+32+7)/3 = 28%
-Neutro = (52+62+91)/3 = 68%
-Negativo = (3+6+2)/3 = 4%
-
-ranking por tag: (soma)
-Solicitação de Link ou Boleto (2ª Via) = 472+56+68 = 596
-Transbordo para Humano = 441+45+109 = 595
-Confirmação e Comprovante de Pagamento = 443+29+49 = 521
-Interesse em Pagar e Negociação = 282+21+37 = 340
-Inadimplência, Vencimentos e Status Financeiro = 108+20+35 = 163
-Contato Inválido, Sem Resolução ou Reclamação = 32+5+62 = 99
-Onboarding, Triagem e Início de Contato = 22+48 = 70
-Dúvidas sobre Formas de Pagamento = 53 (só blips)
-Assuntos Técnicos do Equipamento = 47 (só Valentina)
-Reclamações, Contestação de Cobrança e Fraude = 29+7 = 36
-Cancelamento, Devolução e Distrato = 23+9 = 32
-Consulta de Contrato e Status = 7+24 = 31
-Outros (Apresentação, Jurídico, Vulnerabilidade) = 15 (só blips)
+taxonomia do ranking por tag (reconstruída em 04/08/2026):
+O catálogo de conversation_tags é free-form — a IA cria tag em runtime, gerando duplicata de
+grafia, variação de idioma e ruído puro (-1, 59, tema, UUID). As tags são normalizadas
+(underscore→espaço, minúsculas) e classificadas na primeira família que casa, nesta ordem:
+RUIDO → HUMANO → COMPROVANTE → LINK_BOLETO → FORMAS_PGTO → INTERESSE → INADIMPLENCIA →
+ONBOARDING → CANCELAMENTO → CONTRATO → EQUIPAMENTO → INVALIDO → RECLAMACAO → OUTROS.
+A ordem importa: "maquina parada/bloqueada - verificacao de boletos em atraso" é inadimplência,
+não equipamento. RUIDO é descartado, não somado. Resíduo não classificado (OUTROS residual):
+29 em blips, 4 em esp-finza, 13 em val-finza.
+A curadoria original de julho não ficou registrada — por isso os números de tag NÃO são
+comparáveis com a versão anterior. Protocolos, transbordo, transferência e sentimento são.

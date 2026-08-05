@@ -1,0 +1,782 @@
+{
+  "object": "page",
+  "has_more": false,
+  "next_page": null,
+  "data": [
+    {
+      "object": "bucket",
+      "start_time": 1782864000,
+      "end_time": 1782950400,
+      "start_time_iso": "2026-07-01T00:00:00",
+      "end_time_iso": "2026-07-02T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "73.12697835000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1782950400,
+      "end_time": 1783036800,
+      "start_time_iso": "2026-07-02T00:00:00",
+      "end_time_iso": "2026-07-03T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "53.45691624000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783036800,
+      "end_time": 1783123200,
+      "start_time_iso": "2026-07-03T00:00:00",
+      "end_time_iso": "2026-07-04T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "65.57197179000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783123200,
+      "end_time": 1783209600,
+      "start_time_iso": "2026-07-04T00:00:00",
+      "end_time_iso": "2026-07-05T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "18.21984227000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783209600,
+      "end_time": 1783296000,
+      "start_time_iso": "2026-07-05T00:00:00",
+      "end_time_iso": "2026-07-06T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "4.207547020000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783296000,
+      "end_time": 1783382400,
+      "start_time_iso": "2026-07-06T00:00:00",
+      "end_time_iso": "2026-07-07T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "69.73116694000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783382400,
+      "end_time": 1783468800,
+      "start_time_iso": "2026-07-07T00:00:00",
+      "end_time_iso": "2026-07-08T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "55.02312075000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783468800,
+      "end_time": 1783555200,
+      "start_time_iso": "2026-07-08T00:00:00",
+      "end_time_iso": "2026-07-09T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "73.15403375000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783555200,
+      "end_time": 1783641600,
+      "start_time_iso": "2026-07-09T00:00:00",
+      "end_time_iso": "2026-07-10T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "32.36641060000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783641600,
+      "end_time": 1783728000,
+      "start_time_iso": "2026-07-10T00:00:00",
+      "end_time_iso": "2026-07-11T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "19.77338935000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783728000,
+      "end_time": 1783814400,
+      "start_time_iso": "2026-07-11T00:00:00",
+      "end_time_iso": "2026-07-12T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "2.738580570000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783814400,
+      "end_time": 1783900800,
+      "start_time_iso": "2026-07-12T00:00:00",
+      "end_time_iso": "2026-07-13T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "0.8587055800000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783900800,
+      "end_time": 1783987200,
+      "start_time_iso": "2026-07-13T00:00:00",
+      "end_time_iso": "2026-07-14T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "11.50381957000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1783987200,
+      "end_time": 1784073600,
+      "start_time_iso": "2026-07-14T00:00:00",
+      "end_time_iso": "2026-07-15T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "35.68536493000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784073600,
+      "end_time": 1784160000,
+      "start_time_iso": "2026-07-15T00:00:00",
+      "end_time_iso": "2026-07-16T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "37.64168930000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784160000,
+      "end_time": 1784246400,
+      "start_time_iso": "2026-07-16T00:00:00",
+      "end_time_iso": "2026-07-17T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "18.72718344000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784246400,
+      "end_time": 1784332800,
+      "start_time_iso": "2026-07-17T00:00:00",
+      "end_time_iso": "2026-07-18T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "10.56548691000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784332800,
+      "end_time": 1784419200,
+      "start_time_iso": "2026-07-18T00:00:00",
+      "end_time_iso": "2026-07-19T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "1.269474650000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784419200,
+      "end_time": 1784505600,
+      "start_time_iso": "2026-07-19T00:00:00",
+      "end_time_iso": "2026-07-20T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "0.6942130800000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784505600,
+      "end_time": 1784592000,
+      "start_time_iso": "2026-07-20T00:00:00",
+      "end_time_iso": "2026-07-21T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "42.34667181000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784592000,
+      "end_time": 1784678400,
+      "start_time_iso": "2026-07-21T00:00:00",
+      "end_time_iso": "2026-07-22T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "23.22234760000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784678400,
+      "end_time": 1784764800,
+      "start_time_iso": "2026-07-22T00:00:00",
+      "end_time_iso": "2026-07-23T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "33.84370077000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784764800,
+      "end_time": 1784851200,
+      "start_time_iso": "2026-07-23T00:00:00",
+      "end_time_iso": "2026-07-24T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "47.97028904000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784851200,
+      "end_time": 1784937600,
+      "start_time_iso": "2026-07-24T00:00:00",
+      "end_time_iso": "2026-07-25T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "35.87229850000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1784937600,
+      "end_time": 1785024000,
+      "start_time_iso": "2026-07-25T00:00:00",
+      "end_time_iso": "2026-07-26T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "9.367139830000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785024000,
+      "end_time": 1785110400,
+      "start_time_iso": "2026-07-26T00:00:00",
+      "end_time_iso": "2026-07-27T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "5.358136700000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785110400,
+      "end_time": 1785196800,
+      "start_time_iso": "2026-07-27T00:00:00",
+      "end_time_iso": "2026-07-28T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "72.26210527000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785196800,
+      "end_time": 1785283200,
+      "start_time_iso": "2026-07-28T00:00:00",
+      "end_time_iso": "2026-07-29T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "65.47830378000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785283200,
+      "end_time": 1785369600,
+      "start_time_iso": "2026-07-29T00:00:00",
+      "end_time_iso": "2026-07-30T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "48.29936746000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785369600,
+      "end_time": 1785456000,
+      "start_time_iso": "2026-07-30T00:00:00",
+      "end_time_iso": "2026-07-31T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "44.57130130000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    },
+    {
+      "object": "bucket",
+      "start_time": 1785456000,
+      "end_time": 1785542400,
+      "start_time_iso": "2026-07-31T00:00:00",
+      "end_time_iso": "2026-08-01T00:00:00",
+      "results": [
+        {
+          "object": "organization.costs.result",
+          "amount": {
+            "value": "42.66127584000000000000000000",
+            "currency": "usd"
+          },
+          "quantity": null,
+          "line_item": null,
+          "user_id": null,
+          "api_key_id": null,
+          "project_id": "proj_TRF0yOCj4e2PyP4IGLukp3Yu",
+          "organization_id": "org-NLlUCvEVo7rKNND2N18853I8",
+          "project_name": "Default Project",
+          "organization_name": "Blips",
+          "user_email": null
+        }
+      ]
+    }
+  ]
+}
