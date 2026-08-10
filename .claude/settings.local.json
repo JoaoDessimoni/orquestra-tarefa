@@ -30,7 +30,9 @@
       "mcp__supabase-prod__execute_sql",
       "mcp__claude_ai_Google_Cloud_BigQuery__execute_sql_readonly",
       "mcp__supabase-prod__get_publishable_keys",
-      "PowerShell(Get-ChildItem rcs.html, rcs.md, rcs-visao-executiva.md, rcs-executivo.md | Select-Object Name, Length, LastWriteTime | Format-Table -AutoSize; Write-Output \"---linhas---\"; \\(Get-Content rcs.html | Measure-Object -Line\\).Lines)"
+      "PowerShell(Get-ChildItem rcs.html, rcs.md, rcs-visao-executiva.md, rcs-executivo.md | Select-Object Name, Length, LastWriteTime | Format-Table -AutoSize; Write-Output \"---linhas---\"; \\(Get-Content rcs.html | Measure-Object -Line\\).Lines)",
+      "mcp__quimera__list_categories",
+      "mcp__quimera__update_ticket"
     ]
   }
 }

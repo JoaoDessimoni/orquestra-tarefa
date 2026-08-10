@@ -359,7 +359,7 @@ a:hover{text-decoration:underline}
                         "color":  "#1A1AFF",
                         "sponsor":  "Jéssica",
                         "plataforma":  "Torre de Controle v2",
-                        "desc":  "SaaS multi-tenant de cobrança digital. URGENTE: BTR02 (multi-org Rhino, em-curso, deadline 09/06, Marcos+João Lucas). BTR07 (refatoração FastAPI/Postgres) postergada. BTR03/BTR04 validação dashboards+relatórios em-curso/em-refinamento. BTR05 (RCS) banda baixa exploratório. BTR06 cancelado (absorvido por BTR02). BTR08 templates régua a-refinar."
+                        "desc":  "SaaS multi-tenant de cobrança digital. URGENTE: BTR02 (multi-org Rhino, em-curso, deadline 09/06, Marcos+João Lucas). BTR07 (refatoração FastAPI/Postgres) postergada. BTR03/BTR04 validação dashboards+relatórios em-curso/em-refinamento. BTR05 (RCS) banda baixa exploratório. BTR06 cancelado (absorvido por BTR02). BTR08 templates régua a-refinar. BTR10 Supabase DEV self-hosted (GCP) com dados de prod anonimizados, em-refinamento (origem Quimera #4786, João executa)."
                     },
                     {
                         "key":  "clara",
@@ -1571,6 +1571,121 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
+                      "prazo_estimado":  false
+                  },
+                  {
+                      "id":  "BTR10",
+                      "frente":  "torre",
+                      "title":  "Provisionar Supabase DEV self-hosted (GCP) com dados de prod anonimizados",
+                      "status":  "em-refinamento",
+                      "prioridade":  "alta",
+                      "sponsor":  "João Vinícius",
+                      "owner":  "João Vinícius",
+                      "implementador":  "João Vinícius Dessimoni Fernandes",
+                      "deadline_alvo":  "2026-Q3",
+                      "criada":  "2026-08-07",
+                      "refinada":  "2026-08-07",
+                      "valor_negocio":  "alto",
+                      "esforco":  "L",
+                      "rice":  {
+                                   "reach":  7,
+                                   "impact":  7,
+                                   "confidence":  6,
+                                   "effort":  6,
+                                   "score":  4.9
+                               },
+                      "origem":  {
+                                     "pendencias":  [
+
+                                                    ],
+                                     "reunioes":  [
+
+                                                  ],
+                                     "solicitacoes":  [
+
+                                                      ]
+                                 },
+                      "roadmap_vinculado":  null,
+                      "dependencias":  [
+
+                                       ],
+                      "bloqueia":  [
+
+                                   ],
+                      "tags":  [
+                                   "torre",
+                                   "supabase",
+                                   "self-hosted",
+                                   "gcp",
+                                   "dev",
+                                   "anonimizacao",
+                                   "pii",
+                                   "edge-functions",
+                                   "verify-jwt",
+                                   "NOVO"
+                               ],
+                      "historia":  "Como time de desenvolvimento da Torre, quero um ambiente Supabase DEV self-hosted no GCP com estrutura e dados de produção replicados, porém com toda a PII anonimizada, para desenvolver e testar contra dados realistas sem risco de vazar dado sensível de cliente e sem depender de produção.",
+                      "contexto":  "Origem Quimera #4786 (cancelado 05/08, reatribuído ao João, que vai executar). Duas frentes: (A) clonar prod→dev via túnel IAP + pg_dump/pg_restore, anonimizando email/telefone (dados do time de dev) e CPF/CNPJ (fictícios); (B) router main/index.ts no self-hosted replicando os 38 overrides verify_jwt=false do config.toml (o config.toml não é lido no self-hosted).",
+                      "criterios_aceite":  [
+                                               {
+                                                   "id":  "CA-1",
+                                                   "texto":  "Túnel IAP aberto — conexão em localhost:5433 (postgres.torre-dev) confirmada por \\conninfo."
+                                               },
+                                               {
+                                                   "id":  "CA-2",
+                                                   "texto":  "pg_restore no DEV com paridade estrutural de prod (tabelas, schemas, objetos)."
+                                               },
+                                               {
+                                                   "id":  "CA-3",
+                                                   "texto":  "Zero email/telefone real de cliente e zero CPF/CNPJ real no DEV (substituídos por dados do time de dev / fictícios)."
+                                               },
+                                               {
+                                                   "id":  "CA-4",
+                                                   "texto":  "Mapa exaustivo de colunas com PII explícito e revisado (não só as óbvias)."
+                                               },
+                                               {
+                                                   "id":  "CA-5",
+                                                   "texto":  "main/index.ts aplica verify_jwt=false às 38 funções do config.toml e true às demais."
+                                               },
+                                               {
+                                                   "id":  "CA-6",
+                                                   "texto":  "Cron/webhook sem JWT passam; EF de frontend sem JWT são bloqueadas."
+                                               },
+                                               {
+                                                   "id":  "CA-7",
+                                                   "texto":  "Router regenerado automaticamente a partir do config.toml (sem lista manual duplicada)."
+                                               }
+                                           ],
+                      "subtarefas":  [
+
+                                     ],
+                      "premissas":  [
+                                        "Acesso ao banco DEV via túnel IAP já liberado ao João (card 28/07).",
+                                        "Servidor DEV é PG 17 — pg_dump/pg_restore v17.",
+                                        "config.toml segue como fonte de verdade única do verify_jwt (38 overrides).",
+                                        "Existe script mapear-webhooks.py que parseia o config.toml."
+                                    ],
+                      "riscos":  [
+                                     "Anonimização incompleta de PII = vazamento de dado sensível disfarçado de ambiente de dev.",
+                                     "pg_dump/restore via pooler pode falhar por parâmetro não suportado — plano B: rodar de dentro da VM.",
+                                     "Router verify_jwt errado abre EF sem auth ou quebra crons/webhooks (não mandam JWT).",
+                                     "Lista dos 38 overrides desatualiza sozinha — EF nova se comporta errado sem alarme.",
+                                     "Escopo cresceu de 'clonar dados' (5 SP) para 'clonar + auth self-hosted' — provavelmente 2 itens."
+                                 ],
+                      "observacoes_po":  "Provavelmente 2 itens: manter BTR10 como clone+anonimização (Frente A) e extrair router verify_jwt (Frente B) como BTR10b. Anonimização é gate não-negociável. Deploy das EF está fora de escopo (já é infra decidida). Self-hosted GCP ≠ dev Cloud (dcedqaatdeobbrlwxzha).",
+                      "historico":  [
+                                        {
+                                            "data":  "2026-08-07",
+                                            "texto":  "Item criado a partir do Quimera #4786 (cancelado e reatribuído ao João). Descrição + 2 comentários técnicos viraram a spec. em-refinamento. Sinalizado candidato a quebra em 2 itens."
+                                        }
+                                    ],
+                      "notas":  "Subtarefas ST-1 a ST-8 detalhadas no .md (acesso/pré-reqs, clone estrutural, mapa de PII, rotina de anonimização, validação, router de EF, testes do router, documentar). Questões em aberto Q1-Q4 (inventário de PII, outras deps do config.toml, onde o router vive, banco inteiro vs fatia).",
+                      "fonte":  "backlog",
+                      "categoria":  "TI",
+                      "jira":  null,
+                      "quimera":  4786,
+                      "concluida":  null,
+                      "responsavel":  "João Vinícius Dessimoni Fernandes",
                       "prazo_estimado":  false
                   },
                   {

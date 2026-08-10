@@ -18,7 +18,7 @@ Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é
 
 Sequência obrigatória no início de cada turno:
 
-1. Ler a lista de skills disponíveis no `<system-reminder>` (10 skills de conhecimento: finza-contexto, finza-design-system, finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, jira, n8n-projeto, torre-projeto + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, etc.).
+1. Ler a lista de skills disponíveis no `<system-reminder>` (11 skills de conhecimento: finza-contexto, finza-design-system, finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, quimera-nova-demanda, jira, n8n-projeto, torre-projeto + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, etc.).
 2. Considerar os **14 agentes** em `.claude/agents/` e os **17 comandos** em `.claude/commands/`.
 3. Se o pedido do usuário se encaixar em um comando/skill, **invoque-o automaticamente** via a ferramenta Skill — não execute manualmente nem peça pro usuário digitar o comando.
 
@@ -97,7 +97,7 @@ orquestra-tarefa/
 │   │   ├── jira.md                   # Opera Jira & Confluence (Atlassian) via MCP
 │   │   ├── n8n.md                    # Ponte read-only p/ N8N-AGENT (workflows, execuções, métricas)
 │   │   └── torre.md                  # Ponte contexto+leitura p/ cobranca-finza (Torre)
-│   ├── skills/                       # Conhecimento canônico (10)
+│   ├── skills/                       # Conhecimento canônico (11)
 │   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais (slides)
 │   │   ├── finza-dossie/             # Documentos/relatórios HTML de rolagem única (template.html + fontes Montserrat)
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
@@ -105,6 +105,7 @@ orquestra-tarefa/
 │   │   ├── po-backlog/               # INVEST, Given/When/Then, frentes, RICE
 │   │   ├── finza-mapas/              # Estrutura do mapa textual + contrato do mapa visual
 │   │   ├── quimera/                  # Catálogo MCP Quimera, status, times, membros, indicadores
+│   │   ├── quimera-nova-demanda/     # Fluxo de abertura de demanda no padrão refinado (Descrição Refinada·Observação·Objetivo) + remove assinatura MCP
 │   │   ├── jira/                     # Catálogo MCP Atlassian (Jira+Confluence), JQL/CQL, descoberta
 │   │   ├── n8n-projeto/              # Mapa do subprojeto N8N-AGENT (ambientes, skills locais, read-only, setup MCP)
 │   │   └── torre-projeto/            # Mapa do subprojeto cobranca-finza (stack, 8 agentes, invariantes, guardrails)
