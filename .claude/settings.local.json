@@ -32,7 +32,8 @@
       "mcp__supabase-prod__get_publishable_keys",
       "PowerShell(Get-ChildItem rcs.html, rcs.md, rcs-visao-executiva.md, rcs-executivo.md | Select-Object Name, Length, LastWriteTime | Format-Table -AutoSize; Write-Output \"---linhas---\"; \\(Get-Content rcs.html | Measure-Object -Line\\).Lines)",
       "mcp__quimera__list_categories",
-      "mcp__quimera__update_ticket"
+      "mcp__quimera__update_ticket",
+      "PowerShell($f = \"C:\\\\Users\\\\João Vinicius\\\\Documents\\\\Finza\\\\Projetos\\\\orquestra-tarefa\\\\Apresentacoes\\\\executando\\\\anomalias-metricas-agentes-torre_dossie_10-08-2026.html\"; $lines = Get-Content $f; Write-Output \"TOTAL LINES: $\\($lines.Count\\)\"; for \\($i=0; $i -lt $lines.Count; $i++\\) { if \\($lines[$i].Length -gt 5000\\) { Write-Output \"LINE $\\($i+1\\): LENGTH $\\($lines[$i].Length\\) [truncated marker]\" } })"
     ]
   }
 }

@@ -469,7 +469,7 @@
       }
       .metrics {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
         gap: 14px;
         margin-top: 48px;
       }
@@ -478,6 +478,7 @@
         border-radius: var(--r);
         padding: 20px 18px;
         overflow: hidden;
+        min-width: 0;
       }
       .metric::after {
         content: "";
@@ -494,23 +495,27 @@
       }
       .metric .n {
         font-family: var(--f-disp);
-        font-size: 1.95rem;
+        font-size: clamp(1.5rem, 2.4vw, 1.95rem);
         font-weight: 700;
-        line-height: 1;
+        line-height: 1.05;
         letter-spacing: -0.01em;
         color: var(--finza-blue);
+        overflow-wrap: anywhere;
       }
       .metric .l {
         font-size: 0.78rem;
         color: var(--muted);
         margin-top: 10px;
         letter-spacing: 0.01em;
+        line-height: 1.35;
       }
       .metric .src {
         font-family: var(--f-mono);
         font-size: 0.63rem;
         color: var(--faint);
         margin-top: 6px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
       }
 
       /* ---------- cards / callouts ---------- */
@@ -532,13 +537,19 @@
         color: var(--finza-blue);
         opacity: 0.65;
       }
+      .card {
+        min-width: 0;
+      }
       .card h3 {
         font-family: var(--f-disp);
         font-size: 1.12rem;
         margin-bottom: 8px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 10px;
+        line-height: 1.3;
+        min-width: 0;
+        padding-right: 44px;
       }
       .card .ico {
         width: 28px;
@@ -559,17 +570,22 @@
         flex-direction: column;
         gap: 12px;
       }
+      /* marcador posicionado (não flex/grid): em flex o item anônimo de texto
+         ignora min-width:0 e chips longos estouravam o card; em grid os <b>
+         viravam itens blocados em células próprias. Fluxo inline resolve os
+         dois — o texto quebra normal e <b>/chip seguem inline. */
       .card li {
-        display: flex;
-        gap: 11px;
-        align-items: flex-start;
+        display: block;
+        position: relative;
+        padding-left: 31px;
         font-size: 0.96rem;
         color: var(--ink);
         line-height: 1.45;
       }
       .card li .mk {
-        flex: none;
-        margin-top: 2px;
+        position: absolute;
+        left: 0;
+        top: 2px;
       }
       .card li .mk .ico {
         width: 20px;
@@ -577,13 +593,17 @@
       }
       .grid2 {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
         gap: 18px;
       }
       .grid3 {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
         gap: 18px;
+      }
+      .grid2 > *,
+      .grid3 > * {
+        min-width: 0;
       }
       .mt32 {
         margin-top: 32px;
@@ -700,7 +720,7 @@
       /* ---------- arc / stages (contexto) ---------- */
       .arc {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
         gap: 14px;
         margin-top: 26px;
       }
@@ -749,7 +769,7 @@
       /* ---------- journey ---------- */
       .journey {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
         gap: 12px;
         margin-top: 26px;
       }
@@ -878,13 +898,32 @@
         font-weight: 700;
       }
       .chip {
+        display: inline-block;
+        max-width: 100%;
         font-family: var(--f-mono);
         font-size: 0.78rem;
+        line-height: 1.4;
         color: var(--muted);
         background: var(--panel);
         border: 1px solid var(--stroke);
         border-radius: 8px;
-        padding: 7px 13px;
+        padding: 5px 10px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        vertical-align: middle;
+      }
+      td .chip,
+      .card .chip,
+      p .chip,
+      li .chip {
+        font-size: 0.74rem;
+        padding: 2px 7px;
+      }
+      .tools {
+        min-width: 0;
+      }
+      .tools .chip {
+        font-size: 0.74rem;
       }
 
       /* ---------- debounce (mockrow + mechanics) ---------- */
@@ -1005,28 +1044,34 @@
       }
       .statrow {
         display: flex;
-        gap: 14px;
+        flex-wrap: wrap;
+        gap: 12px;
         margin-top: 22px;
       }
       .stattile {
-        flex: 1;
+        flex: 1 1 130px;
+        min-width: 0;
         border: 1px solid var(--stroke);
         background: var(--deep);
         border-radius: var(--r);
-        padding: 18px;
+        padding: 16px 12px;
         text-align: center;
       }
       .stattile .big {
         font-family: var(--f-disp);
         font-weight: 700;
-        font-size: 1.9rem;
+        font-size: clamp(1.25rem, 2.1vw, 1.9rem);
         color: var(--finza-blue);
-        line-height: 1;
+        line-height: 1.1;
+        overflow-wrap: anywhere;
+        hyphens: none;
       }
       .stattile .cap {
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         color: var(--muted);
         margin-top: 7px;
+        line-height: 1.4;
+        overflow-wrap: break-word;
       }
 
       /* ---------- accept / reject ---------- */
@@ -1173,7 +1218,7 @@
       /* ---------- event chain (acionamento) ---------- */
       .chain {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 12px;
         margin-top: 26px;
       }
@@ -1222,9 +1267,15 @@
       /* ---------- version steps (evolução) ---------- */
       .vsteps {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         gap: 12px;
         margin-top: 26px;
+      }
+      .vsteps > *,
+      .chain > *,
+      .qstats > *,
+      .arc > * {
+        min-width: 0;
       }
       .vstep {
         border: 1px solid var(--stroke);
@@ -1267,7 +1318,7 @@
       }
       .qstats {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
         gap: 14px;
         margin-top: 20px;
       }
@@ -1321,16 +1372,17 @@
         gap: 14px;
       }
       .flist li {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
+        display: block;
+        position: relative;
+        padding-left: 32px;
         font-size: 0.96rem;
         color: var(--ink);
         line-height: 1.45;
       }
       .flist li .mk {
-        flex: none;
-        margin-top: 2px;
+        position: absolute;
+        left: 0;
+        top: 2px;
         color: var(--finza-blue);
         font-weight: 700;
       }
@@ -1371,6 +1423,7 @@
       .resumo h2 {
         font-size: clamp(1.8rem, 4vw, 2.6rem);
         max-width: 20ch;
+        padding-right: 44px;
       }
       .resumo p {
         color: var(--muted);
@@ -1416,31 +1469,99 @@
         font-size: 0.78rem;
       }
 
+      /* ---------- guardas globais de legibilidade ---------- */
+      body {
+        overflow-wrap: break-word;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      p,
+      li,
+      td,
+      th {
+        overflow-wrap: break-word;
+      }
+      /* nada pode estourar a largura da página */
+      .section,
+      .wrap,
+      .card,
+      .feat,
+      .callout,
+      .metric,
+      .arcstage,
+      .vstep,
+      .ev,
+      .qstat,
+      .pnode,
+      .stattile,
+      .resumo {
+        min-width: 0;
+        max-width: 100%;
+      }
+      .tablewrap {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+      }
+      .legend {
+        flex-wrap: wrap;
+      }
+      .legend > * {
+        min-width: 0;
+      }
+      .m > *,
+      .ac > * {
+        min-width: 0;
+      }
+      .feat p,
+      .card p,
+      .callout p,
+      .vstep .d,
+      .arcstage .d,
+      .ev .d {
+        line-height: 1.55;
+      }
+
+      @media (max-width: 1080px) {
+        .hero .sub {
+          font-size: 1.1rem;
+        }
+        .lede {
+          font-size: 1.04rem;
+        }
+      }
       @media (max-width: 980px) {
-        .metrics {
-          grid-template-columns: repeat(3, 1fr);
-        }
-        .arc,
-        .journey,
-        .chain,
-        .vsteps,
-        .qstats {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .grid3 {
-          grid-template-columns: 1fr 1fr;
+        .journey {
+          grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
         }
         .mockrow {
           grid-template-columns: 1fr;
         }
-      }
-      @media (max-width: 640px) {
         .section {
-          padding: 64px 0;
+          padding: 76px 0;
         }
-        .metrics,
+        .card {
+          padding: 24px 22px;
+        }
+        .hero {
+          padding: 68px 0 56px;
+        }
+        .hero .meta {
+          gap: 16px 22px;
+        }
+      }
+      @media (max-width: 760px) {
+        .wrap {
+          padding: 0 20px;
+        }
+        .section::before {
+          left: 20px;
+          right: 20px;
+        }
         .grid2,
         .grid3,
+        .metrics,
         .arc,
         .journey,
         .chain,
@@ -1450,7 +1571,86 @@
           grid-template-columns: 1fr;
         }
         .statrow {
-          flex-direction: column;
+          gap: 10px;
+        }
+        .stattile {
+          flex: 1 1 100%;
+          text-align: left;
+          padding: 14px 16px;
+        }
+        .stattile .big {
+          font-size: 1.55rem;
+        }
+        .card h3 {
+          padding-right: 40px;
+          font-size: 1.06rem;
+        }
+        .topbar .row {
+          gap: 10px;
+        }
+        .brand {
+          font-size: 0.86rem;
+        }
+      }
+      @media (max-width: 640px) {
+        .section {
+          padding: 60px 0;
+        }
+        .wrap {
+          padding: 0 17px;
+        }
+        .section::before {
+          left: 17px;
+          right: 17px;
+        }
+        .card,
+        .feat {
+          padding: 22px 19px;
+        }
+        .resumo {
+          padding: 30px 22px;
+        }
+        .callout {
+          padding: 16px 18px;
+        }
+        .points .p {
+          padding: 8px 15px;
+          font-size: 0.83rem;
+        }
+        .section h2 {
+          max-width: none;
+        }
+        .hero .sub {
+          font-size: 1.02rem;
+        }
+        .lede {
+          font-size: 1rem;
+        }
+        .card li,
+        .flist li {
+          font-size: 0.92rem;
+        }
+        .tools {
+          padding: 14px 16px;
+          gap: 8px;
+        }
+        .hero .meta {
+          gap: 12px 18px;
+          font-size: 0.76rem;
+        }
+        .iaf-mark {
+          display: none;
+        }
+        .brand {
+          font-size: 0.8rem;
+        }
+      }
+      @media (max-width: 400px) {
+        .stattile .big {
+          font-size: 1.4rem;
+        }
+        .metric .n {
+          font-size: 1.5rem;
         }
       }
     </style>
@@ -1465,11 +1665,12 @@
         <div class="brand"><span class="dot"></span>Métricas · Agentes IA</div>
         <nav class="spy" id="spy">
           <a href="#panorama">Panorama</a>
-          <a href="#diagnostico">O erro</a>
-          <a href="#timeline">Quando começou</a>
+          <a href="#motor">O motor</a>
+          <a href="#diagnostico">Causas-raiz</a>
+          <a href="#timeline">Quando quebrou</a>
           <a href="#onde">Onde está</a>
           <a href="#impactos">Impactos</a>
-          <a href="#erros">Os 6 erros</a>
+          <a href="#erros">As 9 anomalias</a>
           <a href="#reprocessamento">Reprocessar</a>
           <a href="#correcoes">Como corrigir</a>
           <a href="#resumo">Resumo</a>
@@ -1491,9 +1692,10 @@
       <div class="wrap inner">
         <div class="tagrow">
           <span class="pill anim-up">◆ diagnóstico técnico · Torre de Controle</span>
-          <span class="pill anim-up">supabase-prod · schema org_finza</span>
+          <span class="pill anim-up">n8n assistants · W8Vm9jtLpHLzVyrc</span>
+          <span class="pill anim-up">supabase-prod · org_finza + org_blips</span>
           <span class="pill prod anim-up">● investigação read-only</span>
-          <span class="pill paused anim-up">⏸ correção = dev no cobranca-finza</span>
+          <span class="pill paused anim-up">⏸ rev. 2 — causa-raiz identificada</span>
           <span class="pill anim-up">janela 09/07 → 10/08/2026</span>
         </div>
         <h1 class="anim-up">
@@ -1502,43 +1704,47 @@
         <p class="sub anim-up">
           Esperanza, Valentina e Clara continuam <b>recebendo e registrando
           conversas normalmente</b> — o volume está saudável. O que quebrou é a
-          <b>camada de desfecho e telemetria</b>: o sistema deixou de saber
-          quando uma conversa termina, o tráfego entre agentes ficou invisível e
-          um dos pipelines de dados parou seco. <b>O dashboard, hoje, mostra
-          números que não refletem a realidade da operação.</b>
+          <b>camada de desfecho e telemetria</b>. E ela não mora na Torre: o
+          produtor de quase toda a métrica de IA é <b>um único workflow n8n</b> —
+          o <b>Tageador e registrador de mensagens</b>, 86 nós. Nele, o sinal de
+          "conversa encerrada" depende de um <b>casamento de texto literal</b>
+          que deixou de bater em 24/07. <b>O dashboard mostra números que não
+          refletem a operação porque o motor que os alimenta furou em três
+          pontos distintos.</b>
         </p>
         <div class="meta anim-up">
           <span>data · <b>10/08/2026</b></span>
+          <span>revisão · <b>2 — pós-auditoria do tageador</b></span>
           <span>autor · <b>João Vinícius · Supervisor IAF</b></span>
-          <span>origem · <b>Supabase MCP (read-only)</b></span>
+          <span>origem · <b>n8n REST + Supabase MCP (read-only)</b></span>
           <span>destino · <b>Time da Torre / IA &amp; Automação</b></span>
         </div>
 
         <div class="metrics" id="metrics">
           <div class="metric c-accent">
-            <div class="n" data-count="6">0</div>
+            <div class="n" data-count="9">0</div>
             <div class="l">Anomalias mapeadas</div>
-            <div class="src">2 críticas · 2 altas · 2 médias</div>
+            <div class="src">2 críticas · 4 altas · 3 médias</div>
           </div>
           <div class="metric">
-            <div class="n" data-count="3">0</div>
-            <div class="l">Agentes afetados</div>
-            <div class="src">Esperanza · Valentina · Clara</div>
+            <div class="n" data-count="86">0</div>
+            <div class="l">Nós no tageador</div>
+            <div class="src">1 workflow · escreve 6 tabelas</div>
           </div>
           <div class="metric c-accent">
-            <div class="n">24/07</div>
-            <div class="l">Fim do sinal "finalizado"</div>
-            <div class="src">isolado — status segue vivo</div>
+            <div class="n">1,3 s</div>
+            <div class="l">Entre a marca de texto e o último "finalizado"</div>
+            <div class="src">24/07 16:43:13 → 16:43:14</div>
           </div>
           <div class="metric">
-            <div class="n" data-count="1298">0</div>
+            <div class="n" data-count="1314">0</div>
             <div class="l">Chamadas A2A órfãs</div>
-            <div class="src">100% sem vínculo a protocolo</div>
+            <div class="src">100% sem protocol — typo <b>porotocol</b></div>
           </div>
           <div class="metric">
-            <div class="n">0,3%</div>
-            <div class="l">Resolução da Esperanza</div>
-            <div class="src">1 conversa finalizada em 346</div>
+            <div class="n">0</div>
+            <div class="l">Orgs com a flag do dual-write</div>
+            <div class="src">ai_event_ingestion_v2 inexistente</div>
           </div>
         </div>
       </div>
@@ -1552,13 +1758,13 @@
           <h2 class="reveal">O volume está de pé; o que a IA "faz com ele" ficou cego</h2>
           <p class="lede reveal">
             Varri todas as fontes de métrica dos três agentes primordiais no
-            banco de produção da Torre (<b>org_finza</b>): a tabela canônica de
-            protocolos, os logs de funil e de status, o log legado de
-            interações, as mensagens, as chamadas entre agentes e as próprias
-            funções que o dashboard consome. O diagnóstico é claro: os pipelines
-            de <b>entrada</b> estão saudáveis, mas a camada de <b>desfecho e
-            telemetria</b> tem seis falhas — duas delas graves o bastante para
-            distorcer o que a gestão vê hoje.
+            banco de produção da Torre (<b>org_finza</b>) e, na revisão 2,
+            <b>auditei o produtor desses dados</b>: o workflow n8n que grava
+            protocolo, status, funil, mensagens, tags e chamadas A2A. Os
+            pipelines de <b>entrada</b> estão saudáveis. A camada de
+            <b>desfecho e telemetria</b> tem <b>nove falhas</b> — e as duas
+            críticas têm agora causa-raiz nomeada, com evidência de segundo a
+            segundo. Nenhuma delas é o que a primeira leitura supôs.
           </p>
 
           <div class="grid3 mt32">
@@ -1581,9 +1787,9 @@
                 O que quebrou
               </h3>
               <ul>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg></span>O sinal de "conversa finalizada" praticamente parou de ser emitido</li>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg></span>O tráfego entre agentes (A2A) não se liga a nenhum protocolo</li>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg></span>O pipeline de mensagens parou seco em 23/07</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg></span>O gate de encerramento do tageador deixou de bater em <b>24/07</b></li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg></span>O A2A viaja com a chave errada (<b>porotocol</b>) para uma API que a ignora</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg></span>O dual-write de mensagens está atrás de uma <b>flag que não existe</b></li>
               </ul>
             </div>
             <div class="card reveal">
@@ -1608,9 +1814,143 @@
             <p>
               Não é um problema de "a IA parou de atender" — ela atende. É um
               problema de <b>medição</b>: perdemos a capacidade de saber se ela
-              atende <b>bem</b>. O dado de desfecho quebrou em <b>24/07/2026</b>;
-              um segundo deploy, em <b>03–05/08</b>, apenas expôs o problema no
-              painel novo de agentes.
+              atende <b>bem</b>. E o furo não está na Torre — está no
+              <b>tageador do n8n</b> e em <b>uma linha de configuração
+              ausente</b>. São correções baratas, escondidas atrás de um
+              diagnóstico que parecia caro.
+            </p>
+          </div>
+
+          <div class="callout warn reveal">
+            <h4><span class="badge">revisão 2</span>&nbsp;O que mudou em relação à primeira leitura</h4>
+            <p>
+              A revisão 1 atribuía a quebra de <b>24/07</b> a um deploy de edge
+              function no <b>cobranca-finza</b> e classificava as transcrições e
+              o vínculo A2A como <b>irrecuperáveis</b>. Auditar o tageador
+              derrubou as três conclusões: a causa é <b>gate de texto no n8n</b>,
+              a mensagem volta com <b>uma linha de config</b> e o A2A é
+              <b>corrigível daqui pra frente</b> — o protocolo já está na mão do
+              workflow. A tabela de correções foi reordenada por consequência.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== O MOTOR ===================== -->
+      <section class="section" id="motor">
+        <div class="wrap">
+          <div class="eyebrow reveal">O motor das métricas</div>
+          <h2 class="reveal">Um workflow n8n escreve quase toda a telemetria de IA</h2>
+          <p class="lede reveal">
+            A descoberta que reorganiza o diagnóstico: as métricas dos agentes
+            não nascem na Torre. Nascem no workflow
+            <b>"Stage - Tageador e registrador de mensagens"</b>
+            (<span class="chip">W8Vm9jtLpHLzVyrc</span>) na instância
+            <b>n8n-assistants</b> — 86 nós, ativo, com <b>cerca de uma execução
+            por minuto</b>. Ele é chamado pelos fluxos dos agentes e é ele quem
+            faz o POST de cada evento nas Edge Functions da Torre. As EFs
+            <b>recebem</b> o dado; quem <b>decide o que mandar</b> é este
+            workflow.
+          </p>
+
+          <div class="tablewrap reveal">
+            <table style="min-width:700px">
+              <thead><tr><th>Nó do tageador</th><th>Endpoint chamado</th><th>Tabela alimentada</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><span class="chip">enviar mensagens</span> <span class="chip">…1 / 2 / 3</span></td>
+                  <td><span class="chip">POST /api/conversation-logs</span></td>
+                  <td>actions_interaction_logs <span class="st prod">vivo</span></td>
+                </tr>
+                <tr>
+                  <td><span class="chip">enviar tags</span></td>
+                  <td><span class="chip">POST /api/conversation-tags</span></td>
+                  <td>conversation_tags <span class="st prod">vivo</span></td>
+                </tr>
+                <tr>
+                  <td><span class="chip">enviar funil</span> <span class="chip">at_encerrado</span></td>
+                  <td><span class="chip">POST /ai-conversation-webhook</span> <span class="td">event_type=funnel_stage</span></td>
+                  <td>ai_funnel_events <span class="st prod">vivo</span></td>
+                </tr>
+                <tr>
+                  <td><span class="chip">status{em_andamento}</span> <span class="chip">status{Transferido}</span></td>
+                  <td><span class="chip">POST /ai-conversation-webhook</span> <span class="td">event_type=protocol_status</span></td>
+                  <td>ai_protocol_status_log · ai_protocols <span class="st prod">vivo</span></td>
+                </tr>
+                <tr>
+                  <td><span class="chip">status{encerrado}</span> <span class="chip">status{encerrado}1</span></td>
+                  <td><span class="chip">POST /ai-conversation-webhook</span> <span class="td">status=finalizado</span></td>
+                  <td>ai_protocols.status <span class="st stub">nada desde 24/07</span></td>
+                </tr>
+                <tr>
+                  <td><span class="chip">salva_mensagem_agente</span></td>
+                  <td><span class="chip">POST /api/ai/agent-calls</span></td>
+                  <td>agent_call_logs <span class="st stub">sem protocol</span></td>
+                </tr>
+                <tr>
+                  <td><span class="chip">status{finalizado}</span></td>
+                  <td><span class="chip">POST /api/ai/protocol-conversation/finalize</span></td>
+                  <td>— <span class="st stub">nunca produziu efeito</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="legend reveal">
+            <span><span class="st prod">vivo</span> escrevendo em produção hoje</span>
+            <span><span class="st stub">parado</span> nó existe, dado não chega</span>
+          </div>
+
+          <div class="grid2 mt32">
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3>
+                <svg class="ico" viewBox="0 0 24 24"><path d="M4 4h16v12H5.2L4 17.2z"/></svg>
+                Como o tageador é acionado
+              </h3>
+              <ul>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span><b>Execute Workflow Trigger</b> — o caminho real: os fluxos dos agentes chamam o tageador como sub-workflow (modo <span class="chip">integrated</span>). É por aqui que passa 100% do tráfego observado</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span><b>Webhook <span class="chip">tageador-torre</span></b> — entrada HTTP alternativa</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span><b>Webhook <span class="chip">tageador-interno</span></b> — única porta para o encerramento novo. Os dois webhooks compartilham o <b>mesmo webhookId</b> (<span class="chip">777b64f8-…</span>), resíduo de copy/paste com risco real de colisão de registro</li>
+              </ul>
+            </div>
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3>
+                <svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+                Por que ninguém percebeu por 17 dias
+              </h3>
+              <p style="margin-bottom:14px">
+                Praticamente todo nó HTTP está com
+                <span class="chip">onError: continueErrorOutput</span>. E nos nós
+                de encerramento, <b>a saída de sucesso e a de erro apontam para o
+                mesmo nó seguinte</b>:
+              </p>
+              <div class="tools" style="margin-top:0">
+                <span class="lbl">grafo</span>
+                <span class="chip">enviar mensagens1 → main[0] → status{encerrado}</span>
+                <span class="chip">enviar mensagens1 → main[1] → status{encerrado}</span>
+                <span class="chip">status{encerrado} → main[0] → at_encerrado</span>
+                <span class="chip">status{encerrado} → main[1] → at_encerrado</span>
+              </div>
+              <p style="margin-top:14px">
+                Falha de escrita não aborta, não alarma e a execução <b>fecha como
+                success</b>. A telemetria pode furar em silêncio por semanas — foi
+                exatamente o que aconteceu.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout crit reveal">
+            <h4>
+              <svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              Consequência para o endereçamento
+            </h4>
+            <p>
+              A revisão 1 mandava auditar edge function no <b>cobranca-finza</b>.
+              O dono das duas anomalias críticas é o <b>N8N-AGENT</b> — mais
+              barato, mais rápido e sem CI/CD no caminho. O cobranca-finza entra
+              em dois pontos secundários: persistir <span class="chip">protocol</span>
+              no endpoint de A2A e inserir a flag do dual-write.
             </p>
           </div>
         </div>
@@ -1619,45 +1959,116 @@
       <!-- ===================== O QUE É O ERRO ===================== -->
       <section class="section" id="diagnostico">
         <div class="wrap">
-          <div class="eyebrow reveal">O que é o erro</div>
-          <h2 class="reveal">Dois pipelines, um vivo e um morto — e um desfecho que sumiu</h2>
+          <div class="eyebrow reveal">As causas-raiz</div>
+          <h2 class="reveal">Três furos independentes, três mecanismos diferentes</h2>
           <p class="lede reveal">
-            Cada conversa de um agente gera dois tipos de dado: o <b>tráfego</b>
-            (mensagens, eventos, protocolos abertos) e o <b>desfecho</b> (a
-            conversa terminou? foi resolvida pela IA ou passou para um humano?).
-            O tráfego continua sendo gravado. O desfecho, não — e é justamente
-            o desfecho que alimenta os indicadores de qualidade.
+            Cada conversa gera <b>tráfego</b> (mensagens, eventos, protocolos
+            abertos) e <b>desfecho</b> (terminou? resolvida pela IA ou passada a
+            um humano?). O tráfego continua sendo gravado. O desfecho, não. Mas
+            não é uma falha só — são <b>três mecanismos distintos</b>, cada um
+            com um dono diferente.
           </p>
+
+          <div class="card reveal mt32">
+            <span class="iaf">◆ iaf</span>
+            <h3>
+              <svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+              Causa-raiz 1 — o desfecho depende de um casamento de texto literal
+            </h3>
+            <p style="margin-bottom:14px">
+              O nó <span class="chip">encerrado</span> é um simples <b>If de
+              string</b>. É o <b>único</b> caminho que chega em
+              <span class="chip">status{encerrado}</span> (que grava
+              <b>finalizado</b>) e em <span class="chip">at_encerrado</span> (que
+              grava <b>conversation_ended</b>):
+            </p>
+            <div class="tools" style="margin-top:0">
+              <span class="lbl">condição</span>
+              <span class="chip">global.agent_message</span>
+              <span class="chip">contains</span>
+              <span class="chip">**Atendimento encerrado**</span>
+            </div>
+            <p style="margin-top:16px">
+              A marca de texto <b>desapareceu da saída dos agentes da Finza em
+              24/07</b>. O gate deixou de bater e, com ele, todo o desfecho. Sem
+              erro, sem alarme — apenas o ramo falso do If.
+            </p>
+            <div class="statrow">
+              <div class="stattile"><div class="big">16:43:13</div><div class="cap">última mensagem com<br>a marca de texto (24/07)</div></div>
+              <div class="stattile"><div class="big">16:43:14</div><div class="cap">último <b>finalizado</b><br>no status log (24/07)</div></div>
+              <div class="stattile"><div class="big">0</div><div class="cap">marcas em ~5.500 msgs<br>de 25/07 até hoje</div></div>
+            </div>
+          </div>
+
+          <div class="callout crit reveal">
+            <h4>
+              <svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><polyline points="5 12 10 17 19 7" /></svg>
+              O teste de controle que fecha o caso
+            </h4>
+            <p>
+              Em <b>org_blips</b>, no <b>mesmo workflow</b>, a marca
+              <b>continua viva</b> — última em <b>06/08 13:00</b>, 7 ocorrências
+              depois de 24/07. O gate funciona. A edge function funciona. O que
+              mudou foi a <b>mensagem de encerramento dos agentes da Finza</b>.
+              Isso elimina migration, deploy de EF e o cluster de 03–05/08 como
+              causa.
+            </p>
+          </div>
 
           <div class="grid2 mt32">
             <div class="card reveal">
               <span class="iaf">◆ iaf</span>
-              <h3>Sintoma 1 — a conversa nunca "fecha"</h3>
+              <h3>
+                <svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
+                Causa-raiz 2 — A2A: um typo e uma API surda
+              </h3>
               <p style="margin-bottom:14px">
-                Em 30 dias, o desfecho <b>finalizado</b> quase não aparece.
-                ~73% dos protocolos ficam presos em <b>em_andamento</b>; o resto
-                vira transferência para humano. A conclusão bem-sucedida pela
-                própria IA virou exceção estatística.
+                O nó <span class="chip">salva_mensagem_agente</span> envia o
+                campo <b>porotocol</b> (sic) em vez de
+                <span class="chip">protocol</span>. E o handler de
+                <span class="chip">POST /api/ai/agent-calls</span>
+                <b>não lê protocol de forma alguma</b> — insere apenas
+                receiving_agent, requesting_agent e metadata.
               </p>
               <div class="statrow">
-                <div class="stattile"><div class="big">1</div><div class="cap">finalizados<br>Esperanza (de 346)</div></div>
-                <div class="stattile"><div class="big">40</div><div class="cap">finalizados<br>Valentina (de 894)</div></div>
-                <div class="stattile"><div class="big">0</div><div class="cap">finalizados<br>Clara (de 14)</div></div>
+                <div class="stattile"><div class="big">1.314</div><div class="cap">chamadas A2A<br>registradas</div></div>
+                <div class="stattile"><div class="big">0</div><div class="cap">com protocol<br>ou source_event_id</div></div>
+                <div class="stattile"><div class="big">0</div><div class="cap">protocolos<br>marcados A2A</div></div>
               </div>
+              <p style="margin-top:16px">
+                <b>O dado nunca esteve perdido:</b> o protocolo está em
+                <span class="chip">global.protocol</span>, na mão do workflow, a
+                um caractere de ser gravado. O <span class="chip">is_a2a: true</span>
+                enviado pelo nó interno também é descartado — não existe no
+                insert do conversation-logs.
+              </p>
             </div>
             <div class="card reveal">
               <span class="iaf">◆ iaf</span>
-              <h3>Sintoma 2 — o tráfego entre agentes é invisível</h3>
+              <h3>
+                <svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+                Causa-raiz 3 — mensagens: uma flag que não existe
+              </h3>
               <p style="margin-bottom:14px">
-                A Esperanza recebe muita chamada de outro agente (A2A) — mas
-                <b>nenhuma</b> dessas chamadas carrega o número do protocolo, e
-                <b>nenhum</b> protocolo é marcado como A2A. Para o dashboard,
-                esse tráfego simplesmente não existe.
+                <b>Este furo não é do n8n.</b> A gravação canônica em
+                <span class="chip">ai_messages</span> roda atrás de uma feature
+                flag, em <span class="chip">conversations.ts:197</span>:
+              </p>
+              <div class="tools" style="margin-top:0">
+                <span class="lbl">código</span>
+                <span class="chip">isAiFeatureFlagEnabled(…, "ai_event_ingestion_v2")</span>
+              </div>
+              <p style="margin-top:16px">
+                Em <span class="chip">public.ai_feature_flags</span> existem
+                <b>apenas duas</b> flags por org — <b>ai_event_ingestion_v2 não
+                está lá</b>, em nenhuma. Sem linha → <b>false</b> → dual-write
+                nunca roda. E <b>nenhuma edge function do repo</b> escreve
+                ai_messages fora desse caminho.
               </p>
               <div class="statrow">
-                <div class="stattile"><div class="big">1.298</div><div class="cap">chamadas A2A<br>recebidas</div></div>
-                <div class="stattile"><div class="big">0</div><div class="cap">com protocolo<br>vinculado</div></div>
-                <div class="stattile"><div class="big">0</div><div class="cap">protocolos<br>marcados A2A</div></div>
+                <div class="stattile"><div class="big">00:19</div><div class="cap">última linha em<br>ai_messages (23/07)</div></div>
+                <div class="stattile"><div class="big">00:29</div><div class="cap">primeiro update das<br>flags (23/07)</div></div>
+                <div class="stattile"><div class="big">10 min</div><div class="cap">de distância entre<br>os dois eventos</div></div>
               </div>
             </div>
           </div>
@@ -1669,7 +2080,8 @@
               dos protocolos fica em <b>em_andamento</b> (que conta como
               "acerto", não como transbordo), o indicador parece saudável mesmo
               sem a IA <b>concluir</b> quase nada. O número existe, mas mede a
-              coisa errada.
+              coisa errada. Contagem de 30 dias: <b>Esperanza 1/346</b> ·
+              <b>Valentina 40/894</b> · <b>Clara 0/14</b> finalizados.
             </p>
           </div>
         </div>
@@ -1678,64 +2090,65 @@
       <!-- ===================== QUANDO COMEÇOU ===================== -->
       <section class="section" id="timeline">
         <div class="wrap">
-          <div class="eyebrow reveal">Quando começou</div>
-          <h2 class="reveal">Duas janelas de deploy — e o que cada uma quebrou</h2>
+          <div class="eyebrow reveal">Quando quebrou</div>
+          <h2 class="reveal">Dois eventos em dois dias — e nenhum deles é migration</h2>
           <p class="lede reveal">
-            A telemetria não nasceu quebrada. Cravando as datas com precisão
-            diária: o sinal <b>finalizado</b> foi gravado pela última vez em
-            <b>24/07</b> (Valentina 13:43 BRT; Esperanza já havia parado em
-            21/07) e o pipeline de <b>mensagens</b> morreu em
-            <b>23/07 00:37 UTC</b> — ambos na janela do endurecimento de métricas
-            de 21–23/07. Um <b>segundo cluster</b> de deploys, em <b>03–05/08</b>
-            (A2A + o novo painel de agentes), mexeu na camada de leitura e é o que
-            tornou o problema visível no dashboard. Detalhe decisivo:
+            A telemetria não nasceu quebrada. Com a auditoria do tageador, as
+            datas passam de correlação a <b>causalidade cravada</b>:
+            <b>23/07 00:19 UTC</b> é a última linha de <b>ai_messages</b> — dez
+            minutos antes do update das feature flags que deixou
+            <b>ai_event_ingestion_v2</b> de fora. <b>24/07 16:43:13 UTC</b> é a
+            última mensagem de agente com a marca <b>**Atendimento
+            encerrado**</b>; o último <b>finalizado</b> entrou
+            <b>1,3 segundo depois</b>, na mesma conversa. O cluster de
+            <b>03–05/08</b> só mexeu na <b>leitura</b> — expôs no painel novo um
+            dado que já estava furado há dez dias. Detalhe decisivo:
             <b>transferido</b> e <b>em_andamento</b> seguem sendo gravados todo
-            dia — só a transição <b>finalizado</b> parou, o que aponta para um
-            deploy de <b>edge function</b> (que não aparece na tabela de
-            migrations do banco).
+            dia, porque não passam pelo gate de texto.
           </p>
 
           <div class="arc reveal">
             <div class="arcstage">
-              <div class="ph">até 24/07</div>
+              <div class="ph">até 22/07</div>
               <div class="h">Funcionando</div>
-              <div class="d">Valentina finaliza ~2–7 conversas/dia; mensagens fluem (até 1.517/semana).</div>
+              <div class="d">Valentina finaliza ~2–7 conversas/dia; mensagens fluem (até 1.517/semana); a marca de encerramento aparece 1–7×/dia.</div>
             </div>
             <div class="arcstage">
-              <div class="ph">23–24/07</div>
-              <div class="h">Quebra de escrita</div>
-              <div class="d">Última mensagem 23/07 00:37 UTC; último "finalizado" 24/07 13:43 BRT. Deploy de edge function na janela do hardening 21–23/07.</div>
+              <div class="ph">23/07 00:19→00:29</div>
+              <div class="h">Morre o ai_messages</div>
+              <div class="d">Última linha canônica às 00:19. Flags da org atualizadas às 00:29 — sem a linha ai_event_ingestion_v2. Dual-write desligado em silêncio.</div>
             </div>
             <div class="arcstage">
-              <div class="ph">03–05/08</div>
-              <div class="h">Mudança de leitura</div>
-              <div class="d">Cluster iaf5187 (A2A + agents overview + KPIs). O painel novo passa a exibir o dado já quebrado.</div>
+              <div class="ph">24/07 16:43</div>
+              <div class="h">Morre o desfecho</div>
+              <div class="d">Última marca "**Atendimento encerrado**" às 16:43:13; último finalizado às 16:43:14. A partir daí o gate de texto nunca mais bate na Finza.</div>
             </div>
             <div class="arcstage final">
               <div class="ph">Hoje · 10/08</div>
               <div class="h">Persiste</div>
-              <div class="d">17 dias sem "finalizado"; A2A ainda sem vínculo; mensagens não voltaram.</div>
+              <div class="d">17 dias sem finalizado; A2A ainda sem vínculo; ai_messages não voltou. O tageador segue rodando ~1×/min, fechando tudo como success.</div>
             </div>
           </div>
 
           <div class="grid2 mt32">
             <div class="reveal">
-              <h3 style="font-size:1.05rem;margin-bottom:6px">Status por dia — Valentina (o corte é cirúrgico)</h3>
+              <h3 style="font-size:1.05rem;margin-bottom:6px">A marca de texto × o desfecho gravado (org_finza)</h3>
               <div class="tablewrap" style="margin-top:12px">
                 <table>
-                  <thead><tr><th>Dia</th><th>finalizado</th><th>transferido</th><th>em_andamento</th></tr></thead>
+                  <thead><tr><th>Dia</th><th>Msgs do dia</th><th>Com a marca</th><th>finalizado</th></tr></thead>
                   <tbody>
-                    <tr><td>22/07</td><td>4</td><td>16</td><td>57</td></tr>
-                    <tr><td>23/07</td><td>7</td><td>10</td><td>38</td></tr>
-                    <tr><td>24/07</td><td><b>2</b> <span style="color:var(--faint)">(último)</span></td><td>12</td><td>30</td></tr>
-                    <tr><td>25/07 →</td><td><b style="color:var(--coral)">0</b></td><td>segue vivo</td><td>segue vivo</td></tr>
-                    <tr><td>03/08</td><td><b style="color:var(--coral)">0</b></td><td>19</td><td>55</td></tr>
+                    <tr><td>22/07</td><td>323</td><td>5</td><td>4</td></tr>
+                    <tr><td>23/07</td><td>296</td><td>7</td><td>7</td></tr>
+                    <tr><td>24/07</td><td>183</td><td><b>2</b> <span style="color:var(--faint)">(último)</span></td><td><b>2</b> <span style="color:var(--faint)">(último)</span></td></tr>
+                    <tr><td>25/07 →</td><td>200–390/dia</td><td><b style="color:var(--coral)">0</b></td><td><b style="color:var(--coral)">0</b></td></tr>
+                    <tr><td>03/08</td><td>390</td><td><b style="color:var(--coral)">0</b></td><td><b style="color:var(--coral)">0</b></td></tr>
                   </tbody>
                 </table>
               </div>
+              <div class="legend"><span>As duas colunas andam juntas dia a dia — a marca é a <b>única</b> fonte do desfecho. Marca contada em org_finza (todos os agentes); finalizado, na Valentina.</span></div>
             </div>
             <div class="reveal">
-              <h3 style="font-size:1.05rem;margin-bottom:6px">Mensagens ingeridas por semana (org_finza)</h3>
+              <h3 style="font-size:1.05rem;margin-bottom:6px">Mensagens canônicas por semana (ai_messages · org_finza)</h3>
               <div class="tablewrap" style="margin-top:12px">
                 <table>
                   <thead><tr><th>Semana</th><th>Mensagens</th><th>Situação</th></tr></thead>
@@ -1743,11 +2156,12 @@
                     <tr><td>22/06</td><td>20</td><td><span class="st prod">ok</span></td></tr>
                     <tr><td>06/07</td><td>518</td><td><span class="st prod">ok</span></td></tr>
                     <tr><td>13/07</td><td>1.517</td><td><span class="st prod">ok</span></td></tr>
-                    <tr><td>20/07</td><td>1.196</td><td><span class="st stub">parou em 23/07</span></td></tr>
-                    <tr><td>27/07 →</td><td><b style="color:var(--coral)">0</b></td><td><span class="st stub">morto</span></td></tr>
+                    <tr><td>20/07</td><td>1.196</td><td><span class="st stub">parou 23/07 00:19</span></td></tr>
+                    <tr><td>27/07 →</td><td><b style="color:var(--coral)">0</b></td><td><span class="st stub">flag ausente</span></td></tr>
                   </tbody>
                 </table>
               </div>
+              <div class="legend"><span>O <b>legado</b> (actions_interaction_logs) nunca parou — segue gravando hoje. Só o canônico morreu.</span></div>
             </div>
           </div>
 
@@ -1768,18 +2182,20 @@
             </div>
           </div>
 
-          <div class="callout crit reveal">
+          <div class="callout ok reveal">
             <h4>
-              <svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-              Onde a investigação de código deve começar
+              <svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><polyline points="5 12 10 17 19 7" /></svg>
+              O que a tabela de deploys prova (por ausência)
             </h4>
             <p>
-              O "finalizado" parou em <b>24/07</b>, mas <b>nenhuma migration de
-              banco toca esse dia</b> — logo o culpado é um deploy de <b>edge
-              function</b> na janela 21–24/07, não o cluster de 03–05/08. O deploy
-              do dia 3–5/08 explica o que aparece no <b>painel</b> (A2A + agents
-              overview), não o buraco no dado. Auditar primeiro a edge function de
-              status/encerramento dentro do <b>cobranca-finza</b>.
+              <b>Nenhuma migration toca 24/07</b> — e agora sabemos por quê:
+              não havia nada a mudar no banco. A revisão 1 leu essa ausência como
+              "então foi deploy de edge function" e apontou para o
+              <b>cobranca-finza</b>. A leitura correta é a oposta: <b>a quebra não
+              foi de código da Torre</b>. Foi a mensagem do agente que mudou, do
+              lado do <b>Hyperflow/n8n</b>, derrubando um gate de texto. O cluster
+              de 03–05/08 segue sendo só camada de <b>leitura</b> — mudou o que o
+              painel mostra, não o que o banco recebe.
             </p>
           </div>
         </div>
@@ -1789,12 +2205,13 @@
       <section class="section" id="onde">
         <div class="wrap">
           <div class="eyebrow reveal">Onde está o erro</div>
-          <h2 class="reveal">O dado quebra na entrada — a leitura só reflete</h2>
+          <h2 class="reveal">O dado quebra antes da Torre — a leitura só reflete</h2>
           <p class="lede reveal">
-            O caminho do dado vai da <b>ingestão</b> (edge functions que gravam o
-            que a IA fez) para as <b>tabelas</b> (org_finza) e daí para as
-            <b>funções de leitura</b> (schema public) que o dashboard consome. As
-            falhas estão quase todas na <b>ingestão</b> — a leitura, na maior
+            O caminho completo tem <b>uma camada a mais</b> do que a revisão 1
+            desenhou: entre a conversa e as edge functions existe o
+            <b>tageador do n8n</b>, que é quem <b>decide e monta cada payload</b>.
+            As EFs só persistem o que recebem. Por isso as falhas estão
+            majoritariamente <b>a montante da Torre</b> — e a leitura, na maior
             parte, apenas propaga o buraco.
           </p>
 
@@ -1802,12 +2219,17 @@
             <div class="pnode io">
               <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               <div class="pt">Conversa no WhatsApp</div>
-              <div class="ps">Cliente ↔ agente de IA</div>
+              <div class="ps">Cliente ↔ agente de IA · Hyperflow</div>
             </div>
             <div class="pnode accent">
+              <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M3 12h6"/><path d="M15 12h6"/><path d="M12 3v6"/><path d="M12 15v6"/></svg>
+              <div class="pt">Tageador n8n · 86 nós</div>
+              <div class="ps">Classifica, tageia e <b>monta os payloads</b> de status, funil, mensagem e A2A — <b style="color:var(--coral)">2 das 3 causas-raiz estão aqui</b></div>
+            </div>
+            <div class="pnode">
               <svg class="ico" viewBox="0 0 24 24"><path d="M4 4h16v12H5.2L4 17.2z"/></svg>
-              <div class="pt">Edge functions de ingestão</div>
-              <div class="ps">Gravam protocolo, status, funil, mensagens, A2A — <b style="color:var(--coral)">é aqui que quebra</b></div>
+              <div class="pt">Edge functions da Torre</div>
+              <div class="ps">ai-conversation-webhook · api/conversation-logs · api/ai/agent-calls — <b style="color:var(--amber)">persistem o que recebem</b></div>
             </div>
             <div class="pnode">
               <svg class="ico" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg>
@@ -1827,45 +2249,57 @@
           </div>
 
           <div class="tablewrap reveal">
-            <table>
-              <thead><tr><th>Falha</th><th>Camada</th><th>Objeto exato</th></tr></thead>
+            <table style="min-width:760px">
+              <thead><tr><th>Falha</th><th>Dono</th><th>Objeto exato</th></tr></thead>
               <tbody>
                 <tr>
-                  <td><span class="tt">Desfecho não emitido</span><div class="td">"finalizado"/"conversation_ended" quase não disparam</div></td>
-                  <td>Ingestão</td>
-                  <td>EF que escreve <span class="chip">ai_protocol_status_log</span> + <span class="chip">ai_protocols.status</span></td>
+                  <td><span class="tt">Desfecho não emitido</span><div class="td">o gate de texto do encerramento parou de bater</div></td>
+                  <td><b>n8n</b></td>
+                  <td>nó <span class="chip">encerrado</span> / <span class="chip">encerrado1</span> — If <span class="chip">contains "**Atendimento encerrado**"</span></td>
                 </tr>
                 <tr>
-                  <td><span class="tt">A2A desconectado</span><div class="td">chamada não carrega protocolo; protocolo não marca A2A</div></td>
-                  <td>Ingestão</td>
-                  <td><span class="chip">agent_call_logs.protocol</span> (null) + <span class="chip">ai_protocols.is_a2a</span> (false)</td>
+                  <td><span class="tt">A2A desconectado</span><div class="td">chave errada no payload + API que a ignora</div></td>
+                  <td><b>n8n</b> + Torre</td>
+                  <td><span class="chip">salva_mensagem_agente</span> envia <b>porotocol</b> · <span class="chip">ai.ts:824</span> não lê protocol</td>
                 </tr>
                 <tr>
-                  <td><span class="tt">Mensagens paradas</span><div class="td">nada gravado desde 23/07</div></td>
-                  <td>Ingestão + Leitura</td>
-                  <td><span class="chip">ai_messages</span> (morto) · lido por <span class="chip">get_ai_interaction_metrics_v1</span></td>
+                  <td><span class="tt">Mensagens canônicas paradas</span><div class="td">dual-write atrás de flag inexistente</div></td>
+                  <td><b>Config</b></td>
+                  <td><span class="chip">public.ai_feature_flags</span> sem a linha <span class="chip">ai_event_ingestion_v2</span></td>
+                </tr>
+                <tr>
+                  <td><span class="tt">Finalização nova nunca usada</span><div class="td">endpoint novo sem caller que funcione</div></td>
+                  <td><b>n8n</b></td>
+                  <td>webhook <span class="chip">tageador-interno</span> → <span class="chip">status{finalizado}</span> (webhookId duplicado)</td>
+                </tr>
+                <tr>
+                  <td><span class="tt">Falha silenciosa por design</span><div class="td">erro de escrita não aborta nem alarma</div></td>
+                  <td><b>n8n</b></td>
+                  <td><span class="chip">onError: continueErrorOutput</span> + saídas de erro e sucesso no mesmo destino</td>
                 </tr>
                 <tr>
                   <td><span class="tt">Transbordo sem tipo (Clara)</span><div class="td">transferências sem classificação</div></td>
-                  <td>Ingestão</td>
+                  <td>Torre</td>
                   <td><span class="chip">ai_funnel_events.transfer_type</span> (null p/ Clara)</td>
                 </tr>
                 <tr>
                   <td><span class="tt">Recência não populada</span><div class="td">colunas de "última atividade" sempre vazias</div></td>
-                  <td>Ingestão</td>
+                  <td>Torre</td>
                   <td><span class="chip">ai_protocols.last_event_at</span> · <span class="chip">last_message_received_at</span></td>
                 </tr>
                 <tr>
-                  <td><span class="tt">Registros órfãos</span><div class="td">150 interações sem agente nem cenário</div></td>
-                  <td>Ingestão</td>
-                  <td><span class="chip">actions_interaction_logs.agent_id</span> (null)</td>
+                  <td><span class="tt">Registros órfãos</span><div class="td">158 logs de link de pagamento sem contexto</div></td>
+                  <td>Ferramenta</td>
+                  <td><span class="chip">actions_interaction_logs</span> com <span class="chip">conversation_id</span>, <span class="chip">protocol</span> e <span class="chip">agent_id</span> nulos</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="legend reveal">
-            <span><b>Ingestão</b> = edge functions no cobranca-finza (dev + deploy via CI/CD)</span>
-            <span><b>Leitura</b> = funções SQL no schema public (migration)</span>
+            <span><b>n8n</b> = workflow no N8N-AGENT (JSON local + import manual)</span>
+            <span><b>Torre</b> = edge function / migration no cobranca-finza (via CI/CD)</span>
+            <span><b>Config</b> = linha de dados no banco</span>
+            <span><b>Ferramenta</b> = produtor externo ao tageador</span>
           </div>
         </div>
       </section>
@@ -1890,12 +2324,12 @@
             <div class="feat reveal">
               <svg class="ico" viewBox="0 0 24 24"><path d="M17 3l4 4-4 4"/><path d="M21 7H8a4 4 0 0 0-4 4"/><path d="M7 21l-4-4 4-4"/><path d="M3 17h10"/></svg>
               <h4>Colaboração entre agentes invisível</h4>
-              <p>1.298 chamadas A2A (todas na Esperanza) não aparecem em métrica nenhuma. Não sabemos o custo nem o ganho desse tráfego.</p>
+              <p>1.314 chamadas A2A (todas na Esperanza) não aparecem em métrica nenhuma. Não sabemos o custo nem o ganho desse tráfego.</p>
             </div>
             <div class="feat reveal">
               <svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              <h4>Transcrições cegas pós-23/07</h4>
-              <p>Como as mensagens pararam, o histórico de conversa e qualquer auditoria de atendimento ficam vazios desde 23/07.</p>
+              <h4>Histórico canônico cego pós-23/07</h4>
+              <p>ai_messages está vazio desde 23/07. O texto das conversas sobrevive no log legado, mas toda leitura que aponta para o canônico volta zerada.</p>
             </div>
             <div class="feat reveal">
               <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
@@ -1927,52 +2361,82 @@
       <section class="section" id="erros">
         <div class="wrap">
           <div class="eyebrow reveal">Inventário completo</div>
-          <h2 class="reveal">As seis anomalias, por severidade</h2>
+          <h2 class="reveal">As nove anomalias, por severidade</h2>
           <p class="lede reveal">
-            Tudo que foi levantado, consolidado. Severidade pela distorção que
-            causa no que a gestão enxerga.
+            Tudo consolidado, agora com <b>causa-raiz e dono</b> por linha. A
+            revisão 2 acrescentou três achados (finalização nova morta, falha
+            silenciosa por design, webhookId duplicado) e <b>reclassificou a
+            origem</b> de três outros. Severidade pela distorção que causa no que
+            a gestão enxerga.
           </p>
 
           <div class="tablewrap reveal">
-            <table style="min-width:720px">
+            <table style="min-width:860px">
               <thead>
-                <tr><th>Sev.</th><th>Anomalia</th><th>Evidência</th><th>Desde</th></tr>
+                <tr><th>Sev.</th><th>Anomalia</th><th>Causa-raiz</th><th>Evidência</th><th>Desde</th></tr>
               </thead>
               <tbody>
                 <tr>
                   <td>🔴</td>
                   <td><span class="tt">Desfecho "finalizado" não é emitido</span><div class="td">as 3 agentes; ~73% presas em em_andamento</div></td>
-                  <td>Esperanza 1/346 · Valentina 40/894 · Clara 0/14. conversation_ended: 3 / 54 / 0.</td>
-                  <td>24/07<div class="td">último registro; regressão de escrita</div></td>
+                  <td><b>n8n</b> — gate de string no nó <span class="chip">encerrado</span></td>
+                  <td>última marca 24/07 16:43:13 → último finalizado 16:43:14 (<b>1,3 s</b>). 0 marcas em ~5.500 msgs depois. org_blips segue emitindo</td>
+                  <td>24/07</td>
                 </tr>
                 <tr>
                   <td>🔴</td>
                   <td><span class="tt">A2A desconectado do modelo de protocolo</span><div class="td">Esperanza recebe todo o tráfego A2A</div></td>
-                  <td>1.298 chamadas · 100% sem protocolo · is_a2a=0 em todos</td>
-                  <td>09/07<div class="td">estrutural (nunca funcionou)</div></td>
+                  <td><b>n8n + Torre</b> — typo <span class="chip">porotocol</span> e endpoint que ignora <span class="chip">protocol</span></td>
+                  <td>1.314 chamadas · 0 com protocol · 0 com source_event_id · is_a2a=0 em todos os protocolos</td>
+                  <td>09/07<div class="td">estrutural</div></td>
                 </tr>
                 <tr>
                   <td>🟠</td>
-                  <td><span class="tt">Pipeline de mensagens morto</span><div class="td">quebra a seção de mensagens e transcrições</div></td>
-                  <td>última msg 23/07 00:37 UTC · 0 nos últimos 7 dias</td>
-                  <td>23/07<div class="td">hard stop</div></td>
+                  <td><span class="tt">ai_messages morto (canônico)</span><div class="td">quebra as leituras que apontam pro canônico</div></td>
+                  <td><b>Config</b> — flag <span class="chip">ai_event_ingestion_v2</span> inexistente</td>
+                  <td>última linha 23/07 00:19 · flags atualizadas 00:29 sem essa · nenhuma EF escreve ai_messages fora do dual-write</td>
+                  <td>23/07</td>
+                </tr>
+                <tr>
+                  <td>🟠</td>
+                  <td><span class="tt">Caminho novo de finalização nunca funcionou</span><div class="td">endpoint com revisão otimista e tags, sem uso</div></td>
+                  <td><b>n8n</b> — só alcançável via webhook <span class="chip">tageador-interno</span></td>
+                  <td><span class="chip">ai_protocols.finalized_at</span> não passa de 24/07; 0 execuções em modo webhook na amostra</td>
+                  <td>—<div class="td">nunca produziu efeito</div></td>
+                </tr>
+                <tr>
+                  <td>🟠</td>
+                  <td><span class="tt">Falha silenciosa por design</span><div class="td">17 dias de furo sem um único alarme</div></td>
+                  <td><b>n8n</b> — <span class="chip">continueErrorOutput</span> com erro e sucesso no mesmo destino</td>
+                  <td>execuções fecham como <b>success</b> mesmo com POST falhando; 45 execuções recentes sem tocar nó de encerramento</td>
+                  <td>estrutural</td>
                 </tr>
                 <tr>
                   <td>🟠</td>
                   <td><span class="tt">Clara: transbordo sem classificação</span><div class="td">transferências caem em "não classificado"</div></td>
+                  <td><b>Torre</b> — transfer_type não populado</td>
                   <td>10 eventos de transferência, todos com transfer_type nulo</td>
                   <td>06/08<div class="td">desde o lançamento</div></td>
                 </tr>
                 <tr>
                   <td>🟡</td>
                   <td><span class="tt">Colunas de recência vazias</span><div class="td">quebram métricas de tempo/staleness</div></td>
+                  <td><b>Torre</b> — ingestão não popula</td>
                   <td>last_event_at e last_message_received_at 100% nulos nas 3</td>
                   <td>estrutural</td>
                 </tr>
                 <tr>
                   <td>🟡</td>
-                  <td><span class="tt">150 registros órfãos</span><div class="td">inflam o total consolidado org-wide</div></td>
-                  <td>actions_interaction_logs com agent_id e scenario nulos (11/07→07/08)</td>
+                  <td><span class="tt">webhookId duplicado nos dois webhooks</span><div class="td">risco de colisão de registro de rota</div></td>
+                  <td><b>n8n</b> — resíduo de copy/paste do nó</td>
+                  <td><span class="chip">tageador-torre</span> e <span class="chip">tageador-interno</span> com o mesmo <span class="chip">777b64f8-…</span></td>
+                  <td>estrutural</td>
+                </tr>
+                <tr>
+                  <td>🟡</td>
+                  <td><span class="tt">158 registros órfãos</span><div class="td">inflam o total consolidado org-wide</div></td>
+                  <td><b>Ferramenta</b> — logs de link de pagamento, <b>não</b> o A2A</td>
+                  <td>intent <span class="chip">payment_link_generated</span>, conversation_id/protocol/agent_id nulos (11/07 → hoje)</td>
                   <td>11/07</td>
                 </tr>
               </tbody>
@@ -1982,6 +2446,7 @@
             <span>🔴 <b>Crítico</b> — distorce o KPI principal</span>
             <span>🟠 <b>Alto</b> — quebra uma seção inteira</span>
             <span>🟡 <b>Médio</b> — ruído/degradação localizada</span>
+            <span>Dono: <b>n8n</b> 4 · <b>Torre</b> 2 · <b>n8n+Torre</b> 1 · <b>Config</b> 1 · <b>Ferramenta</b> 1</span>
           </div>
         </div>
       </section>
@@ -1992,35 +2457,41 @@
           <div class="eyebrow reveal">Recuperar o histórico</div>
           <h2 class="reveal">Dá para reprocessar o que já está no Supabase?</h2>
           <p class="lede reveal">
-            Em parte — e a chave que costura tudo é o <b>protocol</b>, presente
-            em todas as tabelas (protocolo, funil, tags). O que foi
-            <b>capturado em algum lugar</b> pode ser reconciliado; o que
-            <b>nunca foi escrito</b> só volta re-lendo a fonte original (Hyperflow).
+            Mais do que a revisão 1 supunha. A chave que costura tudo é o
+            <b>protocol</b>, presente em todas as tabelas — e a auditoria do
+            tageador mostrou que <b>dois dos quatro vereditos estavam errados</b>:
+            o texto das conversas <b>nunca se perdeu</b> (foi para o log legado) e
+            o vínculo A2A <b>é recuperável para a frente</b>, porque o protocolo
+            está na mão do workflow o tempo todo.
           </p>
 
           <div class="tablewrap reveal mt32">
-            <table style="min-width:720px">
-              <thead><tr><th>Recuperação</th><th>Viável?</th><th>Fonte / caminho</th></tr></thead>
+            <table style="min-width:760px">
+              <thead><tr><th>Recuperação</th><th>Rev. 1</th><th>Rev. 2</th><th>Fonte / caminho</th></tr></thead>
               <tbody>
                 <tr>
                   <td><span class="tt">Desfecho "finalizado" (pós-24/07)</span></td>
                   <td>🟡 Parcial</td>
-                  <td>Reconciliar o status do chat no <b>Hyperflow</b> (evento <span class="chip">chat_finished</span> → success / inactivity / unsolved) por <span class="chip">protocol</span>. Proxy vivo no próprio banco: <span class="chip">actions_interaction_logs.intent_detected</span> (payment_confirmed, no_resolution…) + <span class="chip">conversation_tags</span>.</td>
+                  <td>🟢 <b>Viável</b></td>
+                  <td>Melhor do que se pensava: a <b>própria marca de texto</b> que sumiu na Finza continua identificável no log legado dos períodos anteriores, e o critério é determinístico. Para o buraco 25/07→hoje, reconciliar por <span class="chip">protocol</span> com o status do chat no <b>Hyperflow</b> (<span class="chip">chat_finished</span>). Proxy vivo no banco: <span class="chip">intent_detected</span> + <span class="chip">conversation_tags</span>.</td>
                 </tr>
                 <tr>
                   <td><span class="tt">Re-tagueamento em lote</span></td>
-                  <td>🟢 Viável (dev)</td>
-                  <td>O <b>tageador n8n</b> (<span class="chip">added_by = n8n_agent</span>) está vivo e grava <span class="chip">conversation_tags</span> neste banco. O padrão de backfill por janela/protocolo já existe no pipeline de auditoria — mas é workflow novo, montado dentro do N8N-AGENT + import manual.</td>
+                  <td>🟢 Viável</td>
+                  <td>🟢 <b>Viável</b></td>
+                  <td>Confirmado ao vivo: o tageador está ativo, ~1 execução/min, gravando <span class="chip">conversation_tags</span> (<span class="chip">added_by = n8n_agent</span>) hoje. Backfill por janela/protocolo é workflow novo, montado dentro do N8N-AGENT + import manual.</td>
                 </tr>
                 <tr>
                   <td><span class="tt">Vínculo A2A (is_a2a / protocol)</span></td>
-                  <td>🔴 Inviável pelo banco</td>
-                  <td><span class="chip">agent_call_logs</span> tem metadata vazio e sem chave; 0 casam com mensagens/funil. A correlação nunca foi capturada → só religando na origem (o chamador é o agente <b>Socorro</b>).</td>
+                  <td>🔴 Inviável</td>
+                  <td>🟡 <b>Daqui pra frente</b></td>
+                  <td><b>Reclassificado.</b> O histórico das 1.314 chamadas segue irrecuperável (metadata vazio, nada casa). Mas <b>não é limitação de origem</b>: o protocolo sempre esteve em <span class="chip">global.protocol</span> — corrigido o typo e o endpoint, o vínculo passa a existir da correção em diante.</td>
                 </tr>
                 <tr>
-                  <td><span class="tt">Transcrições pós-23/07</span></td>
-                  <td>🔴 Inviável pelo banco</td>
-                  <td><span class="chip">ai_messages</span> nunca foi escrito no período; só re-puxando do <b>Hyperflow/WhatsApp</b> via n8n.</td>
+                  <td><span class="tt">Texto das conversas pós-23/07</span></td>
+                  <td>🔴 Inviável</td>
+                  <td>🟢 <b>Nunca se perdeu</b></td>
+                  <td><b>Correção material.</b> O que morreu foi o <b>canônico</b> (<span class="chip">ai_messages</span>). O texto continuou sendo gravado em <span class="chip">actions_interaction_logs</span> sem interrupção — 200 a 390 mensagens/dia até hoje. O backfill do canônico é uma <b>cópia interna</b>, sem depender do Hyperflow.</td>
                 </tr>
               </tbody>
             </table>
@@ -2029,20 +2500,20 @@
           <div class="grid2 mt32">
             <div class="card reveal">
               <span class="iaf">◆ iaf</span>
-              <h3>O tageador do n8n — o que confirmamos</h3>
+              <h3>O tageador — o que a auditoria confirmou</h3>
               <ul>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span>Vivo: <b>2.182 tags</b>, 520 nos últimos 7 dias, gravando em <b>org_finza.conversation_tags</b> deste projeto (idinihcyezkqfarztrdx)</li>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span>Fonte de verdade do desfecho = status do chat no <b>Hyperflow</b>, casável por <b>protocol</b></li>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span>Existe trilha de <b>backfill por janela e por protocolo</b> no pipeline de auditoria (reaproveitável como molde)</li>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>Grava <b>tag</b>, não <b>status de protocolo</b> — falta a ponte tag → finalizado</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span><b>Vivo e saudável</b>: ativo, ~1 execução/min, gravando <b>conversation_tags</b> hoje (última às 12:24 de 10/08)</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span>Ele <b>não é só tageador</b> — é o produtor de status, funil, mensagem e A2A. Corrigi-lo corrige a métrica na origem</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--finza-blue)"><polyline points="5 12 10 17 19 7" /></svg></span>O caminho de encerramento existe <b>em duplicidade</b>: o legado (<span class="chip">status{encerrado}</span>) e o novo (<span class="chip">status{finalizado}</span>, com revisão otimista). Só o legado já funcionou</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span>Grava <b>tag</b>, não <b>status de protocolo</b>, no caminho de tags — a ponte tag → finalizado continua faltando</li>
               </ul>
             </div>
             <div class="card reveal">
               <span class="iaf">◆ iaf</span>
               <h3>Antes de reprocessar — 2 travas</h3>
               <ul>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M5 12h14"/></svg></span><b>Vocabulário inconsistente</b>: tags/intents misturam EN/PT (<span class="chip">no_resolution</span> × <span class="chip">sem_resolucao</span>), typo (<span class="chip">contact_iniciado</span>) e lixo (<span class="chip">-1</span>). Normalizar é pré-requisito.</li>
-                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--coral)"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span><b>Confirmação n8n bloqueada</b>: as <span class="chip">N8N_API_KEY</span> no .mcp.json estão vazias — não deu para validar ao vivo o workflow do tageador nem quando ele parou. Preencher as chaves é o primeiro passo operacional.</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M5 12h14"/></svg></span><b>Vocabulário inconsistente</b>: tags/intents misturam EN/PT (<span class="chip">no_resolution</span> × <span class="chip">sem_resolucao</span>), typo (<span class="chip">contact_iniciado</span>) e lixo (<span class="chip">-1</span>). Normalizar é pré-requisito. Some-se a isso o <span class="chip">requesting_agent</span> corrompido no A2A (<span class="chip">Socorro-bb-ca-acd-ffefa</span>, <span class="chip">dbec--efe--de</span>) — vem assim do chamador.</li>
+                <li><span class="mk"><svg class="ico" viewBox="0 0 24 24" style="color:var(--amber)"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span><b>Trava de acesso parcialmente resolvida</b>: as <span class="chip">N8N_API_KEY</span> no <span class="chip">.mcp.json</span> da raiz seguem vazias. Esta auditoria usou a chave do <span class="chip">N8N-AGENT/.env</span> via REST (GET). A chave lê workflow por ID, mas <b>o list volta vazio</b> — não deu para confirmar se existe um gêmeo "Prod" nem puxar o histórico de versões.</li>
               </ul>
             </div>
           </div>
@@ -2050,14 +2521,15 @@
           <div class="callout ok reveal">
             <h4>
               <svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><polyline points="5 12 10 17 19 7" /></svg>
-              Veredito de reprocessamento
+              Veredito de reprocessamento (revisado)
             </h4>
             <p>
-              O desfecho e as tags <b>são recuperáveis</b> — reconciliando por
-              <b>protocol</b> com o Hyperflow e reaproveitando o molde de backfill
-              do tageador. O A2A e as transcrições <b>não</b> são recuperáveis pelo
-              banco: exigem correção para a frente na ingestão. Reprocessar sem
-              corrigir a origem só recompõe o passado; o futuro volta a furar.
+              O desfecho, as tags e o <b>texto das conversas</b> são
+              recuperáveis — o texto, inclusive, <b>sem sair do banco</b>. Só o
+              <b>histórico</b> do vínculo A2A permanece perdido; daqui pra frente
+              ele volta com a correção do payload. Continua valendo a regra:
+              reprocessar sem corrigir a origem só recompõe o passado — e, no caso
+              do gate de texto, o futuro volta a furar no próximo ajuste de prompt.
             </p>
           </div>
         </div>
@@ -2067,50 +2539,73 @@
       <section class="section" id="correcoes">
         <div class="wrap">
           <div class="eyebrow reveal">Como corrigir</div>
-          <h2 class="reveal">Três caminhos — da raiz ao paliativo</h2>
+          <h2 class="reveal">Cinco passos, na ordem do custo x consequência</h2>
           <p class="lede reveal">
-            Os três não são excludentes. O ideal é o <b>Caminho 1</b> (conserta a
-            fonte) somado ao <b>Caminho 3</b> (impede recorrência silenciosa); o
-            <b>Caminho 2</b> serve de ponte enquanto o 1 não é entregue.
+            Com a causa-raiz nomeada, a correção deixa de ser um projeto de dev na
+            Torre e vira uma <b>sequência curta</b>. Os passos 1 a 3 param a
+            hemorragia e cabem em horas; os 4 e 5 impedem a recorrência. Nada aqui
+            depende do cluster de deploys de 03–05/08.
           </p>
+
+          <div class="vsteps reveal">
+            <div class="vstep cur">
+              <div class="v">1</div>
+              <div class="h">Destravar o desfecho</div>
+              <div class="d">Descobrir o que substituiu <b>**Atendimento encerrado**</b> nos prompts da Finza em 24/07 e trocar o gate por um <b>sinal estruturado</b> (campo <span class="chip">encerrado: true</span> no payload), em vez de recolocar o texto. <b>Dono:</b> n8n + Hyperflow.</div>
+            </div>
+            <div class="vstep">
+              <div class="v">2</div>
+              <div class="h">Religar o canônico</div>
+              <div class="d">Inserir a linha <span class="chip">ai_event_ingestion_v2</span> em <span class="chip">public.ai_feature_flags</span> para org_finza e org_blips. Uma linha de config — <b>ai_messages volta a receber na hora</b>. <b>Dono:</b> config/banco.</div>
+            </div>
+            <div class="vstep">
+              <div class="v">3</div>
+              <div class="h">Costurar o A2A</div>
+              <div class="d"><span class="chip">porotocol</span> → <span class="chip">protocol</span> no nó <span class="chip">salva_mensagem_agente</span> <b>e</b> passar a persistir <span class="chip">protocol</span>/<span class="chip">is_a2a</span> nos endpoints. <b>Dono:</b> n8n + Torre (CI/CD).</div>
+            </div>
+            <div class="vstep">
+              <div class="v">4</div>
+              <div class="h">Resolver os webhooks</div>
+              <div class="d">Corrigir o <b>webhookId duplicado</b> e decidir o destino de <span class="chip">tageador-interno</span>: ou existe caller e ele passa a funcionar, ou o caminho novo de finalização é removido. Hoje é código morto no meio do fluxo. <b>Dono:</b> n8n.</div>
+            </div>
+          </div>
 
           <div class="grid3 mt32">
             <div class="feat hl reveal">
-              <svg class="ico" viewBox="0 0 24 24"><path d="M14 2 6 14h6l-2 8 8-12h-6z"/></svg>
-              <h4>1 · Reparo na origem <span style="font-size:.7rem;opacity:.8">(recomendado)</span></h4>
-              <p style="margin-bottom:10px">Corrige a raiz nas edge functions de ingestão, dentro do <b>cobranca-finza</b>:</p>
-              <p>• Auditar o deploy de edge function de ≈24/07 e reabilitar a emissão de <b>finalizado / conversation_ended</b>.<br>
-              • Religar a ingestão de <b>ai_messages</b> (ou migrar a métrica para ai_protocols).<br>
-              • Preencher <b>protocol</b> nas chamadas A2A e marcar <b>is_a2a</b> no protocolo.<br>
-              • Popular <b>last_event_at</b> e classificar transbordo da Clara.<br>
-              <b>Prós:</b> resolve tudo na fonte; a métrica volta a ser verdadeira. <b>Contras:</b> exige dev + deploy via CI/CD; backfill do histórico é trabalhoso.</p>
+              <svg class="ico" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 4 2 7h10c0-3 2-4 2-7a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg>
+              <h4>5 · Instrumentação + alarme <span style="font-size:.7rem;opacity:.8">(não-negociável)</span></h4>
+              <p style="margin-bottom:10px">É o passo que impede o próximo furo de durar 17 dias:</p>
+              <p>• Trocar <b>continueErrorOutput</b> por erro real nos 4 nós de encerramento, ou separar a saída de erro.<br>
+              • Alarme de <b>freshness</b> por tabela (ex.: sem <b>finalizado</b> há &gt; X h).<br>
+              • Teste de contrato: taxa de finalizado dentro de faixa esperada.<br>
+              <b>Prós:</b> detecta em horas. <b>Contras:</b> complementar — não recupera nada sozinho.</p>
             </div>
             <div class="feat reveal">
               <svg class="ico" viewBox="0 0 24 24"><path d="M4 17l6-6-6-6"/><path d="M12 19h8"/></svg>
-              <h4>2 · Correção na leitura (ponte)</h4>
-              <p style="margin-bottom:10px">Mitiga no banco (migration nas RPCs public), sem tocar a ingestão:</p>
+              <h4>Ponte opcional na leitura</h4>
+              <p style="margin-bottom:10px">Só se o painel precisar "parecer certo" antes dos passos 1–3:</p>
               <p>• Migrar <b>get_ai_interaction_metrics_v1</b> para não depender de ai_messages.<br>
               • Derivar "finalizado" de sinais alternativos (inatividade + status log).<br>
-              • Inferir vínculo A2A por janela temporal / source_event_id.<br>
-              <b>Prós:</b> rápido, isolado e reversível — mesmo padrão dos hotfixes já usados em 16/07. <b>Contras:</b> passa a <b>estimar</b> o desfecho; mascara o dado bruto ainda quebrado.</p>
+              <b>Contras:</b> passa a <b>estimar</b> o desfecho e mascara o dado bruto. Com o passo 2 custando uma linha, o custo-benefício desta ponte <b>caiu muito</b>.</p>
             </div>
             <div class="feat reveal">
-              <svg class="ico" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 4 2 7h10c0-3 2-4 2-7a7 7 0 0 0-7-7z"/><path d="M9 21h6"/></svg>
-              <h4>3 · Instrumentação + alarme</h4>
-              <p style="margin-bottom:10px">Não conserta sozinho, mas evita a próxima quebra silenciosa:</p>
-              <p>• Alarme de <b>freshness</b> por tabela (ex.: ai_messages sem insert há &gt; X h).<br>
-              • Teste de contrato: taxa de finalizado dentro de faixa esperada.<br>
-              • Painel de saúde dos pipelines de telemetria.<br>
-              <b>Prós:</b> detecta em horas, não em semanas; risco baixo. <b>Contras:</b> complementar — não recupera os dados atuais.</p>
+              <svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+              <h4>Dívidas que sobram na Torre</h4>
+              <p style="margin-bottom:10px">Não bloqueiam os passos acima, mas continuam abertas:</p>
+              <p>• Popular <b>last_event_at</b> e <b>last_message_received_at</b>.<br>
+              • Classificar o transbordo da Clara (<b>transfer_type</b>).<br>
+              • Dar contexto aos logs de <b>payment_link_generated</b> (hoje 158 órfãos).<br>
+              <b>Dono:</b> cobranca-finza, via CI/CD.</p>
             </div>
           </div>
 
           <div class="goal reveal">
-            Recomendação: abrir o Caminho 1 como item crítico na frente BTR e,
-            em paralelo, subir o Caminho 3 como guardrail permanente. O Caminho 2
-            só se a leitura precisar "parecer certa" antes de o reparo de raiz sair.
-            Feito o Caminho 1, rodar o <b>reprocessamento por protocol</b> (seção
-            anterior) para recompor o desfecho histórico pós-24/07.
+            Recomendação: abrir os passos 1–3 como <b>item crítico único</b> na
+            frente BTR — os três somados são menos trabalho do que a auditoria de
+            edge function que a revisão 1 propunha, e cobrem as duas anomalias
+            críticas. O passo 5 entra como guardrail permanente. Só depois disso
+            rodar o <b>reprocessamento por protocol</b> para recompor o desfecho
+            histórico pós-24/07.
           </div>
         </div>
       </section>
@@ -2121,24 +2616,53 @@
           <div class="eyebrow reveal">Em resumo</div>
           <div class="resumo reveal">
             <span class="iaf">◆ iaf</span>
-            <h2>Os agentes atendem; o sistema parou de medir o atendimento.</h2>
+            <h2>Os agentes atendem; o motor que os mede furou em três pontos.</h2>
             <p>
-              Seis anomalias na telemetria de Esperanza, Valentina e Clara — duas
-              críticas. O desfecho parou de ser gravado em <b>24/07</b> (deploy de
-              edge function); o cluster de <b>03–05/08</b> mexeu no A2A e no painel
-              novo, expondo o problema. O tráfego está saudável; o desfecho, o A2A e
-              as mensagens, não. A raiz mora nas edge functions do cobranca-finza —
-              e parte do histórico dá para recuperar reconciliando por
-              <b>protocol</b> com o Hyperflow.
+              Nove anomalias na telemetria de Esperanza, Valentina e Clara — duas
+              críticas, agora com <b>causa-raiz nomeada</b>. Quem escreve a métrica
+              não é a Torre: é <b>um workflow n8n de 86 nós</b>. Nele, o desfecho
+              dependia de um <b>casamento de texto literal</b> que deixou de bater
+              em <b>24/07</b> — a prova é 1,3 segundo entre a última marca e o
+              último "finalizado", e o fato de <b>org_blips seguir funcionando</b>
+              no mesmo workflow. O A2A viaja com a chave <b>porotocol</b> para uma
+              API que a ignora. E as mensagens canônicas pararam porque uma
+              <b>feature flag não existe</b> em lugar nenhum. Nenhum dos três é
+              deploy de edge function; os três são baratos de corrigir.
             </p>
             <div class="points">
               <span class="p">Volume saudável</span>
-              <span class="p">Desfecho quebrado</span>
-              <span class="p">A2A invisível</span>
-              <span class="p">Mensagens paradas em 23/07</span>
-              <span class="p">Acurácia inflada</span>
-              <span class="p">Corrigir na origem</span>
+              <span class="p">O motor é o tageador n8n</span>
+              <span class="p">Gate de texto quebrou em 24/07</span>
+              <span class="p">A2A: typo porotocol</span>
+              <span class="p">Flag ausente matou o ai_messages</span>
+              <span class="p">Falha silenciosa por design</span>
+              <span class="p">Correção fora da Torre</span>
             </div>
+          </div>
+
+          <div class="callout warn reveal">
+            <h4><span class="badge">honestidade</span>&nbsp;Duas pontas que continuam abertas</h4>
+            <p>
+              <b>1.</b> <span class="chip">conversation_ended</span> ainda aparece
+              em org_finza depois de 24/07 — 21 eventos, quase todos Valentina, o
+              último em 07/08 — <b>sem nenhuma marca de texto correspondente</b>.
+              Existe um segundo produtor desse evento que não consegui
+              identificar: <span class="chip">source</span> e
+              <span class="chip">source_event_id</span> chegam nulos e não
+              discriminam.
+              <b>2.</b> A chave de API só lê workflow por ID; o
+              <span class="chip">list</span> volta vazio. Não deu para confirmar se
+              existe um gêmeo <b>"Prod"</b> deste tageador nem para puxar o
+              histórico de versões e datar a edição de <b>07/08 20:09</b>.
+            </p>
+          </div>
+
+          <div class="tools reveal" style="margin-top:26px">
+            <span class="lbl">método</span>
+            <span class="chip">n8n REST GET /api/v1/workflows · /executions (read-only)</span>
+            <span class="chip">Supabase MCP · SELECT em org_finza + org_blips</span>
+            <span class="chip">leitura de código em cobranca-finza/supabase/functions</span>
+            <span class="chip">45 execuções inspecionadas nó a nó</span>
           </div>
         </div>
       </section>
@@ -2147,10 +2671,10 @@
     <footer>
       <div class="wrap">
         <div>
-          <b>Anomalias nas Métricas dos Agentes de IA — Torre de Controle</b><br />João Vinícius · Supervisor IAF (Finza) · 10/08/2026
+          <b>Anomalias nas Métricas dos Agentes de IA — Torre de Controle</b><br />João Vinícius · Supervisor IAF (Finza) · 10/08/2026 · revisão 2
         </div>
         <div class="mono">
-          fonte · supabase-prod / org_finza (read-only)<br />diagnóstico técnico · ◆ iaf
+          fonte · n8n-assistants + supabase-prod / org_finza · org_blips (read-only)<br />diagnóstico técnico · ◆ iaf
         </div>
       </div>
     </footer>

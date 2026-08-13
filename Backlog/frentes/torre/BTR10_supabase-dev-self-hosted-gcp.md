@@ -1,17 +1,17 @@
 ---
 id: BTR10
-title: Provisionar Supabase DEV self-hosted (GCP) com dados de prod anonimizados
+title: Provisionar Supabase DEV self-hosted (GCP) com 100 clientes anonimizados e ambiente segregado
 frente: torre
 fonte: backlog
-status: em-refinamento
+status: em-curso
 prioridade: alta
 rice:
   reach: 7
   impact: 7
-  confidence: 6
-  effort: 6
-  score: 4.9
-esforco: L
+  confidence: 8
+  effort: 4
+  score: 9.8
+esforco: M
 valor_negocio: alto
 origem:
   pendencias: []
@@ -24,141 +24,135 @@ owner: João Vinícius
 implementador: João Vinícius Dessimoni Fernandes
 sponsor: João Vinícius
 criada: 2026-08-07
-refinada: 2026-08-07
+refinada: 2026-08-10
 deadline_alvo: 2026-Q3
 dependencias: []
-bloqueia: []
+bloqueia: [BTR11]
 riscos:
-  - Anonimização de PII incompleta — se algum email/telefone real de cliente vazar para o dev, é exposição de dado sensível. A regra "muda só email/telefone/cnpj/cpf" precisa de um mapa exaustivo das colunas que carregam PII, não só as óbvias.
-  - pg_dump/pg_restore via pooler pode falhar por "parâmetro não suportado" (alerta do próprio João no card) — plano B é rodar de dentro da VM.
-  - Router de EF (main/index.ts) no self-hosted é ponto de falha silenciosa — errar o verify_jwt abre EF sem auth (buraco de segurança) ou quebra crons/webhooks que não mandam JWT.
-  - Lista dos 38 overrides desatualiza sozinha — EF nova criada sem atualizar o router se comporta errado sem alarme.
-  - Escopo do card cresceu de "clonar dados" (descrição original, 5 SP) para "clonar dados + resolver auth self-hosted" (comentário de 20/07) — é provavelmente 2 itens.
+  - "Janela de exposição: entre o restore e a anonimização o DEV tem PII real. Mitigado por anonimizar na mesma sessão de trabalho, antes de liberar acesso a terceiros — mas a janela existe e é aceita explicitamente."
+  - "PII enterrada em JSONB (custom_fields, metadata, request_payload) não tem esquema fixo. O gerador aplica varredura por regex; o gate G6 é o que prova. Se G6 falhar, apertar o anon_text."
+  - "Matview mv_titles_base (223 MB) materializa PII: anonimizar as tabelas-base sem refrescar deixa vw_titles_live servindo dado real, e o app inteiro lê a MV. Gate G7 cobre."
+  - "session_replication_role=replica exige superusuário. Se o pooler recusar, o seed precisa de ordem topológica de INSERTs (FKs circulares em workflows↔workflow_versions e workflow_steps→si mesma)."
+  - "Nome da VM em conflito entre fontes: torre-dev-supabase (Quimera #4786, 28/07) vs supabase-dev (doc de pipeline do DevOps). Confirmar com gcloud compute instances list antes de rodar qualquer comando."
 premissas:
-  - Acesso ao banco DEV via túnel IAP já foi liberado para o João (confirmado no card em 28/07).
+  - Acesso ao banco DEV via túnel IAP liberado para o João em 28/07 (confirmado no card).
   - Servidor DEV é PG 17 — pg_dump/pg_restore precisam ser v17.
-  - O config.toml do repo continua sendo a fonte de verdade única do verify_jwt (38 funções com override).
-  - Existe script mapear-webhooks.py que parseia o config.toml e pode gerar o router.
-tags: [torre, supabase, self-hosted, gcp, dev, anonimizacao, pii, edge-functions, verify-jwt, infra]
+  - Banco DEV é fechado de propósito (firewall deny-all; só IAP-SSH e Load Balancer). Timeout em 5432/6543 é esperado, não bug. 403 no /mcp é bloqueio proposital no Kong.
+  - Deploy das Edge Functions já resolvido pelo DevOps (GitHub Actions + scp via IAP + restart do container) — fora do escopo deste item.
+tags: [torre, supabase, self-hosted, gcp, dev, anonimizacao, pii, segregacao, infra]
 ---
 
-# BTR10 — Provisionar Supabase DEV self-hosted (GCP) com dados de prod anonimizados
+# BTR10 — Provisionar Supabase DEV self-hosted (GCP) com 100 clientes anonimizados
 
-> **Origem:** Quimera #4786 "Supabase Dev" (TI · 5 SP). Cancelado no Quimera em 2026-08-05 e reatribuído ao João Vinícius — a execução migra para esta spec de backlog. O card original foi aberto pelo João e endereçado ao Marcos; os dois comentários técnicos (28/07 e 20/07) são do próprio João e viram o insumo desta spec.
+> **Origem:** Quimera #4786 "Supabase Dev" (TI · 5 SP), cancelado no Quimera em 2026-08-05 e reatribuído ao João Vinícius.
+> **Quebra:** em 2026-08-10 a Frente D (router `verify_jwt` no self-hosted) foi extraída para o **[[BTR11]]**. Este item cobre clone + anonimização + segregação.
+> **Plano executável:** `Apresentacoes/executando/supabase-dev-selfhosted-gcp_plano_10-08-2026.html`
+> **Roteiro operacional:** `Backlog/referencias/sql/2026-08-10_torre_passo-a-passo-dev.md`
 
 ## História de usuário
 
 Como **time de desenvolvimento da Torre**,
-quero **um ambiente Supabase DEV self-hosted no GCP com a estrutura e os dados de produção replicados, porém com toda a PII anonimizada**,
-para **desenvolver e testar contra dados realistas sem risco de vazar dado sensível de cliente e sem depender do ambiente de produção**.
+quero **um Supabase DEV self-hosted no GCP com a estrutura completa de produção e uma amostra de 100 clientes por org totalmente anonimizada, num ambiente que não alcança produção nem cliente real**,
+para **desenvolver e testar contra dados realistas sem risco de vazamento de PII e sem risco de disparo indevido**.
 
-## Contexto
+## Contexto e escopo
 
-A demanda tem duas frentes de trabalho que nasceram no mesmo card:
+O card original pedia "replicar exatamente o prod, mudando apenas e-mail, telefone, CNPJ e CPF". A leitura do banco de produção (10/08/2026) mostrou que essa frase esconde três trabalhos e que o risco maior não é a PII.
 
-### Frente A — Clonar prod → dev com PII anonimizada (escopo original)
+### Frente A — Clone estrutural com recorte
 
-Replicar tabelas, schemas e dados do Supabase de **produção** para o novo Supabase **dev**, mantendo tudo **idêntico ao prod**, exceto:
+Estrutura **completa** (schemas, tabelas, views, matviews, funções, RPCs, RLS, triggers, índices) via `pg_dump --schema-only` de `public` + `org_blips` + `org_finza`. Dado: **somente o essencial** — catálogos de configuração por org e **100 clientes por org**, escolhidos de forma determinística.
 
-- **Email e telefone** → substituídos pelos do **time de desenvolvimento**.
-- **CNPJ e CPF** → substituídos por valores **fictícios**.
+Fora: todo log e histórico operacional (`etl_source_snapshots`, `skipped_actions_log`, `actions` histórico, `campaign_logs`, `etl_batch_jobs`, `title_status_history`, `ai_conversations`/`ai_messages`, `audit_logs`, `edge_function_call_logs`, `n8n_chat_histories`, etc.). As tabelas existem vazias, com estrutura completa — **nada é apagado, apenas não é carregado**.
 
-O banco DEV **não é exposto à internet de propósito** (firewall deny-all; só IAP-SSH e o Load Balancer liberados). As portas 5432/6543 dando timeout é comportamento esperado — o acesso é por **túnel IAP + localhost**. O acesso do João já foi liberado.
+### Frente B — Anonimização
 
-Fluxo técnico (do comentário de 28/07):
+Mocks definidos pelo João:
 
-```
-# 1. Abrir túnel IAP (deixe rodando — publica o DEV em localhost:5433)
-gcloud compute ssh torre-dev-supabase --zone=us-central1-a \
-  --project=finza-torre-de-controle-dev --tunnel-through-iap \
-  -- -L 5433:localhost:5432 -N
+- **E-mail** → os do time no Quimera, distribuídos de forma estável: `joao.dessimoni@blips.com.br`, `marcos.oliveira@finza.com.br`, `leandro.gontijo@blips.com.br`, `joaopedro@blips.com.br`
+- **Telefone** → `999999999` para todos
+- **CPF/CNPJ** → fictício, **válido no dígito verificador**, determinístico por id
+- **Nome / endereço / texto livre / JSONB** → substituídos (não apagados)
 
-# 2. Testar (outro terminal) — usuário postgres.torre-dev, banco postgres
-psql "postgresql://postgres.torre-dev:SENHA@localhost:5433/postgres" -c '\conninfo'
+Constraint verificada em prod: **não existe unique no valor de e-mail nem de telefone** (o unique é `(contact_id, priority)`), portanto repetir o mesmo contato é seguro. **`contacts.document` É unique** (dois índices) — daí a exigência de documento fictício único.
 
-# 3. Clonar estrutura + fatia do PROD
-pg_dump "STRING_DO_PROD" -Fc -f torre_slice.dump
-pg_restore -d "postgresql://postgres.torre-dev:SENHA@localhost:5433/postgres" torre_slice.dump
+### Frente C — Segregação de ambientes
 
-# 4. MCP (opcional) aponta para localhost:5433 com a mesma string.
-#    NÃO usar o /mcp remoto (403 é bloqueio proposital no Kong).
-```
+Por **omissão**, não por delete:
 
-Pré-requisitos: `gcloud` CLI logado (`gcloud auth login`), `pg_dump`/`pg_restore` **v17** (servidor é PG 17), senha do Postgres (canal privado). Se o dump/restore travar com erro de parâmetro não suportado (é o pooler), rodar de dentro da VM contra o banco.
+- schema `cron` fora do dump → **DEV nasce com zero cron ativo** (dos 26 ativos em prod)
+- `public.project_config` não semeada → `invoke_edge_function()` sem alvo → **DEV não chama EF de prod**
+- `api_keys`, `integration_secrets`, `organization_secrets` não semeadas
+- `auth.users` não clonado (32 logins reais) — time criado no Studio do DEV
 
-### Frente B — Router de autenticação das EF no self-hosted (verify_jwt)
-
-O mecanismo de **deploy** das Edge Functions no GCP já está decidido e é infra (GitHub Actions copia arquivos pra VM e reinicia o container — doc: `infra-torre-controle/docs/pipeline-edge-functions.md`) — **não faz parte desta spec**.
-
-O que precisa ser resolvido é **autenticação por função**. No Supabase Cloud, o `supabase/config.toml` controla o `verify_jwt` de cada função — hoje há **38 funções com `verify_jwt = false`** (crons, webhooks como `webhook-receiver`/`ai-conversation-webhook`, EFs de API externa como `api`, `mcp-server`, `rag-query`, `ai-config`).
-
-No **self-hosted o `config.toml` não é lido**. Quem decide é um `main/index.ts` — um router que o edge-runtime executa antes de cada função. Esse router precisa replicar a lógica dos 38 overrides.
-
-O que quebra se errar:
-- Router exige JWT de tudo → crons e webhooks quebram (pg_cron, pagamento, HyperFlow não mandam JWT).
-- Router não exige JWT de nada → as ~24 funções do frontend ficam abertas sem auth (buraco de segurança).
-- Lista dos 38 desatualiza → EF nova se comporta errado silenciosamente.
-
-**Proposta (do card):** gerar o `main/index.ts` **automaticamente a partir do `config.toml`** usando o script `mapear-webhooks.py`, mantendo o `config.toml` como fonte de verdade única (ninguém mantém lista duplicada na mão).
+Duas exceções em que um **valor** é substituído para permitir "visível mas desligado": `integrations` (`is_active=false`, `config='{}'`) e `report_schedules` (`is_active=false`, destinatário do time). Mais `mv_refresh_config.enabled=false` (paused-by-default, padrão do projeto).
 
 ## Critérios de aceite
 
-- **CA-1** — Given o túnel IAP aberto, When o João conecta em `localhost:5433` com o usuário `postgres.torre-dev`, Then `\conninfo` confirma conexão ao banco DEV.
-- **CA-2** — Given estrutura de prod, When o `pg_restore` roda no DEV, Then todas as tabelas, schemas e objetos existem no DEV com paridade estrutural de prod.
-- **CA-3** — Given os dados de prod restaurados, When qualquer registro é inspecionado, Then **nenhum email/telefone real de cliente** existe no DEV (substituídos pelos do time de dev) e **nenhum CPF/CNPJ real** existe (substituídos por fictícios válidos em formato).
-- **CA-4** — Given o mapa de colunas com PII, When a anonimização roda, Then a lista de colunas tratadas é explícita e revisada (não só as colunas óbvias) — ver questão aberta Q1.
-- **CA-5** — Given o `config.toml` com os 38 overrides, When o `main/index.ts` é gerado, Then o router aplica `verify_jwt=false` exatamente para essas 38 funções e `verify_jwt=true` para as demais.
-- **CA-6** — Given o router publicado no self-hosted, When um cron/webhook sem JWT chama sua EF, Then a chamada passa; e When uma EF de frontend é chamada sem JWT válido, Then é rejeitada.
-- **CA-7** — Given o processo de geração do router, When uma EF nova é adicionada, Then o router se atualiza a partir do `config.toml` (regeneração automática) sem edição manual de lista duplicada.
+- **CA-1** — Given o túnel IAP aberto, When conecto em `localhost:5433` como `postgres.torre-dev`, Then `\conninfo` confirma o banco DEV. *(gate G1)*
+- **CA-2** — Given a estrutura aplicada, When comparo contagem de tabelas/views/matviews/funções/policies por schema, Then há paridade com prod (97 · 97 · 36 tabelas; 4 matviews; 23 views). *(G2)*
+- **CA-3** — Given o seed aplicado, When varro toda coluna de e-mail de toda tabela-base, Then nenhum valor está fora da allowlist do time. *(G3)*
+- **CA-4** — Given o seed aplicado, When varro toda coluna de telefone, Then todo valor é `999999999`. *(G4)*
+- **CA-5** — Given o seed aplicado, When inspeciono `contacts.document`, Then todo documento é único e tem 11 ou 14 dígitos, e nenhum existe em prod. *(G5, G5b)*
+- **CA-6** — Given o seed aplicado, When busco padrão de e-mail dentro de colunas JSONB, Then não há ocorrência estranha. *(G6)*
+- **CA-7** — Given as matviews refrescadas, When repito CA-3/CA-4 **contra `vw_titles_live`**, Then zero PII real e a view **não** está vazia. *(G7)*
+- **CA-8** — Given o DEV pronto, When consulto `cron.job`, Then zero job ativo. *(G8)*
+- **CA-9** — Given o DEV pronto, When conto `project_config`, `api_keys`, `integration_secrets`, integrações ativas e `report_schedules` ativos, Then todos zero. *(G9)*
+- **CA-10** — Given a documentação, When outra pessoa do time roda o refresh do DEV sozinha, Then conclui sem consultar o João. *(G10)*
 
 ## Subtarefas
 
-- [ ] **ST-1 — Acesso e pré-reqs.** Confirmar túnel IAP funcionando, `gcloud` logado, `pg_dump/pg_restore` v17 instalados, senha em mãos. (parcialmente feito — acesso liberado 28/07)
-- [ ] **ST-2 — Clone estrutural.** `pg_dump -Fc` do prod + `pg_restore` no DEV; validar paridade de schemas/tabelas. Ter plano B "rodar de dentro da VM" caso o pooler recuse parâmetros.
-- [ ] **ST-3 — Mapa de PII.** ⚠️ PO: levantar **exaustivamente** as colunas que carregam email, telefone, CPF e CNPJ (em todas as tabelas/schemas, incluindo JSONB e campos livres), não só as óbvias. Este mapa é o gate de segurança do item.
-- [ ] **ST-4 — Rotina de anonimização.** Script que substitui email/telefone pelos do time de dev e gera CPF/CNPJ fictícios (válidos em formato). Idempotente e re-executável a cada refresh do dev.
-- [ ] **ST-5 — Validação de anonimização.** Query de auditoria que prova ausência de PII real pós-anonimização (CA-3/CA-4).
-- [ ] **ST-6 — Router de EF (verify_jwt).** Escrever/gerar o `main/index.ts` a partir do `config.toml` via `mapear-webhooks.py`; validar os 38 overrides. ⚠️ PO: candidato a item próprio (ver Observações).
-- [ ] **ST-7 — Testes do router.** Cron/webhook sem JWT passam; EF de frontend sem JWT são bloqueadas (CA-6).
-- [ ] **ST-8 — Documentar.** Registrar o processo (túnel, clone, anonimização, regeneração do router) para o time repetir sem o João.
+- [x] **ST-1 — Levantar o terreno.** Medir prod: volume, schemas, orgs, crons, EFs, constraints. *(feito 10/08 — 13 GB, 2 orgs, 26 crons ativos, 62 EFs)*
+- [x] **ST-2 — Mapa de PII.** Inventário exaustivo por nível (coluna dedicada · JSONB/texto livre · fora dos schemas de org). *(feito 10/08 — resolve a Q1)*
+- [x] **ST-3 — Definir o recorte.** Critério: exclusão de tabelas de log, não amostragem de linhas. *(feito 10/08 — resolve a Q4)*
+- [x] **ST-4 — Escrever o gerador de seed.** `Backlog/referencias/sql/2026-08-10_torre_gerar-seed-dev.sql` — roda em prod, só objetos temporários, emite INSERTs anonimizados lendo o catálogo (não lista fixa).
+- [x] **ST-5 — Escrever os gates.** `Backlog/referencias/sql/2026-08-10_torre_validacao-dev.sql` — G2 a G9 + checagem de órfãos de FK.
+- [x] **ST-6 — Escrever o roteiro.** `Backlog/referencias/sql/2026-08-10_torre_passo-a-passo-dev.md`.
+- [ ] **ST-7 — Confirmar o nome da VM.** `gcloud compute instances list` — conflito entre `torre-dev-supabase` e `supabase-dev`.
+- [ ] **ST-8 — Passo 0-1: pré-requisitos e túnel.** gcloud logado, pg_dump 17, senha, túnel IAP de pé (CA-1).
+- [ ] **ST-9 — Passo 2-3: estrutura.** `pg_dump --schema-only` e aplicação no DEV (CA-2).
+- [ ] **ST-10 — Passo 4-5: dados.** Gerar e aplicar o seed dos 100 clientes (CA-3 a CA-6).
+- [ ] **ST-11 — Passo 6: validar.** Rodar os gates; refrescar matviews (CA-7 a CA-9).
+- [ ] **ST-12 — Passo 7: liberar.** Usuários do time no Studio, API key de dev, documentar (CA-10).
 
 ## Observações PO
 
-**Pontos de atenção:**
+1. **O risco número 1 não é PII, é disparo.** O banco da Torre não é repositório passivo: é motor de disparo com pg_cron dentro do Postgres chamando EFs que mandam WhatsApp, e-mail e negativação. Clonar o banco é clonar o motor ligado. Anonimizar sem segregar troca um vazamento por um incidente.
 
-1. **Isto é provavelmente 2 itens, não 1.** A descrição original (clonar dados anonimizados, 5 SP) e o comentário de 20/07 (router de auth self-hosted) são frentes técnicas distintas, com skills e riscos diferentes. Sugestão: manter BTR10 como o **clone+anonimização** (Frente A) e extrair a **Frente B (router verify_jwt)** como BTR10b/item próprio se o esforço confirmar. Mantidos juntos por ora porque nasceram no mesmo card e compartilham o objetivo "DEV self-hosted utilizável".
+2. **Segregação por omissão é mais segura que por delete.** Não levar o schema `cron` e não semear `project_config` é estruturalmente mais forte que restaurar tudo e desligar depois — não existe janela entre restore e desligamento.
 
-2. **Anonimização é o gate não-negociável.** O valor do item é justamente "dados realistas SEM PII real". Se ST-3 (mapa de colunas) for feito de forma incompleta, o item entrega um risco de vazamento disfarçado de ambiente de dev. Nenhum dado real de cliente pode sobreviver ao clone.
+3. **Escopo reduzido a 100 clientes por decisão do João (10/08).** O núcleo de negócio em prod são 6.132 contatos / 56.121 títulos (blips) e 1.309 / 3.230 (finza). 100 por org é suficiente para desenvolvimento e reduz drasticamente a superfície de PII. Amostra determinística → dev reproduzível.
 
-3. **"Substituir pelos do time de dev" precisa de definição.** Um único email/telefone do time para todos os registros? Ou distribuído? Definir antes de ST-4 (afeta testes que dependem de unicidade de contato).
+4. **`actions` entra só como dependência de FK.** 16.820 títulos têm `attributed_action_id`, 3.756 `negativation_action_id`, 1.172 `notification_action_id`. Trazer só as actions referenciadas pelos títulos da amostra mantém a integridade sem carregar 469 mil linhas de histórico.
 
-4. **Router auto-gerado > lista manual — concordo com a proposta do card.** Gerar do `config.toml` elimina a classe de bug "EF nova esquecida". Vale investir na regeneração automática (CA-7) mesmo que custe mais que hardcodar os 38 hoje.
+5. **Correção de premissa (10/08):** a ressalva anterior sobre unicidade de e-mail/telefone estava errada — foi inferida dos nomes das migrations (`add_phone_email_unique_constraints`), não da constraint viva. Na prática o unique é `(contact_id, priority)`, então o mock simples pedido pelo João funciona.
 
-5. **Deploy das EF está fora de escopo** (já decidido, é infra `infra-torre-controle`). Não reabrir essa discussão aqui.
+6. **Ambiente self-hosted GCP ≠ dev Cloud.** Este item é a VM no projeto `finza-torre-de-controle-dev`, não o dev Cloud (`project_ref dcedqaatdeobbrlwxzha`) de QMR3380 / IAF-141 / IAF-191.
 
-6. **Ambiente self-hosted GCP ≠ Supabase Cloud dev.** Este item é sobre o self-hosted na VM `torre-dev-supabase` (projeto `finza-torre-de-controle-dev`) — não confundir com o dev Cloud (project_ref `dcedqaatdeobbrlwxzha`) citado em QMR3380/IAF-141/IAF-191.
+## Questões
 
-## Questões em aberto
+- **Q1** — ✅ **Resolvida** (ST-2): inventário de PII derivado do catálogo de prod.
+- **Q4** — ✅ **Resolvida** (ST-3): fatia, por exclusão de tabelas de log.
+- **Q5** — ⏳ Nome da VM: `torre-dev-supabase` ou `supabase-dev`? (ST-7)
+- **Q6** — ⏳ Endereço (`address_*`) e `notes` são anonimizados por decisão minha, embora o card só pedisse e-mail/telefone/CPF/CNPJ. Confirmar que está OK.
+- ~~Q2, Q3~~ — migradas para o **[[BTR11]]** (são do router).
 
-- **Q1** — Existe inventário de colunas com PII na Torre, ou é preciso derivá-lo do schema? (bloqueia ST-3)
-- **Q2** — Além do `verify_jwt`, o `main/index.ts`/self-hosted precisa replicar outra coisa do `config.toml`? (import maps? secrets por função?) — pergunta explícita do card, ainda sem resposta.
-- **Q3** — Onde o router `main/index.ts` vive: no repo do monolito (junto das EFs) ou no `infra-torre-controle`? — decisão pendente no card.
-- **Q4** — O clone é do banco **inteiro** ou de uma **fatia** ("STRING_DO_PROD" / `torre_slice.dump` sugere fatia)? Definir volume e critério de recorte.
+## Itens relacionados
 
-## Itens relacionados (não são dependência dura)
-
+- **[[BTR11]]** — Router `verify_jwt` no self-hosted (extraído deste item). Este item o **bloqueia**: sem DEV de pé não há onde testar o router.
 - **QMR3380 / IAF-134** — Migrar fluxo Torre para dev/PR/prod (entregue).
 - **IAF-141** — Pipeline/deploy automático ambiente dev (entregue).
-- **IAF-191** — Resetar ambiente de dev do supabase (entregue) — dev Cloud, não o self-hosted.
-- **QMR3691** — Recriar supabase prod.
+- **IAF-191** — Resetar ambiente de dev do Supabase (entregue) — dev Cloud, não self-hosted.
+- **QMR3691** — Recriar Supabase prod.
 
 ## Definição de pronto
 
-- [ ] DEV self-hosted acessível via túnel IAP com estrutura de prod (CA-1, CA-2).
-- [ ] Auditoria prova zero PII real no DEV (CA-3, CA-4).
-- [ ] Router de EF publicado, com os 38 overrides corretos e regeneração automática (CA-5, CA-6, CA-7).
-- [ ] Processo documentado para o time reproduzir.
+- [ ] DEV acessível via túnel IAP com estrutura em paridade com prod (CA-1, CA-2).
+- [ ] 100 clientes por org carregados e auditoria provando zero PII real, inclusive em `vw_titles_live` (CA-3 a CA-7).
+- [ ] Ambiente segregado: zero cron ativo, zero credencial de prod (CA-8, CA-9).
+- [ ] Processo documentado e reproduzido por outra pessoa do time (CA-10).
 
 ## Histórico
 
-- 2026-08-07 — Item criado a partir do Quimera #4786 ("Supabase Dev"), que foi cancelado e reatribuído ao João Vinícius (que vai executar). Descrição e os 2 comentários técnicos do card viraram o insumo. Status inicial `em-refinamento`. Sinalizado candidato a quebra em 2 itens (Frente A clone+anonimização · Frente B router verify_jwt).
+- **2026-08-07** — Item criado a partir do Quimera #4786, que foi cancelado e reatribuído ao João. Status `em-refinamento`, esforço L, RICE 4,9. Sinalizado candidato a quebra em 2 itens.
+- **2026-08-10** — Terreno medido em prod (13 GB, 2 orgs, 26 crons ativos, 62 EFs, 53 sem `verify_jwt`). Três premissas do refinamento anterior caíram: são duas orgs e não uma; o `config.toml` não descreve a prod; o clone herda o motor de disparo ligado. Frente C (segregação) criada. Frente D extraída para **[[BTR11]]**. Escopo reduzido a 100 clientes/org por decisão do João. Gerador de seed, gates e roteiro escritos. Status → `em-curso`; esforço L→M; RICE 4,9 → 9,8 (confiança sobe com o recon feito, esforço cai com o escopo reduzido).
