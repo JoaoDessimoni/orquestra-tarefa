@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filtro de Suprimento que casa Contrato — Torre · Finza</title>
+    <style id="montserrat">/*__FONTS__*/</style>
+    <style>
+      :root {
+        --void: #f2f2f2; --deep: #eaeaf2; --panel: #ffffff; --panel-2: #ffffff;
+        --ink: #0a0a2e; --muted: #5c5c7a; --faint: #8a8aa0; --ghost: #b7b7c6;
+        --finza-blue: #1a1aff; --finza-blue-deep: #0f0f8c; --finza-blue-soft: #e8e8ff;
+        --mint: #1a1aff; --mint-rgb: 26,26,255; --azure: #1a1aff; --azure-rgb: 26,26,255;
+        --iris: #0f0f8c; --iris-rgb: 15,15,140;
+        --amber: #f59e0b; --amber-rgb: 245,158,11; --coral: #ef4444; --coral-rgb: 239,68,68;
+        --success: #10b981; --success-rgb: 16,185,129;
+        --accent: var(--mint); --accent-rgb: var(--mint-rgb);
+        --glass: rgba(26,26,255,.03); --glass-2: rgba(26,26,255,.06);
+        --stroke: #d8d8e5; --stroke-2: #c8c8d8;
+        --hi: 0 0 transparent; --lift: 0 10px 26px -20px rgba(10,10,46,.28);
+        --r: 12px; --r-lg: 14px; --r-sm: 9px; --max: 1160px;
+        --f-disp: "Montserrat", system-ui, -apple-system, sans-serif;
+        --f-body: "Montserrat", system-ui, -apple-system, sans-serif;
+        --f-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      }
+      :root[data-theme="dark"] {
+        --void: #0a0a2e; --deep: #101034; --panel: #17173f; --panel-2: #1c1c48;
+        --ink: #ececff; --muted: #b0b0d0; --faint: #7c7ca0; --ghost: #3a3a6a;
+        --finza-blue: #6e6eff; --finza-blue-deep: #4a4ae0; --finza-blue-soft: #20205c;
+        --mint: #6e6eff; --mint-rgb: 110,110,255; --azure: #6e6eff; --azure-rgb: 110,110,255;
+        --iris: #9a9aff; --iris-rgb: 154,154,255;
+        --amber: #f5b942; --amber-rgb: 245,185,66; --coral: #ff6b6b; --coral-rgb: 255,107,107;
+        --success: #2ee6a0; --success-rgb: 46,230,160;
+        --glass: rgba(255,255,255,.03); --glass-2: rgba(255,255,255,.06);
+        --stroke: rgba(255,255,255,.1); --stroke-2: rgba(255,255,255,.18);
+        --hi: 0 0 transparent; --lift: 0 16px 34px -22px rgba(0,0,0,.55);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+      body { margin: 0; color: var(--ink); background: var(--void); font-family: var(--f-body); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative; min-height: 100vh; }
+      .bg { position: fixed; inset: 0; z-index: -3; overflow: hidden; background: radial-gradient(900px 620px at 15% -10%, rgba(var(--azure-rgb),.05), transparent 60%), var(--void); }
+      :root[data-theme="dark"] .bg { background: radial-gradient(900px 620px at 15% -10%, rgba(var(--azure-rgb),.1), transparent 60%), var(--void); }
+      .bggrid { position: fixed; inset: 0; z-index: -2; pointer-events: none; background-image: linear-gradient(rgba(10,10,46,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(10,10,46,.04) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, #000, transparent 82%); }
+      :root[data-theme="dark"] .bggrid { background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); }
+      .glass, .card, .metric, .callout, .pill, .themetgl { background: var(--panel); border: 1px solid var(--stroke); box-shadow: var(--hi), var(--lift); }
+      h1, h2, h3, h4, h5 { font-family: var(--f-disp); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; margin: 0; }
+      a { color: var(--azure); text-decoration: none; }
+      a:hover { color: var(--mint); text-decoration: underline; }
+      a:focus-visible, button:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; border-radius: 6px; }
+      .wrap { max-width: var(--max); margin: 0 auto; padding: 0 26px; }
+      .section { padding: 88px 0; position: relative; }
+      .section::before { content: ""; position: absolute; top: 0; left: 26px; right: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--stroke) 12%, var(--stroke) 88%, transparent); }
+      .eyebrow { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--finza-blue); font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+      .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--finza-blue); }
+      .section h2 { font-size: clamp(1.9rem, 4.2vw, 2.9rem); max-width: 26ch; }
+      .lede { color: var(--muted); font-size: 1.1rem; max-width: 74ch; margin: 18px 0 0; }
+      p { margin: 0 0 14px; }
+      .ico { width: 34px; height: 34px; display: block; }
+      .ico path, .ico circle, .ico rect, .ico line, .ico polyline, .ico polygon, .ico ellipse { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .topbar { position: sticky; top: 0; z-index: 60; background: rgba(242,242,242,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--stroke); }
+      :root[data-theme="dark"] .topbar { background: rgba(10,10,46,.92); }
+      .iaf-mark { flex: none; font-family: var(--f-disp); font-weight: 700; font-size: 0.72rem; color: var(--finza-blue); letter-spacing: 0.08em; }
+      .topbar .row { display: flex; align-items: center; gap: 16px; height: 62px; }
+      .brand { font-family: var(--f-disp); font-weight: 700; font-size: 0.98rem; letter-spacing: 0.02em; white-space: nowrap; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+      .brand .dot { width: 9px; height: 9px; border-radius: 2px; background: var(--finza-blue); box-shadow: 0 0 0 4px rgba(var(--azure-rgb),.16); flex: none; animation: pulse 2.4s ease-in-out infinite; }
+      @keyframes pulse { 50% { opacity: 0.4; } }
+      @media (prefers-reduced-motion: reduce) { .brand .dot { animation: none; } }
+      nav.spy { display: flex; gap: 2px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+      nav.spy::-webkit-scrollbar { display: none; }
+      nav.spy a { font-family: var(--f-mono); font-size: 0.76rem; color: var(--muted); padding: 7px 11px; border-radius: 8px; white-space: nowrap; font-weight: 500; letter-spacing: 0.02em; }
+      nav.spy a:hover { color: var(--ink); background: var(--glass-2); text-decoration: none; }
+      nav.spy a.active { color: var(--mint); background: rgba(var(--mint-rgb),.12); }
+      .themetgl { flex: none; color: var(--ink); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: grid; place-items: center; font-size: 1rem; }
+      .themetgl:hover { border-color: var(--stroke-2); }
+      .hero { position: relative; padding: 84px 0 60px; }
+      .hero .inner { position: relative; z-index: 1; }
+      .tagrow { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px; }
+      .anim-up { opacity: 0; transform: translateY(20px); animation: up 0.8s cubic-bezier(0.2,0.7,0.2,1) forwards; }
+      .anim-up:nth-child(1) { animation-delay: 0.05s; } .anim-up:nth-child(2) { animation-delay: 0.14s; } .anim-up:nth-child(3) { animation-delay: 0.24s; } .anim-up:nth-child(4) { animation-delay: 0.34s; } .anim-up:nth-child(5) { animation-delay: 0.44s; }
+      @keyframes up { to { opacity: 1; transform: none; } }
+      @media (prefers-reduced-motion: reduce) { .anim-up { opacity: 1; transform: none; animation: none; } }
+      .pill { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.06em; padding: 6px 13px; border-radius: 999px; color: var(--finza-blue); background: var(--finza-blue-soft); border-color: transparent; display: inline-flex; align-items: center; gap: 7px; }
+      .pill.crit { color: var(--coral); border-color: rgba(var(--coral-rgb),.4); background: rgba(var(--coral-rgb),.12); }
+      .pill.ok { color: var(--success); border-color: rgba(var(--success-rgb),.4); background: rgba(var(--success-rgb),.12); }
+      .pill.warn { color: var(--amber); border-color: rgba(var(--amber-rgb),.4); background: rgba(var(--amber-rgb),.12); }
+      .hero h1 { font-size: clamp(2.4rem, 6.4vw, 4.6rem); font-weight: 300; color: var(--ghost); max-width: 18ch; margin-bottom: 4px; letter-spacing: -0.02em; line-height: 1.04; }
+      .hero h1 .g { font-weight: 700; color: var(--finza-blue); }
+      .hero .sub { font-size: 1.18rem; color: var(--muted); max-width: 70ch; margin-top: 24px; }
+      .hero .sub b { color: var(--ink); }
+      .hero .meta { display: flex; flex-wrap: wrap; gap: 26px; margin-top: 28px; font-family: var(--f-mono); font-size: 0.82rem; color: var(--faint); }
+      .hero .meta b { color: var(--ink); font-weight: 600; }
+      .metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 48px; }
+      .metric { position: relative; border-radius: var(--r); padding: 20px 18px; overflow: hidden; }
+      .metric::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--mint); opacity: 0.5; }
+      .metric.c-crit::after { background: var(--coral); opacity: 1; }
+      .metric.c-ok::after { background: var(--success); opacity: 1; }
+      .metric .n { font-family: var(--f-disp); font-size: 1.95rem; font-weight: 700; line-height: 1; letter-spacing: -0.01em; color: var(--finza-blue); }
+      .metric.c-crit .n { color: var(--coral); }
+      .metric.c-ok .n { color: var(--success); }
+      .metric .l { font-size: 0.78rem; color: var(--muted); margin-top: 10px; letter-spacing: 0.01em; }
+      .metric .src { font-family: var(--f-mono); font-size: 0.63rem; color: var(--faint); margin-top: 6px; }
+      .card { border-radius: var(--r-lg); padding: 28px; border: 2px dotted var(--finza-blue); box-shadow: none; position: relative; }
+      .card .iaf { position: absolute; top: 16px; right: 18px; font-family: var(--f-disp); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--finza-blue); opacity: 0.65; }
+      .card h3 { font-family: var(--f-disp); font-size: 1.12rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+      .card .ico { width: 28px; height: 28px; color: var(--finza-blue); flex: none; }
+      .card p { margin: 0 0 12px; color: var(--muted); font-size: 0.95rem; }
+      .card ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+      .card li { display: flex; gap: 11px; align-items: flex-start; font-size: 0.95rem; color: var(--ink); line-height: 1.45; }
+      .card li .mk { flex: none; margin-top: 2px; color: var(--finza-blue); font-weight: 700; }
+      .card li .mk .ico { width: 20px; height: 20px; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .mt32 { margin-top: 32px; }
+      .callout { border-radius: var(--r); padding: 18px 22px; margin: 24px 0 0; border-left: 3px solid var(--finza-blue); }
+      .callout.warn { border-left-color: var(--amber); }
+      .callout.crit { border-left-color: var(--coral); }
+      .callout.ok { border-left-color: var(--success); }
+      .callout h4 { font-family: var(--f-disp); font-weight: 700; font-size: 0.98rem; margin-bottom: 6px; color: var(--ink); display: flex; align-items: center; gap: 9px; }
+      .callout.warn h4 { color: var(--amber); } .callout.crit h4 { color: var(--coral); } .callout.ok h4 { color: var(--success); }
+      .callout p { margin: 0; font-size: 0.95rem; color: var(--muted); }
+      .callout .badge { font-family: var(--f-mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; background: var(--finza-blue-soft); color: var(--finza-blue); padding: 4px 10px; border-radius: 7px; text-transform: uppercase; }
+      .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.2,0.7,0.2,1), transform 0.7s cubic-bezier(0.2,0.7,0.2,1); }
+      .reveal.in { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+      .feat { border-radius: var(--r-lg); padding: 24px; border: 1px solid var(--stroke); background: var(--panel); box-shadow: var(--hi), var(--lift); display: flex; flex-direction: column; }
+      .feat .ico { color: var(--finza-blue); margin-bottom: 16px; }
+      .feat.hl { border-color: transparent; background: var(--finza-blue); }
+      .feat.hl .ico { color: #fff; }
+      .feat h4 { font-family: var(--f-disp); font-size: 1.02rem; margin-bottom: 8px; color: var(--ink); }
+      .feat.hl h4 { color: #fff; }
+      .feat p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+      .feat.hl p { color: rgba(255,255,255,.85); }
+      .journey { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 26px; }
+      .jstep { border: 1px solid var(--stroke); background: var(--panel); border-radius: 12px; padding: 22px 18px; box-shadow: var(--hi), var(--lift); }
+      .jstep .num { width: 42px; height: 42px; border-radius: 11px; background: var(--finza-blue-soft); color: var(--finza-blue); font-family: var(--f-disp); font-size: 1.2rem; font-weight: 700; display: grid; place-items: center; margin-bottom: 18px; }
+      .jstep .h { font-family: var(--f-disp); font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 8px; line-height: 1.2; }
+      .jstep .d { font-size: 0.83rem; color: var(--muted); line-height: 1.45; }
+      .jstep.end { border-color: transparent; background: var(--finza-blue); }
+      .jstep.end .num { background: rgba(255,255,255,.16); color: #fff; }
+      .jstep.end .h { color: #fff; }
+      .jstep.end .d { color: rgba(255,255,255,.85); }
+      .arc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 26px; }
+      .arcstage { border: 1px solid var(--stroke); background: var(--deep); border-radius: 12px; padding: 22px 20px; }
+      .arcstage .ph { font-family: var(--f-mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--finza-blue); margin-bottom: 12px; }
+      .arcstage .h { font-family: var(--f-disp); font-weight: 700; font-size: 1.1rem; color: var(--ink); margin-bottom: 9px; line-height: 1.2; }
+      .arcstage .d { font-size: 0.86rem; color: var(--muted); line-height: 1.5; }
+      .arcstage.final { background: var(--finza-blue); border-color: transparent; }
+      .arcstage.final .ph { color: rgba(255,255,255,.8); } .arcstage.final .h { color: #fff; } .arcstage.final .d { color: rgba(255,255,255,.85); }
+      /* tables */
+      .tablewrap { overflow-x: auto; border: 1px solid var(--stroke); border-radius: var(--r); margin: 26px 0 0; background: var(--panel); box-shadow: var(--hi), var(--lift); }
+      table { border-collapse: collapse; width: 100%; font-size: 0.9rem; min-width: 560px; }
+      th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--stroke); vertical-align: top; }
+      thead th { background: var(--finza-blue-soft); font-family: var(--f-disp); font-weight: 700; color: var(--finza-blue-deep); font-size: 0.72rem; letter-spacing: 0.03em; text-transform: uppercase; }
+      tbody tr:last-child td { border-bottom: none; }
+      tbody tr:hover { background: rgba(var(--azure-rgb),.06); }
+      td .tt { font-family: var(--f-disp); font-weight: 700; color: var(--ink); }
+      .st { display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 0.68rem; font-weight: 700; padding: 4px 11px; border-radius: 6px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
+      .st::before { content: ""; width: 6px; height: 6px; border-radius: 2px; }
+      .st.bad { color: var(--coral); background: rgba(var(--coral-rgb),.14); } .st.bad::before { background: var(--coral); }
+      .st.good { color: var(--success); background: rgba(var(--success-rgb),.14); } .st.good::before { background: var(--success); }
+      .st.warn { color: var(--amber); background: rgba(var(--amber-rgb),.16); } .st.warn::before { background: var(--amber); }
+      .num { font-family: var(--f-disp); font-weight: 700; color: var(--finza-blue); }
+      /* ---- extras deste dossiê: split de campos, código, fluxo ---- */
+      .fsplit { display: grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: stretch; margin-top: 26px; }
+      .fbox { border-radius: var(--r-lg); padding: 24px; border: 1px solid var(--stroke); background: var(--panel); box-shadow: var(--hi), var(--lift); }
+      .fbox.set { border: 2px solid var(--success); }
+      .fbox.unset { border: 2px solid var(--coral); }
+      .fbox .tag { font-family: var(--f-mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+      .fbox.set .tag { color: var(--success); } .fbox.unset .tag { color: var(--coral); }
+      .fbox h4 { font-family: var(--f-mono); font-size: 0.98rem; color: var(--ink); margin-bottom: 10px; word-break: break-all; }
+      .fbox p { font-size: 0.9rem; color: var(--muted); margin: 0 0 8px; }
+      .fbox .val { font-family: var(--f-mono); font-size: 0.82rem; margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--deep); color: var(--ink); }
+      .fbox .val b { color: var(--finza-blue); }
+      .fvs { display: grid; place-items: center; font-family: var(--f-disp); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.14em; color: var(--faint); text-transform: uppercase; padding: 0 6px; }
+      .fvs span { writing-mode: vertical-rl; transform: rotate(180deg); }
+      .code { font-family: var(--f-mono); font-size: 0.82rem; line-height: 1.6; background: var(--panel-2); border: 1px solid var(--stroke-2); border-left: 3px solid var(--finza-blue); border-radius: var(--r); padding: 16px 18px; margin: 20px 0 0; overflow-x: auto; color: var(--ink); white-space: pre; }
+      .code .cm { color: var(--faint); }
+      .code .kw { color: var(--finza-blue); font-weight: 700; }
+      .code .bad { color: var(--coral); font-weight: 700; }
+      .code .good { color: var(--success); font-weight: 700; }
+      .code.crit { border-left-color: var(--coral); }
+      .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 26px; }
+      .fnode { flex: 1 1 150px; min-width: 140px; background: var(--panel-2); border: 1px solid var(--stroke-2); border-left: 3px solid var(--finza-blue); border-radius: 11px; padding: 15px 14px; }
+      .fnode.crit { border-left-color: var(--coral); background: rgba(var(--coral-rgb),.06); }
+      .fnode .ft { font-family: var(--f-disp); font-weight: 700; font-size: 0.88rem; color: var(--ink); }
+      .fnode .fd { font-size: 0.75rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+      .arr { color: var(--faint); font-weight: 700; flex: none; }
+      .goal { margin-top: 26px; background: var(--finza-blue); color: #fff; border-radius: var(--r); padding: 22px 26px; font-family: var(--f-disp); font-weight: 600; font-size: 1.05rem; line-height: 1.45; }
+      .resumo { border-radius: var(--r-lg); border: 2px dotted var(--finza-blue); padding: 44px 40px; position: relative; }
+      .resumo .iaf { position: absolute; top: 18px; right: 20px; font-family: var(--f-disp); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.08em; color: var(--finza-blue); opacity: 0.65; }
+      .resumo h2 { font-size: clamp(1.7rem, 4vw, 2.5rem); max-width: 24ch; }
+      .resumo p { color: var(--muted); font-size: 1.1rem; max-width: 72ch; margin: 18px 0 0; }
+      .points { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+      .points .p { background: var(--finza-blue-soft); color: var(--finza-blue); border-radius: 999px; padding: 10px 20px; font-family: var(--f-disp); font-weight: 600; font-size: 0.9rem; }
+      footer { border-top: 1px solid var(--stroke); padding: 52px 0 68px; color: var(--faint); font-size: 0.85rem; margin-top: 40px; }
+      footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+      footer b { color: var(--ink); }
+      footer .mono { font-family: var(--f-mono); font-size: 0.78rem; }
+      @media (max-width: 980px) {
+        .metrics { grid-template-columns: repeat(3, 1fr); }
+        .arc, .journey { grid-template-columns: repeat(2, 1fr); }
+        .grid3 { grid-template-columns: 1fr 1fr; }
+        .fsplit { grid-template-columns: 1fr; }
+        .fvs { padding: 6px 0; } .fvs span { writing-mode: horizontal-tb; transform: none; }
+      }
+      @media (max-width: 640px) {
+        .section { padding: 60px 0; }
+        .metrics, .grid2, .grid3, .arc, .journey { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="bggrid"></div>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="wrap row">
+        <div class="brand"><span class="dot"></span>Torre · Filtros</div>
+        <nav class="spy" id="spy">
+          <a href="#sintoma">Sintoma</a>
+          <a href="#doiscampos">Os dois campos</a>
+          <a href="#motor">O motor</a>
+          <a href="#frontend">A raiz (front)</a>
+          <a href="#veredito">Front × Back</a>
+          <a href="#impacto">Impacto</a>
+          <a href="#correcao">Correção</a>
+          <a href="#resumo">Resumo</a>
+        </nav>
+        <span class="iaf-mark">◆ iaf</span>
+        <button class="themetgl glass" id="themeBtn" aria-label="Alternar tema claro/escuro" title="Alternar tema">◐</button>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="wrap inner">
+        <div class="tagrow">
+          <span class="pill anim-up">◆ Torre de Controle · cobranca-finza</span>
+          <span class="pill crit anim-up">● bug de produto · frontend</span>
+          <span class="pill anim-up">org_blips · filtro "Suprimentos teste"</span>
+          <span class="pill warn anim-up">IAF-4795 · Suprimentos</span>
+        </div>
+        <h1 class="anim-up">O filtro de <span class="g">Suprimento</span> que casa <span class="g">Contrato</span></h1>
+        <p class="sub anim-up">
+          Um filtro cuja condição diz <b>"Suprimento"</b> na tela casa contatos
+          que não têm suprimento nenhum — porque o motor não obedece a condição
+          que você vê, e sim um <b>segundo campo</b> (<b>target_entity</b>) que a
+          interface nunca preenche. Diagnóstico do executivo ao técnico:
+          <b>o que quebra, por que o re-save não corrige, e onde está a raiz.</b>
+        </p>
+        <div class="meta anim-up">
+          <span>investigação · <b>10/08/2026</b></span>
+          <span>autor · <b>João Vinícius</b></span>
+          <span>sistema · <b>Torre (Supabase)</b></span>
+          <span>evidência · <b>prod org_blips · read-only</b></span>
+        </div>
+
+        <div class="metrics" id="metrics">
+          <div class="metric c-crit">
+            <div class="n" data-count="5716">0</div>
+            <div class="l">Contatos que o filtro casa</div>
+            <div class="src">deveria casar 2.216</div>
+          </div>
+          <div class="metric c-ok">
+            <div class="n" data-count="2216">0</div>
+            <div class="l">Contatos com suprimento real</div>
+            <div class="src">supplies.total_value &gt; 1</div>
+          </div>
+          <div class="metric c-crit">
+            <div class="n" data-count="3500">0</div>
+            <div class="l">Falsos-positivos (≈)</div>
+            <div class="src">contatos sem suprimento</div>
+          </div>
+          <div class="metric">
+            <div class="n" data-count="2">0</div>
+            <div class="l">Campos que dizem o mesmo</div>
+            <div class="src">table × target_entity</div>
+          </div>
+          <div class="metric">
+            <div class="n" data-count="0">0</div>
+            <div class="l">Reconciliações no banco</div>
+            <div class="src">sem trigger · sem CHECK</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- SINTOMA -->
+      <section class="section" id="sintoma">
+        <div class="wrap">
+          <div class="eyebrow reveal">O sintoma</div>
+          <h2 class="reveal">Aparece no filtro, mas a carteira mostra "nenhum suprimento"</h2>
+          <p class="lede reveal">
+            O filtro "Suprimentos teste" lista contatos como <b>Josiane Costa de
+            Oliveira</b> e <b>Rodrigo Bergmann</b>. Ao abrir a carteira de cada um
+            → aba <b>Suprimentos</b>, vem "Nenhum suprimento encontrado". A
+            primeira intuição é que a carteira está com bug. É o contrário:
+            <b>a carteira está certa</b> — eles têm zero suprimento — e é o
+            <b>filtro</b> que casa quem não deveria.
+          </p>
+
+          <div class="tablewrap reveal">
+            <table>
+              <thead>
+                <tr><th>Verificação (prod org_blips)</th><th>Josiane</th><th>Rodrigo</th><th>Leitura</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="tt">Suprimentos reais (tabela <code>supplies</code>)</td><td class="num">0</td><td class="num">0</td><td>carteira certa ✓</td></tr>
+                <tr><td class="tt">Parcelas de suprimento (<code>supply_titles</code>)</td><td class="num">0</td><td class="num">0</td><td>nada a mostrar</td></tr>
+                <tr><td class="tt">Linhas na base do filtro (<code>vw_titles_live</code>)</td><td>31 <span class="st bad">todas 'contract'</span></td><td>20 <span class="st bad">todas 'contract'</span></td><td>só contrato legado</td></tr>
+                <tr><td class="tt">Casa o predicado como está salvo</td><td><span class="st bad">Sim</span></td><td><span class="st bad">Sim</span></td><td>falso-positivo</td></tr>
+                <tr><td class="tt">Casaria o predicado correto (suprimento)</td><td><span class="st good">Não</span></td><td><span class="st good">Não</span></td><td>sairiam do filtro</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout crit reveal">
+            <h4>Em uma frase</h4>
+            <p>O filtro retorna <b>5.716</b> contatos, mas só <b>2.216</b> têm suprimento de verdade. Os ~3.500 restantes casam por causa do <b>contrato legado</b>, não do suprimento.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- OS DOIS CAMPOS -->
+      <section class="section" id="doiscampos">
+        <div class="wrap">
+          <div class="eyebrow reveal">A causa · os dois campos</div>
+          <h2 class="reveal">Dois campos dizem "suprimento vs contrato". A UI seta o errado.</h2>
+          <p class="lede reveal">
+            Sua pergunta estava certa: <b>são dois campos distintos que, na API,
+            codificam a mesma decisão</b>. A tela preenche o visível; o motor
+            obedece o invisível. Quando discordam, vence o invisível — e ele
+            nunca foi preenchido.
+          </p>
+
+          <div class="fsplit reveal">
+            <div class="fbox set">
+              <span class="tag">o que a UI seta ✓</span>
+              <h4>conditions[].table</h4>
+              <p>Campo <b>por condição</b>. É o dropdown "Suprimento" que você vê na regra. Define de qual tabela vem a coluna daquela linha.</p>
+              <div class="val">table: <b>"supplies"</b><br />field: "total_value"</div>
+              <p style="margin-top:12px">Persiste corretamente no re-save — por isso a tela continua mostrando "Suprimento".</p>
+            </div>
+            <div class="fvs"><span>o motor usa →</span></div>
+            <div class="fbox unset">
+              <span class="tag">o que o motor obedece ✗</span>
+              <h4>filter_definitions.target_entity</h4>
+              <p>Campo <b>do filtro inteiro</b> (escopo-raiz). Decide contra qual partição <code>entity_kind</code> da base o filtro roda. É coluna própria, <b>fora</b> das condições.</p>
+              <div class="val">target_entity: <b style="color:var(--coral)">"contracts"</b><br /><span style="color:var(--faint)">deveria ser "supplies"</span></div>
+              <p style="margin-top:12px">A UI não tem controle para ele, e nada o deriva da condição.</p>
+            </div>
+          </div>
+
+          <div class="callout reveal">
+            <h4><span class="badge">redundância por design</span></h4>
+            <p>Para um filtro de suprimento, <b>os dois deveriam dizer "supply"</b>. Eles são redundantes na dimensão suprimento×contrato — mas ninguém os reconcilia. A base <code>vw_titles_live</code> é um <code>UNION</code> de duas partições (<code>entity_kind='contract'</code> = mundo legado; <code>entity_kind='supply'</code> = suprimentos), e só o <code>target_entity</code> escolhe a partição.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- O MOTOR -->
+      <section class="section" id="motor">
+        <div class="wrap">
+          <div class="eyebrow reveal">O motor · backend</div>
+          <h2 class="reveal">O compilador está correto — só obedeceu um valor errado</h2>
+          <p class="lede reveal">
+            O compilador <code>compile_filter_to_sql_v2</code> deriva o recorte
+            <b>do target_entity</b>, não da condição. Com <code>target_entity='contracts'</code>,
+            ele injeta <code>entity_kind='contract'</code> e ainda mapeia a coluna
+            de suprimento para a de contrato. O SQL que sai é este:
+          </p>
+
+          <div class="code crit reveal"><span class="cm">-- Filtro salvo: condição supplies.total_value &gt; 1, target_entity = 'contracts'</span>
+<span class="cm">-- SQL efetivamente gerado:</span>
+(<span class="kw">contract_original_value</span>)::NUMERIC &gt; 1
+  AND <span class="bad">entity_kind = 'contract'</span>   <span class="cm">-- ← recorte vindo do target_entity</span>
+
+<span class="cm">-- Traduzindo: "todo contato com CONTRATO legado de valor &gt; 1" — quase a base inteira.</span>
+<span class="cm">-- Nunca olha entity_kind = 'supply'.</span></div>
+
+          <div class="code reveal"><span class="cm">-- O que DEVERIA sair (se target_entity = 'supplies'):</span>
+(<span class="kw">contract_original_value</span>)::NUMERIC &gt; 1
+  AND <span class="good">entity_kind = 'supply'</span>    <span class="cm">-- ← recorta suprimento → 2.216 contatos (bate com a realidade)</span></div>
+
+          <div class="callout ok reveal">
+            <h4><svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><polyline points="5 12 10 17 19 7" /></svg>Consumidores já leem o campo certo</h4>
+            <p>A contagem do card (<code>evaluate_filters_batch</code>) e a lista do drawer (<code>get_filter_contacts_paginated</code>) — verificados no banco vivo — leem <code>target_entity</code> e o repassam ao compilador. O motor faria a coisa certa <b>se o valor salvo estivesse certo</b>. Não há bug de runtime.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FRONTEND -->
+      <section class="section" id="frontend">
+        <div class="wrap">
+          <div class="eyebrow reveal">A raiz · frontend</div>
+          <h2 class="reveal">Por que o target_entity nunca vira "supplies"</h2>
+          <p class="lede reveal">
+            O caminho de salvar o filtro (escrita direta na tabela, sem edge
+            function) tem quatro lacunas que, somadas, garantem que todo filtro
+            de suprimento nasça e permaneça como "contracts".
+          </p>
+
+          <div class="grid2 mt32">
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3><svg class="ico" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>A UI não expõe o campo</h3>
+              <ul>
+                <li><span class="mk">1</span>O modal "Editar Filtro" só tem Nome, Cor, Descrição, Ícone, "Escopo" (que é <code>usage_scope</code>, outra coisa) e as condições.</li>
+                <li><span class="mk">2</span>Não há seletor de "entidade-alvo". O schema do formulário nem inclui <code>target_entity</code>.</li>
+                <li><span class="mk">3</span>O dropdown "Suprimento" só grava <code>rule.table</code> na condição — nunca toca o filtro.</li>
+              </ul>
+            </div>
+            <div class="card reveal">
+              <span class="iaf">◆ iaf</span>
+              <h3><svg class="ico" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>Nada deriva, nada atualiza</h3>
+              <ul>
+                <li><span class="mk">4</span><b>Nenhum código</b> lê a condição e conclui <code>target_entity='supplies'</code>.</li>
+                <li><span class="mk">5</span><b>CREATE</b>: default fixo <code>target_entity: data.target_entity || "contracts"</code>, e o valor da UI é sempre <code>undefined</code> → nasce "contracts".</li>
+                <li><span class="mk">6</span><b>UPDATE</b>: o payload nem inclui o campo → o Postgres mantém o valor antigo. <b>É por isso que seu re-save não corrigiu.</b></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code reveal"><span class="cm">// useFilters.ts — CREATE nasce 'contracts' (data.target_entity é sempre undefined vindo da UI)</span>
+transformCreate: (data) =&gt; ({
+  name: data.name, conditions: data.conditions,
+  <span class="bad">target_entity: data.target_entity || "contracts",</span>
+})
+
+<span class="cm">// filter-builder/index.tsx — UPDATE monta o payload SEM target_entity → coluna intocada</span>
+const filterData = { name, description, <span class="kw">conditions</span>, color, icon };  <span class="bad">// ← sem target_entity</span>
+await updateFilter.mutateAsync({ ...filterData, id: filter.id });</div>
+
+          <div class="callout warn reveal">
+            <h4><svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>O banco não segura</h4>
+            <p>Coluna <code>target_entity</code> é <code>VARCHAR(50) DEFAULT 'contracts'</code>, <b>sem CHECK</b> e <b>sem trigger</b> que a reconcilie com as condições. A única edge function que escreve filtro (<code>ai-proposal-executor</code>) também omite o campo. O IAF-4795 entregou o lado da leitura; o lado da escrita no front nunca foi fechado.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VEREDITO -->
+      <section class="section" id="veredito">
+        <div class="wrap">
+          <div class="eyebrow reveal">Veredito</div>
+          <h2 class="reveal">O erro é no frontend. O backend está correto.</h2>
+          <div class="grid3 mt32">
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+              <h4>Frontend — defeituoso</h4>
+              <p>Não seta nem deriva <code>target_entity</code>; no UPDATE nem manda o campo. <b>Raiz do erro.</b></p>
+            </div>
+            <div class="feat hl reveal">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><rect x="2" y="7" width="20" height="14" rx="2"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              <h4>Backend — correto</h4>
+              <p>Deriva <code>entity_kind</code> corretamente do valor recebido. Fez a conta certa com o dado errado.</p>
+            </div>
+            <div class="feat reveal">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+              <h4>Banco — frágil</h4>
+              <p>Default 'contracts', sem CHECK/trigger. Backstop, não origem — mas um endurecimento desejável.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMPACTO -->
+      <section class="section" id="impacto">
+        <div class="wrap">
+          <div class="eyebrow reveal">Impacto</div>
+          <h2 class="reveal">Contido em uma org — mas sistêmico como produto</h2>
+          <div class="arc reveal">
+            <div class="arcstage">
+              <div class="ph">Nesta org</div>
+              <div class="h">1 filtro afetado</div>
+              <div class="d">Só o "Suprimentos teste" referencia supplies em org_blips. Contido.</div>
+            </div>
+            <div class="arcstage">
+              <div class="ph">O produto</div>
+              <div class="h">Impossível criar certo</div>
+              <div class="d">Pela UI, todo filtro de suprimento nasce 'contracts'. Não existe caminho feliz.</div>
+            </div>
+            <div class="arcstage">
+              <div class="ph">Efeito dominó</div>
+              <div class="h">Régua / portfolio / campanha</div>
+              <div class="d">Qualquer um que consuma um filtro de suprimento mira contrato em silêncio.</div>
+            </div>
+            <div class="arcstage final">
+              <div class="ph">Tendência</div>
+              <div class="h">Cresce com Suprimentos</div>
+              <div class="d">Conforme o uso de Suprimentos avança, o erro aparece em qualquer org.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CORREÇÃO -->
+      <section class="section" id="correcao">
+        <div class="wrap">
+          <div class="eyebrow reveal">Correção recomendada</div>
+          <h2 class="reveal">Fechar a escrita no front — e endurecer o banco</h2>
+
+          <div class="journey reveal">
+            <div class="jstep">
+              <div class="num">1</div>
+              <div class="h">Derivar no front</div>
+              <div class="d">Se alguma condição usa supplies/supply_titles → <code>target_entity='supplies'</code>. Calcular no submit.</div>
+            </div>
+            <div class="jstep">
+              <div class="num">2</div>
+              <div class="h">Mandar no CREATE e no UPDATE</div>
+              <div class="d">Incluir o campo no payload e adicionar o <code>transformUpdate</code> (hoje inexistente) para ele entrar no .update().</div>
+            </div>
+            <div class="jstep">
+              <div class="num">3</div>
+              <div class="h">Trava no banco</div>
+              <div class="d">Trigger/CHECK que reconcilie target_entity com as condições — pega qualquer writer desatualizado. Via CI/CD.</div>
+            </div>
+            <div class="jstep end">
+              <div class="num">✓</div>
+              <div class="h">Dado imediato</div>
+              <div class="d">Corrigir o registro para 'supplies' e recalcular o cache → cai para ~2.216; Josiane/Rodrigo saem.</div>
+            </div>
+          </div>
+
+          <div class="callout warn reveal">
+            <h4><span class="badge">decisão de produto</span></h4>
+            <p>O recorte-raiz é único (<code>entity_kind</code> é ou/ou), então <b>filtro misto contrato+suprimento não é representável</b> hoje. A UI deveria impedir misturar as duas famílias na mesma definição, ou exigir escolha explícita da raiz.</p>
+          </div>
+
+          <div class="callout reveal">
+            <h4><svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>Risco secundário a validar</h4>
+            <p>No ramo de suprimento, <code>contract_original_value</code> não é igual a <code>supplies.total_value</code> linha-a-linha (parece agregado por parcela). Para o limiar <code>&gt; 1</code> é inócuo, mas um filtro de suprimento <b>por faixa de valor</b> pode errar mesmo com o target_entity certo. Validar a projeção da view antes de confiar.</p>
+          </div>
+
+          <div class="goal reveal">
+            Fechada a escrita no front + a trava no banco, filtros de Suprimento passam a funcionar por construção — a condição que você vê e o motor voltam a concordar.
+          </div>
+        </div>
+      </section>
+
+      <!-- RESUMO -->
+      <section class="section" id="resumo">
+        <div class="wrap">
+          <div class="eyebrow reveal">Em resumo</div>
+          <div class="resumo reveal">
+            <span class="iaf">◆ iaf</span>
+            <h2>A tela mostra "Suprimento". O motor obedece "Contrato".</h2>
+            <p>
+              Dois campos codificam a mesma decisão suprimento×contrato: a
+              <code>table</code> da condição (que a UI seta) e o
+              <code>target_entity</code> do filtro (que o motor usa). A interface
+              nunca preenche o segundo nem o deriva do primeiro, e o UPDATE nem
+              o envia — por isso o re-save não corrige. O bug é de frontend; o
+              backend está correto; o banco não tem trava que reconcilie.
+            </p>
+            <div class="points">
+              <span class="p">Bug de frontend</span>
+              <span class="p">Backend correto</span>
+              <span class="p">5.716 → deveria 2.216</span>
+              <span class="p">target_entity nunca setado</span>
+              <span class="p">Sem trava no banco</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div>
+          <b>Filtro de Suprimento que casa Contrato — Torre de Controle</b><br />
+          João Vinícius · Supervisor IAF (Finza) · 10/08/2026
+        </div>
+        <div class="mono">
+          evidência: prod org_blips (read-only)<br />
+          relatório: Backlog/analises/10-08-2026/ · ◆ iaf
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const root = document.documentElement, tb = document.getElementById("themeBtn");
+      tb.addEventListener("click", () => {
+        const cur = root.getAttribute("data-theme") || "light";
+        root.setAttribute("data-theme", cur === "dark" ? "light" : "dark");
+      });
+      const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+      if (!reduce) {
+        const io = new IntersectionObserver((ents) => {
+          ents.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      } else {
+        document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+      }
+      function animateCount(el) {
+        const raw = el.dataset.count; const target = parseInt(raw, 10);
+        if (reduce) { el.textContent = target.toLocaleString("pt-BR"); return; }
+        let t0 = null; const dur = 1300;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          const p = Math.min((ts - t0) / dur, 1);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * e).toLocaleString("pt-BR");
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      const mio = new IntersectionObserver((ents) => {
+        ents.forEach((en) => { if (en.isIntersecting) { animateCount(en.target); mio.unobserve(en.target); } });
+      }, { threshold: 0.5 });
+      document.querySelectorAll("#metrics .n[data-count]").forEach((el) => mio.observe(el));
+      const spy = document.getElementById("spy"), links = [...spy.querySelectorAll("a")];
+      const secs = links.map((a) => document.querySelector(a.getAttribute("href")));
+      const sio = new IntersectionObserver((ents) => {
+        ents.forEach((en) => {
+          if (en.isIntersecting) {
+            const id = "#" + en.target.id;
+            links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === id));
+          }
+        });
+      }, { rootMargin: "-45% 0px -50% 0px" });
+      secs.forEach((s) => { if (s) sio.observe(s); });
+    </script>
+  </body>
+</html>

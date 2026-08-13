@@ -1898,6 +1898,14 @@
         stroke: var(--rc5);
         stroke-width: 2.5;
       }
+      .linechart .ser-pct {
+        fill: none;
+        stroke: var(--rc5);
+        stroke-width: 2.5;
+      }
+      .linechart .pt.pct {
+        fill: var(--rc5);
+      }
       .linechart .pt {
         transition: r 0.12s;
       }
@@ -2314,16 +2322,16 @@
             A partir do dia 08/07 os dados começaram a ser metrificados e
             refletidos na Torre. Série de volume reapurada até <b>31/07</b>.
           </p>
+          <div class="costctrls reveal">
+            <div class="seg" id="segCmp">
+              <button class="segbtn active" data-v="vol">Volume</button
+              ><button class="segbtn" data-v="pct">Percentual</button>
+            </div>
+          </div>
           <div class="chartcard reveal">
             <div id="cmpChart"></div>
             <div class="charttip" id="cmpTip"></div>
-            <div class="chartleg">
-              <span><i style="background: var(--rc1)"></i>Protocolos</span>
-              <span
-                ><i style="background: var(--rc5)"></i>Encaminhado a humano (BQ
-                até 07/07 · Torre de 08–31/07)</span
-              >
-            </div>
+            <div class="chartleg" id="cmpLeg"></div>
           </div>
           <div class="srcnote reveal">
             Protocolos: BigQuery <span class="mono">org_*_ai_protocols</span>.
@@ -3045,6 +3053,7 @@ val-finza|2026-07-31|35|0|35|0|0|8`;
           fim: RANGE_MAX,
           moeda: "USD",
           gran: "dia",
+          cmpView: "vol",
         };
 
         /* ---- helpers ---- */
@@ -3429,6 +3438,7 @@ val-finza|2026-07-31|35|0|35|0|0|8`;
         /* ================= COMPARAÇÃO (timeline) ================= */
         function renderComparison() {
           const ser = series();
+          const pct = S.cmpView === "pct";
           const W = 920,
             H = 340,
             pL = 42,
@@ -3443,7 +3453,14 @@ val-finza|2026-07-31|35|0|35|0|0|8`;
              Torre (transbordo+transferência) dentro de 08–31/07 — a fonte mais completa por dia. */
           const protV = ser.map((d) => d.prot),
             encV = ser.map((d) => (d.tele ? d.encTorre : d.encBQ));
-          const ymax = Math.max(1, ...protV, ...encV) * 1.12;
+          /* percentual diário = encaminhado ÷ protocolos (mesmas séries, sem novo dado) */
+          const pctV = ser.map((d, i) =>
+            d.prot > 0 ? (encV[i] / d.prot) * 100 : 0,
+          );
+          const pctLbl = (v) => v.toFixed(1).replace(".", ",");
+          const ymax = pct
+            ? Math.max(1, ...pctV) * 1.15
+            : Math.max(1, ...protV, ...encV) * 1.12;
           const Y = (v) => pT + (1 - v / ymax) * plotH;
           const path = (vals) =>
             vals
@@ -3470,7 +3487,7 @@ val-finza|2026-07-31|35|0|35|0|0|8`;
             const val = (ymax * i) / 4,
               y = Y(val);
             grid += `<line class="grid" x1="${pL}" y1="${y.toFixed(1)}" x2="${W - pR}" y2="${y.toFixed(1)}"></line>`;
-            yl += `<text class="lbl" x="${pL - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end">${Math.round(val)}</text>`;
+            yl += `<text class="lbl" x="${pL - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end">${Math.round(val)}${pct ? "%" : ""}</text>`;
           }
           const step = Math.max(1, Math.round(n / 8));
           let xl = "";
@@ -3484,15 +3501,25 @@ val-finza|2026-07-31|35|0|35|0|0|8`;
                   `<circle class="pt ${cls}" cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="2.4"></circle>`,
               )
               .join("");
+          const lines = pct
+            ? `<path class="ser-pct" d="${path(pctV)}"></path>${dots(pctV, "pct")}`
+            : `<path class="ser-prot" d="${path(protV)}"></path><path class="ser-enc-bq" d="${path(encV)}"></path>${dots(protV, "prot")}${dots(encV, "enc")}`;
           $("#cmpChart").innerHTML =
             `<svg class="linechart" id="cmpSvg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
       ${grid}${yl}<line class="axis" x1="${pL}" y1="${H - pB}" x2="${W - pR}" y2="${H - pB}"></line>${cut}
-      <path class="ser-prot" d="${path(protV)}"></path><path class="ser-enc-bq" d="${path(encV)}"></path>
-      ${dots(protV, "prot")}${dots(encV, "enc")}
+      ${lines}
       <line class="guide" y1="${pT}" y2="${H - pB}"></line>${xl}</svg>`;
+          $("#cmpLeg").innerHTML = pct
+            ? `<span><i style="background: var(--rc5)"></i>% encaminhado a humano (encaminhado ÷ protocolos por dia)</span>`
+            : `<span><i style="background: var(--rc1)"></i>Protocolos</span><span><i style="background: var(--rc5)"></i>Encaminhado a humano (BQ até 07/07 · Torre de 08–31/07)</span>`;
           wireHover("#cmpSvg", "#cmpTip", n, X, (i) => {
             const d = ser[i];
             const enc = d.tele ? d.encTorre : d.encBQ;
+            if (pct)
+              return (
+                `${iso2br(d.iso)}<br><b>${pctLbl(pctV[i])}%</b> encaminhado a humano · ${d.tele ? "Torre" : "BQ"}<br>` +
+                `<span class="tl">${intBR(Math.round(enc))}</span> de ${intBR(d.prot)} protocolos`
+              );
             return (
               `${iso2br(d.iso)}<br><b>${intBR(d.prot)}</b> protocolos<br>` +
               `<span class="tl">${intBR(enc)}</span> encaminhado a humano · ${d.tele ? "Torre" : "BQ"}`
@@ -4181,6 +4208,7 @@ val-finza|2026-07-31|35|0|35|0|0|8`;
         wireSeg("#segCanal", "canal", renderAll);
         wireSeg("#segMoeda", "moeda", renderCost);
         wireSeg("#segGran", "gran", renderCost);
+        wireSeg("#segCmp", "cmpView", renderComparison);
 
         const PRESETS = {
           tudo: [RANGE_MIN, RANGE_MAX],
