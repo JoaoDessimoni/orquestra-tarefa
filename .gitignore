@@ -3,8 +3,23 @@
 .env
 .env.local
 
+# Copia PREENCHIDA do template de variaveis da Torre DEV.
+# O template (torre-dev.env.example) e versionado e vazio; a copia com valores
+# nunca entra no repo.
+torre-dev.env
+*.env.local
+*-secrets.txt
+
 # Subprojetos acoplados — repos git proprios, versionados nos seus proprios GitHub.
 # Ignorados aqui para o repo do orquestra-tarefa nao engolir o conteudo deles.
 # (N8N-AGENT -> github.com/blips-ai/N8N-AGENT ; cobranca-finza -> github.com/blips-ai/cobranca-finza)
 /N8N-AGENT/
 /cobranca-finza/
+# finza-torre-controle-ia -> github.com/finza-org/finza-torre-controle-ia
+# infra-torre-controle    -> repo de infra do sysops
+/finza-torre-controle-ia/
+/infra-torre-controle/
+
+# Dump de esquema de producao baixado como artifact do CI. Descartavel:
+# regerar pelo workflow dump-schema.yml quando precisar.
+/baseline-schema-PROD-*/

@@ -15,7 +15,7 @@ Roteia para o agente **`quimera-ops`**, que usa as ferramentas MCP `mcp__quimera
 | `/quimera` (vazio) | Snapshot operacional do squad — `get_operacional_summary` + tickets ativos por status (`list_tickets team=ia_automacao_finza`). |
 | `/quimera demandas [filtros]` | Consulta demandas. Aceita `status=`, `prioridade=`, `assignee=<nome>`, `categoria=`, `busca="texto"`, `limit=`. Default: pais ativos do squad. Equivale a `consultar`. |
 | `/quimera show <#número\|id>` | Detalhe completo de um ticket (`get_ticket`) — tags, subtarefas, watchers, comentários. |
-| `/quimera card "<título>"` | Cria ticket pai (`create_ticket`). Pergunta o que faltar (descrição, categoria, prioridade, requester, assignee). **high exige justificativa.** Monta o payload e confirma antes de criar. Equivale a `novo`. |
+| `/quimera card "<título>"` | Cria ticket pai (`create_ticket`). **Roda primeiro o gate anti-duplicata** da skill `quimera-nova-demanda` §1 — varre o time + o que está com os desenvolvedores, cruza título E descrição, e **não cria se já existir em qualquer status**. Depois pergunta o que faltar (descrição, categoria, prioridade, requester, assignee). **high exige justificativa.** Monta o payload e confirma antes de criar. Equivale a `novo`. |
 | `/quimera sub <#pai> "<título>"` | Cria subtarefa (`create_subtask`) sob o pai (herda team/categoria/requester). |
 | `/quimera status <#número> <novo-status>` | Muda status (`change_ticket_status`). **Confirma antes** — dispara notificação/e-mail. Estados: backlog, fila_exec, em_andamento, em_validacao, finalizado, cancelado. |
 | `/quimera comentar <#número> "<texto>" [--interno]` | Adiciona comentário (`add_comment`). `--interno` = nota de analista. Público confirma antes. |
@@ -36,6 +36,7 @@ Escopo: time ia_automacao_finza (salvo override explícito no pedido)
 
 ## Quando pedir input adicional (via AskUserQuestion)
 
+- **card** com **duplicata suspeita** no gate (mesmo sistema/objeto, ação possivelmente distinta, ou já existe como subtarefa) → **pare e pergunte**, mostrando candidata × ticket existente (`#número · título · status`). Duplicata confirmada não pergunta: não cria e reporta o existente.
 - **card** sem descrição clara → peça descrição. Sem categoria → ofereça {Cobrança, Recuperação, TI}. Prioridade `high` sem justificativa → peça a justificativa ou rebaixe.
 - **card/sub** com requester ambíguo → default João Vinícius; confirme se for terceiro.
 - **status/comentar/atribuir** sem número → liste demandas ativas e pergunte qual.
