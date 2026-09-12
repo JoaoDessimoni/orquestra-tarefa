@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roadmap · Torre de Controle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --finza-blue:#1A1AFF;--finza-dark:#0A0A2E;
+  --bg:#F4F5F7;--surface:#FFFFFF;--ghost:#C8C8D4;
+  --text:#0F1226;--text-muted:#5C5C7A;--text-subtle:#9498AD;
+  --border:#E4E6EE;--border-soft:#EEF0F5;
+  /* status */
+  --st-entregue:#10B981;--st-backlog:#64748B;--st-a-refinar:#9CA3AF;--st-adiado:#94A3B8;--st-cancelado:#EF4444;--st-executando:#2563EB;--st-bloqueado:#DC2626;
+  /* dev */
+  --dev-marcos:#EAB308;--dev-leandro:#3B82F6;--dev-joao:#F97316;
+  /* prioridade */
+  --p-urgente:#DC2626;--p-alta:#D97706;--p-media:#2563EB;--p-baixa:#64748B;
+  /* tipo */
+  --t-bug:#E11D48;--t-melhoria:#0EA5E9;
+  --font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',monospace;
+  --sidebar-w:250px;--topbar-h:52px;--radius:10px;
+  --shadow-sm:0 1px 2px rgba(15,18,38,.05);--shadow-md:0 4px 16px rgba(15,18,38,.08);--shadow-lg:0 24px 48px rgba(15,18,38,.18);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font-sans);font-size:13.5px;line-height:1.55;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--finza-blue);outline-offset:2px;border-radius:4px}
+
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:var(--finza-dark);color:#fff;display:flex;flex-direction:column;padding:18px 12px;overflow-y:auto;z-index:10}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:99px}
+.brand{display:flex;align-items:baseline;gap:8px;padding:6px 10px 16px}
+.brand .mark{color:#6E6EFF;font-size:14px;font-weight:700}
+.brand .name{font-size:14px;font-weight:700;letter-spacing:.04em}
+.brand .tag{margin-left:auto;font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase}
+.side-section{font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.4);text-transform:uppercase;padding:14px 12px 6px;font-weight:700}
+.side-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;color:rgba(255,255,255,.72);font-size:13px;width:100%;text-align:left;transition:background .12s,color .12s;margin-bottom:1px}
+.side-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.side-item.active{background:var(--finza-blue);color:#fff;font-weight:500}
+.side-item .ico{font-size:11px;width:14px;text-align:center}
+.side-item .lbl{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-item .count{font-family:var(--font-mono);font-size:10px;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:99px;color:rgba(255,255,255,.7);min-width:22px;text-align:center}
+.side-item.active .count{background:rgba(255,255,255,.22);color:#fff}
+.side-item .dot-frente{width:8px;height:8px;border-radius:50%;flex:none}
+.sidebar-footer{margin-top:auto;padding:14px 10px 4px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.5)}
+.sidebar-footer .who strong{color:#fff;font-weight:500;display:block;font-size:12px;margin-bottom:2px}
+.sidebar-footer .src{font-family:var(--font-mono);font-size:9px;color:rgba(255,255,255,.32);margin-top:6px;line-height:1.5}
+
+.main{min-width:0;display:flex;flex-direction:column;position:relative}
+.topbar{position:sticky;top:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 26px;z-index:20}
+.crumb{display:flex;align-items:center;gap:8px;font-size:13px}
+.crumb .seg{color:var(--text-muted)}.crumb .seg.cur{color:var(--text);font-weight:500}
+.crumb .sep{color:var(--text-subtle);font-size:10px}
+.topbar-spacer{flex:1}
+.iaf-mark{font-size:11px;font-weight:700;color:var(--finza-blue);letter-spacing:.1em}
+.view{padding:28px 34px 90px;width:100%;max-width:1680px;margin:0 auto}
+.ghost{font-weight:300;color:var(--ghost);font-size:32px;line-height:1.1;letter-spacing:-.015em;margin:0 0 6px}
+.ghost .accent{font-weight:700;color:var(--finza-blue)}
+.sub{color:var(--text-muted);font-size:13.5px;margin:0 0 22px;max-width:860px}
+.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text-muted);margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between}
+.section-title .extra{font-size:11px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-subtle)}
+
+/* hero slim */
+.hero{background:var(--finza-dark);color:#fff;padding:20px 26px;border-radius:14px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-40%;right:-6%;width:320px;height:320px;background:radial-gradient(circle,rgba(46,46,255,.3) 0%,transparent 70%);pointer-events:none}
+.hero .label{font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.5);text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.hero .title{font-size:20px;font-weight:300;line-height:1.3;margin:0;max-width:760px}
+.hero .title b{font-weight:700;color:#B9B9FF}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:8px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;position:relative}
+.kpi::before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--kc,var(--finza-blue))}
+.kpi .lab{font-size:10px;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.kpi .num{font-size:26px;font-weight:700;line-height:1;font-family:var(--font-mono);color:var(--text)}
+.kpi.k-total{--kc:var(--finza-blue)}.kpi.k-entregue{--kc:var(--st-entregue)}.kpi.k-backlog{--kc:var(--st-backlog)}
+.kpi.k-arefinar{--kc:var(--st-a-refinar)}.kpi.k-adiado{--kc:var(--st-adiado)}.kpi.k-cancelado{--kc:var(--st-cancelado)}
+.kpi.k-executando{--kc:var(--st-executando)}.kpi.k-bloqueado{--kc:var(--st-bloqueado)}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+@media (max-width:1200px){.grid3{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:820px){.grid3{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.panel h3{margin:0 0 14px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)}
+.donut-wrap{display:flex;align-items:center;gap:16px}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:12px;flex:1;min-width:0}
+.legend .row{display:flex;align-items:center;gap:8px}
+.legend .sw{width:10px;height:10px;border-radius:3px;flex:none}
+.legend .ll{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend .lv{font-family:var(--font-mono);font-weight:700;color:var(--text-muted)}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 30px;gap:10px;align-items:center;font-size:12px}
+.bar-row.wide{grid-template-columns:150px 1fr 30px}
+.bar-row .bl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:8px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px}
+.bar-row .bv{font-family:var(--font-mono);font-weight:700;text-align:right;color:var(--text-muted)}
+
+/* legend chips (colors reference) */
+.legendbar{display:flex;flex-wrap:wrap;gap:14px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:18px;font-size:11.5px;color:var(--text-muted)}
+.legendbar .grp{display:flex;align-items:center;gap:8px}
+.legendbar .grp .t{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:9.5px;color:var(--text-subtle)}
+.legendbar .lg{display:inline-flex;align-items:center;gap:5px}
+.legendbar .lg .d{width:9px;height:9px;border-radius:50%}
+
+/* board */
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:14px}
+.search{flex:1;min-width:210px;max-width:340px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
+.search input{border:0;outline:0;width:100%;background:none}
+.search .mag{color:var(--text-subtle)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{padding:5px 11px;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-size:12px;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.chip:hover{border-color:var(--text-subtle);color:var(--text)}
+.chip.on{background:var(--finza-dark);color:#fff;border-color:var(--finza-dark)}
+.chip .d{width:8px;height:8px;border-radius:50%}
+.chip-clear{font-size:12px;color:var(--text-subtle);text-decoration:underline}
+.filter-lab{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-subtle);margin:8px 0 5px}
+
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(230px,1fr));gap:13px}
+@media (max-width:1100px){.kanban:not(.kstatus){grid-template-columns:repeat(2,1fr)}}
+.kanban.kstatus{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.kanban.kstatus .kcol{flex:0 0 clamp(192px,13.5vw,240px)}
+.kcol{background:#EBECF1;border-radius:11px;padding:9px;min-height:100px}
+.kcol-head{display:flex;align-items:center;gap:8px;padding:5px 6px 10px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.kcol-head .kc-dot{width:9px;height:9px;border-radius:50%}
+.kcol-head .kc-count{margin-left:auto;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);background:var(--surface);padding:1px 7px;border-radius:99px}
+.kcol-body{display:flex;flex-direction:column;gap:8px}
+.kcol-empty{font-size:11px;color:var(--text-subtle);text-align:center;padding:14px 0;font-style:italic}
+
+.ci{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--ci-accent,var(--st-backlog));border-radius:8px;padding:10px 12px;cursor:pointer;transition:box-shadow .12s,transform .12s}
+.ci:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.ci.done{opacity:.72}.ci.dropped{opacity:.6}
+.ci-top{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ci-id{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--text-subtle)}
+.ci-esf{margin-left:auto;font-size:10px;color:var(--text-subtle);font-family:var(--font-mono)}
+.ci-title{font-size:12.8px;font-weight:500;line-height:1.35;margin-bottom:9px;color:var(--text)}
+.ci.dropped .ci-title{text-decoration:line-through;text-decoration-color:var(--text-subtle)}
+.ci-bot{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pill{font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:4px}
+.pbadge{font-family:var(--font-mono);font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:4px;color:#fff}
+.pbadge.urgente{background:var(--p-urgente)}.pbadge.alta{background:var(--p-alta)}.pbadge.media{background:var(--p-media)}.pbadge.baixa{background:var(--p-baixa)}
+.tipo{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:4px}
+.tipo.bug{background:#FFE4E9;color:var(--t-bug)}.tipo.melhoria{background:#E0F2FE;color:#0284C7}
+.frente-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);background:var(--bg);padding:2px 8px;border-radius:99px;max-width:100%}
+.frente-pill .d{width:7px;height:7px;border-radius:50%;flex:none}
+.frente-pill .fl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-pill{color:#fff}
+.exec-pill{font-family:var(--font-mono);font-size:9.5px;color:#fff;background:#2563EB}
+.reab-pill{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:#fff;background:#B45309;padding:2px 8px;border-radius:99px;white-space:nowrap;letter-spacing:.02em}
+.status-pill.entregue{background:var(--st-entregue)}.status-pill.backlog{background:var(--st-backlog)}
+.status-pill.a-refinar{background:#fff;color:var(--st-a-refinar);border:1px dashed var(--st-a-refinar)}
+.status-pill.executando{background:var(--st-executando)}
+.status-pill.bloqueado{background:var(--st-bloqueado)}
+.status-pill.adiado{background:var(--st-adiado)}.status-pill.cancelado{background:var(--st-cancelado)}
+.dev-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text);padding:1px 8px 1px 6px;border-radius:99px;background:var(--bg)}
+.dev-chip .d{width:8px;height:8px;border-radius:50%;background:var(--dc)}
+.dep-tag{font-size:9.5px;font-weight:700;text-transform:uppercase;color:#9333EA;background:#F3E8FF;padding:1px 6px;border-radius:4px}
+.ci-obs{margin-top:8px;padding-top:7px;border-top:1px dashed var(--border);font-size:10.5px;line-height:1.4;color:var(--text-muted);font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ci-obs .oic{font-style:normal;color:var(--text-subtle);margin-right:4px}
+.refino-pill{font-size:9.5px;font-weight:700;padding:1px 8px;border-radius:99px;color:#fff}
+.exec-pill{font-size:9.5px;font-weight:700;color:#fff;background:#10B981;padding:1px 7px;border-radius:99px;letter-spacing:.02em}
+.qkey{font-family:var(--font-mono);font-size:9.5px;color:var(--text-subtle);background:var(--bg);padding:1px 6px;border-radius:4px}
+.src-q{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6366F1;background:#EEF2FF;padding:1px 6px;border-radius:4px}
+.fora-q{font-size:9.5px;font-weight:700;color:#71717A;background:#F1F1F5;border:1px dashed #C4C4D0;padding:1px 7px;border-radius:99px;letter-spacing:.02em}
+
+/* segmented toggle */
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:2px}
+.seg button{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap}
+.seg button.on{background:var(--finza-dark);color:#fff}
+
+/* filter bar — uma linha */
+.fbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.fbar .search{flex:0 1 260px;min-width:180px}
+.fdrop{position:relative}
+.fdrop-btn{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;color:var(--text-muted)}
+.fdrop-btn:hover{border-color:var(--text-subtle);color:var(--text)}
+.fdrop-btn .cnt{font-family:var(--font-mono);font-size:10px;background:var(--finza-blue);color:#fff;border-radius:99px;padding:0 5px;min-width:15px;text-align:center}
+.fdrop-btn .car{font-size:8px;color:var(--text-subtle)}
+.fdrop-menu{position:absolute;top:calc(100% + 4px);left:0;z-index:30;background:var(--surface);border:1px solid var(--border);border-radius:9px;box-shadow:var(--shadow-md);padding:6px;min-width:200px;max-height:300px;overflow:auto;display:none}
+.fdrop.open .fdrop-menu{display:block}
+.fopt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap}
+.fopt:hover{background:var(--bg)}
+.fopt input{margin:0;accent-color:var(--finza-blue)}
+.fopt .d{width:9px;height:9px;border-radius:50%;flex:none}
+.fchip-exec{padding:6px 11px;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--st-entregue);font-weight:600;display:inline-flex;align-items:center;gap:6px;background:var(--surface)}
+.fchip-exec.on{background:var(--st-entregue);color:#fff;border-color:var(--st-entregue)}
+.fchip-fora{padding:6px 11px;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-muted);font-weight:600;display:inline-flex;align-items:center;gap:6px;background:var(--surface)}
+.fchip-fora.on{background:#6B7280;color:#fff;border-color:#6B7280}
+.fbar .clr{font-size:12px;color:var(--text-subtle);text-decoration:underline;margin-left:2px}
+
+/* frente dashboard */
+.fdash{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:1000px){.fdash{grid-template-columns:repeat(3,1fr)}}
+.fdash .fd{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;position:relative}
+.fdash .fd::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--kc,var(--border))}
+.fdash .fd .l{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:700;margin-bottom:4px}
+.fdash .fd .n{font-size:21px;font-weight:700;font-family:var(--font-mono);line-height:1;color:var(--kc,var(--text))}
+.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 16px;margin-bottom:16px}
+.progress-wrap .pl{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-muted);margin-bottom:7px}
+.progress-wrap .pl .pct{font-family:var(--font-mono);font-weight:700;font-size:16px;color:var(--st-entregue)}
+.progress-track{height:10px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#10B981,#34D399);border-radius:99px;transition:width .3s}
+/* conclusão do backlog (overview) — hoje vs previsto c/ pipeline do Quimera */
+.compl-nums{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.compl-b{min-width:118px}
+.compl-l{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:700;margin-bottom:4px}
+.compl-n{font-family:var(--font-mono);font-size:34px;font-weight:700;line-height:1}
+.compl-s{font-size:11.5px;color:var(--text-subtle);margin-top:4px}
+.compl-arrow{font-size:24px;color:var(--text-subtle);align-self:center;font-weight:700}
+.compl-track{position:relative;height:16px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.compl-proj{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(37,99,235,.55) 0 6px,rgba(37,99,235,.30) 6px 12px)}
+.compl-done{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#10B981,#34D399)}
+.compl-leg{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--text-muted)}
+.compl-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:middle}
+.compl-leg i.hatch{background:repeating-linear-gradient(45deg,rgba(37,99,235,.55) 0 4px,rgba(37,99,235,.30) 4px 8px)}
+
+/* Finza — matriz de pesos */
+.wmatrix{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 22px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:6px}
+@media(max-width:820px){.wmatrix{grid-template-columns:1fr}}
+.wm{display:grid;grid-template-columns:150px 1fr 42px;gap:10px;align-items:center;font-size:12px}
+.wm-l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.wm-l .pen-t{font-size:9px;color:#EF4444;font-weight:700;text-transform:uppercase}
+.wm-bar{height:8px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.wm-fill{height:100%;border-radius:99px}
+.wm-w{font-family:var(--font-mono);font-weight:700;text-align:right;color:var(--text-muted)}
+/* Finza — ranking */
+.rank{display:flex;flex-direction:column;gap:8px}
+.rk{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 15px;cursor:pointer;transition:box-shadow .12s,transform .12s}
+.rk:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.rk-main{flex:1;min-width:0}
+.rk-sub{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--finza-blue)}
+.rk-t{font-size:13.5px;font-weight:600;color:var(--text);margin:2px 0 7px;line-height:1.3}
+.rk-t .mand{font-size:10px;font-weight:700;color:#DC2626;background:#FEE2E2;padding:1px 7px;border-radius:99px}
+.rk-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.crit{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:#fff;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.rk-meta{font-size:10.5px;color:var(--text-subtle);margin-left:4px}
+.rk-score{width:110px;flex:none;text-align:right}
+.rk-num{font-family:var(--font-mono);font-size:19px;font-weight:700;color:var(--finza-blue);line-height:1}
+.rk-bar{height:6px;background:var(--border-soft);border-radius:99px;overflow:hidden;margin-top:6px}
+.rk-fill{height:100%;background:linear-gradient(90deg,#1A1AFF,#6E6EFF);border-radius:99px}
+/* Finza — matriz no drawer */
+.cmatrix{display:flex;flex-direction:column;gap:8px}
+.cmx{display:grid;grid-template-columns:120px 1fr 22px;gap:10px;align-items:center;font-size:12px}
+.cmx-l{color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmx-bar{height:8px;background:var(--border-soft);border-radius:99px;overflow:hidden}
+.cmx-fill{height:100%;border-radius:99px}
+.cmx-v{font-family:var(--font-mono);font-weight:700;text-align:right;color:var(--text)}
+
+/* lançamento — demandas selecionadas p/ o board da diretoria */
+.launch-intro{font-size:12.5px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:6px}
+.launch-list{display:flex;flex-direction:column;gap:12px}
+.lc{display:flex;gap:14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--finza-blue);border-radius:var(--radius);padding:15px 17px}
+.lc-num{flex:none;width:26px;height:26px;border-radius:7px;background:var(--finza-dark);color:#fff;font-family:var(--font-mono);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.lc-main{flex:1;min-width:0}
+.lc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.lc-id{font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--finza-blue);letter-spacing:.02em}
+.lc-meta{margin-left:auto;display:flex;gap:5px;flex-wrap:wrap}
+.lc-chip{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--text-muted);background:var(--bg);border:1px solid var(--border);padding:1px 7px;border-radius:99px}
+.lc-title{font-size:15px;font-weight:700;line-height:1.3;color:var(--text);margin-bottom:6px}
+.lc-desc{font-size:12.5px;color:var(--text-muted);line-height:1.5;margin-bottom:10px}
+.lc-why{background:#EEF0FF;border:1px solid #D6D9FF;border-radius:8px;padding:9px 12px;font-size:12px;color:#26268A;line-height:1.5}
+.lc-why-lab{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--finza-blue);margin-bottom:3px}
+.lc-copy{margin-top:11px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--finza-blue);background:var(--surface);border:1px solid var(--finza-blue);border-radius:8px;padding:6px 12px;transition:background .12s,color .12s,border-color .12s}
+.lc-copy:hover{background:var(--finza-blue);color:#fff}
+.lc-copy.ok{background:var(--st-entregue);border-color:var(--st-entregue);color:#fff}
+@media(max-width:820px){.lc-meta{margin-left:0}}
+
+/* frente header */
+.frente-head{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:16px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:13px}
+.frente-head .fh-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;font-family:var(--font-mono);flex:none}
+.frente-head .fh-label{font-size:20px;font-weight:700;line-height:1.1}
+.fh-kpis{margin-left:auto;display:flex;gap:20px;flex-wrap:wrap}
+.fh-kpis .k{text-align:center;min-width:44px}
+.fh-kpis .k .n{font-family:var(--font-mono);font-weight:700;font-size:20px;line-height:1;color:var(--kc,var(--text))}
+.fh-kpis .k .l{font-size:8.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-weight:700;margin-top:4px;white-space:nowrap}
+
+/* analise */
+.obs-prio{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:8px}
+@media (max-width:900px){.obs-prio{grid-template-columns:1fr}}
+.obs-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--oc);border-radius:var(--radius);padding:14px 16px}
+.obs-card .oh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:6px}
+.obs-card .oh .cnt{margin-left:auto;font-family:var(--font-mono);font-size:12px;color:var(--text-muted)}
+.obs-card p{margin:0;font-size:12.5px;color:var(--text-muted);line-height:1.55}
+.top10{display:flex;flex-direction:column;gap:7px}
+.top-row{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--finza-blue);border-radius:8px;padding:11px 13px}
+.top-row .tn{font-family:var(--font-mono);font-size:17px;font-weight:700;color:var(--finza-blue);line-height:1.1}
+.top-row .ti{font-weight:600;margin-bottom:3px}
+.top-row .tw{font-size:12px;color:var(--text-muted);line-height:1.45}
+.top-row .tags{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.gerais{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.gerais li{position:relative;padding-left:18px;font-size:13px;color:var(--text);line-height:1.5}
+.gerais li::before{content:'▸';position:absolute;left:0;color:var(--finza-blue);font-weight:700}
+.refino-summary{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.refino-summary .rs{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:12px}
+.refino-summary .rs .rn{font-family:var(--font-mono);font-weight:700}
+.refino-summary .rs .rd{width:9px;height:9px;border-radius:50%}
+.refino-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media (max-width:900px){.refino-grid{grid-template-columns:1fr}}
+.refino-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--rc);border-radius:var(--radius);padding:14px 16px}
+.refino-card .rh{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:3px}
+.refino-card .rh .rcount{margin-left:auto;font-family:var(--font-mono);font-size:13px;color:var(--rc)}
+.refino-card .rhint{font-size:11.5px;color:var(--text-muted);line-height:1.45;margin-bottom:10px}
+.refino-list{display:flex;flex-direction:column;gap:3px}
+.refino-list .rli{display:grid;grid-template-columns:34px 1fr;gap:8px;align-items:baseline;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:12px}
+.refino-list .rli:hover{background:var(--bg)}
+.refino-list .rli .rid{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--text-subtle)}
+.refino-list .rli .rtt{color:var(--text)}
+.refino-list .rli .robs{display:block;font-size:10.5px;color:var(--text-muted);font-style:italic;margin-top:1px;line-height:1.35}
+
+/* drawer */
+.overlay{position:fixed;inset:0;background:rgba(15,18,38,.42);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.overlay.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(560px,94vw);background:var(--surface);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);z-index:50;display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:22px 26px 16px;border-bottom:1px solid var(--border-soft);display:flex;align-items:flex-start;gap:12px}
+.drawer-head .dh-id{font-family:var(--font-mono);font-size:11px;color:var(--text-subtle);font-weight:700}
+.drawer-head .dh-title{font-size:18px;font-weight:700;line-height:1.28;margin-top:4px}
+.drawer-close{margin-left:auto;font-size:22px;color:var(--text-subtle);line-height:1;flex:none}
+.drawer-close:hover{color:var(--text)}
+.drawer-body{padding:18px 26px 60px;overflow-y:auto;flex:1}
+.d-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.d-meta{display:grid;grid-template-columns:1fr 1fr;gap:13px 18px;margin:0 0 20px;padding:15px 16px;background:var(--bg);border-radius:var(--radius)}
+.d-meta .mlab{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-subtle);font-weight:700;margin-bottom:3px}
+.d-meta .mval{font-size:13px;font-weight:500}
+.d-block{margin-bottom:18px}
+.d-block h4{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);font-weight:700;margin:0 0 8px}
+.d-desc{font-size:14px;line-height:1.62;color:var(--text);border-left:3px solid var(--finza-blue);padding-left:14px}
+.d-obs{font-size:13.5px;line-height:1.6;color:var(--text);background:#F0F4FF;border-left:3px solid #6E6EFF;border-radius:0 8px 8px 0;padding:11px 14px}
+.d-nota{font-size:13px;line-height:1.55;color:#92400E;background:#FEF3C7;border-radius:8px;padding:12px 14px}
+.d-nota .nl{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#B45309;margin-bottom:5px}
+.empty{color:var(--text-subtle);font-style:italic;padding:26px 0;text-align:center}
+
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:16px}
+.tl-month{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tl-mhead{display:flex;align-items:center;gap:10px;padding:10px 16px;font-family:var(--font-mono);font-weight:700;font-size:13px;border-left:4px solid #10B981;background:linear-gradient(90deg,rgba(16,185,129,.09),transparent)}
+.tl-mhead.plan{border-left-color:#64748B;background:linear-gradient(90deg,rgba(100,116,139,.10),transparent)}
+.tl-mlabel{text-transform:uppercase;letter-spacing:.05em}
+.tl-mcount{margin-left:auto;font-size:11px;font-weight:600;color:var(--text-subtle)}
+.tl-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-top:1px solid var(--border);cursor:pointer;font-size:12.5px;transition:background .12s}
+.tl-row:hover{background:var(--bg)}
+.tl-date{font-family:var(--font-mono);font-weight:700;color:var(--finza-blue);min-width:46px;font-size:12px}
+.tl-id{font-family:var(--font-mono);font-size:10.5px;color:var(--text-subtle);min-width:38px}
+.tl-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-note{margin-top:12px;font-size:12px;color:var(--text-subtle);padding:9px 13px;border:1px dashed var(--border);border-radius:8px;line-height:1.5}
+.ci-date{font-family:var(--font-mono);font-size:10px;font-weight:700;color:#10B981}
+/* timeline — atraso + grupos sem data */
+.tl-mhead.atraso{border-left-color:#EF4444;background:linear-gradient(90deg,rgba(239,68,68,.12),transparent);color:#B91C1C}
+.tl-mhead.nodate{border-left-color:#CBD5E1;background:linear-gradient(90deg,rgba(148,163,184,.10),transparent)}
+.tl-mhead.drop{border-left-color:#EF4444;background:linear-gradient(90deg,rgba(239,68,68,.06),transparent)}
+.tl-mhead.refine{border-left-color:#9CA3AF;background:linear-gradient(90deg,rgba(156,163,175,.12),transparent)}
+.tl-row.atrasado{background:rgba(239,68,68,.045);box-shadow:inset 3px 0 0 #EF4444}
+.tl-row.atrasado:hover{background:rgba(239,68,68,.09)}
+.tl-badge-atraso{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:#fff;background:#DC2626;padding:1px 7px;border-radius:99px;letter-spacing:.02em;white-space:nowrap}
+.tl-badge-exec{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:#fff;background:#2563EB;padding:1px 7px;border-radius:99px;letter-spacing:.02em;white-space:nowrap}
+.tl-row.exec-atraso{background:linear-gradient(90deg,rgba(239,68,68,.05),rgba(37,99,235,.06));box-shadow:inset 3px 0 0 #EF4444,inset -3px 0 0 #2563EB}
+.tl-row.exec-atraso:hover{background:linear-gradient(90deg,rgba(239,68,68,.09),rgba(37,99,235,.10))}
+.tl-row.em-quimera{background:rgba(37,99,235,.045);box-shadow:inset 3px 0 0 #2563EB}
+.tl-row.em-quimera:hover{background:rgba(37,99,235,.09)}
+.tl-mhead.exec{border-left-color:#2563EB;background:linear-gradient(90deg,rgba(37,99,235,.11),transparent);color:#1D4ED8}
+.section-title.tl-exec-sec{color:#1D4ED8;border-bottom-color:rgba(37,99,235,.35)}
+.section-title.tl-exec-sec .extra{color:#2563EB}
+.tl-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+.tl-toolbar .spacer{flex:1}
+.section-title.tl-atraso-sec{color:#B91C1C;border-bottom-color:rgba(239,68,68,.35)}
+.section-title.tl-atraso-sec .extra{color:#DC2626}
+.fchip-atraso{padding:6px 11px;border:1px solid var(--border);border-radius:8px;font-size:12px;color:#DC2626;font-weight:600;display:inline-flex;align-items:center;gap:6px;background:var(--surface)}
+.fchip-atraso.on{background:#DC2626;color:#fff;border-color:#DC2626}
+.tl-datefilter{font-size:12px;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px}
+.tl-datefilter select{font-family:var(--font-sans);font-size:12px;padding:5px 7px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text)}
+/* gantt */
+.gantt{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow-sm);overflow:hidden}
+.gantt-axis{display:grid;position:relative;border-bottom:1px solid var(--border);background:var(--bg);font-family:var(--font-mono);font-size:10.5px;font-weight:700;color:var(--text-subtle)}
+.gantt-axis .gax-lbl{padding:7px 0 7px 12px;border-right:1px solid var(--border-soft)}
+.gantt-axis .gax-month{padding:7px 8px;text-align:left;border-right:1px solid var(--border-soft);text-transform:uppercase;letter-spacing:.05em}
+.gantt-scroll{overflow-x:auto}
+.gantt-inner{min-width:640px}
+.gantt-row{display:grid;align-items:center;border-top:1px solid var(--border-soft);min-height:34px;transition:background .12s}
+.gantt-row:hover{background:var(--bg)}
+.gantt-label{display:flex;align-items:center;gap:7px;padding:5px 10px 5px 12px;min-width:0;cursor:pointer;border-right:1px solid var(--border-soft)}
+.gantt-label .gl-id{font-family:var(--font-mono);font-size:10px;color:var(--text-subtle);flex:none}
+.gantt-label .gl-title{font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.gantt-label .gl-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.gantt-track{position:relative;height:100%;min-height:34px;cursor:pointer}
+.gantt-track .gt-grid{position:absolute;top:0;bottom:0;width:1px;background:var(--border-soft)}
+.gantt-bar{position:absolute;top:9px;height:16px;border-radius:5px;min-width:5px;display:flex;align-items:center;box-shadow:var(--shadow-sm)}
+.gantt-bar.plan{opacity:.92;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.28) 0 5px,transparent 5px 10px)}
+.gantt-bar.atraso{outline:2px solid #EF4444;outline-offset:1px}
+.gantt-bar.exec{outline:2px solid #2563EB;outline-offset:1px}
+.gantt-bar.atraso.exec{outline:2px solid #2563EB;outline-offset:1px}
+.gantt-label .gl-exec{color:#2563EB;font-size:10px;font-weight:700;flex:none}
+.gantt-bar.done::after{content:"✓";position:absolute;right:4px;color:#fff;font-size:9px;font-weight:700}
+.gantt-ms{position:absolute;top:8px;width:14px;height:14px;transform:rotate(45deg);border-radius:3px;box-shadow:var(--shadow-sm)}
+.gantt-nodate{position:absolute;top:11px;left:6px;font-size:10px;color:var(--text-subtle);font-style:italic}
+.gantt-today{position:absolute;top:0;bottom:0;width:2px;background:#EF4444;z-index:4;pointer-events:none}
+.gantt-today::after{content:attr(data-today);position:absolute;top:-1px;left:3px;font-family:var(--font-mono);font-size:8.5px;font-weight:700;color:#EF4444;background:var(--bg);padding:0 3px;border-radius:3px;white-space:nowrap}
+.gantt-empty{padding:34px 20px;text-align:center;color:var(--text-subtle);font-style:italic;font-size:13px;line-height:1.6}
+
+/* ===== Cronograma (Gantt por dia) =====
+   Scroll é SEMPRE interno ao componente (.cg-scroll). A página nunca rola de lado.
+   Coluna Tarefa fica presa à esquerda, Entrega à direita, cabeçalho preso no topo. */
+/* barra unica: controles do Gantt + filtros, todos em linha, acima do calendario */
+.fbar-gantt{gap:7px;row-gap:9px;margin-bottom:12px}
+.cg-ctl{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fbar-sep{width:1px;align-self:stretch;min-height:26px;background:var(--border);margin:0 4px;flex:none}
+.cg-nav{display:flex;align-items:center;gap:6px}
+.cg-arrow,.cg-tool{border:1px solid var(--border);background:var(--surface);color:var(--text-muted);border-radius:8px;cursor:pointer;font-family:inherit;transition:background .12s,color .12s,border-color .12s}
+.cg-arrow{width:30px;height:30px;font-size:17px;line-height:1}
+.cg-tool{height:30px;min-width:30px;padding:0 8px;font-size:13px;font-weight:700;line-height:1}
+.cg-tool.wide{font-size:11.5px;padding:0 11px;letter-spacing:.02em}
+.cg-tool.on{background:var(--finza-blue);color:#fff;border-color:var(--finza-blue)}
+.cg-tool.on:hover{background:var(--finza-blue);color:#fff}
+.cg-arrow:hover,.cg-tool:hover{background:var(--bg);color:var(--text);border-color:var(--text-subtle)}
+.cg-arrow:focus-visible,.cg-tool:focus-visible,.cg-mes:focus-visible,.cg-row:focus-visible{outline:2px solid var(--finza-blue);outline-offset:2px}
+.cg-mes{min-width:150px;padding:6px 14px;border:1px solid var(--border);background:var(--surface);border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--text);cursor:pointer;text-transform:capitalize;text-align:center}
+.cg-mes:hover{background:var(--bg)}
+.cg-mes-lock{cursor:default;border-style:dashed;color:var(--text-muted)}
+.cg-mes-lock:hover{background:var(--surface)}
+.cg-tools{display:flex;gap:5px}
+.cg-periodo{display:inline-flex;align-items:center;gap:6px;font-size:12px;flex-wrap:wrap}
+.cg-pval{font-family:var(--font-mono);font-size:11.5px;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--border);padding:4px 8px;border-radius:7px;font-variant-numeric:tabular-nums}
+.cg-pto{color:var(--text-subtle)}
+.cg-ndays{font-family:var(--font-mono);font-size:10.5px;color:var(--text-subtle)}
+.cg-legend{display:inline-flex;gap:13px;flex-wrap:wrap;font-size:11.5px;color:var(--text-muted);margin-left:auto;flex:none}
+.cg-legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.cg-legend i{width:11px;height:11px;border-radius:3px;flex:none}
+
+.cg-wrap{background:var(--surface);border:1px solid var(--border);border-radius:11px;overflow:hidden}
+.cg-scroll{overflow:auto;max-height:clamp(300px,64vh,720px);overscroll-behavior:contain}
+.cg-grid{display:block;width:max-content;min-width:100%}
+.cg-hrow,.cg-row{display:grid;grid-template-columns:250px minmax(var(--tw),1fr) 86px;align-items:stretch}
+.cg-cell{background:var(--surface)}
+
+/* cabeçalho preso no topo */
+.cg-hrow{position:sticky;top:0;z-index:6;border-bottom:1px solid var(--border)}
+.cg-hrow .cg-cell{background:var(--bg)}
+.cg-hlbl,.cg-hent{display:flex;align-items:center;padding:0 13px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle)}
+.cg-hent{justify-content:flex-end}
+/* colunas presas nas laterais */
+.cg-hlbl,.cg-lbl{position:sticky;left:0;z-index:5}
+.cg-hent,.cg-ent{position:sticky;right:0;z-index:5}
+.cg-hlbl,.cg-hent{z-index:7}
+.cg-lbl{box-shadow:1px 0 0 var(--border-soft)}
+.cg-ent{box-shadow:-1px 0 0 var(--border-soft)}
+.cg-hlbl{box-shadow:1px 0 0 var(--border)}
+.cg-hent{box-shadow:-1px 0 0 var(--border)}
+
+.cg-hdays{display:flex;flex-direction:column;width:var(--tw)}
+.cg-mrow{display:flex;height:19px;border-bottom:1px solid var(--border-soft)}
+.cg-mband{display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);border-left:1px solid var(--border);white-space:nowrap;overflow:hidden}
+.cg-drow{display:flex}
+.cg-d{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:5px 0;border-left:1px solid var(--border-soft);min-width:0}
+.cg-d.we{background:color-mix(in srgb, var(--text-subtle) 10%, transparent)}
+.cg-d.today{background:color-mix(in srgb, #EF4444 14%, transparent)}
+.cg-wd{font-family:var(--font-mono);font-size:7.5px;font-weight:700;color:var(--text-subtle);line-height:1}
+.cg-d.today .cg-wd,.cg-d.today .cg-dn{color:#EF4444}
+.cg-dn{font-family:var(--font-mono);font-size:10.5px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;line-height:1}
+
+/* corpo + overlay de fundo (uma vez, atrás de tudo) */
+.cg-body{position:relative}
+.cg-overlay{position:absolute;top:0;bottom:0;left:250px;z-index:0;pointer-events:none;
+  background-image:linear-gradient(to right,var(--border-soft) 0 1px,transparent 1px 100%);background-repeat:repeat-x}
+.cg-we-band{position:absolute;top:0;bottom:0;background:color-mix(in srgb, var(--text-subtle) 7%, transparent)}
+.cg-now{position:absolute;top:0;bottom:0;width:2px;background:#EF4444;opacity:.65}
+
+.cg-row{border-bottom:1px solid var(--border-soft);cursor:pointer;position:relative;z-index:1}
+.cg-row:last-child{border-bottom:none}
+.cg-row:hover .cg-track{background:color-mix(in srgb, var(--finza-blue) 5%, transparent)}
+.cg-row:hover .cg-cell{background:var(--bg)}
+.cg-lbl{display:flex;align-items:center;gap:9px;padding:8px 13px;min-width:0}
+.cg-av{width:25px;height:25px;flex:none;border-radius:50%;background:var(--av);color:#fff;font-family:var(--font-mono);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.cg-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.cg-t{font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}
+.cg-s{font-size:10px;color:var(--text-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-mono)}
+.cg-s b{color:#B45309;font-weight:700}
+
+.cg-track{position:relative;min-height:44px;width:var(--tw)}
+.cg-bar{position:absolute;top:50%;transform:translateY(-50%);height:22px;border-radius:5px;overflow:hidden;
+  background:color-mix(in srgb, var(--bc) 24%, transparent);border:1px solid color-mix(in srgb, var(--bc) 58%, transparent);
+  transition:filter .12s}
+.cg-row:hover .cg-bar{filter:brightness(1.06)}
+.cg-fill{position:absolute;inset:0;background:var(--bc);opacity:.92}
+.cg-rng{position:absolute;top:50%;right:7px;transform:translateY(-50%);font-family:var(--font-mono);font-size:9.5px;font-weight:700;z-index:1;white-space:nowrap;letter-spacing:.02em;color:var(--bt)}
+.cg-bar.clipL{border-top-left-radius:0;border-bottom-left-radius:0;border-left:2px dashed color-mix(in srgb, var(--bc) 85%, transparent)}
+.cg-bar.clipR{border-top-right-radius:0;border-bottom-right-radius:0;border-right:2px dashed color-mix(in srgb, var(--bc) 85%, transparent)}
+
+.cg-done{--bc:#10B981;--bt:#04352A;--br:#065F46}
+.cg-exec{--bc:#F59E0B;--bt:#3A2503;--br:#92400E}
+.cg-late{--bc:#EF4444;--bt:#450A0A;--br:#991B1B}
+.cg-idle{--bc:#94A3B8;--bt:#1B2432;--br:#475569}
+
+.cg-ent{display:flex;align-items:center;justify-content:flex-end;padding:0 13px}
+.cg-entp{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cg-entp.late{color:#fff;background:#EF4444;padding:2px 7px;border-radius:99px}
+.cg-entp.none{color:var(--text-subtle);font-weight:400}
+.cg-foot{margin-top:10px;font-size:11.5px;color:var(--text-subtle);line-height:1.5;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.cg-foot b{color:var(--text-muted)}
+.cg-foot-txt{flex:1 1 380px;min-width:0}
+
+@media (max-width:700px){
+  .cg-hrow,.cg-row{grid-template-columns:150px minmax(var(--tw),1fr) 66px}
+  .cg-overlay{left:150px}
+  .cg-legend{margin-left:0;width:100%}
+  .fbar-sep{display:none}
+  .cg-foot{gap:8px}
+  .cg-mes{min-width:120px;font-size:12.5px}
+  .cg-t{font-size:11.5px}
+  .cg-av{width:21px;height:21px;font-size:8px}
+  .cg-ent{padding:0 8px}
+  .cg-scroll{max-height:clamp(280px,58vh,560px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .cg-row:hover .cg-bar{filter:none}
+  .cg-arrow,.cg-tool,.cg-bar{transition:none}
+}
+
+
+@media (max-width:880px){
+  .tl-row .frente-pill,.tl-row .dev-chip{display:none}
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:0;top:0;width:240px;transform:translateX(-100%);transition:transform .2s}
+  .sidebar.open{transform:translateX(0)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb" id="crumb"></div>
+      <div class="topbar-spacer"></div>
+      <span class="iaf-mark">◆ iaf</span>
+    </div>
+    <div class="view" id="view"></div>
+  </main>
+</div>
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer"></aside>
+
+<script type="application/json" id="roadmap-data">{"owner":"João Vinícius","squad":"Roadmap · Torre de Controle","generated_at":"2026-09-10","source":"meu-roadmap.xlsx · aba IA Esboço (reconciliado c/ Quimera 2026-09-10)","frentes":[{"key":"dashboard","label":"Dashboard","color":"#2563EB","code":"DS","count":24},{"key":"agentes-ia","label":"Agentes de IA","color":"#7C3AED","code":"IA","count":12},{"key":"acoes","label":"Ações","color":"#EA580C","code":"AC","count":9},{"key":"configuracoes","label":"Configurações","color":"#6366F1","code":"CF","count":9},{"key":"regua","label":"Régua","color":"#DB2777","code":"RG","count":8},{"key":"integracoes","label":"Integrações","color":"#E11D48","code":"IN","count":6},{"key":"dados-infra","label":"Dados / Infra","color":"#0891B2","code":"DI","count":5},{"key":"gestao-carteira","label":"Gestão de Carteira","color":"#059669","code":"GC","count":5},{"key":"filtros","label":"Filtros","color":"#CA8A04","code":"FT","count":4},{"key":"campanha","label":"Campanha","color":"#0D9488","code":"CP","count":1},{"key":"custo","label":"Custo","color":"#14B8A6","code":"CU","count":1}],"items":[{"id":"R01","frente":"dados-infra","menu":"Atualização das Informações","title":"Sincronização Torre x Módulo Financeiro","desc":"Garantir que toda fonte de dados da Torre atualize, no mínimo, junto com o BigQuery do Módulo Financeiro. Hoje há desincronização entre Torre e MF — e até internamente entre as abas Gestão de Carteira e Fonte de Dados. Como a vw_titles_live é servida pela materialized view mv_titles_base (refresh ~12h), o dado exibido pode ficar defasado frente ao MF; alinhar a cadência de refresh à do BigQuery e monitorar a defasagem.","nota_negocio":"Definir qual é a janela aceitável de atraso Torre×MF.","prioridade":"urgente","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":"4275","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-30","entrega_real":"2026-07-01","prev_entrega":null},{"id":"R02","frente":"dados-infra","menu":"Fonte de Dados","title":"Padronizar a query de títulos pagos","desc":"Na query de títulos pagos há registros com payment_date preenchido e outros sem. Padronizar o tratamento: quando existe data de pagamento o status deve inferir 'Pago' (a ETL já corrige status='Disponível' com payment_date). Uniformizar o critério na fonte que alimenta a vw_titles_live para não haver dois entendimentos de 'pago'.","nota_negocio":null,"prioridade":"urgente","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"precisa ser analisado todas as queires da fonte de dados, aproveite e melhore performance dessas queries","refino_tag":"tecnico","source":"roadmap","quimera_key":"4276","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-30","entrega_real":"2026-07-07","prev_entrega":null},{"id":"R03","frente":"dados-infra","menu":"Fonte de Dados","title":"IA Esperanza lendo da Torre (janela de 20 dias)","desc":"A Esperanza passou a ler da Torre (não mais do BigQuery). O dado diverge do BQ e, por enxergar só ~20 dias de vencimento futuro, a IA chega a dizer ao cliente que ele está quitando. Corrigir a fonte consultada e parametrizar/ampliar a janela de vencimentos considerada, mantendo a diretriz de não expor títulos futuros como quitação.","nota_negocio":"Definir a janela de vencimento futuro correta que a IA deve enxergar.","prioridade":"urgente","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"estudar a sumarização das informações de contratos como parcelas restante, valor restante, valor de quitação e outras informações que hoje a esperanza não vê que deveria olhar, coloca tudo isso na tabela de contratos","refino_tag":"tecnico","source":"roadmap","quimera_key":"4277","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"reaberto_key":"6921","reaberto_status":"finalizado","inicio_real":"2026-06-30","entrega_real":"2026-07-06","prev_entrega":null},{"id":"R04","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Revalidar o conceito de pago","desc":"Revalidar o que é considerado 'pago' (fonte: BigQuery MF), pois já houve gap nesse indicador e o risco é deixar de cobrar quem deve. Cancelado neste ciclo — coberto pela padronização da query de títulos pagos (R02) e pela sincronização Torre×MF (R01).","nota_negocio":null,"prioridade":"urgente","status":"entregue","dev":"Marcos","tipo":"bug","esforco":null,"dep":false,"obs_refino":"ja contemplado em outro card","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-06-30","entrega_real":"2026-07-07","prev_entrega":null},{"id":"R05","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Conciliar carteira Torre x Dash Inadimplência","desc":"Na carteira Ideal (multi-org Finza + Blips) a Torre mostra > R$ 2 mi, mas o dash de inadimplência, no mesmo status de título, mostra R$ 1.788.000. Reconciliar as duas fontes: mesmo recorte de status/cedente e mesma base (vw_titles_live) para eliminar a divergência de ~R$ 200 mil.","nota_negocio":null,"prioridade":"urgente","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"necessário analisar o dashboard com o J e consultar a query que monta o dash junto com o time de dados, determinar qual erro e normalizar os dois dash","refino_tag":"tecnico","source":"roadmap","quimera_key":"4285","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-30","entrega_real":"2026-07-02","prev_entrega":null},{"id":"R06","frente":"configuracoes","menu":"Configurações - Valores Padrão","title":"Monitoramento preventivo de novos valores padrão","desc":"Quando um novo valor padrão é criado sem avisar a Torre, gera-se um gap descoberto só de forma reativa. Criar monitoramento/tratamento preventivo que detecte valores padrão novos e sinalize antes de virar acionamento indevido.","nota_negocio":"Definir quais campos de 'valor padrão' devem ser monitorados e o canal do alerta.","prioridade":"urgente","status":"cancelado","dev":null,"tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário refinar melhor com o João Pedro qual impacto e qual resultado esperado.","refino_tag":"negocio","source":"roadmap","quimera_key":4831,"quimera_status":"cancelado","executando":false,"and_status":"cancelado","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":"2026-07-23"},{"id":"R07","frente":"dados-infra","menu":"Infraestrutura","title":"Capacidade e estabilidade da Torre","desc":"Há gargalos e picos de lentidão mesmo sem disparos massivos e fora do horário de pico. Aumentar capacidade/estabilidade da Torre (infra e queries) para eliminar esse comportamento no uso diário.","nota_negocio":null,"prioridade":"urgente","status":"entregue","dev":null,"tipo":"bug","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"reaberto_key":"6993","reaberto_status":"finalizado","inicio_real":"2026-06-24","entrega_real":"2026-06-24","prev_entrega":null},{"id":"R08","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Filtro de período personalizado não é respeitado","desc":"No dashboard de Performance de IA, o filtro de período personalizado não é respeitado (ex.: ao filtrar 15/06 o dia não aparece). Corrigir o filtro de data para refletir exatamente o intervalo escolhido.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"coisa simples, necessário corrigir e validar filtros, confirmar antes com o negocio","refino_tag":"pronto","source":"roadmap","quimera_key":"4399","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-21","prev_entrega":"2026-07-22"},{"id":"R09","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Classificação de motivo de transbordo incorreta","desc":"As classificações de motivo de transbordo vêm incorretas. Aprimorar o tracking do transfer_reason (registrado no log de interação da IA) para que o motivo exibido corresponda ao motivo real da transferência para humano.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-22","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R10","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Apresentar por granularidade de protocolo","desc":"O indicador não apresenta por granularidade de protocolo. Ajustar para permitir a visão por protocolo de atendimento, não só consolidada.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":4616,"quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-22","entrega_real":"2026-07-23","prev_entrega":null},{"id":"R11","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Revisar os cards do topo","desc":"Revisar todos os cards do topo (Atendimentos iniciados, Taxa de retenção, Promessas de IA, Transbordo), conforme apontado pelo Leandro — validar fonte, cálculo e período de cada um.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"reaberto_key":"6995","reaberto_status":"finalizado","inicio_real":"2026-06-22","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R12","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Divergência de transbordo (dia x últimas 24h)","desc":"O card Transbordo e o indicador Motivo de transbordo mostram quantidades diferentes para o mesmo filtro: um considera o dia, o outro as últimas 24h. Alinhar o conceito de janela entre os dois.","nota_negocio":null,"prioridade":"alta","status":"executando","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"finalizado","executando":true,"and_status":"finalizado","no_quimera":false,"reaberto_key":"6985","reaberto_status":"em_validacao","reaberto_inicio":"2026-09-04","inicio_real":"2026-06-22","entrega_real":"2026-09-08","prev_entrega":null,"entrega_original":"2026-07-09"},{"id":"R13","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Funil de cobrança com time out","desc":"O funil de cobrança quase não carrega (time out) e a nomenclatura dos indicadores não está clara. Otimizar a consulta que monta o funil (paginação/materialização) e renomear os indicadores para leitura clara.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"necessário validar performace de consulta e arquitetura de serviço, coisa simples que não deveria acontecer","refino_tag":"tecnico","source":"roadmap","quimera_key":"5700","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"reaberto_key":"5700","reaberto_status":"finalizado","entrega_original":"2026-08-20","inicio_real":"2026-08-12","entrega_real":"2026-09-04","prev_entrega":"2026-07-27"},{"id":"R14","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Indicador de frequência de acionamento","desc":"Segundo o Leandro, o indicador de frequência de acionamento nunca funcionou. Revisar a fonte e o cálculo (nº de ações por contrato/título ao longo do tempo) e corrigir.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":4617,"quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-29","prev_entrega":"2026-07-22"},{"id":"R15","frente":"dashboard","menu":"Dashboard","title":"Filtros do dashboard carregam incorretamente","desc":"Os filtros aplicados na aba de dashboard não carregam corretamente: alguns dados corrompem, não carregam ou filtram diferente. Validar e padronizar o comportamento dos filtros do dashboard.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"ajuste slimpes, garantir que filtros estejam alterando corretamente e chamando o endpoint get com os query params","refino_tag":"tecnico","source":"roadmap","quimera_key":"5702","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-12","entrega_real":"2026-08-19","prev_entrega":"2026-07-29"},{"id":"R16","frente":"acoes","menu":"Ações","title":"Métrica de transbordo para humano","desc":"O indicador 'Solicitou atendimento' conta quem clicou no botão, mas precisamos da quantidade efetivamente transferida ao humano — alinhada ao relatório de Performance de IA (status Respondido/Em Atendimento). Expor a métrica de transbordo efetivo.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":4618,"quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-21","prev_entrega":"2026-07-22"},{"id":"R17","frente":"acoes","menu":"Ações","title":"Filtros da aba com bugs","desc":"Os filtros da aba de Ações não performam bem, têm bug visual e nem sempre aplicam à página inteira. Corrigir performance, o bug visual e garantir que o filtro valha para toda a aba.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"necessário validar performace de consulta e arquitetura de serviço, coisa simples que não deveria acontecer","refino_tag":"tecnico","source":"roadmap","quimera_key":"5703","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"reaberto_key":"7241","reaberto_status":"finalizado","entrega_original":"2026-08-19","inicio_real":"2026-08-12","entrega_real":"2026-09-04","prev_entrega":"2026-07-29"},{"id":"R18","frente":"acoes","menu":"Ações","title":"Scorização de telefones","desc":"Criar modelo estatístico de scorização de telefones com base nos status retornados pela Meta e pelo Hyper: indicar se o número nos bloqueou, qual número, e quais não são WhatsApp. Disponibilizar a base no front da Torre e no banco. Obs.: scorização de telefone não é hoje uma feature documentada da Torre — desenhar do zero.","nota_negocio":"Definir os status/sinais da Meta e do Hyper que entram no score e como será usado na régua.","prioridade":"alta","status":"backlog","dev":"Marcos","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"necessário entender e refinar melhor sobre os pesos de scorização, fonte de dados analisada, qual modelo estatistico e sua visualização de dentro da torre, isso aqui é uma demanda enorme","refino_tag":"negocio","source":"roadmap","quimera_key":"7317","quimera_status":"fila_exec","executando":false,"and_status":"fila_exec","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":"2026-08-14"},{"id":"R19","frente":"regua","menu":"Régua","title":"Bloqueio e desbloqueio em massa","desc":"Integração para desbloquear em confiança/exceção em massa e bloquear em massa por X tempo (com desbloqueio posterior) ou por tempo indeterminado até a quitação. Atua sobre o blocklist (por documento CPF/CNPJ), que já impede acionamento enquanto ativo.","nota_negocio":"Definir os motivos/perfis que autorizam bloqueio/desbloqueio em massa.","prioridade":"alta","status":"executando","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"em teoria é simples, necessário entender onde será feito a ação pela torre e integrar com o serviço responsável.","refino_tag":"tecnico","source":"roadmap","quimera_key":"7318","quimera_status":"em_validacao","executando":true,"and_status":"em_validacao","no_quimera":false,"inicio_real":"2026-09-09","entrega_real":"2026-09-10","prev_entrega":"2026-08-28"},{"id":"R20","frente":"regua","menu":"Régua","title":"Deduplicação de réguas","desc":"Relatório de contratos em duplicidade de réguas programadas (por falha de filtro) para corrigir antes do disparo. No disparo, aplicar deduplicação automática com prioridade configurável e, como 2º critério, o maior atraso do contrato (decrescente). Encaixa no cross_dedup do Pipeline v2.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário refinar examente as informações do relatorio, refinar melhor com solicitante","refino_tag":"negocio","source":"roadmap","quimera_key":"6853","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-07-31"},{"id":"R21","frente":"regua","menu":"Régua","title":"Troca de canal em massa na régua","desc":"No topo da régua, permitir trocar o canal/integração de todos os steps de um mesmo tipo (ex.: todos os WhatsApp) de uma vez — facilitando migrar de Blips 1 para Blips 2 sem ajustar step a step.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário entender melhor com negócio sobre visualização e expectativa.","refino_tag":"negocio","source":"roadmap","quimera_key":"6854","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-08-05"},{"id":"R22","frente":"regua","menu":"Régua","title":"Filtros múltiplos quebrando na régua","desc":"Ao usar dois ou mais filtros, a régua quebra e não exibe os filtros habilitados. Corrigir a combinação de múltiplos filtros na régua.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"simples, deve apenas entender com negocio antes","refino_tag":"pronto","source":"roadmap","quimera_key":"4400","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-14","prev_entrega":null},{"id":"R23","frente":"regua","menu":"Régua","title":"Excluir ações de disparo avulsas","desc":"Hoje não é possível excluir ações de disparo criadas fora de uma régua/campanha (só desabilitar). Permitir a exclusão dessas ações avulsas.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, deve apenas entender com negocio antes","refino_tag":"pronto","source":"roadmap","quimera_key":"4401","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-15","entrega_real":"2026-07-16","prev_entrega":null},{"id":"R24","frente":"filtros","menu":"Filtros","title":"Revisar e padronizar filtros","desc":"Padronizar filtros: permitir ativar, desativar, excluir e alterar, com uma flag no topo para ver ativos/desativados/todos, com o mesmo comportamento entre as abas. Base para a revisão global de filtros (R33).","nota_negocio":null,"prioridade":"alta","status":"executando","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"hoje tudo isso já é possivel menos desativar o filtro.","refino_tag":"pronto","source":"roadmap","quimera_key":"4402","quimera_status":"finalizado","executando":true,"and_status":"finalizado","no_quimera":false,"reaberto_key":"6986","reaberto_status":"em_validacao","reaberto_inicio":"2026-09-04","inicio_real":"2026-07-09","entrega_real":"2026-09-08","prev_entrega":null,"entrega_original":"2026-07-14"},{"id":"R25","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Função de excluir cadastro","desc":"A função de deletar cadastro não está funcional (testado com cadastro de teste). Corrigir a exclusão de cadastro na Gestão de Carteira.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"simples, deve apenas entender com negocio antes","refino_tag":"pronto","source":"roadmap","quimera_key":"4403","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-08","entrega_real":"2026-07-15","prev_entrega":null},{"id":"R26","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Blocklist automático por marcação jurídica","desc":"Contratos com marcação de etapa judicial/jurídico/Procon entram automaticamente no blocklist; ao sair a marcação, voltam a ser cobrados na régua. Implementado via tag persistente com auditoria.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":"3424","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-14","entrega_real":"2026-07-14","prev_entrega":null},{"id":"R27","frente":"configuracoes","menu":"Configurações - Valores Padrão","title":"Tratar a marcação jurídica de atrito","desc":"O Jurídico, junto com a plataforma, criou uma marcação para clientes em etapa jurídica de atrito (não acionar). A Torre passou a tratar esse novo valor no filtro de acionamento.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-07-14","entrega_real":"2026-07-14","prev_entrega":null},{"id":"R28","frente":"configuracoes","menu":"Configurações - Datas Bloqueadas","title":"Datas bloqueadas com criação automática","desc":"A Torre não possui datas bloqueadas na Finza; hoje é manual e depende do humano. Adicionar datas bloqueadas org-level (ações não disparam nesses dias) com fluxo de criação automática e monitoramento para evitar acionamento indevido.","nota_negocio":"Definir a fonte do calendário de datas bloqueadas (feriados/datas especiais).","prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"ja temos isso na torre, tem que entender a necessidade exata e se não possui mesmo.","refino_tag":"negocio","source":"roadmap","quimera_key":"6860","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-08-21"},{"id":"R29","frente":"agentes-ia","menu":"Agentes de IA","title":"Métricas do agente não refletem a realidade","desc":"As informações da tela de métricas do agente não refletem a realidade. Validar de ponta a ponta a fonte e o cálculo das métricas da IA (logs de interação, estágios do funil) e corrigir.","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"muito genérico, isso aqui precisa de refinamento maior com o negócio, quais métricas não refletem realidade?","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-07-13","entrega_real":"2026-07-22","prev_entrega":"2026-07-22"},{"id":"R30","frente":"agentes-ia","menu":"Maestro IA","title":"Corrigir o Maestro IA","desc":"O Maestro IA (orquestrador interno do operador: modos plan/semi_auto/full_auto) não funciona hoje. Seria útil, p.ex., para alterar todas as variáveis de uma régua por comando em vez de manual. Adiado neste ciclo (esforço alto).","nota_negocio":null,"prioridade":"alta","status":"adiado","dev":null,"tipo":"bug","esforco":"Alto","dep":false,"obs_refino":"esforço enorme, vai ficar para próxima depois de refatorar torre","refino_tag":"posrefac","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R31","frente":"integracoes","menu":"Template/BM","title":"Saúde de template e BM (Meta)","desc":"Coletar da Meta as informações de saúde de template e BM (impactado, banido, reprovado, step ofensor) para saber o que está sendo afetado. Provável origem upstream (Hyperflow/Meta Business Manager); a Torre consome templates validados. Adiado neste ciclo.","nota_negocio":"Confirmar se a saúde de BM/template é exposta pela Meta/Hyperflow para consumo da Torre.","prioridade":"alta","status":"adiado","dev":null,"tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"esforço enorme, vai ficar para próxima depois de refatorar torre","refino_tag":"posrefac","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R32","frente":"acoes","menu":"Torre de Controle","title":"Botões sem funcionamento","desc":"Vários botões não funcionam em telas da Torre (próxima página, atualizar, exportar — clica e não abre). Validar todas as funções/botões das grids e corrigir os quebrados.","nota_negocio":null,"prioridade":"alta","status":"executando","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"quais botões? necessário refinar melhor mas ta facil, necessário entender oque funciona e não funciona e homologar direito","refino_tag":"negocio","source":"roadmap","quimera_key":"7319","quimera_status":"finalizado","executando":true,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-09-09","entrega_real":"2026-09-10","prev_entrega":"2026-08-28"},{"id":"R33","frente":"filtros","menu":"Torre de Controle","title":"Filtros e busca globais","desc":"Os filtros da Torre não funcionam por completo: alguns bugados, filtram incorreto, e há filtros presentes em umas abas e ausentes em outras. Revisar todos, criar um padrão único e melhorar a busca global (por documento, telefone, contrato, e-mail).","nota_negocio":null,"prioridade":"alta","status":"executando","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"muito genérico, isso aqui precisa de refinamento maior com o negócio, quais filtros não funcionam exatamente?","refino_tag":"negocio","source":"roadmap","quimera_key":"7320","quimera_status":"finalizado","executando":true,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-09-03","entrega_real":"2026-09-10","prev_entrega":"2026-08-28"},{"id":"R34","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Filtro por data de ação","desc":"Adicionar filtro por data de ação para distinguir os atendimentos da IA de hoje das ações remanescentes (fila que sobrou de dias anteriores).","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":4619,"quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"reaberto_key":"7572","reaberto_status":"em_validacao","inicio_real":"2026-07-13","entrega_real":"2026-08-03","prev_entrega":"2026-07-22"},{"id":"R35","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Dashboard mais visual (linha C16)","desc":"Construir um dashboard mais visual (conforme a linha C16 da planilha) somado ao filtro de data de ação — leitura mais rápida do que a visão atual.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"muito generico, falta refinamento do negocio","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-06-22","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R36","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Diferenciar transbordo por falha x por escopo","desc":"Diferenciar o transbordo por falha de fluxo daquele previsto no prompt (ex.: transferência por pedido de renegociação é escopo esperado). Marcar a origem do transbordo para não penalizar a IA por transferências intencionais.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-22","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R37","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Trackear a Esperanza como sub-agente","desc":"Quando a Esperanza atua como sub-agente de outras IAs não há tracking. Trackear e diferenciar quando ela é a IA principal vs sub-agente, para as métricas não misturarem os dois papéis.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":4620,"quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-17","prev_entrega":null},{"id":"R38","frente":"dashboard","menu":"Dashboard - Performance de IA","title":"Atendimentos iniciados por protocolo","desc":"O indicador 'Atendimentos iniciados' mostra visão única (não por protocolo), passando impressão de baixo volume. Permitir a visão por protocolo.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"genérico, precisa de refinar melhor com negócio","refino_tag":"negocio","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-07-13","entrega_real":"2026-07-22","prev_entrega":"2026-07-22"},{"id":"R39","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Card Carteira Total (valor atualizado x original)","desc":"O card Carteira Total usa o valor atualizado (com juros/multa). Informar isso na legenda e adicionar um card com o valor original, para não confundir os dois conceitos.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, confirmar com negócio","refino_tag":"pronto","source":"roadmap","quimera_key":"4404","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-03","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R40","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Separar vencidos de vincendas no card Em aberto","desc":"O card 'Em aberto' soma vencidos e vincendas. Separar os dois (título-a-título por days_overdue) ou, no mínimo, explicar na legenda que agrega ambos.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, confirmar com negócio","refino_tag":"pronto","source":"roadmap","quimera_key":"4405","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-03","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R41","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Acionamentos ao longo do tempo (espontâneo x ação)","desc":"No indicador de acionamentos ao longo do tempo, separar pagamento espontâneo do pagamento por ação da Torre (regra D+2) e documentar os conceitos de 'Pago Torre' e 'Cancelado Pago'.","nota_negocio":"'Pago Torre' e 'Cancelado Pago' não são status canônicos — definir a regra exata (janela D+2 e o que conta como atribuível à Torre).","prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"em teoria o negocio deveria conseguir fazer isso sozinho, precisa avaliar, caso negocio não consiga a demanda será para permitir esse ajuste para o negocio","refino_tag":"negocio","source":"roadmap","quimera_key":"6175","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-19","entrega_real":"2026-08-26","prev_entrega":"2026-07-27"},{"id":"R42","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Eficiência por step comparativa","desc":"Criar visão comparativa de eficiência por step entre períodos; hoje só há o consolidado, o que dificulta comparar a evolução de cada step da régua.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"não é dificil de fazer, mas quem dita isso é o negócio, precisa de refinar melhor, oque é para comparar? oque se trata de eficiencia? quais steps?","refino_tag":"negocio","source":"roadmap","quimera_key":"6852","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-07-28"},{"id":"R43","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Diagnóstico do dado","desc":"Permitir entender a causa por trás do número (ex.: por que a taxa de resposta está baixa) — um diagnóstico do dado. Cancelado neste ciclo.","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"não faz sentido, isso é obrigação do analista","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R44","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Granularidade da transferência para humano","desc":"Permitir visualizar em detalhe as transferências para humano e o funil completo do que foi ao humano, do início ao fim (motivo → conversa → mensagens).","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"entrará na segunda etapa do STIA dentro da torre","refino_tag":"stia","source":"roadmap","quimera_key":4621,"quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-23","prev_entrega":"2026-07-22"},{"id":"R45","frente":"dashboard","menu":"Dashboard","title":"Refatorar dashboards contando a história ponta a ponta","desc":"Refatorar os dashboards contando a história ponta a ponta e mapeando cada etapa (da base elegível ao pagamento), para o conjunto de indicadores narrar o processo de forma coerente.","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"extremamente genérico, que história? quais etapas? qual inicio? qual fim? quem dita isso é negócio, falta eles refinarem melhor","refino_tag":"negocio","source":"roadmap","quimera_key":"6856","quimera_status":"cancelado","executando":false,"and_status":"cancelado","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":"2026-08-07","reaberto_key":"7562","reaberto_status":"backlog_futuro"},{"id":"R46","frente":"acoes","menu":"Ações","title":"Exportar relatório de ações","desc":"Botão para extrair relatório das ações, permitindo comprovar acionamentos (evidência de contato com o cliente).","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"funcionalidade em si não tem segredo, necessário apenas validar e consolidar os relatórios exatamente","refino_tag":"tecnico","source":"roadmap","quimera_key":"6855","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-07-31"},{"id":"R47","frente":"acoes","menu":"Ações","title":"Funil completo na aba de Ações","desc":"Na aba de Ações, enxergar o funil completo: base elegível, quem caiu em cada step da régua, enviados, recebidos, responderam/interagiram, transferidos por prompt, transferidos por falha da IA, resolvidos na IA, travados e demais steps.","nota_negocio":null,"prioridade":"media","status":"executando","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"demanda colossal, precisa de entender melhor qual visão que o negócio quer ter aqui, falta refinamento deles.","refino_tag":"negocio","source":"roadmap","quimera_key":"7321","quimera_status":"fila_exec","executando":true,"and_status":"fila_exec","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":"2026-08-14"},{"id":"R48","frente":"acoes","menu":"Ações","title":"Acesso à Gestão de Carteira pelo detalhe da ação","desc":"No pop-up de detalhes da ação, permitir abrir a Gestão de Carteira do contrato — navegação direta da ação para o cadastro.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples, confirmar com o negocio","refino_tag":"pronto","source":"roadmap","quimera_key":"4406","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-14","prev_entrega":null},{"id":"R49","frente":"regua","menu":"Régua","title":"Variáveis mais robustas","desc":"Permitir variáveis mais robustas na régua, como a lista de contratos (não só variáveis simples). Cancelado neste ciclo (sobrepõe-se às variáveis aninhadas, R57).","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"ja contemplado em outro card","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R50","frente":"regua","menu":"Régua","title":"HTML no e-mail com pré-visualização","desc":"Permitir cadastrar HTML no e-mail e pré-visualizar, como já ocorre no WhatsApp, melhorando a comunicação visual dos e-mails.","nota_negocio":null,"prioridade":"media","status":"executando","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário refinar melhor com o negócio e entender necessidade, após isso é arquitetar bem o serviço, os templates e então executar","refino_tag":"negocio","source":"roadmap","quimera_key":"6857","quimera_status":"em_andamento","executando":true,"and_status":"em_andamento","no_quimera":false,"inicio_real":"2026-09-03","entrega_real":null,"prev_entrega":"2026-08-14"},{"id":"R51","frente":"regua","menu":"Régua","title":"Recurso melhorar com IA","desc":"A opção 'melhorar o texto com IA' não funciona. Corrigir e explorar o potencial (melhorar redação, validar e revisar ortografia do conteúdo dos steps).","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"João Pedro","tipo":"bug","esforco":"Baixo","dep":false,"obs_refino":"entender melhor com negocio usabilidade e implementar","refino_tag":"negocio","source":"roadmap","quimera_key":"6016","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-11","entrega_real":"2026-08-14","prev_entrega":"2026-08-14"},{"id":"R52","frente":"filtros","menu":"Filtros","title":"Filtros aninhados (union all)","desc":"Aprimorar a filtragem permitindo combinar filtros dentro de filtros (union all). Hoje é tudo AND ou tudo OR, o que impede esse tipo de combinação.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessario entender melhor a necessidade do negocio sobre esse filtro e aplicar.","refino_tag":"negocio","source":"roadmap","quimera_key":"6858","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-08-07"},{"id":"R53","frente":"filtros","menu":"Filtros","title":"Colunas personalizáveis na exportação","desc":"Ao visualizar/exportar contratos de um filtro, permitir adicionar colunas (ex.: telefone, nº do contrato), personalizar por perfil de usuário e salvar a preferência (como em Gestão de Carteira), além de ordenar e pesquisar.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessário entender melhor a necessidade do negocio e expectativa","refino_tag":"negocio","source":"roadmap","quimera_key":"6859","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-08-07"},{"id":"R54","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Filtros por tipo de ação e dimensões","desc":"Permitir filtrar por tipo de ação (negativação, WhatsApp, e-mail, step de régua) e ampliar os filtros da Gestão de Carteira (Segmento, Equipamento).","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"muito generico, negocio precisa ditar exatamente quais filtros precisam","refino_tag":"negocio","source":"roadmap","quimera_key":"6176","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-19","entrega_real":"2026-08-26","prev_entrega":"2026-08-14"},{"id":"R55","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Tornar o +6 réguas clicável","desc":"Ao abrir o cliente, a lista de réguas mostra '+6' quando há muitas, mas não é clicável — não dá para ver em quais outras réguas ele está. Tornar o '+N' clicável e navegável.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"necessario entender melhor a necessidade do negocio sobre esse filtro e aplicar.","refino_tag":"negocio","source":"roadmap","quimera_key":"6177","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-19","entrega_real":"2026-08-26","prev_entrega":"2026-08-14"},{"id":"R56","frente":"gestao-carteira","menu":"Gestão de Carteira","title":"Exportar histórico de ações do cliente","desc":"No histórico de ações do cliente, permitir exportar as ações com nível de detalhe micro (linha a linha) ou macro (resumo).","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"necessario entender melhor a necessidade do negocio sobre esse filtro e aplicar.","refino_tag":"negocio","source":"roadmap","quimera_key":"6861","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-08-25","entrega_real":"2026-09-02","prev_entrega":"2026-08-21"},{"id":"R57","frente":"configuracoes","menu":"Configurações - Variáveis","title":"Variáveis aninhadas","desc":"Permitir variáveis dentro de variáveis (como a lista de contratos), não apenas simples, e permitir quebra de texto — ampliando o conjunto das 86+ variáveis de template.","nota_negocio":null,"prioridade":"media","status":"executando","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"não é tão simples a forma de catar os valores e montar as variaveis, necessário entender exatamente quais variáveis seram colocadas aqui, esta muito generico, precisa refinar melhor","refino_tag":"negocio","source":"roadmap","quimera_key":"6862","quimera_status":"em_validacao","executando":true,"and_status":"em_validacao","no_quimera":false,"inicio_real":"2026-09-03","entrega_real":"2026-09-10","prev_entrega":"2026-08-21"},{"id":"R58","frente":"configuracoes","menu":"Configurações - TAGs","title":"Mapear TAGs","desc":"Mapear e descrever as TAGs (catálogo por org, com auditoria de adição/remoção). Falta refinamento do negócio para definir o catálogo de tags e seus significados.","nota_negocio":"Negócio precisa listar as tags e o que cada uma significa/dispara.","prioridade":"baixa","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-07-13","entrega_real":"2026-07-22","prev_entrega":"2026-07-22"},{"id":"R59","frente":"configuracoes","menu":"Configurações - Matriz de Permissões","title":"Permissões personalizáveis","desc":"Permitir personalizar permissões, criar novos cargos etc. — flexibilizar a matriz (hoje 5 papéis: Owner>Admin>Manager>Operator>Viewer, com RBAC no front e RLS no backend).","nota_negocio":"Definir quais permissões finas devem ser configuráveis por cargo.","prioridade":"media","status":"adiado","dev":"João Vinícius","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"necessário refinar melhor com o joão vinicius","refino_tag":"negocio","source":"roadmap","quimera_key":"7322","quimera_status":"backlog_futuro","executando":false,"and_status":"backlog_futuro","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":"2026-08-28"},{"id":"R60","frente":"configuracoes","menu":"Configurações - Relatórios","title":"Envio automático do relatório da Torre","desc":"O relatório da Torre não é enviado automaticamente; automatizar o envio (recorrência/e-mail) como diferencial.","nota_negocio":"Definir destinatários, recorte e periodicidade do envio automático.","prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"simples, necessário apenas avaliar o relatorio em si","refino_tag":"pronto","source":"roadmap","quimera_key":"4407","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-21","prev_entrega":"2026-07-22"},{"id":"R61","frente":"agentes-ia","menu":"Agentes de IA","title":"IA omnicanal (N1 em todos os canais)","desc":"Hoje a IA atende só no WhatsApp; torná-la o N1 de todos os canais possíveis (e-mail, RCS, telefone, SMS, push de app). A Esperanza é otimizada para canal síncrono — expandir exige adaptar por canal.","nota_negocio":"Priorizar quais canais entram primeiro no omnichannel.","prioridade":"media","status":"entregue","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"avaliar a necessidade e aplicar, falta refinamento do negocio","refino_tag":"negocio","source":"roadmap","quimera_key":"7323","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-09-02","entrega_real":"2026-09-02","prev_entrega":"2026-09-04"},{"id":"R62","frente":"agentes-ia","menu":"Agentes de IA","title":"Migrar as IAs da Finza para a Torre","desc":"Migrar todas as IAs da Finza para a Torre de Controle e permitir a criação por lá (versionagem draft→published→archived, playground de teste). Consolida a gestão de agentes num só lugar.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"já em execução a primeira parte, essa demanda será divida em 3 demandas, a primeira parte será entregue na semana do dia","refino_tag":"execucao","source":"roadmap","quimera_key":"3989","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-19","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R63","frente":"agentes-ia","menu":"Agentes de IA","title":"Playground com busca de contato","desc":"No Playground, permitir pesquisar um contato dentro da Gestão de Carteira para auxiliar a simulação com dados reais.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"simples","refino_tag":"pronto","source":"roadmap","quimera_key":"4408","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-13","entrega_real":"2026-07-21","prev_entrega":"2026-07-22"},{"id":"R64","frente":"agentes-ia","menu":"Agentes de IA","title":"Prompts com diretrizes básicas","desc":"Refazer o prompt apenas com as diretrizes básicas, sem aplicação de regras (Layer 1/2 do prompt, sem as regras de negócio de Layer 4). Falta refinamento do negócio.","nota_negocio":"Negócio define quais diretrizes básicas ficam e quais regras saem do prompt.","prioridade":"baixa","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-07-10","entrega_real":"2026-07-10","prev_entrega":null},{"id":"R65","frente":"agentes-ia","menu":"Agentes de IA","title":"Base de exemplos","desc":"Aprimorar a base de conhecimento de exemplos (RAG) com as novas regras de negócio. Falta refinamento do negócio para fornecer os exemplos atualizados.","nota_negocio":"Negócio precisa entregar os exemplos/casos atualizados.","prioridade":"baixa","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-07-10","entrega_real":"2026-07-10","prev_entrega":null},{"id":"R66","frente":"agentes-ia","menu":"Agentes de IA","title":"Mapear regras de negócio","desc":"Mapear as regras de negócio e onde cada uma se aplica no item adequado (guidelines/business_rules do agente). Falta refinamento do negócio.","nota_negocio":"Negócio precisa mapear as regras e onde entram.","prioridade":"baixa","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R67","frente":"agentes-ia","menu":"Agentes de IA","title":"Mapear o funil","desc":"Mapear e descrever as etapas do funil (os 8 estágios do funil da Esperanza: contact_initiated → … → conversation_ended). Falta refinamento do negócio.","nota_negocio":"Negócio precisa descrever cada etapa do funil e critérios de transição.","prioridade":"baixa","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R68","frente":"integracoes","menu":"Integrações - RCS","title":"RCS multimídia","desc":"Adicionar imagens, carrossel, botões e conteúdo multimídia no RCS. Aguardando dependência externa (João Neto: esforço e prazo). RCS ainda é exploração de menor prioridade (WhatsApp+SMS cobrem a maioria dos casos).","nota_negocio":"Depende do retorno do João Neto sobre esforço/prazo do RCS.","prioridade":"media","status":"entregue","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":true,"obs_refino":"ja em execução, essa demanda também foi divida em 3 entregas, estamos já no desenvolvimento da terceira entraga.","refino_tag":"execucao","source":"roadmap","quimera_key":"4297","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-01","entrega_real":"2026-07-22","prev_entrega":"2026-07-24"},{"id":"R69","frente":"integracoes","menu":"Template","title":"Criar, aprovar e vincular template de WhatsApp","desc":"Permitir ao negócio criar, aprovar e vincular template de WhatsApp — nem que seja enviar a solicitação e o time dar sequência via backlog. Templates são sincronizados da Meta (cron ~06:00 BRT). Adiado neste ciclo.","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":null,"tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"orientação é para não criamos templates apenas para exceções.","refino_tag":"coberto","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R70","frente":"integracoes","menu":"Template","title":"Template RCS personalizado","desc":"Criar template RCS personalizado, com todas as opções da ferramenta RCS, pelo negócio.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"ja em execução, essa demanda também foi divida em 3 entregas, estamos já no desenvolvimento da terceira entraga.","refino_tag":"execucao","source":"roadmap","quimera_key":"4297","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-25","entrega_real":"2026-06-30","prev_entrega":null},{"id":"R71","frente":"configuracoes","menu":"Notificações","title":"Notificar alterações da Torre","desc":"Criar notificações das alterações feitas na Torre — há muitas novidades, correções e mudanças de regra que passam despercebidas. Entregue.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-06-17","entrega_real":"2026-06-29","prev_entrega":null},{"id":"R72","frente":"configuracoes","menu":"Auditoria","title":"Logs de auditoria","desc":"Logs de auditoria de toda a Torre, visíveis para o nível proprietário (modelo semelhante ao do Discord). Adiado neste ciclo.","nota_negocio":null,"prioridade":"media","status":"adiado","dev":"Marcos","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"esforço enorme, vai ficar para próxima depois de refatorar torre","refino_tag":"posrefac","source":"roadmap","quimera_key":"7325","quimera_status":"fila_exec","executando":false,"and_status":"fila_exec","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":"2026-09-16"},{"id":"R73","frente":"dashboard","menu":"Sumário/Docs","title":"Sumário documentado de indicadores","desc":"Sumário documentado de cada indicador (público, fonte, tratamento, cálculo e cards), com navegação clicável entre o sumário e a página correspondente. Já existe documentação; foi completada/ajustada. Entregue.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"reaberto_key":"6992","reaberto_status":"finalizado","entrega_original":"2026-06-29","inicio_real":"2026-06-17","entrega_real":"2026-09-04","prev_entrega":null},{"id":"R74","frente":"dashboard","menu":"Dashboard - Visão Executiva","title":"Legenda do card Vencida","desc":"Informar na legenda que o card 'Vencida' representa o valor vencido em aberto, não pago (inadimplente), para não confundir com carteira total ou em aberto.","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"simples","refino_tag":"pronto","source":"roadmap","quimera_key":"4409","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-03","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R75","frente":"dados-infra","menu":"Módulo Financeiro","title":"Credencial Rhino para negativação","desc":"Definir a credencial Rhino para negativação em caso de atraso — ou será a mesma da Finza? Depende de definição do Módulo Financeiro/negócio antes de qualquer implementação.","nota_negocio":"Módulo Financeiro precisa definir a credencial de negativação (Rhino x Finza).","prioridade":"alta","status":"cancelado","dev":null,"tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"R76","frente":"acoes","menu":"Ações","title":"Documentar indicadores (Taxa de Envio e Interação)","desc":"Explicar o conceito dos indicadores Taxa de Envio e Taxa de Interação (o que entra em cada um). Entregue.","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-06-17","entrega_real":"2026-06-29","prev_entrega":null},{"id":"R77","frente":"acoes","menu":"Ações","title":"Documentar status dos cards","desc":"Explicar os status apresentados dentro dos cards (ex.: Cancelado, Cancelado Pago) para leitura sem ambiguidade. Entregue.","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":"Marcos","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":false,"and_status":null,"no_quimera":true,"inicio_real":"2026-06-17","entrega_real":"2026-06-29","prev_entrega":null},{"id":"R78","frente":"agentes-ia","menu":"Agentes de IA","title":"Nome do agente dinâmico","desc":"Permitir alterar o nome do agente; o prompt precisa enxergar o nome vindo da Torre para ser dinâmico (hoje 'Esperanza' é fixo em produção).","nota_negocio":null,"prioridade":"baixa","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Baixo","dep":false,"obs_refino":"já em desenvolvimento ao passar o STIA dentro para torre","refino_tag":"stia","source":"roadmap","quimera_key":"3989","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-19","entrega_real":"2026-07-09","prev_entrega":null},{"id":"R79","frente":"campanha","menu":"Campanhas","title":"Documentar conceitos do monitoramento","desc":"Na aba de monitoramento, o histórico de execuções traz um gráfico com termos técnicos cujos conceitos ficaram pendentes de explicação. Documentado. Entregue.","nota_negocio":null,"prioridade":"baixa","status":"executando","dev":"Marcos","tipo":"melhoria","esforco":null,"dep":false,"obs_refino":"","refino_tag":"semobs","source":"roadmap","quimera_key":null,"quimera_status":null,"executando":true,"and_status":null,"no_quimera":true,"reaberto_key":"6990","reaberto_status":"em_validacao","reaberto_inicio":"2026-09-02","inicio_real":"2026-06-17","entrega_real":"2026-09-08","prev_entrega":null,"entrega_original":"2026-06-29"},{"id":"R80","frente":"custo","menu":"Custo","title":"Gestão de custos da Torre","desc":"Contemplar disparos, metas, campanhas e agentes — visão de gestão de custo dentro da Torre.","nota_negocio":"Escopo: disparos, metas, campanhas e agentes. Distinto do ticket #4398 (Redução de Custos), que atacou templates/modelo de LLM.","prioridade":"alta","status":"executando","dev":"João Pedro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":null,"refino_tag":"negocio","source":"roadmap","quimera_key":"7326","quimera_status":"fila_exec","executando":true,"and_status":"fila_exec","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"QMR4368","frente":"agentes-ia","menu":"Quimera #4368","title":"Timeout Esperanza","desc":"Timeouts na Esperanza (agente de IA da cobrança). Investigar e corrigir as respostas que estouram o tempo limite. Ticket sinalizado como intruder (não planejado).","nota_negocio":null,"prioridade":"alta","status":"entregue","dev":"Leandro","tipo":"bug","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4368","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-07-02","entrega_real":"2026-07-09","prev_entrega":null},{"id":"QMR4266","frente":"integracoes","menu":"Quimera #4266","title":"Configuração de novo canal Hyperflow – Webchat","desc":"Configurar um novo canal Webchat no Hyperflow — habilita mais um ponto de entrada de atendimento além do WhatsApp (passo em direção ao omnichannel).","nota_negocio":null,"prioridade":"media","status":"cancelado","dev":null,"tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4266","quimera_status":"cancelado","executando":false,"and_status":"cancelado","no_quimera":false,"inicio_real":null,"entrega_real":null,"prev_entrega":null},{"id":"QMR4175","frente":"agentes-ia","menu":"Quimera #4175","title":"Renegociação | IA","desc":"Fluxo de renegociação conduzido pela IA (Esperanza) — negociar/renegociar o débito com o cliente dentro do atendimento.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"Leandro","tipo":"melhoria","esforco":"Alto","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4175","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-24","entrega_real":"2026-07-15","prev_entrega":null},{"id":"QMR4147","frente":"integracoes","menu":"Quimera #4147","title":"Documentar Templates","desc":"Documentar os templates (WhatsApp/e-mail) usados na cobrança — catálogo, uso e vínculo com os steps. Em validação.","nota_negocio":null,"prioridade":"media","status":"entregue","dev":"João Pedro","tipo":"melhoria","esforco":"Médio","dep":false,"obs_refino":"","refino_tag":"execucao","source":"quimera","quimera_key":"4147","quimera_status":"finalizado","executando":false,"and_status":"finalizado","no_quimera":false,"inicio_real":"2026-06-23","entrega_real":"2026-07-03","prev_entrega":null}],"refino_meta":[{"tag":"negocio","label":"Falta refino do negócio","color":"#D97706","hint":"Genéricos/subespecificados — o negócio precisa detalhar (o quê, quais campos, qual expectativa) antes de estimar."},{"tag":"pronto","label":"Pronto p/ execução · confirmar","color":"#10B981","hint":"Simples; só depende de um alinhamento rápido com o negócio para seguir."},{"tag":"tecnico","label":"Escopo técnico definido","color":"#0891B2","hint":"Caminho técnico claro do nosso lado (query, performance, integração) — executar/validar."},{"tag":"stia","label":"Absorvido pelo STIA na Torre","color":"#7C3AED","hint":"Já endereçado pela migração do STIA para dentro da Torre (em desenvolvimento ou na 2ª etapa)."},{"tag":"execucao","label":"Em execução (fatiado)","color":"#2563EB","hint":"Já em desenvolvimento, dividido em entregas."},{"tag":"posrefac","label":"Pós-refatoração da Torre","color":"#64748B","hint":"Esforço alto — fica para depois da refatoração da Torre."},{"tag":"coberto","label":"Coberto / decidido fora","color":"#94A3B8","hint":"Já contemplado em outro card, ou resolvido por decisão/fora do escopo de dev."},{"tag":"semobs","label":"Sem observação de refinamento","color":"#CBD5E1","hint":"Sem nota de refinamento — em geral já entregues ou ainda aguardando refino."}],"quimera_meta":[{"key":"backlog","label":"Backlog","color":"#94A3B8"},{"key":"backlog_futuro","label":"Backlog Futuro","color":"#78716C"},{"key":"fila_exec","label":"Fila de Execução","color":"#6366F1"},{"key":"em_andamento","label":"Execução","color":"#2563EB"},{"key":"bloqueado","label":"Bloqueado","color":"#EF4444"},{"key":"em_validacao","label":"Validação","color":"#A855F7"},{"key":"finalizado","label":"Entregue","color":"#10B981"},{"key":"cancelado","label":"Cancelado","color":"#9CA3AF"}]}</script>
+<script>
+const DATA=JSON.parse(document.getElementById('roadmap-data').textContent);
+const FRENTES=Object.fromEntries(DATA.frentes.map(f=>[f.key,f]));
+const ALL_ITEMS=DATA.items;
+// Lane derivada do Quimera (regra do Joao, 27/08/2026) -- auto-enforcada p/ nao depender de reconcile manual.
+// finalizado OU em_validacao => concluido (lane entregue). cancelado => cancelado. Demais status preservam a lane curada.
+// So vale p/ item com ticket; itens source:proposta nao tem quimera_key e ficam intactos.
+const LANE_FROM_Q={backlog:'backlog',backlog_futuro:'adiado',fila_exec:'executando',em_andamento:'executando',bloqueado:'bloqueado',em_validacao:'entregue',finalizado:'entregue',cancelado:'cancelado'};
+ALL_ITEMS.forEach(i=>{if(i.quimera_key&&LANE_FROM_Q[i.and_status])i.status=LANE_FROM_Q[i.and_status];});
+// Reabertura: o negocio abriu ticket novo sobre item ja entregue. Se essa reabertura esta VIVA (fila/execucao/bloqueado)
+// a lane volta a refletir a execucao. Reabertura cancelada ou ja re-concluida NAO mexe na lane -- fica so como historico.
+// entrega_real e quimera_key originais sao preservados sempre: a entrega passada aconteceu e nao se apaga.
+ALL_ITEMS.forEach(i=>{
+  const l=LANE_FROM_Q[i.reaberto_status];
+  if(l==='executando'||l==='bloqueado'){i.status=l;i.reaberto_vivo=true;}
+  else if((l==='adiado'||l==='backlog')&&i.status!=='entregue')i.status=l;   // reabertura viva mas PARADA (backlog/backlog_futuro): revive item cancelado p/ a lane do ticket novo; item entregue nao regride
+  else if(l&&!i.quimera_key)i.status=l;   // reabertura encerrada em item SEM ticket proprio: ela e o unico sinal de status
+  if(i.quimera_key||i.reaberto_key)i.executando=(i.status==='executando'||i.status==='bloqueado');
+});
+const ITEMS=ALL_ITEMS.slice();   // roadmap Torre+Quimera (overview/board/timeline)
+const TORRE_FRENTES=DATA.frentes;   // as frentes da Torre (a frente Finza saiu desta versão)
+
+const PRIO_ORDER=['urgente','alta','media','baixa'];
+const PRIO_LABELS={urgente:'Urgente',alta:'Alta',media:'Média',baixa:'Baixa'};
+const PRIO_PCODE={urgente:'P0',alta:'P1',media:'P2',baixa:'P3'};
+const PRIO_COLOR={urgente:'#DC2626',alta:'#D97706',media:'#2563EB',baixa:'#64748B'};
+const STATUS_ORDER=['backlog','a-refinar','executando','bloqueado','entregue','adiado','cancelado'];
+const STATUS_LABELS={'backlog':'Backlog','a-refinar':'A refinar','executando':'Executando','bloqueado':'Bloqueado','entregue':'Entregue','adiado':'Adiado','cancelado':'Cancelado'};
+const STATUS_COLOR={'backlog':'#64748B','a-refinar':'#9CA3AF','executando':'#2563EB','bloqueado':'#DC2626','entregue':'#10B981','adiado':'#94A3B8','cancelado':'#EF4444'};
+const STATUS_ICON={'entregue':'✓ ','cancelado':'✕ ','adiado':'⏸ ','a-refinar':'✎ ','backlog':'','executando':'▶ ','bloqueado':'⊘ '};
+const DEV_COLOR={'Marcos':'#EAB308','Leandro':'#3B82F6','João Pedro':'#F97316','João Vinícius':'#A855F7'};
+const TIPO_LABELS={bug:'Bug',melhoria:'Melhoria'};
+const REFINO_META=DATA.refino_meta||[];
+const REFINO=Object.fromEntries(REFINO_META.map(r=>[r.tag,r]));
+const QMETA=DATA.quimera_meta||[];
+const QORDER=QMETA.map(q=>q.key);
+const QLABEL=Object.fromEntries(QMETA.map(q=>[q.key,q.label]));
+const QCOLOR=Object.fromEntries(QMETA.map(q=>[q.key,q.color]));
+let boardMode='prio';   // 'prio' | 'status' — compartilhado por Board e Frente
+let tlMode='list';      // 'list' | 'gantt' — modo da Timeline (isolado do Board)
+let tlF={status:new Set(),frentes:new Set(),devs:new Set(),foraq:false,atrasados:false,mesDe:'',mesAte:''};   // filtros do Gantt
+
+let currentView='overview';
+
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function fmtd(d){return d?d.slice(8,10)+'/'+d.slice(5,7):'';}
+const MONTHS_PT=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function monthLabel(k){const p=k.split('-');return MONTHS_PT[+p[1]-1]+'/'+p[0];}
+function byFrente(k){return ITEMS.filter(i=>i.frente===k);}
+function byStatus(s){return ITEMS.filter(i=>i.status===s);}
+function byPrio(p){return ITEMS.filter(i=>i.prioridade===p);}
+function accentOf(it){return it.dev?DEV_COLOR[it.dev]:STATUS_COLOR[it.status];}
+
+/* ─── Previsão de Início (coluna H do xlsx "Roadmap Torre de Controle.xlsx" · aba IA Esboço) ───
+   O JSON embutido não carrega esse campo; injetamos por título (join normalizado).
+   Snapshot da planilha analisado em 2026-08-05; o atraso é calculado contra a data de referência. */
+const TODAY='2026-09-10';   // data de referência fixada em 10/09/2026 (referência de "hoje" para atraso e para o marcador da timeline)
+function norm(s){return (s==null?'':String(s)).toLowerCase().replace(/\s+/g,' ').trim();}
+const PREV_INICIO_BY_TITLE={
+  "monitoramento preventivo de novos valores padrão":"2026-07-20",
+  "funil de cobrança com time out":"2026-07-23",
+  "acionamentos ao longo do tempo (espontâneo x ação)":"2026-07-23",
+  "eficiência por step comparativa":"2026-07-23",
+  "filtros do dashboard carregam incorretamente":"2026-07-23",
+  "filtros da aba com bugs":"2026-07-23",
+  "deduplicação de réguas":"2026-07-27",
+  "troca de canal em massa na régua":"2026-07-27",
+  "scorização de telefones":"2026-07-27",
+  "exportar relatório de ações":"2026-07-27",
+  "refatorar dashboards contando a história ponta a ponta":"2026-07-29",
+  "funil completo na aba de ações":"2026-07-29",
+  "html no e-mail com pré-visualização":"2026-08-03",
+  "filtros aninhados (union all)":"2026-08-03",
+  "colunas personalizáveis na exportação":"2026-08-03",
+  "bloqueio e desbloqueio em massa":"2026-08-14",
+  "recurso melhorar com ia":"2026-08-10",
+  "filtros por tipo de ação e dimensões":"2026-08-10",
+  "tornar o +6 réguas clicável":"2026-08-10",
+  "exportar histórico de ações do cliente":"2026-08-17",
+  "datas bloqueadas com criação automática":"2026-08-17",
+  "variáveis aninhadas":"2026-08-17",
+  "permissões personalizáveis":"2026-08-24",
+  "ia omnicanal (n1 em todos os canais)":"2026-08-24",
+  "botões sem funcionamento":"2026-08-24",
+  "filtros e busca globais":"2026-08-24",
+  "logs de auditoria":"2026-08-31"
+};
+ALL_ITEMS.forEach(i=>{const k=norm(i.title);if(PREV_INICIO_BY_TITLE[k]&&!i.prev_inicio)i.prev_inicio=PREV_INICIO_BY_TITLE[k];});
+// atrasado = Previsão de Início vencida e item ainda aberto (não entregue/cancelado/adiado)
+function isAtrasado(it){return !!it.prev_inicio && it.prev_inicio<TODAY && !it.inicio_real && it.status!=='entregue' && it.status!=='cancelado' && it.status!=='adiado';}
+// pipeline = a lane resolvida pelo Quimera (executando/bloqueado). Ancorar na lane, e nao no and_status cru,
+// Regra do negocio: fila_exec/em_andamento => executando ; bloqueado => bloqueado ; finalizado/em_validacao => entregue (concluido) ; cancelado => cancelado.
+// O mapa cobre TODOS os status do Quimera: se faltar um, a lane do item fica presa no valor antigo quando o ticket sai de um status mapeado.
+// backlog nao infla o pipeline porque emAndamentoQ le a LANE resolvida (executando/bloqueado), nao o and_status cru.
+function emAndamentoQ(it){return it.status==='executando'||it.status==='bloqueado';}
+// atrasado E já no pipeline do Quimera — recebe sinalização combinada na timeline
+function isAtrasadoExec(it){return isAtrasado(it) && emAndamentoQ(it);}
+
+/* donut */
+function donut(segs,size){
+  size=size||116;const r=size/2,inner=r*0.62;const total=segs.reduce((a,s)=>a+s.value,0)||1;let acc=0;
+  const paths=segs.map(s=>{const frac=s.value/total;if(frac<=0)return'';const a0=acc*2*Math.PI-Math.PI/2;acc+=frac;const a1=acc*2*Math.PI-Math.PI/2;const lg=frac>0.5?1:0;
+    const x0=r+r*Math.cos(a0),y0=r+r*Math.sin(a0),x1=r+r*Math.cos(a1),y1=r+r*Math.sin(a1);
+    const xi0=r+inner*Math.cos(a1),yi0=r+inner*Math.sin(a1),xi1=r+inner*Math.cos(a0),yi1=r+inner*Math.sin(a0);
+    return `<path d="M${x0} ${y0} A${r} ${r} 0 ${lg} 1 ${x1} ${y1} L${xi0} ${yi0} A${inner} ${inner} 0 ${lg} 0 ${xi1} ${yi1} Z" fill="${s.color}"/>`;}).join('');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex:none">${paths}
+    <text x="${r}" y="${r-2}" text-anchor="middle" font-family="var(--font-mono)" font-size="21" font-weight="700" fill="var(--text)">${total}</text>
+    <text x="${r}" y="${r+13}" text-anchor="middle" font-size="9" fill="var(--text-subtle)">itens</text></svg>`;
+}
+function legend(segs){return `<div class="legend">`+segs.filter(s=>s.value>0).map(s=>`<div class="row"><span class="sw" style="background:${s.color}"></span><span class="ll">${esc(s.label)}</span><span class="lv">${s.value}</span></div>`).join('')+`</div>`;}
+function bars(rows,max,wide){max=max||Math.max(1,...rows.map(r=>r.value));return `<div class="bars">`+rows.map(r=>`<div class="bar-row${wide?' wide':''}"><span class="bl">${esc(r.label)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(r.value/max*100)}%;background:${r.color}"></div></div><span class="bv">${r.value}</span></div>`).join('')+`</div>`;}
+
+/* sidebar */
+function buildSidebar(){
+  const sb=document.getElementById('sidebar');
+  let h=`<div class="brand"><span class="mark">◆</span><span class="name">roadmap</span><span class="tag">torre</span></div>`;
+  h+=`<div class="side-section">Visões</div>`;
+  [['overview','◆','Visão geral'],['board','▦','Board'],['timeline','◷','Timeline']].forEach(([v,ic,lb])=>{
+    h+=`<button class="side-item ${currentView===v?'active':''}" onclick="render('${v}')"><span class="ico">${ic}</span><span class="lbl">${lb}</span></button>`;});
+  h+=`<div class="sidebar-footer"><div class="who"><strong>${esc(DATA.owner)}</strong>Supervisor IAF · Finza</div><div class="src">fonte: ${esc(DATA.source)}<br>gerado ${esc(DATA.generated_at)}</div></div>`;
+  sb.innerHTML=h;
+}
+
+/* router */
+function render(view){
+  currentView=view;buildSidebar();
+  const v=document.getElementById('view');
+  if(view==='overview')v.innerHTML=renderOverview();
+  else if(view==='board'){v.innerHTML=renderBoard();attachBoard();}
+  else if(view==='timeline'){v.innerHTML=renderTimeline();attachTimeline();}
+  const map={overview:'Visão geral',board:'Board',timeline:'Timeline'};
+  document.getElementById('crumb').innerHTML=`<span class="seg">Roadmap Torre</span><span class="sep">›</span><span class="seg cur">${map[view]}</span>`;
+  window.scrollTo(0,0);
+}
+
+/* legend bar (colors reference) */
+function legendBar(){
+  const st=STATUS_ORDER.map(s=>`<span class="lg"><span class="d" style="background:${STATUS_COLOR[s]}"></span>${STATUS_LABELS[s]}</span>`).join('');
+  const dv=Object.entries(DEV_COLOR).map(([n,c])=>`<span class="lg"><span class="d" style="background:${c}"></span>${n}</span>`).join('');
+  return `<div class="legendbar"><div class="grp"><span class="t">Status</span>${st}</div><div class="grp"><span class="t">Dev</span>${dv}</div></div>`;
+}
+
+/* overview */
+function renderOverview(){
+  const total=ITEMS.length;
+  const cnt=s=>byStatus(s).length;
+  const noQ=ITEMS.filter(i=>i.quimera_key).length,foraQ=ITEMS.filter(i=>!i.quimera_key).length,execQ=ITEMS.filter(i=>i.executando).length;
+  const stSeg=STATUS_ORDER.map(s=>({label:STATUS_LABELS[s],value:cnt(s),color:STATUS_COLOR[s]}));
+  const devSeg=Object.keys(DEV_COLOR).map(d=>({label:d,value:ITEMS.filter(i=>i.dev===d).length,color:DEV_COLOR[d]}));
+  const tipoSeg=[{label:'Melhoria',value:ITEMS.filter(i=>i.tipo==='melhoria').length,color:'#0EA5E9'},{label:'Bug',value:ITEMS.filter(i=>i.tipo==='bug').length,color:'#E11D48'}];
+  const frSeg=TORRE_FRENTES.map(f=>({label:f.label,value:f.count,color:f.color}));
+  let h=`<div class="hero"><div class="label">Roadmap · Torre de Controle</div>
+    <div class="title">${total} demandas em <b>${DATA.frentes.length} frentes</b> — <b>${cnt('entregue')} entregues</b>, <b>${cnt('executando')} executando</b>${cnt('bloqueado')?`, ${cnt('bloqueado')} bloqueado${cnt('bloqueado')>1?'s':''}`:''}, ${cnt('backlog')} em backlog, ${cnt('a-refinar')} a refinar.</div></div>`;
+  h+=`<div class="kpis">
+    <div class="kpi k-total"><div class="lab">Total</div><div class="num">${total}</div></div>
+    <div class="kpi k-entregue"><div class="lab">Entregue</div><div class="num">${cnt('entregue')}</div></div>
+    <div class="kpi k-executando"><div class="lab">Executando</div><div class="num">${cnt('executando')}</div></div>
+    <div class="kpi k-bloqueado"><div class="lab">Bloqueado</div><div class="num">${cnt('bloqueado')}</div></div>
+    <div class="kpi k-backlog"><div class="lab">Backlog</div><div class="num">${cnt('backlog')}</div></div>
+    <div class="kpi k-arefinar"><div class="lab">A refinar</div><div class="num">${cnt('a-refinar')}</div></div>
+    <div class="kpi k-adiado"><div class="lab">Adiado</div><div class="num">${cnt('adiado')}</div></div>
+    <div class="kpi k-cancelado"><div class="lab">Cancelado</div><div class="num">${cnt('cancelado')}</div></div>
+  </div>`;
+  // Conclusão do backlog: hoje (entregues) vs previsto (entregues + pipeline do Quimera). Denominador = escopo ativo (exclui cancelados).
+  const baseItems=ITEMS.filter(i=>i.status!=='cancelado');
+  const baseN=baseItems.length||1;
+  const doneN=baseItems.filter(i=>i.status==='entregue').length;
+  const pipeN=baseItems.filter(i=>emAndamentoQ(i)&&i.status!=='entregue').length;
+  const pctNow=doneN/baseN*100, pctProj=(doneN+pipeN)/baseN*100, gain=pctProj-pctNow;
+  h+=`<div class="section-title">Conclusão do backlog <span class="extra">entregues ÷ escopo ativo (exclui ${cnt('cancelado')} cancelados) · projeção com o pipeline do Quimera</span></div>
+  <div class="panel">
+    <div class="compl-nums">
+      <div class="compl-b"><div class="compl-l">Concluído hoje</div><div class="compl-n" style="color:#10B981">${pctNow.toFixed(0)}%</div><div class="compl-s">${doneN} de ${baseN} entregues</div></div>
+      <div class="compl-arrow">→</div>
+      <div class="compl-b"><div class="compl-l">Previsto com o Quimera</div><div class="compl-n" style="color:#2563EB">${pctProj.toFixed(0)}%</div><div class="compl-s">${doneN+pipeN} de ${baseN} quando o Quimera finalizar</div></div>
+      <div class="compl-b"><div class="compl-l">Ganho projetado</div><div class="compl-n" style="color:#2563EB">+${gain.toFixed(0)} pts</div><div class="compl-s">${pipeN} demandas em andamento no Quimera</div></div>
+    </div>
+    <div class="compl-track"><div class="compl-proj" style="width:${pctProj.toFixed(1)}%"></div><div class="compl-done" style="width:${pctNow.toFixed(1)}%"></div></div>
+    <div class="compl-leg"><span><i style="background:#10B981"></i>Concluído hoje (${pctNow.toFixed(1)}%)</span><span><i class="hatch"></i>Em andamento no Quimera (+${gain.toFixed(1)} pts → ${pctProj.toFixed(1)}%)</span><span><i style="background:var(--border-soft)"></i>Backlog fora do Quimera</span></div>
+  </div>`;
+  h+=`<div class="section-title">Cobertura no Quimera <span class="extra">Quimera = fonte da verdade da execução · reconciliado ${esc(DATA.generated_at)}</span></div>
+  <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi" style="--kc:#6366F1"><div class="lab">No Quimera</div><div class="num">${noQ}</div></div>
+    <div class="kpi" style="--kc:#10B981"><div class="lab">Em execução</div><div class="num">${execQ}</div></div>
+    <div class="kpi" style="--kc:#B4B4C4"><div class="lab">Fora do Quimera</div><div class="num">${foraQ}</div></div>
+  </div>`;
+  h+=`<div class="grid3">
+    <div class="panel"><h3>Por status</h3><div class="donut-wrap">${donut(stSeg)}${legend(stSeg)}</div></div>
+    <div class="panel"><h3>Carga por dev</h3>${bars(devSeg)}<div style="margin-top:14px;font-size:11.5px;color:var(--text-subtle)">${ITEMS.filter(i=>!i.dev).length} itens sem dev (entregue/cancelado/adiado/a refinar).</div></div>
+    <div class="panel"><h3>Bug × Melhoria</h3><div class="donut-wrap">${donut(tipoSeg,104)}${legend(tipoSeg)}</div></div>
+  </div>`;
+  h+=`<div class="section-title">Distribuição por frente</div><div class="panel">${bars(frSeg,Math.max(...frSeg.map(s=>s.value)),true)}</div>`;
+  return h;
+}
+
+/* board */
+let F={frentes:new Set(),status:new Set(),devs:new Set(),tipos:new Set(),exec:false,foraq:false,query:''};
+function filtered(){
+  let a=ITEMS.slice();
+  if(F.frentes.size)a=a.filter(i=>F.frentes.has(i.frente));
+  if(F.status.size)a=a.filter(i=>F.status.has(i.status));
+  if(F.devs.size)a=a.filter(i=>i.dev&&F.devs.has(i.dev));
+  if(F.tipos.size)a=a.filter(i=>F.tipos.has(i.tipo));
+  if(F.exec)a=a.filter(i=>i.executando);
+  if(F.foraq)a=a.filter(i=>!i.quimera_key);
+  if(F.query){const q=F.query.toLowerCase();a=a.filter(i=>(i.title+' '+i.id+' '+i.desc).toLowerCase().includes(q));}
+  return a;
+}
+function tog(set,v){set.has(v)?set.delete(v):set.add(v);}
+function segToggle(){return `<div class="seg" id="vseg"><button data-mode="prio" class="${boardMode==='prio'?'on':''}">Prioridade</button><button data-mode="status" class="${boardMode==='status'?'on':''}">Status</button></div>`;}
+function fdrop(id,label,opts,sel){
+  const n=sel.size;
+  const rows=opts.map(o=>`<label class="fopt"><input type="checkbox" data-f="${id}" value="${esc(o.val)}" ${sel.has(o.val)?'checked':''}>${o.color?`<span class="d" style="background:${o.color}"></span>`:''}${esc(o.label)}</label>`).join('');
+  return `<div class="fdrop" data-drop="${id}"><button class="fdrop-btn" data-dropbtn="${id}">${label}${n?`<span class="cnt">${n}</span>`:''}<span class="car">▼</span></button><div class="fdrop-menu">${rows}</div></div>`;
+}
+function renderBoard(){
+  const active=F.frentes.size||F.status.size||F.devs.size||F.tipos.size||F.exec||F.foraq||F.query;
+  const frOpts=TORRE_FRENTES.map(f=>({val:f.key,label:f.label,color:f.color}));
+  const stOpts=STATUS_ORDER.map(s=>({val:s,label:STATUS_LABELS[s],color:STATUS_COLOR[s]}));
+  const dvOpts=Object.keys(DEV_COLOR).map(d=>({val:d,label:d,color:DEV_COLOR[d]}));
+  const tpOpts=[{val:'bug',label:'Bug'},{val:'melhoria',label:'Melhoria'}];
+  let h=`<h1 class="ghost">Board <span class="accent">${boardMode==='prio'?'por prioridade':'por status · Quimera'}</span></h1>
+    <p class="sub">Alterne entre <b>Prioridade</b> (P0–P3) e o <b>kanban de status do Quimera</b> (fonte da verdade). A tag <span class="exec-pill">▶ Executando</span> marca o que está em execução; <span class="fora-q">✕ Fora do Quimera</span> marca demandas sem ticket no Quimera.</p>`;
+  h+=`<div class="fbar">${segToggle()}<div class="search"><span class="mag">⌕</span><input id="q" placeholder="Buscar…" value="${esc(F.query)}"></div>`+
+     fdrop('frentes','Frente',frOpts,F.frentes)+fdrop('status','Status',stOpts,F.status)+fdrop('devs','Dev',dvOpts,F.devs)+fdrop('tipos','Tipo',tpOpts,F.tipos)+
+     `<button class="fchip-exec ${F.exec?'on':''}" id="execchip">▶ Executando</button><button class="fchip-fora ${F.foraq?'on':''}" id="foraqchip">✕ Fora do Quimera</button>${active?`<button class="clr" id="clearf">limpar</button>`:''}</div>`;
+  h+=`<div id="kboard"></div>`;
+  return h;
+}
+function sortCards(a,b){return (PRIO_ORDER.indexOf(a.prioridade)-PRIO_ORDER.indexOf(b.prioridade))||a.id.localeCompare(b.id);}
+function kcol(label,color,col){
+  return `<div class="kcol"><div class="kcol-head"><span class="kc-dot" style="background:${color}"></span>${esc(label)}<span class="kc-count">${col.length}</span></div><div class="kcol-body">${col.length?col.map(card).join(''):'<div class="kcol-empty">—</div>'}</div></div>`;
+}
+function renderKanban(items,mode){
+  mode=mode||'prio';
+  let h=`<div class="kanban${mode==='status'?' kstatus':''}">`;
+  if(mode==='status'){
+    QORDER.forEach(s=>{h+=kcol(QLABEL[s],QCOLOR[s],items.filter(i=>i.and_status===s).sort(sortCards));});
+    h+=kcol('Fora do Quimera','#B4B4C4',items.filter(i=>!i.quimera_key).sort(sortCards));
+  }else{
+    PRIO_ORDER.forEach(p=>{h+=kcol(PRIO_PCODE[p]+' · '+PRIO_LABELS[p],PRIO_COLOR[p],items.filter(i=>i.prioridade===p).sort(sortCards));});
+  }
+  return h+`</div>`;
+}
+function card(it){
+  const f=FRENTES[it.frente];const done=it.status==='entregue';const drop=it.status==='cancelado'||it.status==='adiado';
+  return `<article class="ci ${done?'done':''} ${drop?'dropped':''}" style="--ci-accent:${accentOf(it)}" onclick="openItem('${it.id}')">
+    <div class="ci-top"><span class="ci-id">${it.id}</span><span class="pbadge ${it.prioridade}">${PRIO_PCODE[it.prioridade]}</span><span class="tipo ${it.tipo}">${TIPO_LABELS[it.tipo]}</span>${it.executando?'<span class="exec-pill">▶ Executando</span>':''}${it.reaberto_vivo?'<span class="reab-pill">↻ reaberto</span>':''}${it.esforco?`<span class="ci-esf">${it.esforco}</span>`:''}</div>
+    <div class="ci-title">${esc(it.title)}</div>
+    <div class="ci-bot"><span class="frente-pill"><span class="d" style="background:${f.color}"></span><span class="fl">${esc(f.label)}</span></span>
+      <span class="pill status-pill ${it.status}">${STATUS_ICON[it.status]}${STATUS_LABELS[it.status]}</span>
+      ${it.dev?`<span class="dev-chip" style="--dc:${DEV_COLOR[it.dev]}"><span class="d"></span>${esc(it.dev)}</span>`:''}
+      ${it.quimera_key?`<span class="qkey">#${esc(it.quimera_key)}</span>`:''}
+      ${it.source==='quimera'?'<span class="src-q">Quimera</span>':''}
+      ${!it.quimera_key?'<span class="fora-q">✕ fora do Quimera</span>':''}
+      ${it.dep?'<span class="dep-tag">dep</span>':''}
+      ${it.entrega_real?`<span class="ci-date" title="entrega real">✓ ${fmtd(it.entrega_real)}</span>`:''}
+    </div>
+    ${it.obs_refino?`<div class="ci-obs"><span class="oic">✎</span>${esc(it.obs_refino)}</div>`:''}
+    </article>`;
+}
+function wireToggle(paint){
+  document.querySelectorAll('#vseg [data-mode]').forEach(b=>b.onclick=()=>{boardMode=b.dataset.mode;
+    document.querySelectorAll('#vseg [data-mode]').forEach(x=>x.classList.toggle('on',x.dataset.mode===boardMode));paint();});
+}
+function wireDrops(paint){
+  const M={frentes:F.frentes,status:F.status,devs:F.devs,tipos:F.tipos};
+  document.querySelectorAll('[data-dropbtn]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const d=b.closest('.fdrop');const open=d.classList.contains('open');
+    document.querySelectorAll('.fdrop.open').forEach(x=>x.classList.remove('open'));if(!open)d.classList.add('open');});
+  document.querySelectorAll('.fdrop-menu input[data-f]').forEach(inp=>inp.onchange=()=>{
+    const set=M[inp.dataset.f];tog(set,inp.value);
+    const btn=document.querySelector('[data-dropbtn="'+inp.dataset.f+'"]');let cnt=btn.querySelector('.cnt');const n=set.size;
+    if(n){if(!cnt){cnt=document.createElement('span');cnt.className='cnt';btn.insertBefore(cnt,btn.querySelector('.car'));}cnt.textContent=n;}
+    else if(cnt){cnt.remove();}
+    paint();});
+}
+function attachBoard(){
+  wireToggle(paintBoard);wireDrops(paintBoard);
+  const ex=document.getElementById('execchip');if(ex)ex.onclick=()=>{F.exec=!F.exec;ex.classList.toggle('on',F.exec);paintBoard();};
+  const fq=document.getElementById('foraqchip');if(fq)fq.onclick=()=>{F.foraq=!F.foraq;fq.classList.toggle('on',F.foraq);paintBoard();};
+  const cl=document.getElementById('clearf');if(cl)cl.onclick=()=>{F={frentes:new Set(),status:new Set(),devs:new Set(),tipos:new Set(),exec:false,foraq:false,query:''};refresh();};
+  const q=document.getElementById('q');if(q){let t;q.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{F.query=q.value;paintBoard();},170);};}
+  paintBoard();
+}
+function paintBoard(){const el=document.getElementById('kboard');if(el)el.innerHTML=renderKanban(filtered(),boardMode);}
+function refresh(){document.getElementById('view').innerHTML=renderBoard();attachBoard();}
+
+/* timeline — ritmo de entrega (entregues por mês) + planejado */
+function tlRow(it,dateField){
+  const f=FRENTES[it.frente];const d=it[dateField];const atr=isAtrasado(it);const em=emAndamentoQ(it);
+  return `<div class="tl-row${atr?' atrasado':''}${em?(atr?' exec-atraso':' em-quimera'):''}" onclick="openItem('${it.id}')">
+    <span class="tl-date">${d?fmtd(d):'—'}</span>
+    <span class="tl-id">${it.id}</span>
+    <span class="pbadge ${it.prioridade}">${PRIO_PCODE[it.prioridade]}</span>
+    <span class="tl-title">${esc(it.title)}</span>
+    ${atr?`<span class="tl-badge-atraso">⚠ atrasado · início ${fmtd(it.prev_inicio)}</span>`:''}${em?`<span class="tl-badge-exec">▶ em andamento no Quimera</span>`:''}
+    <span class="frente-pill"><span class="d" style="background:${f.color}"></span><span class="fl">${esc(f.label)}</span></span>
+    ${it.dev?`<span class="dev-chip" style="--dc:${DEV_COLOR[it.dev]||'#94A3B8'}"><span class="d"></span>${esc(it.dev)}</span>`:''}
+    ${it.quimera_key?`<span class="qkey">#${esc(it.quimera_key)}</span>`:'<span class="fora-q">✕ fora do Quimera</span>'}
+  </div>`;
+}
+function tlMonthBlock(label,items,dateField,cls){
+  return `<div class="tl-month"><div class="tl-mhead ${cls||''}"><span class="tl-mlabel">${label}</span><span class="tl-mcount">${items.length} ${items.length===1?'item':'itens'}</span></div>`+items.map(i=>tlRow(i,dateField)).join('')+`</div>`;
+}
+function groupByMonth(items,field){
+  const m={};items.forEach(i=>{const k=(i[field]||'').slice(0,7);if(!k)return;(m[k]=m[k]||[]).push(i);});
+  return Object.keys(m).sort().map(k=>[k,m[k].sort((a,b)=>(a[field]).localeCompare(b[field]))]);
+}
+function renderTimeline(){
+  let h=`<h1 class="ghost">Timeline <span class="accent">da Torre</span></h1>
+    <p class="sub">Duas visões do roadmap: <b>Lista</b> (ritmo de entregas + backlog, com atrasos sinalizados) e <b>Gantt</b> (linha do tempo interativa, com filtros). Atraso = item de backlog com <b>Previsão de Início</b> já vencida. Demandas que já existem no Quimera aparecem na seção <b>Em andamento no Quimera</b> e recebem a marca <span style="color:#2563EB;font-weight:700">▶ em andamento</span> (se existe ticket, está no pipeline de execução). Referência: hoje é ${fmtd(TODAY)}/${TODAY.slice(0,4)}. Reconciliado com o Quimera em ${fmtd(DATA.generated_at)}/${DATA.generated_at.slice(0,4)}.</p>`;
+  h+=`<div class="tl-toolbar">${tlSegToggle()}</div>`;
+  h+=`<div id="tlbody"></div>`;
+  return h;
+}
+function tlSegToggle(){return `<div class="seg" id="tlseg"><button data-tlmode="list" class="${tlMode==='list'?'on':''}">Lista</button><button data-tlmode="gantt" class="${tlMode==='gantt'?'on':''}">Gantt</button></div>`;}
+function attachTimeline(){
+  document.querySelectorAll('#tlseg [data-tlmode]').forEach(b=>b.onclick=()=>{tlMode=b.dataset.tlmode;
+    document.querySelectorAll('#tlseg [data-tlmode]').forEach(x=>x.classList.toggle('on',x.dataset.tlmode===tlMode));paintTimeline();});
+  paintTimeline();
+}
+function paintTimeline(){
+  const el=document.getElementById('tlbody');if(!el)return;
+  if(tlMode==='gantt'){el.innerHTML=ganttFilterBar()+`<div id="tlchart"></div>`;wireTlFilters();paintGantt();}
+  else el.innerHTML=renderTimelineList();
+}
+
+/* ── modo Lista — visibilidade total + destaque de atrasados ── */
+function renderTimelineList(){
+  const atrasados=ITEMS.filter(isAtrasado).sort((a,b)=>a.prev_inicio.localeCompare(b.prev_inicio));
+  const done=ITEMS.filter(i=>i.status==='entregue'&&i.entrega_real);
+  const doneNoDate=ITEMS.filter(i=>i.status==='entregue'&&!i.entrega_real);
+  const emAndamento=ITEMS.filter(emAndamentoQ).sort((a,b)=>(a.prev_entrega||'9999').localeCompare(b.prev_entrega||'9999'));
+  const planned=ITEMS.filter(i=>i.status==='backlog'&&i.prev_entrega&&!emAndamentoQ(i));
+  const plannedNoDate=ITEMS.filter(i=>i.status==='backlog'&&!i.prev_entrega&&!emAndamentoQ(i));
+  const arefinar=ITEMS.filter(i=>i.status==='a-refinar');
+  const adiados=ITEMS.filter(i=>i.status==='adiado');
+  const cancelados=ITEMS.filter(i=>i.status==='cancelado');
+  const dMonths=groupByMonth(done,'entrega_real');
+  const pMonths=groupByMonth(planned,'prev_entrega');
+  let h='';
+  if(atrasados.length){
+    const execAtr=atrasados.filter(isAtrasadoExec).length;
+    h+=`<div class="section-title tl-atraso-sec">⚠ Atrasados <span class="extra">${atrasados.length} ${atrasados.length===1?'item':'itens'} · Previsão de Início vencida${execAtr?` · <span style="color:#2563EB">▶ ${execAtr} já em andamento no Quimera</span>`:''}</span></div>`;
+    h+=`<div class="tl">`+tlMonthBlock('Início planejado já vencido',atrasados,'prev_inicio','atraso')+`</div>`;
+  }
+  if(emAndamento.length){
+    h+=`<div class="section-title tl-exec-sec" style="margin-top:26px">▶ Em andamento no Quimera <span class="extra">${emAndamento.length} ${emAndamento.length===1?'item':'itens'} · existe ticket no Quimera = está no pipeline de execução</span></div>`;
+    h+=`<div class="tl">`+tlMonthBlock('No pipeline do Quimera',emAndamento,'prev_entrega','exec')+`</div>`;
+  }
+  h+=`<div class="section-title" style="margin-top:26px">Entregue <span class="extra">${done.length} itens · por mês de entrega real</span></div><div class="tl">`;
+  dMonths.forEach(([k,arr])=>{h+=`<div class="tl-month"><div class="tl-mhead"><span class="tl-mlabel">${monthLabel(k)}</span><span class="tl-mcount">${arr.length} entregues</span></div>`+arr.map(i=>tlRow(i,'entrega_real')).join('')+`</div>`;});
+  h+=`</div>`;
+  if(doneNoDate.length)h+=`<div class="tl" style="margin-top:16px">`+tlMonthBlock('Entregues sem data registrada',doneNoDate,'entrega_real','nodate')+`</div>`;
+  h+=`<div class="section-title" style="margin-top:26px">Planejado · backlog <span class="extra">${planned.length} com previsão · por mês de entrega prevista</span></div><div class="tl">`;
+  pMonths.forEach(([k,arr])=>{h+=`<div class="tl-month"><div class="tl-mhead plan"><span class="tl-mlabel">${monthLabel(k)}</span><span class="tl-mcount">${arr.length} previstos</span></div>`+arr.map(i=>tlRow(i,'prev_entrega')).join('')+`</div>`;});
+  h+=`</div>`;
+  if(plannedNoDate.length)h+=`<div class="tl" style="margin-top:16px">`+tlMonthBlock('Backlog sem previsão de data',plannedNoDate,'prev_entrega','nodate')+`</div>`;
+  if(arefinar.length)h+=`<div class="section-title" style="margin-top:26px">A refinar <span class="extra">${arefinar.length}</span></div><div class="tl">`+tlMonthBlock('Aguardando refinamento',arefinar,'prev_entrega','refine')+`</div>`;
+  if(adiados.length)h+=`<div class="section-title" style="margin-top:26px">Adiados <span class="extra">${adiados.length}</span></div><div class="tl">`+tlMonthBlock('Adiados',adiados,'prev_entrega','nodate')+`</div>`;
+  if(cancelados.length)h+=`<div class="section-title" style="margin-top:26px">Cancelados <span class="extra">${cancelados.length}</span></div><div class="tl">`+tlMonthBlock('Cancelados',cancelados,'prev_entrega','drop')+`</div>`;
+  return h;
+}
+
+/* ── modo Gantt — barras derivadas + filtros ── */
+function ganttDates(it){
+  // reabertura VIVA: a barra mostra o retrabalho de agora, nao a entrega antiga
+  if(it.reaberto_vivo){
+    const ini=it.reaberto_inicio||it.prev_inicio||TODAY;
+    const fim=(it.prev_entrega&&it.prev_entrega>=ini)?it.prev_entrega:(TODAY>ini?TODAY:ini);
+    return {start:ini,end:fim,kind:'live'};
+  }
+  // reabertura JA CONCLUIDA: a barra cobre a janela da reabertura (1a entrega -> reentrega),
+  // nao o vao inteiro desde o inicio original, que daria uma barra de meses sem trabalho contínuo.
+  if(it.entrega_original&&it.entrega_real)return {start:it.reaberto_inicio||it.entrega_original,end:it.entrega_real,kind:'done'};
+  // entregue: janela real de ponta a ponta
+  if(it.entrega_real)return {start:it.inicio_real||it.entrega_real,end:it.entrega_real,kind:'done'};
+  // em curso: comeca no INICIO REAL. Termina na previsao; se a previsao ja passou, estica ate hoje
+  // (a barra precisa cobrir o tempo que a demanda esta rodando, senao fim < inicio e a barra some).
+  if(it.inicio_real){
+    const fim=(it.prev_entrega&&it.prev_entrega>=it.inicio_real)?it.prev_entrega:(TODAY>it.inicio_real?TODAY:it.inicio_real);
+    return {start:it.inicio_real,end:fim,kind:'live'};
+  }
+  // nao comecou: janela prevista
+  if(it.prev_inicio&&it.prev_entrega)return {start:it.prev_inicio,end:it.prev_entrega,kind:'plan'};
+  if(it.prev_entrega)return {start:it.prev_entrega,end:it.prev_entrega,kind:'ms'};
+  if(it.prev_inicio)return {start:it.prev_inicio,end:it.prev_inicio,kind:'ms'};
+  return null;
+}
+function tlFiltered(){
+  let a=ITEMS.slice();
+  if(tlF.status.size)a=a.filter(i=>tlF.status.has(i.status));
+  if(tlF.frentes.size)a=a.filter(i=>tlF.frentes.has(i.frente));
+  if(tlF.devs.size)a=a.filter(i=>i.dev&&tlF.devs.has(i.dev));
+  if(tlF.foraq)a=a.filter(i=>!i.quimera_key);
+  if(tlF.atrasados)a=a.filter(isAtrasado);
+  if(tlF.mesDe||tlF.mesAte)a=a.filter(i=>{const d=ganttDates(i);if(!d)return false;const s=d.start.slice(0,7),e=d.end.slice(0,7);
+    if(tlF.mesDe&&e<tlF.mesDe)return false;if(tlF.mesAte&&s>tlF.mesAte)return false;return true;});
+  return a;
+}
+function allGanttMonths(){
+  let min=null,max=null;ITEMS.forEach(i=>{const d=ganttDates(i);if(!d)return;if(!min||d.start<min)min=d.start;if(!max||d.end>max)max=d.end;});
+  if(!min)return [];const a=[];let cur=new Date(min.slice(0,7)+'-01T00:00:00');const end=new Date(max.slice(0,7)+'-01T00:00:00');
+  while(cur<=end){a.push(cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0'));cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);}
+  return a;
+}
+function ganttFilterBar(){
+  const stOpts=STATUS_ORDER.map(s=>({val:s,label:STATUS_LABELS[s],color:STATUS_COLOR[s]}));
+  const frOpts=TORRE_FRENTES.map(f=>({val:f.key,label:f.label,color:f.color}));
+  const dvOpts=Object.keys(DEV_COLOR).map(d=>({val:d,label:d,color:DEV_COLOR[d]}));
+  const active=tlF.status.size||tlF.frentes.size||tlF.devs.size||tlF.foraq||tlF.atrasados||tlF.mesDe||tlF.mesAte;
+  const monthOpts=allGanttMonths().map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('');
+  return `<div class="fbar fbar-gantt">`+
+    `<span class="cg-ctl" id="gctl">${ganttCtl()}</span><span class="fbar-sep"></span>`+
+    fdrop('tlstatus','Status',stOpts,tlF.status)+fdrop('tlfrente','Frente',frOpts,tlF.frentes)+fdrop('tldev','Dev',dvOpts,tlF.devs)+
+    `<button class="fchip-fora ${tlF.foraq?'on':''}" id="tlforaq">✕ Fora do Quimera</button>`+
+    `<button class="fchip-atraso ${tlF.atrasados?'on':''}" id="tlatraso">⚠ Só atrasados</button>`+
+    `<span class="tl-datefilter">De <select id="tlmesde"><option value="">—</option>${monthOpts}</select> até <select id="tlmesate"><option value="">—</option>${monthOpts}</select></span>`+
+    (active?`<button class="clr" id="tlclear">limpar</button>`:'')+
+  `</div>`;
+}
+function wireTlFilters(){
+  const M={tlstatus:tlF.status,tlfrente:tlF.frentes,tldev:tlF.devs};
+  document.querySelectorAll('#tlbody [data-dropbtn]').forEach(b=>b.onclick=e=>{e.stopPropagation();
+    const d=b.closest('.fdrop');const open=d.classList.contains('open');
+    document.querySelectorAll('.fdrop.open').forEach(x=>x.classList.remove('open'));if(!open)d.classList.add('open');});
+  document.querySelectorAll('#tlbody .fdrop-menu input[data-f]').forEach(inp=>inp.onchange=()=>{
+    const set=M[inp.dataset.f];if(!set)return;tog(set,inp.value);
+    const btn=document.querySelector('#tlbody [data-dropbtn="'+inp.dataset.f+'"]');let cnt=btn.querySelector('.cnt');const n=set.size;
+    if(n){if(!cnt){cnt=document.createElement('span');cnt.className='cnt';btn.insertBefore(cnt,btn.querySelector('.car'));}cnt.textContent=n;}else if(cnt){cnt.remove();}
+    paintGantt();});
+  const fq=document.getElementById('tlforaq');if(fq)fq.onclick=()=>{tlF.foraq=!tlF.foraq;fq.classList.toggle('on',tlF.foraq);paintGantt();};
+  const at=document.getElementById('tlatraso');if(at)at.onclick=()=>{tlF.atrasados=!tlF.atrasados;at.classList.toggle('on',tlF.atrasados);paintGantt();};
+  const de=document.getElementById('tlmesde');if(de){de.value=tlF.mesDe;de.onchange=()=>{tlF.mesDe=de.value;paintGantt();};}
+  const ate=document.getElementById('tlmesate');if(ate){ate.value=tlF.mesAte;ate.onchange=()=>{tlF.mesAte=ate.value;paintGantt();};}
+  const cl=document.getElementById('tlclear');if(cl)cl.onclick=()=>{tlF={status:new Set(),frentes:new Set(),devs:new Set(),foraq:false,atrasados:false,mesDe:'',mesAte:''};paintTimeline();};
+}
+function paintGantt(){
+  const ctl=document.getElementById('gctl');if(ctl)ctl.innerHTML=ganttCtl();   // so o grupo de controles: nao mexe nos dropdowns abertos
+  const el=document.getElementById('tlchart');if(!el)return;
+  el.innerHTML=renderGanttChart(tlFiltered());
+  if(!gCentered){gCentered=true;gCenter(TODAY);}
+}
+let gCentered=false;
+/* ===== Cronograma — Gantt por dia =====
+   Janela: sem filtro de mês = mês navegado (default = mês de TODAY). Com filtro de mês = o intervalo inteiro,
+   com scroll horizontal DENTRO do componente (a página nunca rola de lado).
+   Cores: verde = concluído · amarelo = em andamento · vermelho = atrasado ou bloqueado · cinza = não iniciado.
+   Sem percentual de conclusão por tarefa (decisão do João, 04/09/2026): o Quimera não tem campo de progresso,
+   então a barra mostra só o intervalo de datas e o status pela cor. */
+let gMes=TODAY.slice(0,7);
+/* zoom: null = automatico (encaixa a janela na largura disponivel). Um zoom manual vale ate a janela mudar. */
+let gZoom=null,gWKey='';
+const G_ZMIN=16,G_ZMAX=68;
+function gAvailW(){const el=document.getElementById('tlchart');const w=el?el.clientWidth:1040;
+  const lbl=window.innerWidth<=700?150:250;return Math.max(240,w-lbl-86-14);}
+function gAutoDW(n){return Math.max(G_ZMIN,Math.min(G_ZMAX,Math.floor(gAvailW()/Math.max(1,n))));}
+function gNav(delta){const p=gMes.split('-');const d=new Date(+p[0],+p[1]-1+delta,1);
+  gMes=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');paintGantt();}
+function gHoje(){gMes=TODAY.slice(0,7);paintGantt();gCenter(TODAY);}
+function gZ(delta){const D=gDays(gWin());const cur=gZoom||gAutoDW(D.n);
+  gZoom=Math.max(G_ZMIN,Math.min(G_ZMAX,cur+delta));paintGantt();}
+function gAuto(){gZoom=null;paintGantt();}
+
+/* janela = filtro de mês (se houver) ou mês navegado */
+function gWin(){
+  if(tlF.mesDe||tlF.mesAte){
+    const a=tlF.mesDe||tlF.mesAte,b=tlF.mesAte||tlF.mesDe;
+    return a<=b?{from:a,to:b,filt:true}:{from:b,to:a,filt:true};
+  }
+  return {from:gMes,to:gMes,filt:false};
+}
+function gDays(w){
+  const pf=w.from.split('-'),pt=w.to.split('-');
+  const first=new Date(+pf[0],+pf[1]-1,1),last=new Date(+pt[0],+pt[1],0);
+  return {first:first,last:last,n:Math.round((last-first)/86400000)+1};
+}
+const gIso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+function gState(it){
+  if(it.status==='entregue')return 'done';
+  if(it.status==='bloqueado')return 'late';
+  if(isAtrasado(it))return 'late';
+  if(it.status==='executando')return 'exec';
+  return 'idle';
+}
+function gAvatar(dev){
+  if(!dev)return '<span class="cg-av" style="--av:#94A3B8">--</span>';
+  const w=String(dev).trim().split(/\s+/);
+  const ini=(w.length>1?w[0][0]+w[1][0]:w[0].slice(0,2)).toUpperCase();
+  return `<span class="cg-av" style="--av:${DEV_COLOR[dev]||'#94A3B8'}" title="${esc(dev)}">${esc(ini)}</span>`;
+}
+function gEntrega(it){return it.entrega_real||it.prev_entrega||'';}
+/* centraliza uma data na viewport do componente */
+function gCenter(iso){
+  const s=document.querySelector('.cg-scroll');if(!s)return;
+  const w=gWin(),D=gDays(w);const d=new Date(iso+'T00:00:00');
+  if(d<D.first||d>D.last){s.scrollLeft=0;return;}
+  const idx=Math.round((d-D.first)/86400000);
+  const lbl=window.innerWidth<=700?150:250;
+  s.scrollLeft=Math.max(0,idx*gZoom-(s.clientWidth-lbl)/2);
+}
+
+/* controles do Gantt (mes, periodo, zoom) — vivem DENTRO da barra de filtros, em linha */
+function ganttCtl(){
+  const w=gWin(),D=gDays(w),nDays=D.n;
+  const mStart=gIso(D.first),mEnd=gIso(D.last);
+  const janela=w.filt?(w.from===w.to?monthLabel(w.from):monthLabel(w.from)+' \u2192 '+monthLabel(w.to)):monthLabel(gMes);
+  let h='';
+  if(w.filt){
+    h+=`<span class="cg-mes cg-mes-lock" title="A janela vem do filtro De/até desta mesma barra">${esc(janela)}</span>`;
+  }else{
+    h+=`<button class="cg-arrow" onclick="gNav(-1)" title="Mês anterior" aria-label="Mês anterior">&lsaquo;</button>`+
+       `<button class="cg-mes" onclick="gHoje()" title="Voltar para o mês de hoje">${esc(janela)}</button>`+
+       `<button class="cg-arrow" onclick="gNav(1)" title="Mês seguinte" aria-label="Mês seguinte">&rsaquo;</button>`;
+  }
+  h+=`<span class="cg-periodo"><span class="cg-pval">${fmtd(mStart)}/${mStart.slice(0,4)}</span><span class="cg-pto">até</span><span class="cg-pval">${fmtd(mEnd)}/${mEnd.slice(0,4)}</span><span class="cg-ndays">${nDays} dias</span></span>`;
+  h+=`<button class="cg-tool" onclick="gZ(-6)" title="Menos zoom" aria-label="Menos zoom">&minus;</button>`+
+     `<button class="cg-tool" onclick="gZ(6)" title="Mais zoom" aria-label="Mais zoom">+</button>`+
+     `<button class="cg-tool wide${gZoom?'':' on'}" onclick="gAuto()" title="Encaixar a janela inteira na largura disponível">Auto</button>`+
+     `<button class="cg-tool wide" onclick="gCenter(TODAY)" title="Rolar até hoje">Hoje</button>`;
+  return h;
+}
+
+function renderGanttChart(items){
+  const w=gWin(),D=gDays(w),nDays=D.n;
+  const wkey=w.from+'|'+w.to;
+  if(gWKey!==wkey){gWKey=wkey;gZoom=null;}   // janela mudou: volta ao zoom automatico
+  const DW=gZoom||gAutoDW(nDays);
+  const mStart=gIso(D.first),mEnd=gIso(D.last);
+  const all=items.map(i=>({it:i,d:ganttDates(i)}));
+  const rows=all.filter(x=>x.d&&x.d.start<=mEnd&&x.d.end>=mStart)
+                .sort((a,b)=>a.d.start.localeCompare(b.d.start)||a.it.id.localeCompare(b.it.id));
+  const fora=all.filter(x=>x.d&&!(x.d.start<=mEnd&&x.d.end>=mStart)).length;
+  const nodate=items.filter(i=>!ganttDates(i));
+  const WD=['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+  const idxOf=s=>{const d=new Date(s+'T00:00:00');
+    if(d<D.first)return 0;if(d>D.last)return nDays-1;return Math.round((d-D.first)/86400000);};
+  const janela=w.filt?(w.from===w.to?monthLabel(w.from):monthLabel(w.from)+' → '+monthLabel(w.to)):monthLabel(gMes);
+
+  let h='';
+  if(!rows.length){
+    h+=`<div class="cg-wrap"><div class="gantt-empty">Nenhuma demanda com data em ${esc(janela)}.${fora?` ${fora} ${fora===1?'item está':'itens estão'} fora desta janela — ${w.filt?'ajuste o filtro de mês':'use as setas'}.`:''}</div></div>`;
+    if(nodate.length)h+=ganttNodateBlock(nodate);
+    return h;
+  }
+
+  /* faixas de mês + células de dia */
+  let mrow='',drow='';
+  let cur=new Date(D.first.getFullYear(),D.first.getMonth(),1);
+  while(cur<=D.last){
+    const ms=new Date(Math.max(cur,D.first)),me=new Date(Math.min(new Date(cur.getFullYear(),cur.getMonth()+1,0),D.last));
+    const span=Math.round((me-ms)/86400000)+1;
+    mrow+=`<div class="cg-mband" style="width:${span*DW}px">${monthLabel(cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0'))}</div>`;
+    cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);
+  }
+  for(let k=0;k<nDays;k++){
+    const dd=new Date(D.first.getFullYear(),D.first.getMonth(),D.first.getDate()+k);
+    const wd=dd.getDay(),we=(wd===0||wd===6),isT=gIso(dd)===TODAY;
+    drow+=`<div class="cg-d${we?' we':''}${isT?' today':''}" style="width:${DW}px">${DW>=30?`<span class="cg-wd">${WD[wd]}</span>`:''}<span class="cg-dn">${dd.getDate()}</span></div>`;
+  }
+
+  /* overlay de fundo: fins de semana + linha de hoje, desenhado UMA vez atrás de todas as linhas */
+  let bands='';
+  for(let k=0;k<nDays;k++){
+    const dd=new Date(D.first.getFullYear(),D.first.getMonth(),D.first.getDate()+k),wd=dd.getDay();
+    if(wd===0||wd===6)bands+=`<span class="cg-we-band" style="left:${k*DW}px;width:${DW}px"></span>`;
+  }
+  const tIn=(TODAY>=mStart&&TODAY<=mEnd);
+  const nowLine=tIn?`<span class="cg-now" style="left:${(idxOf(TODAY)+0.5)*DW}px"></span>`:'';
+
+  const trackW=nDays*DW;
+  h+=`<div class="cg-wrap"><div class="cg-scroll"><div class="cg-grid" style="--dw:${DW}px;--tw:${trackW}px">`;
+  h+=`<div class="cg-hrow"><div class="cg-cell cg-hlbl">Tarefa</div>
+      <div class="cg-hdays"><div class="cg-mrow">${mrow}</div><div class="cg-drow">${drow}</div></div>
+      <div class="cg-cell cg-hent">Entrega</div></div>`;
+  h+=`<div class="cg-body"><div class="cg-overlay" style="width:${trackW}px;background-size:${DW}px 100%">${bands}${nowLine}</div>`;
+  rows.forEach(({it,d})=>{
+    const f=FRENTES[it.frente];
+    const st=gState(it);
+    const a=idxOf(d.start),b=idxOf(d.end);
+    const left=a*DW,bw=Math.max(DW,(b-a+1)*DW);
+    const clipL=d.start<mStart,clipR=d.end>mEnd;
+    const ent=gEntrega(it);const entVencida=!!ent&&ent<TODAY&&it.status!=='entregue';
+    const rng=d.start===d.end?fmtd(d.start):`${fmtd(d.start)}–${fmtd(d.end)}`;
+    const tip=`${it.id} · ${it.title} · ${rng} · ${STATUS_LABELS[it.status]}`;
+    const showRng=bw>=112;
+    h+=`<div class="cg-row" onclick="openItem('${it.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openItem('${it.id}')">
+      <div class="cg-cell cg-lbl" title="${esc(it.title)}">${gAvatar(it.dev)}<span class="cg-txt"><span class="cg-t">${esc(it.title)}</span><span class="cg-s">${it.id} · ${esc(f?f.label:'')}${it.reaberto_vivo?' · <b>reaberto</b>':''}</span></span></div>
+      <div class="cg-track">
+        <div class="cg-bar cg-${st}${clipL?' clipL':''}${clipR?' clipR':''}" style="left:${left}px;width:${bw}px" title="${esc(tip)}">
+          <span class="cg-fill"></span>
+          ${showRng?`<span class="cg-rng">${rng}</span>`:''}
+        </div>
+      </div>
+      <div class="cg-cell cg-ent">${ent?`<span class="cg-entp${entVencida?' late':''}" title="${entVencida?'entrega prevista vencida':(it.status==='entregue'?'entrega real':'entrega prevista')}">${fmtd(ent)}</span>`:'<span class="cg-entp none">—</span>'}</div>
+    </div>`;
+  });
+  h+=`</div></div></div></div>`;
+  h+=`<div class="cg-foot"><span class="cg-foot-txt"><b>${rows.length}</b> ${rows.length===1?'demanda':'demandas'} em ${esc(janela)}${fora?` · ${fora} fora desta janela`:''}${nodate.length?` · ${nodate.length} sem data`:''} — o intervalo mostra início e entrega (real quando concluída, prevista quando não).</span>
+  <span class="cg-legend">
+    <span><i style="background:#10B981"></i>Concluído</span>
+    <span><i style="background:#F59E0B"></i>Em andamento</span>
+    <span><i style="background:#EF4444"></i>Atrasado</span>
+    <span><i style="background:#94A3B8"></i>Não iniciado</span>
+  </span></div>`;
+  if(nodate.length)h+=ganttNodateBlock(nodate);
+  return h;
+}
+
+function ganttNodateBlock(items){return `<div class="section-title" style="margin-top:18px">Sem data <span class="extra">${items.length} — não plotáveis no Gantt</span></div><div class="tl">`+tlMonthBlock('Itens sem nenhuma data',items,'prev_entrega','nodate')+`</div>`;}
+
+/* drawer */
+function openItem(id){
+  const it=ALL_ITEMS.find(i=>i.id===id);if(!it)return;const f=FRENTES[it.frente];
+  const d=document.getElementById('drawer');
+  d.innerHTML=`<div class="drawer-head"><div><div class="dh-id">${it.id}</div><div class="dh-title">${esc(it.title)}</div></div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
+  <div class="drawer-body">
+    <div class="d-badges"><span class="pbadge ${it.prioridade}">${PRIO_PCODE[it.prioridade]} · ${PRIO_LABELS[it.prioridade]}</span>
+      <span class="pill status-pill ${it.status}">${STATUS_ICON[it.status]}${STATUS_LABELS[it.status]}</span>
+      <span class="tipo ${it.tipo}">${TIPO_LABELS[it.tipo]}</span>
+      ${it.executando?'<span class="exec-pill">▶ Executando</span>':''}
+      ${it.reaberto_vivo?'<span class="reab-pill">↻ reaberto</span>':''}
+      ${it.refino_tag&&REFINO[it.refino_tag]?`<span class="refino-pill" style="background:${REFINO[it.refino_tag].color}">${esc(REFINO[it.refino_tag].label)}</span>`:''}
+      ${it.dep?'<span class="dep-tag">aguardando dependência</span>':''}</div>
+    <div class="d-meta">
+      <div><div class="mlab">Frente</div><div class="mval"><span class="frente-pill"><span class="d" style="background:${f.color}"></span>${esc(f.label)}</span></div></div>
+      <div><div class="mlab">Responsável</div><div class="mval">${it.dev?`<span class="dev-chip" style="--dc:${DEV_COLOR[it.dev]}"><span class="d"></span>${esc(it.dev)}</span>`:'—'}</div></div>
+      <div><div class="mlab">Esforço</div><div class="mval">${it.esforco||'—'}</div></div>
+      <div><div class="mlab">Menu de origem</div><div class="mval">${esc(it.menu)}</div></div>
+      ${it.quimera_key?`<div><div class="mlab">Quimera</div><div class="mval">#${esc(it.quimera_key)} · <span class="status-pill ${it.and_status}" style="background:${QCOLOR[it.and_status]||'#64748B'};color:#fff">${esc(QLABEL[it.and_status]||it.and_status)}</span></div></div>`:`<div><div class="mlab">Quimera</div><div class="mval"><span class="fora-q">✕ Fora do Quimera</span></div></div>`}
+      ${it.entrega_original?`<div><div class="mlab">Entrega original</div><div class="mval"><span style="font-family:var(--font-mono);font-weight:700">${fmtd(it.entrega_original)}</span> <span style="color:var(--text-subtle);font-size:11px">— reaberta depois</span></div></div>`:''}
+      ${it.reaberto_key?`<div><div class="mlab">Reaberto por</div><div class="mval">#${esc(it.reaberto_key)} · <span class="status-pill ${it.reaberto_status}" style="background:${QCOLOR[it.reaberto_status]||'#64748B'};color:#fff">${esc(QLABEL[it.reaberto_status]||it.reaberto_status)}</span></div></div>`:''}
+      ${it.entrega_real?`<div><div class="mlab">Entrega real</div><div class="mval"><span style="font-family:var(--font-mono);font-weight:700;color:#10B981">✓ ${esc(it.entrega_real)}</span>${it.inicio_real?` · início ${esc(it.inicio_real)}`:''}</div></div>`:(it.prev_entrega?`<div><div class="mlab">Previsão de entrega</div><div class="mval"><span style="font-family:var(--font-mono);font-weight:700;color:var(--finza-blue)">${esc(it.prev_entrega)}</span></div></div>`:'')}
+    </div>
+    <div class="d-block"><h4>Descrição refinada</h4><div class="d-desc">${esc(it.desc)}</div></div>
+    ${it.obs_refino?`<div class="d-block"><h4>Observação de refinamento</h4><div class="d-obs">${esc(it.obs_refino)}</div></div>`:''}
+    ${it.nota_negocio?`<div class="d-block"><div class="d-nota"><div class="nl">Depende do negócio</div>${esc(it.nota_negocio)}</div></div>`:''}
+  </div>`;
+  d.classList.add('open');document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+document.addEventListener('click',e=>{if(!e.target.closest('.fdrop'))document.querySelectorAll('.fdrop.open').forEach(x=>x.classList.remove('open'));});
+
+render('overview');
+</script>
+</body>
+</html>
