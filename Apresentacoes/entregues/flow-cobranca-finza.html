@@ -1,0 +1,778 @@
+<title>Flow de Cobrança Finza</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#2F2FF2;--blue-ink:#2323C4;--blue-soft:#E4E4FD;--blue-line:#B9B9F9;
+  --navy:#0B0A34;--navy-2:#15144A;
+  --bg:#E9ECF3;--surface:#FFFFFF;--surface-2:#F4F5F9;
+  --ink:#0B0A34;--ink-2:#3E4060;--muted:#666A88;--line:#D3D6E3;--ghost:#BCC0D2;
+  --good:#1B8F63;--warn:#B96A00;--bad:#C4322C;
+  --good-bg:#DDF3EA;--warn-bg:#FBEBD2;--bad-bg:#F9DEDC;
+  --on-dark:#FFFFFF;--on-dark-2:rgba(255,255,255,.78);--on-dark-3:rgba(255,255,255,.55);--dark-line:rgba(255,255,255,.16);--dark-card:rgba(255,255,255,.07);
+  --wa-green:#25d366;--wa-teal:#075e54;--wa-bg:#efeae2;--wa-sheet:#fff;--wa-text:#111b21;--wa-text-2:#667781;--wa-border:#e9edef;--wa-blue:#027eb5;--wa-error:#ea0038;--wa-bezel:#1f2c34;
+  --wrap:1120px;--gutter:clamp(16px,4vw,48px);--r:12px;--r-sm:8px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --blue:#7A7AFF;--blue-ink:#9C9CFF;--blue-soft:#1C1C58;--blue-line:#3A3A9A;
+  --bg:#07071F;--surface:#11113A;--surface-2:#171748;
+  --ink:#F1F2FA;--ink-2:#C9CBE0;--muted:#9A9DBA;--line:#2A2B58;--ghost:#3E4070;
+  --good:#3FC48F;--warn:#E4A24A;--bad:#F07A73;--good-bg:#0F3A2C;--warn-bg:#3D2A0C;--bad-bg:#4A1A17;
+  --navy:#040414;--navy-2:#0B0A34;
+}}
+:root[data-theme="dark"]{
+  --blue:#7A7AFF;--blue-ink:#9C9CFF;--blue-soft:#1C1C58;--blue-line:#3A3A9A;
+  --bg:#07071F;--surface:#11113A;--surface-2:#171748;
+  --ink:#F1F2FA;--ink-2:#C9CBE0;--muted:#9A9DBA;--line:#2A2B58;--ghost:#3E4070;
+  --good:#3FC48F;--warn:#E4A24A;--bad:#F07A73;--good-bg:#0F3A2C;--warn-bg:#3D2A0C;--bad-bg:#4A1A17;
+  --navy:#040414;--navy-2:#0B0A34;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Montserrat,"Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--gutter)}
+h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-weight:800;font-size:clamp(32px,4.6vw,60px);line-height:1.04;color:var(--on-dark)}
+h1 em{font-style:normal;color:#9D9DFF}
+h2{font-weight:800;font-size:clamp(26px,3vw,40px);line-height:1.1;color:var(--ink)}
+h2 em{font-style:normal;color:var(--blue)}
+h3{font-size:clamp(15px,1.15vw,18px);font-weight:700;line-height:1.3}
+p{margin:0}
+.lead{font-size:clamp(16px,1.25vw,19px);color:var(--ink-2);max-width:64ch;margin-top:14px;line-height:1.55}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.fine{font-size:12.5px;color:var(--muted);line-height:1.5}
+.num{font-variant-numeric:tabular-nums}
+.kick{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.kick::before{content:"";width:22px;height:3px;background:var(--blue);transform:skewX(-30deg)}
+code{font-family:Consolas,ui-monospace,"SF Mono",monospace;font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:4px;color:var(--ink-2)}
+a{color:var(--blue-ink)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:800;font-size:14px;letter-spacing:.02em;white-space:nowrap}
+.brand img{width:26px;height:20px;object-fit:contain}
+.brand small{font-weight:600;color:var(--muted);font-size:12px}
+.links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:13px;font-weight:600;padding:8px 11px;border-radius:6px}
+.links a:hover{background:var(--blue-soft);color:var(--blue-ink)}
+
+/* hero */
+.hero{background:var(--navy);color:var(--on-dark);position:relative;overflow:hidden;padding-block:clamp(56px,8vw,104px) clamp(48px,6vw,88px)}
+.hero .band{position:absolute;right:-6%;top:0;bottom:0;width:38%;background:#2F2FF2;transform:skewX(-14deg);transform-origin:top;pointer-events:none}
+.hero .band2{position:absolute;right:26%;top:0;bottom:0;width:6%;background:#2323C4;transform:skewX(-14deg);pointer-events:none;opacity:.9}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.9fr);gap:clamp(28px,5vw,72px);align-items:end}
+.hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-2)}
+.hero .lead{color:var(--on-dark-2);max-width:56ch}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;transition:filter .12s;border:2px solid transparent}
+.btn.light{background:#fff;color:#0B0A34}.btn.ghost{border-color:rgba(255,255,255,.6);color:#fff}
+.btn:hover{filter:brightness(.94)}
+.status{background:rgba(11,10,52,.85);border:1px solid rgba(255,255,255,.22);border-radius:var(--r);padding:20px 22px;color:#fff;backdrop-filter:blur(6px)}
+.status .kick{color:#C6C6FF}.status .kick::before{background:#C6C6FF}
+.status dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:14px 0 0;font-size:14px}
+.status dt{color:rgba(255,255,255,.65);font-weight:600}.status dd{margin:0;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.02em;vertical-align:middle;white-space:nowrap}
+.chip.done{background:var(--good-bg);color:var(--good)}.chip.now{background:var(--warn-bg);color:var(--warn)}.chip.wait{background:var(--blue-soft);color:var(--blue-ink)}.chip.risk{background:var(--bad-bg);color:var(--bad)}
+.status .chip.now{background:#F5B14F;color:#3A2200}
+
+/* sections */
+section{padding-block:clamp(52px,6.5vw,96px)}
+section.alt{background:var(--surface)}
+section.dark{background:var(--navy);color:var(--on-dark)}
+section.dark h2{color:var(--on-dark)}section.dark h2 em{color:#9D9DFF}
+section.dark .lead{color:var(--on-dark-2)}section.dark .kick{color:#C6C6FF}section.dark .kick::before{background:#C6C6FF}
+section.dark .muted,section.dark .fine{color:var(--on-dark-3)}
+.sec-head{max-width:800px;margin-bottom:clamp(26px,3.6vw,44px)}
+.sec-head h2{margin-top:12px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--surface);border-radius:var(--r);padding:22px 24px}
+section.alt .card{background:var(--surface-2)}
+.card.tint{background:var(--blue-soft)}
+.card.line{background:transparent;border:1px solid var(--line)}
+section.dark .card{background:var(--dark-card);color:var(--on-dark)}
+.card .kick{font-size:11px}
+.big{font-size:clamp(30px,2.8vw,46px);font-weight:800;color:var(--blue);line-height:1;letter-spacing:-.02em;margin-top:14px}
+.big small{font-size:.4em;color:var(--muted);font-weight:600;letter-spacing:0}
+.card h3{margin-top:10px}
+.card p.muted{margin-top:6px;font-size:14.5px}
+.callout{background:var(--blue);color:#fff;padding:20px 24px;border-radius:var(--r);font-weight:600;font-size:clamp(15px,1.1vw,17px);position:relative;overflow:hidden}
+.callout::after{content:"";position:absolute;right:-30px;top:-20px;bottom:-20px;width:90px;background:rgba(255,255,255,.14);transform:skewX(-16deg)}
+.callout.navy{background:var(--navy-2)}
+:root[data-theme="dark"] .callout,:root:not([data-theme="light"]) .callout{--_x:0}
+.steps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:14px}
+.steps li{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5}
+.dot{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:0 0 auto}
+section.dark .dot{background:#fff;color:var(--navy)}
+.dot.bad{background:var(--bad);color:#fff}.dot.good{background:var(--good);color:#fff}
+
+/* TL;DR */
+.tldr{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:t}
+.tldr .t{background:var(--surface);border-radius:var(--r);padding:22px 24px;display:grid;gap:10px;align-content:start;position:relative;border-top:4px solid var(--blue)}
+.tldr .t b{font-size:clamp(16px,1.2vw,19px);line-height:1.3;display:block}
+.tldr .t span{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* table */
+.tablewrap{overflow-x:auto;border-radius:var(--r);background:var(--surface)}
+section.alt .tablewrap{background:var(--surface-2)}
+table.t{width:100%;border-collapse:collapse;font-size:clamp(14px,1.02vw,16px);min-width:560px}
+table.t th,table.t td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line)}
+table.t tr:last-child td{border-bottom:0}
+table.t th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+table.t th:not(:first-child),table.t td.num{text-align:right}
+table.t td.num{font-weight:600}
+table.t tr.tot td{font-weight:800;background:var(--blue-soft);color:var(--ink)}
+table.t tr.alt2 td{color:var(--muted);font-style:italic}
+
+/* charts */
+.chart{display:grid;gap:10px;margin-top:16px}
+.chart .row{display:grid;grid-template-columns:minmax(120px,190px) 1fr minmax(96px,140px);gap:12px;align-items:center;font-size:14.5px}
+.chart .row .lbl{display:grid;line-height:1.3}
+.chart .row .lbl small{color:var(--muted);font-size:12px;font-weight:500}
+.chart .track{height:26px;background:var(--surface-2);border-radius:4px;position:relative;overflow:hidden}
+section.alt .chart .track{background:var(--surface)}
+.chart .bar{position:absolute;inset:0 auto 0 0;background:var(--blue);border-radius:0 4px 4px 0}
+.chart .row.hot .bar{background:var(--bad)}
+.chart .row.dim .bar{background:var(--ghost)}
+.chart .val{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chart .val small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.chart .row:hover .bar{filter:brightness(1.08)}
+.chart .sep{height:1px;background:var(--line);margin:4px 0}
+.stack{display:flex;height:42px;border-radius:6px;overflow:hidden;gap:2px;background:var(--line);margin-top:16px}
+.stack div{display:grid;place-items:center;font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;min-width:0}
+.stack div.gh{color:var(--ink)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 16px;font-size:13px;margin-top:14px}
+.legend span{display:flex;gap:8px;align-items:flex-start;line-height:1.35}
+.legend span::before{content:"";flex:0 0 auto;display:inline-block;width:12px;height:12px;border-radius:3px;margin-top:3px;background:var(--c)}
+.legend b{display:block;font-variant-numeric:tabular-nums}
+
+/* plan */
+.plan{display:grid;gap:0;margin-top:8px}
+.plan .ph{display:grid;grid-template-columns:120px 1fr auto;gap:16px;padding:14px 0;border-top:1px solid var(--line);font-size:15px;align-items:start}
+.plan .ph:last-child{border-bottom:1px solid var(--line)}
+.plan .d{font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums}
+.plan .ph.now{background:var(--warn-bg);margin-inline:-16px;padding-inline:16px;border-radius:var(--r-sm);border-top-color:transparent}
+.plan .ph.now + .ph{border-top-color:transparent}
+.plan .ph small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+
+/* decisions */
+.q{background:var(--surface);border-radius:var(--r);padding:18px 20px;display:grid;gap:8px;font-size:14.5px;border-left:4px solid var(--blue)}
+section.alt .q{background:var(--surface-2)}
+.q b{font-size:16px;line-height:1.35}
+.q .who{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.q .prop{color:var(--ink-2)}.q .prop b{font-size:inherit;display:inline}
+
+/* risks */
+.risk{display:grid;margin-top:8px}
+.risk .r{display:grid;grid-template-columns:auto 1fr 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--line);font-size:14.5px;align-items:start}
+.risk .r:last-child{border-bottom:1px solid var(--line)}
+.risk .m{color:var(--muted)}
+.risk .hd{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;padding-bottom:6px;border-top:0}
+.risk .hd span:first-child{width:96px}
+.risk .chip{width:96px;justify-content:center}
+
+/* arquitetura */
+.arch{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative}
+.arch .node{background:var(--dark-card);border-radius:var(--r);padding:20px 20px 18px;position:relative;border:1px solid var(--dark-line)}
+.arch .node.new{border-color:#9D9DFF}
+.arch .node .kick{font-size:10.5px;margin-bottom:10px}
+.arch .node p{font-size:14px;color:var(--on-dark-2);margin-top:6px;line-height:1.5}
+.arch .node .tag{position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:999px;background:#9D9DFF;color:#0B0A34}
+.proof{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.proof ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px}
+.proof li{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;line-height:1.45}
+.proof li::before{content:"";width:10px;height:10px;border-radius:50%;margin-top:6px;background:var(--good)}
+.proof .open li::before{background:var(--warn);border-radius:2px}
+details{background:var(--dark-card);border:1px solid var(--dark-line);border-radius:var(--r);padding:0 20px;margin-top:18px}
+details summary{cursor:pointer;padding:16px 0;font-weight:700;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::after{content:"+";font-size:20px;font-weight:600;color:#9D9DFF}
+details[open] summary::after{content:"–"}
+details .tablewrap{background:transparent;margin-bottom:18px}
+details table.t{min-width:640px;font-size:13.5px}
+details table.t th,details table.t td{border-color:var(--dark-line);padding:10px 12px}
+details table.t td{color:var(--on-dark-2)}details table.t th{color:var(--on-dark-3)}
+details table.t td:first-child{font-weight:700;color:#C6C6FF;white-space:nowrap}
+
+/* simulação */
+.simwrap{display:grid;grid-template-columns:400px 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+.scen{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.scen button{font:inherit;font-size:13px;font-weight:700;padding:9px 14px;border-radius:999px;border:1.5px solid var(--dark-line);background:transparent;color:var(--on-dark);cursor:pointer}
+.scen button:hover{border-color:#9D9DFF}
+.scen button[aria-pressed="true"]{background:#fff;color:var(--navy);border-color:#fff}
+.tracker{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tracker span{font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:6px;background:var(--dark-card);border:1px solid var(--dark-line);color:var(--on-dark-3);letter-spacing:.02em}
+.tracker span.on{background:#fff;color:var(--navy);border-color:#fff}
+.tracker span.was{color:var(--on-dark);border-color:#9D9DFF}
+.tracker span.term::after{content:" ■";font-size:9px;opacity:.6}
+.log{font-family:Consolas,ui-monospace,monospace;font-size:12px;background:rgba(0,0,0,.28);border:1px solid var(--dark-line);border-radius:var(--r);padding:14px;max-height:380px;overflow:auto;display:grid;gap:8px;align-content:start;color:#fff}
+.log .e{display:grid;grid-template-columns:128px 1fr;gap:10px}
+.log .k{color:#B4B4FF;font-weight:700}.log .k.n8n{color:#F5B14F}.log .k.err{color:#FF9B93}
+.log pre{margin:0;white-space:pre-wrap;color:rgba(255,255,255,.82);font-family:inherit}
+.log .empty{color:var(--on-dark-3);font-family:Montserrat,sans-serif;font-size:13px}
+.legendlog{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--on-dark-3);margin-top:8px}
+.legendlog i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+/* footer */
+footer{background:var(--navy);color:#fff;padding-block:clamp(52px,6.5vw,88px) 36px;position:relative;overflow:hidden}
+footer .band{position:absolute;left:-8%;top:0;bottom:0;width:22%;background:#2F2FF2;transform:skewX(-14deg);opacity:.9;pointer-events:none}
+footer .wrap{position:relative}
+footer h2{color:#fff}footer h2 em{color:#9D9DFF}
+footer .kick{color:#C6C6FF}footer .kick::before{background:#C6C6FF}
+footer .card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff}
+footer .card p{color:rgba(255,255,255,.8);font-size:14px;margin-top:6px}
+footer .fine{margin-top:36px;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.15);padding-top:18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer .fine img{height:18px;opacity:.9}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media (max-width:1000px){.g3,.g4,.tldr,.arch{grid-template-columns:1fr 1fr}.simwrap{grid-template-columns:1fr}.hero .wrap{grid-template-columns:1fr}.hero .band{width:30%}.hero .band2{display:none}}
+@media (max-width:640px){.g2,.g3,.g4,.tldr,.arch,.proof{grid-template-columns:1fr}.risk .r{grid-template-columns:1fr}.risk .hd{display:none}.plan .ph{grid-template-columns:1fr}.chart .row{grid-template-columns:1fr 84px}.chart .track{display:none}.nav .wrap{height:56px}.hero .band{display:none}.wa-phone{width:100%;max-width:390px;margin:0 auto}.log .e{grid-template-columns:1fr}}
+
+/* WhatsApp phone (fidelidade ao produto: sempre claro) */
+.wa-phone{width:390px;height:min(760px,82vh);background:var(--wa-bg);background-image:radial-gradient(circle at 20% 30%,rgba(0,0,0,.02) 0 2px,transparent 2px),radial-gradient(circle at 70% 60%,rgba(0,0,0,.02) 0 2px,transparent 2px);background-size:60px 60px,80px 80px;border-radius:30px;border:10px solid var(--wa-bezel);box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column;position:relative;color:var(--wa-text);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.4}
+.wa-chatbar{background:var(--wa-teal);color:#fff;padding:12px 14px;display:flex;gap:10px;align-items:center;flex:0 0 auto}
+.wa-avatar{width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;overflow:hidden}
+.wa-avatar img{width:22px;height:18px;object-fit:contain}
+.wa-chatbar .n{font-weight:600;font-size:15px;line-height:1.1}.wa-chatbar .s{font-size:11.5px;opacity:.85}
+.wa-chat{flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:8px}
+.wa-bubble{background:#fff;border-radius:10px;padding:8px 10px;max-width:88%;font-size:13.5px;box-shadow:0 1px 1px rgba(0,0,0,.08);position:relative;align-self:flex-start;color:var(--wa-text)}
+.wa-bubble.me{background:#d9fdd3;align-self:flex-end}
+.wa-bubble .time{display:block;text-align:right;font-size:10.5px;color:var(--wa-text-2);margin-top:4px}
+.wa-bubble .hsm-btn{margin-top:8px;border-top:1px solid var(--wa-border);padding-top:8px;text-align:center;color:var(--wa-blue);font-weight:600;cursor:pointer;user-select:none}
+.wa-bubble .hsm-btn:hover{text-decoration:underline}
+.wa-sysmsg{align-self:center;background:#fff3c4;color:#54636f;font-size:11.5px;padding:5px 10px;border-radius:8px;text-align:center;max-width:90%}
+.wa-inputbar{flex:0 0 auto;background:#f0f2f5;padding:8px 10px;display:flex;gap:8px;align-items:center}
+.wa-inputbar div{flex:1;background:#fff;border-radius:20px;padding:9px 14px;color:var(--wa-text-2);font-size:13.5px}
+.wa-sheet{position:absolute;inset:36px 0 0 0;background:var(--wa-sheet);border-radius:16px 16px 0 0;display:flex;flex-direction:column;box-shadow:0 -4px 24px rgba(0,0,0,.25);animation:wa-slide-up .28s ease-out;z-index:5;color:var(--wa-text)}
+@keyframes wa-slide-up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+.wa-topbar{display:flex;align-items:center;gap:12px;padding:14px 16px 10px;border-bottom:1px solid var(--wa-border);flex:0 0 auto}
+.wa-topbar button{background:none;border:0;cursor:pointer;padding:4px;color:var(--wa-text-2);font-size:18px;line-height:1}
+.wa-topbar .wa-title{flex:1;text-align:center;font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wa-body{flex:1 1 auto;overflow-y:auto;padding:16px 20px 8px;display:flex;flex-direction:column;gap:14px}
+.wa-body::-webkit-scrollbar{width:5px}.wa-body::-webkit-scrollbar-thumb{background:#d1d7db;border-radius:3px}
+.wa-heading{font-size:22px;font-weight:700;line-height:1.25}.wa-subheading{font-size:17px;font-weight:600;line-height:1.3}
+.wa-textbody{font-size:14.5px;line-height:1.45;word-break:break-word;white-space:pre-line}.wa-caption{font-size:12.5px;color:var(--wa-text-2);line-height:1.4;white-space:pre-line}
+.wa-field{display:flex;flex-direction:column;gap:5px}.wa-label{font-size:13px;font-weight:600}.wa-req{color:var(--wa-error)}
+.wa-input,.wa-textarea{width:100%;border:1.6px solid #c7ced3;border-radius:8px;padding:11px 12px;font-size:14.5px;font-family:inherit;background:#fff;color:var(--wa-text);outline:none}
+.wa-input:focus,.wa-textarea:focus{border-color:var(--wa-teal)}.wa-textarea{resize:vertical;min-height:84px}
+.wa-helper{font-size:12px;color:var(--wa-text-2)}.wa-error-msg{font-size:12px;color:var(--wa-error)}
+.wa-field.wa-invalid .wa-input,.wa-field.wa-invalid .wa-textarea{border-color:var(--wa-error)}
+.wa-options{display:flex;flex-direction:column}
+.wa-option{display:flex;align-items:center;gap:12px;padding:11px 2px;cursor:pointer;border-bottom:1px solid var(--wa-border)}
+.wa-option:last-child{border-bottom:0}.wa-option input{accent-color:var(--wa-green);width:19px;height:19px;flex:0 0 auto}
+.wa-option-text{flex:1;min-width:0}.wa-option-title{font-size:14.5px}.wa-option-desc{font-size:12.5px;color:var(--wa-text-2)}
+.wa-embedded-link{color:var(--wa-blue);font-size:14px;cursor:pointer;text-align:center;font-weight:500}.wa-embedded-link:hover{text-decoration:underline}
+.wa-footer{flex:0 0 auto;padding:10px 20px 14px;border-top:1px solid var(--wa-border);background:var(--wa-sheet)}
+.wa-cta{width:100%;border:0;border-radius:999px;background:var(--wa-green);color:#fff;font-size:15px;font-weight:600;font-family:inherit;padding:13px 0;cursor:pointer}
+.wa-cta:hover{filter:brightness(.95)}.wa-managed-by{text-align:center;font-size:11px;color:var(--wa-text-2);margin-top:7px}
+.wa-toast{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:#1f2c34;color:#fff;font-size:12.5px;border-radius:8px;padding:9px 16px;z-index:40;max-width:85%;text-align:center;animation:wa-fade .18s ease-out}
+.wa-toast.err{background:var(--wa-error)}
+@keyframes wa-fade{from{opacity:0}to{opacity:1}}
+.wa-loading{position:absolute;inset:36px 0 0 0;z-index:6;display:grid;place-items:center;background:rgba(255,255,255,.6)}
+.wa-loading span{width:28px;height:28px;border:3px solid #c7ced3;border-top-color:var(--wa-teal);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+
+<nav class="nav" aria-label="Seções">
+  <div class="wrap">
+    <a class="brand" href="#top"><img alt="" src="data:image/png;base64,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"> Finza <small>· IAF-7286</small></a>
+    <div class="links">
+      <a href="#resumo">Em 30 s</a><a href="#porque">Por que</a><a href="#custo">Custo</a><a href="#hoje">Hoje</a><a href="#menu">O que pedem</a><a href="#proposta">Proposta</a><a href="#simulacao">Simulação</a><a href="#arquitetura">Por trás</a><a href="#endpoints">Endpoints</a><a href="#plano">Plano</a><a href="#decisoes">Decisões</a><a href="#riscos">Riscos</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="band"></div><div class="band2"></div>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Cobrança · Finza, Blips e Ideal · para negócio e diretoria</span>
+      <h1 style="margin-top:16px">Trocar a conversa livre por um menu: <em>a cobrança no WhatsApp Flow</em></h1>
+      <p class="lead">Hoje o cliente devedor responde à cobrança escrevendo, e a Esperanza, um agente de IA, tenta entender. A proposta: ele toca num botão e resolve em telas, com os dados do contrato buscados na hora. Um só Flow, publicado nos 9 números oficiais de Finza, Blips e Ideal.</p>
+      <div class="cta"><a class="btn light" href="#simulacao">Ver a simulação</a><a class="btn ghost" href="#decisoes">O que precisamos decidir</a></div>
+    </div>
+    <aside class="status" aria-label="Onde estamos">
+      <span class="kick">Onde estamos · 18/09/2026</span>
+      <dl>
+        <dt>Chamado</dt><dd>#7286 em andamento · 13 SP · entrega 25/09</dd>
+        <dt>Desenho</dt><dd>Flow v1 com 6 telas, validado <span class="chip done">feito</span></dd>
+        <dt>Builder Meta</dt><dd>Reprovou 1 vez, corrigido, validador cobre <span class="chip done">feito</span></dd>
+        <dt>Draft</dt><dd>Na WABA Finza, em teste interno <span class="chip now">em curso</span></dd>
+        <dt>Até 24/09</dt><dd>Telas novas, Blips e Ideal, costura <span class="chip wait">próximo</span></dd>
+        <dt>Decisões</dt><dd>Tomadas em 18/09; validação de negócio com o time da Jéssica</dd>
+      </dl>
+    </aside>
+  </div>
+</header>
+
+<section id="resumo">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">Em 30 segundos</span><h2>Quatro coisas para <em>levar da sala</em></h2></div>
+    <div class="tldr">
+      <div class="t"><b>O cliente já diz o que quer, e são poucas coisas.</b><span>Em 8.434 conversas das três marcas, 47% são "quero pagar" ou "já paguei". Um menu de 6 opções cobre 83% do que é declarado.</span></div>
+      <div class="t"><b>A Esperanza custa R$ 22 mil por mês, e 80% disso é Blips.</b><span>O Flow entra nos 9 números oficiais das três marcas desde o início, com o mesmo JSON. É na Blips que a economia grande aparece.</span></div>
+      <div class="t"><b>Não é plataforma nova. É costurar o que já existe.</b><span>Torre dispara, Hyperflow entrega e cifra, backend da cobrança devolve os dados. A parte nova é pequena e já tem contrato escrito.</span></div>
+      <div class="t"><b>As decisões de negócio estão tomadas. Falta validar com o negócio.</b><span>Escopo evolui até 24/09, validação interna primeiro e depois com o time da Jéssica. Em outubro a Esperanza desliga e a Valentina assume o que sobrar.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="porque" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">01 / Contexto</span><h2>Por que <em>agora</em></h2><p class="lead">Uma decisão de custo e de experiência ao mesmo tempo. A data da Meta é o gatilho, não a justificativa.</p></div>
+    <div class="grid g3">
+      <div class="card"><span class="kick">Custo</span><div class="big num">R$ 22 mil<small> /mês</small></div><h3>é o que a Esperanza custa hoje</h3><p class="muted">Mensagens mais modelo de IA, nas duas marcas, média de jul e ago/2026.</p></div>
+      <div class="card"><span class="kick">Experiência</span><div class="big num">47%</div><h3>querem pagar ou já pagaram</h3><p class="muted">Pedidos estruturados, que um menu resolve melhor que um diálogo. E 36% das conversas terminam pedindo um humano.</p></div>
+      <div class="card"><span class="kick">Prazo</span><div class="big num">01/10</div><h3>a Meta passa a cobrar cada resposta</h3><p class="muted">US$ 0,0068 por mensagem na janela de 24 h. Na Esperanza dá pouco (cerca de R$ 600/mês). É o calendário, não o argumento.</p></div>
+    </div>
+    <div class="callout" style="margin-top:24px">O caminho já existe: a Torre dispara pelo Hyperflow, e o Hyperflow já opera WhatsApp Flows. Não é plataforma nova. É trocar o que acontece depois do toque.</div>
+  </div>
+</section>
+
+<section id="custo">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">02 / Custo</span><h2>O que a Esperanza <em>custa hoje</em>, por marca</h2><p class="lead">Um agente, dois tenants. Mensagens medidas por empresa. O modelo de IA é um projeto só, rateado por conversas (72% Blips, 28% Finza, medido).</p></div>
+    <div class="tablewrap">
+      <table class="t">
+        <thead><tr><th>jul + ago/2026 · meses fechados</th><th>Blips</th><th>Finza</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>Mensagens · Meta + Hyperflow, depto IA-Financeiro</td><td class="num">R$ 27,1 mil</td><td class="num">R$ 5,5 mil</td><td class="num">R$ 32,6 mil</td></tr>
+          <tr><td>Modelo de IA · OpenAI, rateado</td><td class="num">R$ 9,0 mil</td><td class="num">R$ 3,5 mil</td><td class="num">R$ 12,5 mil</td></tr>
+          <tr class="tot"><td>Média mensal · baseline declarado</td><td class="num">R$ 18,0 mil</td><td class="num">R$ 4,5 mil</td><td class="num">R$ 22,5 mil</td></tr>
+          <tr class="alt2"><td>Média mensal · se a queda de IA de 25/08 for permanente</td><td class="num">R$ 14,6 mil</td><td class="num">R$ 3,2 mil</td><td class="num">R$ 17,8 mil</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid g3" style="margin-top:20px">
+      <div class="card"><span class="kick">Volume · chats/mês</span><p style="margin-top:10px;font-size:15px"><b>Blips</b> caindo: 23,5 → 20,2 → 15,4 mil (jun a ago).<br><b>Finza</b> subindo: 720 → 1,3 → 2,6 mil. Setembro no ritmo de 4 mil.</p></div>
+      <div class="card"><span class="kick">Onde a economia aparece · estimativa</span><p style="margin-top:10px;font-size:15px"><b>IA:</b> R$ 6,3 mil/mês (ou R$ 1,5 mil no baseline baixo) deixam de ser gastos na Esperanza; parte migra para a Valentina. <b>Humano:</b> quase metade das conversas, cerca de 1.300 por mês nas três marcas, passa a terminar na tela. <b>Mensagens:</b> quase não caem, 95% é o disparo da régua.</p></div>
+      <div class="card" style="border-left:4px solid var(--warn)"><span class="kick" style="color:var(--warn)">Dois baselines</span><p style="margin-top:10px;font-size:15px">O custo de IA <b>caiu cerca de 80% desde 25/08</b> sem queda de volume, sem causa registrada. Se foi troca de modelo, a linha em itálico é a honesta. Apresentamos as duas.</p></div>
+    </div>
+    <p class="fine" style="margin-top:14px">Fontes: <code>s1_custos_ia.v_custos_por_agente</code> · <code>VIEWS_DASHES.custo_hyperflow_rateio_depto</code> · câmbio médio 5,8. Setembro da Blips ainda sem fatura carregada.</p>
+  </div>
+</section>
+
+<section id="hoje" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">03 / Hoje</span><h2>De onde estamos <em>saindo</em></h2><p class="lead">A régua manda um template. Quem responde cai na Esperanza, um agente de IA que lê texto livre, o mesmo para as três marcas. Funil medido nas três marcas, de 08/06 a 15/09/2026 (Finza a partir de 10/07).</p></div>
+    <div class="grid g2">
+      <div class="card">
+        <span class="kick" style="color:var(--bad)">Jornada de hoje</span>
+        <ol class="steps">
+          <li><span class="dot">1</span><span><b>Torre</b> dispara pelo Hyperflow um template de cobrança (7 modelos, por faixa de atraso).</span></li>
+          <li><span class="dot">2</span><span>O cliente <b>responde escrevendo</b>: "quero o boleto", "já paguei", "não é meu", "a máquina quebrou".</span></li>
+          <li><span class="dot bad">3</span><span>A <b>Esperanza</b> interpreta, consulta as ferramentas e responde. Cada troca vira mensagem paga a partir de 01/10.</span></li>
+          <li><span class="dot bad">4</span><span><b>36% escalam</b> para um humano (43% na Finza). Na Finza, 13% das conversas registram "erro de fluxo".</span></li>
+        </ol>
+      </div>
+      <div class="card">
+        <span class="kick">Funil medido · três marcas · 115.603 disparos</span>
+        <div class="chart" role="img" aria-label="Funil: 115.603 disparos, 81.215 sessões abertas, 8.434 conversas (10,4% das sessões), 3.053 escaladas (36,2% das conversas)">
+          <div class="row"><span class="lbl">Disparos</span><div class="track"><div class="bar" style="width:100%"></div></div><span class="val num">115.603</span></div>
+          <div class="row"><span class="lbl">Sessões abertas</span><div class="track"><div class="bar" style="width:70.2%"></div></div><span class="val num">81.215<small>70% dos disparos</small></span></div>
+          <div class="row"><span class="lbl">Conversas</span><div class="track"><div class="bar" style="width:7.3%"></div></div><span class="val num">8.434<small>10,4% das sessões</small></span></div>
+          <div class="row hot"><span class="lbl">Escaladas<small>para humano</small></span><div class="track"><div class="bar" style="width:2.6%"></div></div><span class="val num">3.053<small>36,2% das conversas</small></span></div>
+        </div>
+        <p class="muted small" style="margin-top:16px">Nove em cada dez clientes que abrem a mensagem não respondem. Dos que respondem, um em cada três acaba com um atendente. São cerca de <b>2.780 conversas por mês</b> nas três marcas; Blips e Ideal respondem por 84% delas. Na Finza, 1 em 5 sessões vira conversa e 43% escalam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">04 / Demanda</span><h2>O que o cliente <em>pede</em> quando responde</h2><p class="lead">8.434 conversas das três marcas, classificadas em categorias que não se sobrepõem. É o menu do Flow, na ordem em que o cliente pede.</p></div>
+    <div class="card">
+      <div class="chart" style="margin-top:4px" role="img" aria-label="Distribuição das conversas por pedido: quero pagar 26,9%, já paguei 20,5%, renegociar ou contestar 13,7%, falar com atendente 11,2%, problema com a máquina 9,1%, essa cobrança não é minha 1,4%, risco e compliance 0,8%, não declara assunto 16,3%">
+        <div class="row"><span class="lbl">Quero pagar<small>2ª via de boleto ou PIX</small></span><div class="track"><div class="bar" style="width:100%"></div></div><span class="val num">26,9%<small>2.271 conversas</small></span></div>
+        <div class="row"><span class="lbl">Já paguei<small>informar pagamento feito</small></span><div class="track"><div class="bar" style="width:76.2%"></div></div><span class="val num">20,5%<small>1.731</small></span></div>
+        <div class="row"><span class="lbl">Renegociar ou contestar<small>valor errado, cobrança indevida</small></span><div class="track"><div class="bar" style="width:50.9%"></div></div><span class="val num">13,7%<small>1.159</small></span></div>
+        <div class="row"><span class="lbl">Falar com um atendente<small>pede humano de cara</small></span><div class="track"><div class="bar" style="width:41.6%"></div></div><span class="val num">11,2%<small>946</small></span></div>
+        <div class="row"><span class="lbl">Problema com a máquina<small>suporte técnico</small></span><div class="track"><div class="bar" style="width:33.8%"></div></div><span class="val num">9,1%<small>769 · 85% escalam</small></span></div>
+        <div class="row"><span class="lbl">Essa cobrança não é minha<small>contato incorreto</small></span><div class="track"><div class="bar" style="width:5.2%"></div></div><span class="val num">1,4%<small>120</small></span></div>
+        <div class="sep"></div>
+        <div class="row dim"><span class="lbl">Risco / compliance<small>nunca vira botão</small></span><div class="track"><div class="bar" style="width:3%"></div></div><span class="val num">0,8%<small>fora do menu</small></span></div>
+        <div class="row dim"><span class="lbl">Não declara assunto<small>responde e não diz o que quer</small></span><div class="track"><div class="bar" style="width:60.6%"></div></div><span class="val num">16,3%<small>denominador da conversão</small></span></div>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:18px">
+      <p class="muted small">"Quero pagar" é piso (faixa de 26,9% a 45,3%): a classificação foi feita para <em>não</em> favorecer a tese. A ordem do menu é a mesma na Finza e na Blips. Com a amostra maior, "Problema com a máquina" quase dobrou e "Essa cobrança não é minha" caiu para 1,4%: entra na v1 por decisão, no fim do menu.</p>
+      <p class="muted small">Os 16,3% que não declaram assunto não ganham tela e não devem ganhar: respondem e não abrem o menu. São o denominador honesto de qualquer taxa de conversão do Flow. Amostra: 8.434 conversas, 08/06 a 15/09/2026, três marcas.</p>
+    </div>
+  </div>
+</section>
+
+<section id="proposta" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">05 / Proposta</span><h2>Para onde estamos <em>indo</em></h2><p class="lead">O botão abre um Flow: oito telas, dados buscados na hora, humano a um toque de qualquer tela. Funciona no disparo da régua e no receptivo: quem escreve para o número da marca recebe o mesmo botão. Um só JSON publicado nos 9 números das três marcas. Saudação, textos e canal vêm do backend, por marca.</p></div>
+    <div class="grid g2">
+      <div class="card">
+        <span class="kick">Jornada proposta</span>
+        <ol class="steps">
+          <li><span class="dot">1</span><span><b>Ativo:</b> a Torre dispara o mesmo template, agora com o botão <b>"Ver débitos e pagar"</b>. <b>Receptivo:</b> o cliente escreve e o número da marca responde com o mesmo botão, sem IA.</span></li>
+          <li><span class="dot good">2</span><span>Ao tocar, o Flow abre já com <b>nome, contrato, valor e parcelas</b>, lidos na hora da base da Torre. Sem contrato localizado, o menu abre mesmo assim.</span></li>
+          <li><span class="dot good">3</span><span>O cliente <b>escolhe no menu</b>. "Quero pagar" devolve o link na própria tela, com a chave PIX copiável. Com mais de uma parcela em aberto, ele escolhe quais pagar (até 2 por vez). Título já pago e "essa cobrança não é minha" ganham telas próprias.</span></li>
+          <li><span class="dot good">4</span><span>Ao concluir, um <b>desfecho estruturado</b> chega ao n8n pelo chat. Ninguém interpreta texto. "Já paguei" passa a gravar data e forma, que hoje ninguém guarda.</span></li>
+        </ol>
+      </div>
+      <div class="card">
+        <span class="kick">O que isso cobre das conversas de hoje</span>
+        <div class="stack" role="img" aria-label="Cobertura das 8.434 conversas: absorve inteiro 36,0%, absorve com conflito 11,1%, parcial 21,5%, não absorve 19,2%, sem classificação 11,3%, fora do mapa 0,8%">
+          <div style="width:36%;background:#2F2FF2">36,0%</div>
+          <div style="width:11.1%;background:#7A7AF7">11,1%</div>
+          <div style="width:21.5%;background:#B9B9F9;color:#0B0A34">21,5%</div>
+          <div style="width:19.2%;background:#8A8DA8">19,2%</div>
+          <div class="gh" style="width:11.3%;background:#D3D6E3">11,3%</div>
+          <div class="gh" style="width:.8%;background:#F5B14F" title="0,8% fora do mapa"></div>
+        </div>
+        <div class="legend">
+          <span style="--c:#2F2FF2"><span><b>36,0% · 3.037</b>o Flow absorve inteiro</span></span>
+          <span style="--c:#7A7AF7"><span><b>11,1% · 936</b>absorve, com conflito</span></span>
+          <span style="--c:#B9B9F9"><span><b>21,5% · 1.816</b>só em parte</span></span>
+          <span style="--c:#8A8DA8"><span><b>19,2% · 1.623</b>não absorve</span></span>
+          <span style="--c:#D3D6E3"><span><b>11,3% · 954</b>sem classificação</span></span>
+          <span style="--c:#F5B14F"><span><b>0,8% · 68</b>tag fora do mapa</span></span>
+        </div>
+        <p class="muted small" style="margin-top:14px">Quase <b>metade</b> das conversas hoje resolvidas por IA ou humano passa a ser resolvida por tela. Outras 2 em 10 ficam mais curtas. Soma fecha em 8.434. Cobertura efetiva hoje: <b>0%</b>, até a costura existir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="simulacao" class="dark">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">06 / Simulação</span><h2>Veja <em>funcionando</em></h2><p class="lead">É o Flow JSON (v7.3, 8 telas, o mesmo arquivo que vai ao Builder da Meta), com um backend simulado. Escolha como a conversa começa e quem é o cliente, toque no botão e siga o menu.</p></div>
+    <div class="scen" role="group" aria-label="Como a conversa começa" id="modo" style="margin-bottom:10px">
+      <span class="kick" style="align-self:center;margin-right:6px">Início</span>
+      <button type="button" data-m="ativo" aria-pressed="true">Disparo da régua (ativo)</button>
+      <button type="button" data-m="receptivo" aria-pressed="false">Cliente escreve primeiro (receptivo)</button>
+    </div>
+    <div class="scen" role="group" aria-label="Cenário do cliente" id="scen">
+      <span class="kick" style="align-self:center;margin-right:6px">Cliente</span>
+      <button type="button" data-s="ok" aria-pressed="true">Finza · João, 3 parcelas em aberto</button>
+      <button type="button" data-s="blips" aria-pressed="false">Blips · Marcos, 2 parcelas em aberto</button>
+      <button type="button" data-s="ideal" aria-pressed="false">Ideal · Carla, 1 parcela, página fora do ar</button>
+      <button type="button" data-s="quitado" aria-pressed="false">Finza · Ana, título já consta pago</button>
+      <button type="button" data-s="semcontrato" aria-pressed="false">Número sem contrato localizado</button>
+    </div>
+    <div class="simwrap">
+      <div id="phone"></div>
+      <div style="display:grid;gap:16px;align-content:start">
+        <div class="card">
+          <span class="kick">Como o caminho é decidido</span>
+          <p style="margin-top:10px;font-size:15px;line-height:1.55">Só três telas falam com o backend: o <b>menu</b>, a <b>escolha de parcelas</b> e a de <b>contrato não localizado</b>. Cada "Continuar" manda a escolha, e o backend devolve a próxima tela já com os dados. As outras cinco são finais: "Concluir" devolve o desfecho pelo chat, e o n8n age. No receptivo nada muda no Flow: muda só quem manda a mensagem com o botão.</p>
+          <div class="tracker" id="tracker" aria-label="Tela atual"></div>
+        </div>
+        <div>
+          <span class="kick">Bastidores · o que sai da tela</span>
+          <div class="log" id="log" style="margin-top:10px"></div>
+          <div class="legendlog"><span><i style="background:#B4B4FF"></i>tela ↔ backend</span><span><i style="background:#F5B14F"></i>desfecho para o n8n</span><span><i style="background:#FF9B93"></i>bloqueio ou erro</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="arquitetura" class="dark" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">07 / Arquitetura</span><h2>Como funciona <em>por trás</em></h2><p class="lead">Nada novo na Torre: o Flow costura APIs que já existem. As peças novas são o fluxo do endpoint no Hyperflow e o desfecho no n8n.</p></div>
+    <div class="arch">
+      <div class="node"><span class="kick">1 · Torre de cobrança</span><h3>Dispara a régua</h3><p>Mesmas réguas e ações. O template ganha o botão de Flow. Status da ação: Enviado → Interagiu → Respondido.</p></div>
+      <div class="node new"><span class="tag">novo</span><span class="kick">2 · Hyperflow</span><h3>Entrega, cifra e roteia</h3><p>Envia o template com o botão de Flow pelo número da marca, direto pela plataforma. Cuida da criptografia exigida pela Meta e chama o backend em claro.</p></div>
+      <div class="node new"><span class="tag">novo</span><span class="kick">3 · Backend da cobrança</span><h3>Decide a tela</h3><p>Uma chamada. Resolve o cliente e a marca pelo token, lê contrato e títulos na Torre da organização certa, usa o link de pagamento já gerado e devolve a próxima tela.</p></div>
+      <div class="node new"><span class="tag">novo</span><span class="kick">4 · n8n</span><h3>Recebe o desfecho</h3><p>Triagem vira transferência com assunto. "Já paguei" aguarda o comprovante. A ação na Torre é atualizada.</p></div>
+    </div>
+    <div class="proof">
+      <div class="card"><span class="kick">Já provado</span>
+        <ul>
+          <li>Flow JSON com as telas validado; o validador do projeto reproduz os erros que o Builder da Meta apontou.</li>
+          <li>Draft publicado na WABA da Finza e em teste interno. A chave PIX é copiável na tela, e também pode ir num campo de texto.</li>
+          <li>O template com o botão de Flow sai direto pelo Hyperflow, sem passar pelo Gerenciador da Meta.</li>
+          <li>Contrato do backend escrito com o formato real do gerador de pagamento: link primeiro, PIX como exceção.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="kick" style="color:#F5B14F">Até 24/09</span>
+        <ul class="open">
+          <li>Telas adicionais: "Essa cobrança não é minha" e os demais tópicos que entrarem na v1.</li>
+          <li>Publicar o mesmo Flow nas WABAs da Blips e da Ideal, com o título de cada marca.</li>
+          <li>Costura: endpoint no Hyperflow, backend da cobrança e fluxo n8n do desfecho.</li>
+          <li>Validação interna, e depois a apresentação ao time da Jéssica para a validação de negócio.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout navy" style="margin-top:18px">Orçamento de tempo: abrir a tela em até 3 s, gerar pagamento em até 5 s. A Meta desliga em 10 s. Backend fora do ar devolve a tela de triagem, e a pessoa fala com gente.</div>
+  </div>
+</section>
+
+<section id="endpoints" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">08 / Endpoints da Torre</span><h2>O que o Flow <em>consulta e grava</em></h2><p class="lead">Nada de API nova na Torre. Cada tela usa uma rota que já existe, e as escritas registram o que hoje se perde: quem abriu, o que escolheu, quando pagou.</p></div>
+    <div class="tablewrap">
+      <table class="t" style="min-width:860px">
+        <thead><tr><th>Endpoint</th><th>O que faz</th><th>Onde o Flow usa</th><th>Para qual fim</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET /api/ai/agent-context</code></td><td>Devolve contato, contratos, títulos e histórico, por contato ou por busca (documento, telefone)</td><td>Abertura do menu · Seu pagamento · Já está pago</td><td>Saudação com nome, resumo do contrato, escolher a parcela mais antiga em aberto e dizer quantas restam</td></tr>
+          <tr><td><code>identify_contact_by_phone</code><br><code>identify_contact_by_document</code><br><span class="fine">MCP da Torre</span></td><td>Localiza o cliente entre as três organizações, pelo telefone ou pelo CPF/CNPJ</td><td>Abertura (telefone vem do disparo) · Não localizei (documento digitado)</td><td>Achar o cliente e a marca certa; dar a segunda chance pelo documento</td></tr>
+          <tr><td><code>generate_payment_link</code> <span class="fine">MCP</span><br><span class="fine">hoje: <code>gerar_pagamento</code> no n8n → módulo financeiro</span></td><td>Gera o link de checkout da parcela; devolve a chave PIX quando a página falha; avisa se o título já foi pago</td><td>Seu pagamento · Já está pago</td><td>Entregar o pagamento sem humano; nunca dizer "não localizei" para um adimplente</td></tr>
+          <tr><td><code>GET /api/status/title/:id</code><br><code>GET /api/status/contract/:id</code></td><td>Status, vencimento e dias de atraso do título e do contrato</td><td>Seu pagamento · Já está pago</td><td>Confirmar quitação antes de afirmar; tentar a próxima parcela se o gerador desincronizar</td></tr>
+          <tr><td><code>PATCH /api/actions/:id</code></td><td>Atualiza o status da ação de cobrança: Enviado → Interagiu → Respondido</td><td>Ao abrir o Flow · Ao concluir</td><td>A Torre mede o funil do Flow no mesmo painel das réguas</td></tr>
+          <tr><td><code>ai-conversation-webhook</code><br><span class="fine">eventos protocol_status, conversation_ended</span></td><td>Registra o ciclo de vida do protocolo de atendimento</td><td>Em todo desfecho, pelo n8n</td><td>Fechar sem humano ou transbordar para a Valentina ou para o time, com rastro</td></tr>
+          <tr><td><code>POST /api/conversation-tags</code></td><td>Grava a tag da conversa por protocolo</td><td>Em todo desfecho</td><td>Classificar o atendimento (pagar, já paguei, não é minha…) para os painéis e para a comparação com a Esperanza</td></tr>
+          <tr><td><code>POST /api/mcp-tools/log_interaction</code></td><td>Registra a interação com dados estruturados</td><td>Pagamento feito · Essa cobrança não é minha</td><td>Guardar data e forma do pagamento declarado e o "não é meu", que hoje não são salvos</td></tr>
+          <tr><td><code>send-message</code> <span class="fine">função da Torre</span></td><td>Dispara o template pelo Hyperflow, respeitando blocklist e horário</td><td>Disparo da régua</td><td>O mesmo disparo de hoje, agora com o botão que abre o Flow</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fine" style="margin-top:14px">Rotas conferidas no repositório da Torre de cobrança em 18/09. Parâmetros e respostas exatas fecham na construção da costura, semana de 20/09.</p>
+  </div>
+</section>
+
+<section id="plano">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">09 / Plano</span><h2>Plano e <em>onde estamos</em></h2><p class="lead">Entrega interna em 24/09, buffer 25/09. O mesmo JSON entra nos 9 números oficiais das três marcas. Validação interna primeiro; depois o time da Jéssica valida o negócio. Em outubro a Esperanza desliga e a Valentina assume o que o Flow não resolve.</p></div>
+    <div class="plan">
+      <div class="ph"><span class="d">15–16/09</span><span>Mapa do que a Esperanza atende, categorias, Flow JSON v1 (6 telas), contrato do backend, custo por marca, desenho do endpoint no Hyperflow<small>Revisão adversarial em 2 rodadas. Builder da Meta reprovou o roteamento uma vez, corrigido para rotas só para frente.</small></span><span class="chip done">feito</span></div>
+      <div class="ph now"><span class="d">17–19/09</span><span>Draft na WABA Finza, em teste interno<small>PIX copiável confirmado na tela. Template com botão de Flow sai direto pelo Hyperflow.</small></span><span class="chip now">em curso</span></div>
+      <div class="ph"><span class="d">20–24/09</span><span>Telas novas, WABAs Blips e Ideal, costura Hyperflow + backend + n8n<small>"Essa cobrança não é minha" e demais tópicos entram na v1. Entrega interna em 24/09.</small></span><span class="chip wait">próximo</span></div>
+      <div class="ph"><span class="d">25/09</span><span>Buffer e validação de negócio com o time da Jéssica</span><span class="chip wait">aguarda</span></div>
+      <div class="ph"><span class="d">até 01/10</span><span>Piloto nos 9 números oficiais de Finza, Blips e Ideal</span><span class="chip wait">aguarda</span></div>
+      <div class="ph"><span class="d">outubro</span><span>Esperanza desligada. A Valentina assume as tarefas que sobram: SAC, comprovante, contestação</span><span class="chip wait">aguarda</span></div>
+    </div>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card tint"><span class="kick">Sucesso · custo</span><p style="margin-top:8px;font-weight:700;font-size:16px">Custo de mensagem e de IA por conversa abaixo do da Esperanza</p></div>
+      <div class="card tint"><span class="kick">Sucesso · finalização</span><p style="margin-top:8px;font-weight:700;font-size:16px">Mais conversas terminam na tela, escalonamento abaixo dos 36% de hoje</p></div>
+      <div class="card tint"><span class="kick">Sucesso · inadimplência</span><p style="margin-top:8px;font-weight:700;font-size:16px">Redução da inadimplência com o novo formato de cobrança</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="decisoes" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">10 / Decisões</span><h2>O que já está <em>decidido</em></h2><p class="lead">Respostas dadas em 18/09. Vale como registro para a validação interna e para a apresentação ao time da Jéssica.</p></div>
+    <div class="grid g2">
+      <div class="q" style="border-left-color:var(--good)"><span class="who">Canais</span><b>1 · Os 9 números oficiais entram</b><span class="prop">Cada empresa tem 3 números: o principal, Financeiro e Financeiro III. Finza, Blips e Ideal, 9 no total. O Flow se publica em cada um.</span></div>
+      <div class="q" style="border-left-color:var(--good)"><span class="who">Escopo</span><b>2 · A v1 começa em "pagar + triagem" e cresce até 24/09</b><span class="prop">Os demais tópicos podem entrar conforme ficarem prontos. A v1 é o ponto de partida, não o teto.</span></div>
+      <div class="q" style="border-left-color:var(--good)"><span class="who">Validação</span><b>3 · Interna primeiro, depois o negócio</b><span class="prop">O time valida por dentro. Em seguida a proposta é apresentada ao time da Jéssica, responsável pela validação de negócio.</span></div>
+      <div class="q" style="border-left-color:var(--good)"><span class="who">Esperanza</span><b>4 · Desliga em outubro; a Valentina assume</b><span class="prop">Sem fase de fallback longa. As tarefas que o Flow não resolve passam para a Valentina.</span></div>
+      <div class="q" style="border-left-color:var(--good)"><span class="who">Tela extra</span><b>5 · "Essa cobrança não é minha" entra na v1</b><span class="prop">O Flow registra o caso. Questões de SAC vão para a Valentina, não para um humano.</span></div>
+      <div class="q" style="border-left-color:var(--good)"><span class="who">Métrica</span><b>6 · Custo, finalização sem humano e inadimplência</b><span class="prop">Principalmente custo, por causa do novo formato de cobrança. Os três aparecem nos critérios de sucesso do plano.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="riscos">
+  <div class="wrap">
+    <div class="sec-head"><span class="kick">11 / Riscos</span><h2>Riscos <em>declarados</em></h2><p class="lead">O que ainda pode dar errado do lado do negócio, o que fazemos se falhar, e o que já fechou.</p></div>
+    <div class="risk">
+      <div class="r hd"><span>Estado</span><span>Risco</span><span>Resposta</span></div>
+      <div class="r"><span class="chip risk">aberto</span><span><b>Baseline de custo em movimento.</b> O gasto de IA caiu 80% desde 25/08 sem explicação registrada.</span><span class="m">Identificar a causa antes de prometer economia. A seção de custo mostra os dois baselines.</span></div>
+      <div class="r"><span class="chip risk">aberto</span><span><b>Três marcas, um backend.</b> Textos, canal e link de pagamento dependem da organização resolvida no disparo. Um erro de marca mostra o nome errado ao cliente.</span><span class="m">A organização viaja com o token desde o disparo. Os desfechos são testados em cada um dos 9 números antes do piloto.</span></div>
+      <div class="r"><span class="chip risk">aberto</span><span><b>Transição Esperanza → Valentina.</b> Cerca de 2 em 10 conversas o Flow não absorve (SAC, comprovante, contestação), e "problema com a máquina" são 769 conversas com 85% de escalonamento. Em outubro elas precisam ter dono.</span><span class="m">Mapear tarefa a tarefa o que a Valentina assume antes de desligar a Esperanza.</span></div>
+      <div class="r"><span class="chip wait">mitigado</span><span><b>Gerador de pagamento dessincronizado.</b> Às vezes diz "já pago" para parcela em aberto.</span><span class="m">Confirmar o status do título na Torre e tentar a próxima parcela (até 3) antes de afirmar quitação. Nunca negar o contrato.</span></div>
+      <div class="r"><span class="chip done">fechado</span><span><b>Copiar o PIX na tela.</b> Não havia fonte que confirmasse seleção de texto num bloco do Flow.</span><span class="m">Confirmado no Draft: copia. E a chave também pode ir num campo de texto.</span></div>
+      <div class="r"><span class="chip done">fechado</span><span><b>Template com botão de Flow.</b> Temia-se que exigisse o Gerenciador da Meta.</span><span class="m">Sai direto pelo Hyperflow.</span></div>
+      <div class="r"><span class="chip done">fechado</span><span><b>Roteamento reprovado pelo Builder da Meta.</b> A primeira colagem falhou por rota reversa.</span><span class="m">Rotas só para frente, entrada sempre no menu. O validador local reproduz os erros e sai limpo.</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="band"></div>
+  <div class="wrap">
+    <span class="kick">Próximos passos</span>
+    <h2 style="margin-top:12px">Até 24/09, <em>três entregas</em></h2>
+    <div class="grid g3" style="margin-top:30px">
+      <div class="card"><span class="dot">1</span><h3 style="margin-top:12px">Telas novas e 3 marcas</h3><p>"Essa cobrança não é minha" e demais tópicos; Flow publicado nas WABAs de Finza, Blips e Ideal.</p></div>
+      <div class="card"><span class="dot">2</span><h3 style="margin-top:12px">Costura de ponta a ponta</h3><p>Hyperflow, backend da cobrança e desfecho no n8n, usando as rotas da Torre que já existem.</p></div>
+      <div class="card"><span class="dot">3</span><h3 style="margin-top:12px">Validação</h3><p>Interna primeiro; depois a apresentação ao time da Jéssica para a validação de negócio.</p></div>
+    </div>
+    <div class="fine"><span>IAF-7286 · Nada foi publicado em produção. Amostra ampliada em 18/09/2026: 8.434 conversas de Finza, Blips e Ideal, 08/06 → 15/09/2026 12:00 BRT. Custo medido em jul e ago. Quem reexecutar as consultas obtém os mesmos valores.</span><span>Atualizado em 18/09/2026</span></div>
+  </div>
+</footer>
+
+<script>
+/* ───────── Flow JSON real (iaf7286-flow-cobranca-finza-v1.json) — routing_model só para frente, RESUMO é a entrada ───────── */
+const FLOW={"version":"7.3","data_api_version":"3.0","routing_model":{"RESUMO":["SEM_CONTRATO","ESCOLHER_TITULOS","PAGAMENTO","TITULO_QUITADO","JA_PAGUEI","NAO_E_MINHA","TRIAGEM"],"SEM_CONTRATO":["ESCOLHER_TITULOS","PAGAMENTO","TITULO_QUITADO","TRIAGEM"],"ESCOLHER_TITULOS":["PAGAMENTO","TITULO_QUITADO","TRIAGEM"],"PAGAMENTO":[],"TITULO_QUITADO":[],"JA_PAGUEI":[],"NAO_E_MINHA":[],"TRIAGEM":[]},"screens":[{"id":"RESUMO","title":"Atendimento Finza","data":{"saudacao":{"type":"string","__example__":"Olá, João 👋"},"resumo_txt":{"type":"string","__example__":"Localizei seu contrato com a Finza. Escolha abaixo como podemos ajudar."},"contrato_txt":{"type":"string","__example__":"Contrato 36529132 · R$ 4.078,62 em aberto em 5 parcelas · a mais antiga venceu em 04/08/2026"},"titulo_id":{"type":"string","__example__":"36529132-07"}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"${data.saudacao}"},{"type":"TextBody","text":"${data.resumo_txt}"},{"type":"TextCaption","text":"${data.contrato_txt}"},{"type":"RadioButtonsGroup","name":"assunto","label":"Sobre o que você quer falar?","required":true,"data-source":[{"id":"pagamento_2via","title":"Quero pagar","description":"2ª via de boleto ou PIX"},{"id":"comprovante","title":"Já paguei","description":"Quero informar um pagamento já feito"},{"id":"negociacao_contestacao","title":"Renegociar ou contestar","description":"Renegociação, valor errado, cobrança indevida"},{"id":"atendimento_humano","title":"Falar com um atendente","description":"Atendimento humano"},{"id":"suporte_equipamento","title":"Problema com a máquina","description":"Defeito, máquina parada, suporte técnico"},{"id":"contato_incorreto","title":"Essa cobrança não é minha","description":"Não reconheço esse contrato"}]},{"type":"Footer","label":"Continuar","on-click-action":{"name":"data_exchange","payload":{"etapa":"menu","assunto":"${form.assunto}","titulo_id":"${data.titulo_id}"}}}]}},{"id":"SEM_CONTRATO","title":"Não localizei","data":{"erro_txt":{"type":"string","__example__":"Não encontrei nenhum contrato ativo ligado a este número de WhatsApp. Pode ser que ele esteja cadastrado em outro CPF ou CNPJ."},"documento_exemplo":{"type":"string","__example__":"Só os números, sem ponto nem traço"}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Não localizei seu contrato"},{"type":"TextBody","text":"${data.erro_txt}"},{"type":"RadioButtonsGroup","name":"saida","label":"Como prefere seguir?","required":true,"data-source":[{"id":"tentar_documento","title":"Tentar pelo CPF/CNPJ","description":"Eu informo o documento do contrato"},{"id":"atendente","title":"Falar com um atendente","description":"Um atendente localiza o contrato para você"}]},{"type":"TextInput","name":"documento","label":"CPF ou CNPJ do contrato","input-type":"number","required":false,"max-chars":18,"helper-text":"${data.documento_exemplo}"},{"type":"Footer","label":"Continuar","on-click-action":{"name":"data_exchange","payload":{"etapa":"sem_contrato","saida":"${form.saida}","documento":"${form.documento}"}}}]}},{"id":"ESCOLHER_TITULOS","title":"Parcelas em aberto","data":{"intro_txt":{"type":"string","__example__":"Você tem 3 parcelas em aberto, R$ 2.447,16 no total. Escolha até 2 para pagar agora."},"opcoes":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"title":{"type":"string"},"description":{"type":"string"}}},"__example__":[{"id":"36529132-07","title":"Parcela 07 · R$ 815,72","description":"Venceu em 04/08/2026 · a mais antiga"},{"id":"36529132-08","title":"Parcela 08 · R$ 815,72","description":"Venceu em 04/09/2026"},{"id":"36529132-09","title":"Parcela 09 · R$ 815,72","description":"Vence em 04/10/2026"}]},"pre":{"type":"array","items":{"type":"string"},"__example__":["36529132-07"]}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Quais parcelas você quer pagar?"},{"type":"TextBody","text":"${data.intro_txt}"},{"type":"CheckboxGroup","name":"titulos","label":"Parcelas em aberto","required":true,"max-selected-items":2,"data-source":"${data.opcoes}","init-value":"${data.pre}"},{"type":"TextCaption","text":"Cada parcela gera um link de pagamento próprio. Você pode voltar e escolher outras depois."},{"type":"Footer","label":"Continuar","on-click-action":{"name":"data_exchange","payload":{"etapa":"titulos","titulos":"${form.titulos}"}}}]}},{"id":"PAGAMENTO","title":"Seu pagamento","terminal":true,"data":{"resumo_txt":{"type":"string","__example__":"2 parcelas · R$ 1.631,44"},"parcelas_txt":{"type":"string","__example__":"Depois destas, ainda restam 1 parcela em aberto neste contrato."},"titulo_ids":{"type":"string","__example__":"36529132-07,36529132-08"},"titulo_txt_1":{"type":"string","__example__":"Parcela 07 · R$ 815,72 · venceu em 04/08/2026"},"checkout_url":{"type":"string","__example__":"https://exemplo.finza/pay/a3f9c1b27e64"},"titulo_txt_2":{"type":"string","__example__":"Parcela 08 · R$ 815,72 · venceu em 04/09/2026"},"checkout_url_2":{"type":"string","__example__":""},"codigo_pix":{"type":"string","__example__":""},"linha_digitavel":{"type":"string","__example__":""},"data_apuracao":{"type":"string","__example__":"18/09/2026"}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Seu pagamento"},{"type":"TextBody","text":"${data.resumo_txt}"},{"type":"TextCaption","text":"${data.parcelas_txt}"},{"type":"If","condition":"${data.checkout_url} != ''","then":[{"type":"TextSubheading","text":"Pagar pelo link"},{"type":"TextCaption","text":"${data.titulo_txt_1}"},{"type":"EmbeddedLink","text":"Abrir link de pagamento","on-click-action":{"name":"open_url","url":"${data.checkout_url}"}}]},{"type":"If","condition":"${data.checkout_url_2} != ''","then":[{"type":"TextCaption","text":"${data.titulo_txt_2}"},{"type":"EmbeddedLink","text":"Abrir o 2º link","on-click-action":{"name":"open_url","url":"${data.checkout_url_2}"}}]},{"type":"If","condition":"${data.checkout_url} != ''","then":[{"type":"TextCaption","text":"A página abre o QR Code e o código copia e cola."}]},{"type":"If","condition":"${data.codigo_pix} != ''","then":[{"type":"TextSubheading","text":"PIX copia e cola"},{"type":"TextInput","name":"pix_copia","label":"Chave PIX","input-type":"text","required":false,"init-value":"${data.codigo_pix}","helper-text":"Toque no campo, selecione tudo e copie. Cole no app do seu banco."}]},{"type":"If","condition":"${data.linha_digitavel} != ''","then":[{"type":"TextSubheading","text":"Linha digitável do boleto"},{"type":"TextBody","text":"${data.linha_digitavel}"},{"type":"TextCaption","text":"O boleto compensa em até 2 dias úteis após o pagamento."}]},{"type":"TextCaption","text":"Valores apurados em ${data.data_apuracao}."},{"type":"RadioButtonsGroup","name":"quer_atendente","label":"Precisa de mais alguma coisa?","required":false,"data-source":[{"id":"nao","title":"Não, obrigado","description":"Consegui o que precisava"},{"id":"sim","title":"Falar com um atendente","description":"Ainda tenho dúvida sobre esta cobrança"}]},{"type":"Footer","label":"Concluir","on-click-action":{"name":"complete","payload":{"desfecho":"pagamento_2via","titulo_ids":"${data.titulo_ids}","quer_atendente":"${form.quer_atendente}"}}}]}},{"id":"TITULO_QUITADO","title":"Já está pago","terminal":true,"data":{"titulo_txt":{"type":"string","__example__":"Parcela 07 · R$ 815,72 · vencimento 04/08/2026"},"parcelas_txt":{"type":"string","__example__":"Não encontrei outras parcelas em aberto neste contrato."},"titulo_id":{"type":"string","__example__":"36529132-07"}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Esse título já consta pago"},{"type":"TextBody","text":"${data.titulo_txt}"},{"type":"TextCaption","text":"${data.parcelas_txt}"},{"type":"TextCaption","text":"Se você recebeu cobrança depois de ter pago, fale com a gente que corrigimos."},{"type":"RadioButtonsGroup","name":"quer_atendente","label":"Quer falar com alguém sobre isso?","required":false,"data-source":[{"id":"nao","title":"Não, obrigado","description":"Está tudo certo"},{"id":"sim","title":"Falar com um atendente","description":"Recebi cobrança mesmo tendo pago"}]},{"type":"Footer","label":"Concluir","on-click-action":{"name":"complete","payload":{"desfecho":"titulo_quitado","titulo_id":"${data.titulo_id}","quer_atendente":"${form.quer_atendente}"}}}]}},{"id":"JA_PAGUEI","title":"Pagamento feito","terminal":true,"data":{"contrato_txt":{"type":"string","__example__":"Contrato 36529132 · R$ 4.078,62 em aberto em 5 parcelas"},"titulo_id":{"type":"string","__example__":"36529132-07"},"hoje":{"type":"string","__example__":"2026-09-15"},"min_data_pgto":{"type":"string","__example__":"2025-09-15"}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Vamos registrar seu pagamento"},{"type":"TextBody","text":"${data.contrato_txt}"},{"type":"DatePicker","name":"data_pagamento","label":"Quando você pagou?","required":true,"min-date":"${data.min_data_pgto}","max-date":"${data.hoje}","helper-text":"Use a data que aparece no comprovante"},{"type":"RadioButtonsGroup","name":"forma","label":"Como você pagou?","required":true,"data-source":[{"id":"pix","title":"PIX"},{"id":"boleto","title":"Boleto"},{"id":"transferencia","title":"Transferência"},{"id":"outro","title":"Outro"}]},{"type":"TextCaption","text":"Ao concluir, envie a foto ou o PDF do comprovante aqui no chat. É o comprovante que dá baixa — esta tela apenas avisa o time de que ele está chegando."},{"type":"RadioButtonsGroup","name":"quer_atendente","label":"Quer falar com um atendente sobre este pagamento?","required":false,"data-source":[{"id":"nao","title":"Não, obrigado","description":"Só queria avisar"},{"id":"sim","title":"Falar com um atendente","description":"Tenho uma dúvida sobre este pagamento"}]},{"type":"Footer","label":"Concluir","on-click-action":{"name":"complete","payload":{"desfecho":"comprovante","titulo_id":"${data.titulo_id}","data_pagamento":"${form.data_pagamento}","forma":"${form.forma}","quer_atendente":"${form.quer_atendente}"}}}]}},{"id":"NAO_E_MINHA","title":"Não reconheço","terminal":true,"data":{"contrato_txt":{"type":"string","__example__":"Contrato 36529132 · em nome de João"},"titulo_id":{"type":"string","__example__":"36529132-07"}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Vamos registrar que essa cobrança não é sua"},{"type":"TextBody","text":"${data.contrato_txt}"},{"type":"RadioButtonsGroup","name":"relacao","label":"Qual é a sua relação com esse contrato?","required":true,"data-source":[{"id":"desconheco","title":"Não conheço o titular","description":"Nunca tive relação com essa empresa"},{"id":"conheco","title":"Conheço o titular","description":"Posso passar o recado ou o contato certo"},{"id":"ex_titular","title":"Fui titular, mas encerrei","description":"Contrato encerrado ou equipamento devolvido"}]},{"type":"TextArea","name":"detalhe","label":"Quer explicar melhor?","required":false,"max-length":300,"helper-text":"Opcional. Ajuda o time a corrigir o cadastro"},{"type":"TextCaption","text":"Vamos revisar o cadastro e parar as mensagens para este número se for o caso. Você recebe uma confirmação por aqui."},{"type":"Footer","label":"Enviar","on-click-action":{"name":"complete","payload":{"desfecho":"contato_incorreto","titulo_id":"${data.titulo_id}","relacao":"${form.relacao}","detalhe":"${form.detalhe}"}}}]}},{"id":"TRIAGEM","title":"Falar com o time","terminal":true,"data":{"contrato_txt":{"type":"string","__example__":"Ainda não localizei um contrato no seu nome"},"titulo_id":{"type":"string","__example__":""},"assunto_inicial":{"type":"string","__example__":"atendimento_humano"},"horario_txt":{"type":"string","__example__":"Atendemos de segunda a quinta das 8h às 18h e sexta das 8h às 17h. Fora desse horário sua mensagem entra na fila e respondemos no próximo dia útil."}},"layout":{"type":"SingleColumnLayout","children":[{"type":"TextHeading","text":"Vamos te conectar ao time"},{"type":"TextBody","text":"${data.contrato_txt}"},{"type":"RadioButtonsGroup","name":"assunto","label":"Confirma o assunto?","required":true,"init-value":"${data.assunto_inicial}","data-source":[{"id":"atendimento_humano","title":"Falar com um atendente","description":"Atendimento humano, sem assunto específico"},{"id":"negociacao_contestacao","title":"Renegociar ou contestar","description":"Renegociação, valor errado, cobrança indevida"},{"id":"contato_incorreto","title":"Essa cobrança não é minha","description":"Não reconheço esse contrato"},{"id":"suporte_equipamento","title":"Problema com a máquina","description":"Defeito, máquina parada, suporte técnico"},{"id":"pagamento_2via","title":"Dúvida sobre o pagamento","description":"Boleto, PIX, valor ou vencimento"},{"id":"outro","title":"Outro assunto","description":"Nenhum dos anteriores"}]},{"type":"TextArea","name":"detalhe","label":"Quer adiantar algum detalhe?","required":false,"max-length":300,"helper-text":"Opcional — ajuda o atendente a já chegar com o contexto"},{"type":"TextCaption","text":"${data.horario_txt}"},{"type":"Footer","label":"Enviar","on-click-action":{"name":"complete","payload":{"desfecho":"triagem","titulo_id":"${data.titulo_id}","assunto":"${form.assunto}","detalhe":"${form.detalhe}"}}}]}}]};
+
+/* ───────── Cenários (dados de exemplo) ───────── */
+const HOJE="18/09/2026",HOJE_ISO="2026-09-18",MIN_ISO="2025-09-18";
+const HORARIO="Atendemos de segunda a quinta das 8h às 18h e sexta das 8h às 17h. Fora desse horário sua mensagem entra na fila e respondemos no próximo dia útil.";
+const CHECKOUT="https://lk155fncjd.execute-api.us-east-1.amazonaws.com/prod/v1/payment_finza/a3f9c1b27e64";
+const SCEN={
+  ok:{marca:"Finza",nome:"João",contrato:"36529132",total:"R$ 2.447,16",parcelas:3,venc:"04/08/2026",
+      titulos:[{id:"36529132-07",n:"07",val:815.72,venc:"04/08/2026",vencido:true,pago:false},{id:"36529132-08",n:"08",val:815.72,venc:"04/09/2026",vencido:true,pago:false},{id:"36529132-09",n:"09",val:815.72,venc:"04/10/2026",vencido:false,pago:false}],
+      hsm:"Identificamos uma parcela do seu contrato 36529132 em aberto desde 04/08/2026. Veja os detalhes e pague por aqui, sem precisar digitar nada."},
+  blips:{marca:"Blips",nome:"Marcos",contrato:"28741903",total:"R$ 1.398,00",parcelas:2,venc:"15/08/2026",
+      titulos:[{id:"28741903-03",n:"03",val:699,venc:"15/08/2026",vencido:true,pago:false},{id:"28741903-04",n:"04",val:699,venc:"15/09/2026",vencido:true,pago:false}],
+      hsm:"Identificamos uma parcela do seu contrato 28741903 em aberto desde 15/08/2026. Veja os detalhes e pague por aqui, sem precisar digitar nada.",
+      nota:"Mesmo Flow JSON, outra WABA. Saudação, textos e horário vêm do backend da organização Blips."},
+  ideal:{marca:"Ideal",nome:"Carla",contrato:"51930277",total:"R$ 2.190,00",parcelas:3,venc:"20/08/2026",pixFallback:true,
+      titulos:[{id:"51930277-05",n:"05",val:730,venc:"20/08/2026",vencido:true,pago:false}],
+      hsm:"Identificamos uma parcela do seu contrato 51930277 em aberto desde 20/08/2026. Veja os detalhes e pague por aqui, sem precisar digitar nada.",
+      nota:"Caminho de exceção: a página de pagamento falhou, então a chave PIX vem num campo de texto para copiar."},
+  quitado:{marca:"Finza",nome:"Ana",contrato:"41022871",total:"R$ 612,40",parcelas:1,venc:"10/09/2026",
+      titulos:[{id:"41022871-12",n:"12",val:612.4,venc:"10/09/2026",vencido:true,pago:true}],
+      hsm:"Identificamos uma parcela do seu contrato 41022871 em aberto desde 10/09/2026. Veja os detalhes e pague por aqui, sem precisar digitar nada.",
+      nota:"A régua saiu antes da baixa sincronizar. O gerador de pagamento responde que o título já foi pago."},
+  semcontrato:{marca:"Finza",nome:null,contrato:null,titulos:[],
+      hsm:"Identificamos uma parcela em aberto no seu nome. Veja os detalhes e pague por aqui, sem precisar digitar nada.",
+      nota:"Nenhum contrato ativo ligado a este número. 14,8% dos pedidos de pagamento caem aqui hoje."}
+};
+let CLI=SCEN.ok;let MODO="ativo";
+const contratoTxt=()=>CLI.contrato?`Contrato ${CLI.contrato} · ${CLI.total} em aberto em ${CLI.parcelas} parcela${CLI.parcelas>1?"s":""}`:"Ainda não localizei um contrato no seu nome";
+const triagem=(assunto,contrato_txt)=>({screen:"TRIAGEM",data:{contrato_txt:contrato_txt||contratoTxt(),titulo_id:CLI.titulos[0]?CLI.titulos[0].id:"",assunto_inicial:assunto,horario_txt:HORARIO}});
+
+/* ───────── Backend simulado: decide a tela a partir da escolha ───────── */
+const brl=v=>"R$ "+v.toFixed(2).replace(".",",").replace(/\B(?=(\d{3})+(?!\d))/g,".");
+const tit=t=>`Parcela ${t.n} · ${brl(t.val)} · ${t.vencido?"venceu":"vence"} em ${t.venc}`;
+function pagamento(selecionados){
+  const abertos=CLI.titulos.filter(t=>!t.pago);
+  if(!CLI.titulos.length)return{screen:"SEM_CONTRATO",data:{erro_txt:"Não encontrei nenhum contrato ativo ligado a este número de WhatsApp. Pode ser que ele esteja cadastrado em outro CPF ou CNPJ.",documento_exemplo:"Só os números, sem ponto nem traço"}};
+  if(!abertos.length)return{screen:"TITULO_QUITADO",data:{titulo_txt:tit(CLI.titulos[0]),parcelas_txt:"Não encontrei outras parcelas em aberto neste contrato.",titulo_id:CLI.titulos[0].id}};
+  if(abertos.length>1&&!selecionados){
+    const total=abertos.reduce((a,t)=>a+t.val,0);
+    return{screen:"ESCOLHER_TITULOS",data:{intro_txt:`Você tem ${abertos.length} parcelas em aberto, ${brl(total)} no total. Escolha até 2 para pagar agora.`,
+      opcoes:abertos.map((t,i)=>({id:t.id,title:`Parcela ${t.n} · ${brl(t.val)}`,description:`${t.vencido?"Venceu":"Vence"} em ${t.venc}${i===0?" · a mais antiga":""}`})),pre:[abertos[0].id]}};
+  }
+  const sel=(selecionados||[abertos[0]]).slice(0,2);const restam=abertos.length-sel.length;
+  const pix=CLI.pixFallback?"00020126580014br.gov.bcb.pix0136a3f9c1b2-7e64-4c1a-9d2e-51930277000552040000530398654047300005802BR5913IDEAL COMMERCE6009SAO PAULO62070503***6304B1D7":"";
+  return{screen:"PAGAMENTO",data:{resumo_txt:`${sel.length} parcela${sel.length>1?"s":""} · ${brl(sel.reduce((a,t)=>a+t.val,0))}`,
+    parcelas_txt:restam>0?`Depois desta${sel.length>1?"s":""}, ainda ${restam>1?"restam":"resta"} ${restam} parcela${restam>1?"s":""} em aberto neste contrato.`:"Com este pagamento o contrato fica em dia.",
+    titulo_ids:sel.map(t=>t.id).join(","),titulo_txt_1:tit(sel[0]),checkout_url:CLI.pixFallback?"":CHECKOUT+"/"+sel[0].id,
+    titulo_txt_2:sel[1]?tit(sel[1]):"",checkout_url_2:sel[1]&&!CLI.pixFallback?CHECKOUT+"/"+sel[1].id:"",codigo_pix:pix,linha_digitavel:"",data_apuracao:HOJE}};
+}
+function backend(action,screen,payload,session){
+  if(action==="INIT"){
+    if(!CLI.contrato)return{screen:"RESUMO",data:{saudacao:"Olá 👋",resumo_txt:"Não localizei um contrato ativo ligado a este número. Você ainda pode escolher abaixo como podemos ajudar.",contrato_txt:"Se o contrato estiver em outro CPF ou CNPJ, escolha “Quero pagar” e informe o documento.",titulo_id:""}};
+    return{screen:"RESUMO",data:{saudacao:`Olá, ${CLI.nome} 👋`,resumo_txt:`Localizei seu contrato com a ${CLI.marca}. Escolha abaixo como podemos ajudar.`,contrato_txt:`${contratoTxt()} · a mais antiga venceu em ${CLI.venc}`,titulo_id:CLI.titulos[0].id}};
+  }
+  if(screen==="RESUMO"){
+    const a=payload.assunto;
+    if(a==="pagamento_2via")return pagamento();
+    if(a==="contato_incorreto")return{screen:"NAO_E_MINHA",data:{contrato_txt:CLI.contrato?`Contrato ${CLI.contrato} · em nome de ${CLI.nome}`:"Nenhum contrato localizado para este número",titulo_id:CLI.titulos[0]?CLI.titulos[0].id:""}};
+    if(a==="comprovante")return{screen:"JA_PAGUEI",data:{contrato_txt:contratoTxt(),titulo_id:CLI.titulos[0]?CLI.titulos[0].id:"",hoje:HOJE_ISO,min_data_pgto:MIN_ISO}};
+    return triagem(a);
+  }
+  if(screen==="ESCOLHER_TITULOS"){
+    const ids=Array.isArray(payload.titulos)?payload.titulos:String(payload.titulos||"").split(",").filter(Boolean);
+    const sel=CLI.titulos.filter(t=>ids.includes(t.id));
+    if(!sel.length)return{screen:"ESCOLHER_TITULOS",data:{error_message:"Escolha pelo menos uma parcela"}};
+    return pagamento(sel);
+  }
+  if(screen==="SEM_CONTRATO"){
+    if(payload.saida==="atendente")return triagem("atendimento_humano","Ainda não localizei um contrato no seu nome");
+    const doc=String(payload.documento||"").replace(/\D/g,"");
+    if(doc.length!==11&&doc.length!==14)return{screen:"SEM_CONTRATO",data:{erro_txt:"Preciso do número do CPF ou CNPJ, só os números.",documento_exemplo:"11 dígitos (CPF) ou 14 (CNPJ)",error_message:"Documento incompleto"}};
+    session.tentativas++;
+    if(doc==="12345678901"||doc==="12345678000190"){CLI=Object.assign({},SCEN.ok,{nome:"João"});return pagamento()}
+    if(session.tentativas>=2)return triagem("atendimento_humano","Ainda não localizei um contrato no seu nome");
+    return{screen:"SEM_CONTRATO",data:{erro_txt:"Não achei contrato com esse documento. Confere o número? (Na simulação, 12345678901 localiza o contrato do João.)",documento_exemplo:"Só os números, sem ponto nem traço",error_message:"Documento não encontrado"}};
+  }
+  return triagem("pagamento_2via","Tive um problema para gerar seu pagamento agora");
+}
+
+/* ───────── WAFlowEngine (porte do simulator/engine.js) + camada de conversa ───────── */
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
+const getPath=(o,p)=>p.split(".").reduce((a,k)=>a==null?undefined:a[k],o);
+const INPUT_TYPES={text:"text",number:"number",email:"email",password:"password",passcode:"password",phone:"tel"};
+const LABEL={pagamento_2via:"Quero pagar",comprovante:"Já paguei",atendimento_humano:"Falar com um atendente",negociacao_contestacao:"Renegociar ou contestar",contato_incorreto:"Essa cobrança não é minha",suporte_equipamento:"Problema com a máquina",outro:"Outro assunto"};
+const SCREEN_LABEL={RESUMO:"Menu",SEM_CONTRATO:"Não localizei",ESCOLHER_TITULOS:"Parcelas",PAGAMENTO:"Seu pagamento",TITULO_QUITADO:"Já está pago",JA_PAGUEI:"Pagamento feito",NAO_E_MINHA:"Não é minha",TRIAGEM:"Falar com o time"};
+const logEl=document.getElementById("log"),trackerEl=document.getElementById("tracker");
+const LOGO="data:image/png;base64,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";
+function logEmpty(){logEl.innerHTML="";logEl.appendChild(el("div","empty","Toque em “Ver débitos e pagar” no telefone. Cada passo aparece aqui: o que a tela manda, o que o backend responde e o que chega ao n8n."))}
+function log(k,cls,body){const first=logEl.querySelector(".empty");if(first)first.remove();const e=el("div","e");const kk=el("span","k "+(cls||""),k);const pre=el("pre",null,body);e.append(kk,pre);logEl.appendChild(e);logEl.scrollTop=logEl.scrollHeight}
+const fmt=o=>JSON.stringify(o,null,1).replace(/[{}]/g,"").replace(/^\n|\n$/g,"").trim();
+function drawTracker(currentId,visited){trackerEl.innerHTML="";FLOW.screens.forEach(s=>{const t=el("span",null,SCREEN_LABEL[s.id]||s.id);if(s.terminal)t.classList.add("term");if(s.id===currentId)t.classList.add("on");else if(visited.has(s.id))t.classList.add("was");trackerEl.appendChild(t)})}
+
+let SIM=null;
+function mountSim(container){
+  const screens={};FLOW.screens.forEach(s=>screens[s.id]=s);
+  const state={stack:[],forms:{},session:{tentativas:0},open:false,completed:false,visited:new Set()};
+  const current=()=>state.stack[state.stack.length-1];
+  const form=id=>(state.forms[id]||(state.forms[id]={}));
+  const invalids={};
+  let phoneEl,sheetEl,bodyEl,chatEl;
+  const hora=()=>new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  function lookup(expr){const cur=current();const p=expr.trim().split(".");if(p[0]==="data")return getPath(cur.data,p.slice(1).join("."));if(p[0]==="form")return getPath(form(cur.id),p.slice(1).join("."));return undefined}
+  function resolve(v){if(typeof v!=="string"){if(Array.isArray(v))return v.map(resolve);if(v&&typeof v==="object"){const o={};for(const[k,x]of Object.entries(v))o[k]=resolve(x);return o}return v}const ex=v.match(/^\$\{([^}]+)\}$/);if(ex)return lookup(ex[1]);return v.replace(/\$\{([^}]+)\}/g,(_,e)=>{const r=lookup(e);return r==null?"":String(r)})}
+  function evalCondition(c){try{const js=String(c).replace(/\$\{([^}]+)\}/g,(_,e)=>JSON.stringify(lookup(e)??null));return!!new Function("return ("+js+");")()}catch{return false}}
+  function flatten(ch){const out=[];for(const c of ch||[]){if(!c||typeof c!=="object")continue;if(c.type==="If")out.push(...flatten(evalCondition(c.condition)?c.then:c.else||[]));else if(c.type==="Form")out.push(...flatten(c.children));else out.push(c)}return out}
+  function toast(msg,err){phoneEl.querySelectorAll(".wa-toast").forEach(t=>t.remove());const t=el("div","wa-toast"+(err?" err":""),msg);phoneEl.appendChild(t);setTimeout(()=>t.remove(),2800)}
+  function loading(on){phoneEl.querySelectorAll(".wa-loading").forEach(x=>x.remove());if(on){const l=el("div","wa-loading");l.appendChild(el("span"));phoneEl.appendChild(l)}}
+  function pushScreen(resp){const data=Object.assign({},exampleData(screens[resp.screen]),resp.data||{});const err=data.error_message;delete data.error_message;
+    if(current()&&current().id===resp.screen){Object.assign(current().data,data)}else state.stack.push({id:resp.screen,data});
+    state.visited.add(resp.screen);render();if(err)toast(err,true)}
+  function exampleData(s){const out={};if(s&&s.data)for(const[k,v]of Object.entries(s.data))if(v&&typeof v==="object"&&"__example__"in v)out[k]=v.__example__;return out}
+  function callBackend(action,screen,payload){loading(true);const p=Object.assign({},payload);
+    if(p.assunto)log("tela → backend","",fmt(Object.assign({},p,{assunto:p.assunto+"  ("+(LABEL[p.assunto]||p.assunto)+")"})));
+    else log(action==="INIT"?"Meta → backend":"tela → backend","",action==="INIT"?"INIT · flow_token → ação → cliente, contrato, títulos":fmt(p));
+    setTimeout(()=>{const resp=backend(action,screen,payload,state.session);loading(false);log("backend → tela",resp.data&&resp.data.error_message?"err":"","responde tela "+resp.screen+(resp.data&&resp.data.error_message?" · erro: "+resp.data.error_message:""));pushScreen(resp)},480)}
+  function runAction(a){if(!a||state.completed)return;const payload=resolve(a.payload||{});
+    if(a.name==="complete"){state.completed=true;complete(payload)}
+    else if(a.name==="open_url"){const url=resolve(a.url)||payload.url;log("cliente","","abre a página de pagamento");toast("Abriria no navegador: "+url)}
+    else if(a.name==="data_exchange")callBackend("data_exchange",current().id,payload)}
+  function validateScreen(comps){const errors=[];for(const c of comps){if(!c.name)continue;const v=form(current().id)[c.name];const label=resolve(c.label||c.name);const req=resolve(c.required)===true;const empty=v==null||v==="";if(["TextInput","TextArea","DatePicker","RadioButtonsGroup"].includes(c.type)&&req&&empty)errors.push({name:c.name,msg:`“${label}” é obrigatório`});if(c.type==="CheckboxGroup"&&req&&(!Array.isArray(v)||!v.length))errors.push({name:c.name,msg:`Escolha pelo menos uma opção em “${label}”`})}return errors}
+  const setValue=(n,v)=>{form(current().id)[n]=v};
+  function fieldWrap(c,inner,bad){const w=el("div","wa-field"+(bad?" wa-invalid":""));if(c.label){const lb=el("div","wa-label",resolve(c.label));if(resolve(c.required)===true)lb.appendChild(el("span","wa-req"," *"));w.appendChild(lb)}w.appendChild(inner);if(bad)w.appendChild(el("div","wa-error-msg",bad));else if(c["helper-text"])w.appendChild(el("div","wa-helper",resolve(c["helper-text"])));return w}
+  const R={
+    TextHeading:c=>el("div","wa-heading",resolve(c.text)),TextSubheading:c=>el("div","wa-subheading",resolve(c.text)),
+    TextBody:c=>el("div","wa-textbody",String(resolve(c.text)??"")),TextCaption:c=>el("div","wa-caption",String(resolve(c.text)??"")),
+    TextInput(c){const i=el("input","wa-input");i.type=INPUT_TYPES[c["input-type"]]||"text";i.maxLength=c["max-chars"]||400;i.id="f-"+current().id+"-"+c.name;if(form(current().id)[c.name]==null&&c["init-value"]){const iv=resolve(c["init-value"]);if(iv)form(current().id)[c.name]=iv}i.value=form(current().id)[c.name]??"";i.addEventListener("focus",()=>{if(c["init-value"])i.select()});i.addEventListener("input",()=>{form(current().id)[c.name]=i.value});return fieldWrap(c,i,invalids[c.name])},
+    TextArea(c){const t=el("textarea","wa-textarea");t.maxLength=c["max-length"]||600;t.id="f-"+current().id+"-"+c.name;t.value=form(current().id)[c.name]??"";t.addEventListener("input",()=>{form(current().id)[c.name]=t.value});return fieldWrap(c,t,invalids[c.name])},
+    DatePicker(c){const i=el("input","wa-input");i.type="date";i.id="f-"+current().id+"-"+c.name;if(c["min-date"])i.min=String(resolve(c["min-date"]));if(c["max-date"])i.max=String(resolve(c["max-date"]));i.value=form(current().id)[c.name]??"";i.addEventListener("change",()=>setValue(c.name,i.value));return fieldWrap(c,i,invalids[c.name])},
+    CheckboxGroup(c){const wrap=el("div","wa-options");const f=form(current().id);let cur=f[c.name];if(cur==null){const iv=resolve(c["init-value"]);cur=Array.isArray(iv)?iv.slice():[];f[c.name]=cur}const max=c["max-selected-items"]||99;
+      for(const opt of resolve(c["data-source"])||[]){const lbl=el("label","wa-option");const i=el("input");i.type="checkbox";i.value=opt.id;i.id="f-"+current().id+"-"+c.name+"-"+opt.id;i.checked=cur.includes(opt.id);i.disabled=!i.checked&&cur.length>=max;i.addEventListener("change",()=>{const arr=f[c.name];if(i.checked){if(!arr.includes(opt.id))arr.push(opt.id)}else{const k=arr.indexOf(opt.id);if(k>=0)arr.splice(k,1)}render()});const t=el("div","wa-option-text");t.appendChild(el("div","wa-option-title",opt.title));if(opt.description)t.appendChild(el("div","wa-option-desc",opt.description));lbl.append(t,i);wrap.appendChild(lbl)}
+      const w=fieldWrap(c,wrap,invalids[c.name]);if(max<99)w.appendChild(el("div","wa-helper",`Até ${max} por vez · ${cur.length} selecionada${cur.length===1?"":"s"}`));return w},
+    RadioButtonsGroup(c){const wrap=el("div","wa-options");const g="wa-"+current().id+"-"+c.name;let cur=form(current().id)[c.name];if(cur==null){const iv=resolve(c["init-value"]);if(iv){cur=iv;form(current().id)[c.name]=iv}}
+      for(const opt of resolve(c["data-source"])||[]){const lbl=el("label","wa-option");const i=el("input");i.type="radio";i.name=g;i.value=opt.id;i.id=g+"-"+opt.id;i.checked=cur===opt.id;i.addEventListener("change",()=>setValue(c.name,opt.id));const t=el("div","wa-option-text");t.appendChild(el("div","wa-option-title",opt.title));if(opt.description)t.appendChild(el("div","wa-option-desc",opt.description));lbl.append(t,i);wrap.appendChild(lbl)}return fieldWrap(c,wrap,invalids[c.name])},
+    EmbeddedLink(c){const a=el("div","wa-embedded-link",resolve(c.text));a.addEventListener("click",()=>runAction(c["on-click-action"]));return a},
+    Footer(c){const f=el("div");const btn=el("button","wa-cta",resolve(c.label));btn.type="button";btn.addEventListener("click",()=>{const comps=flatten(current().screen.layout.children);const errors=validateScreen(comps);Object.keys(invalids).forEach(k=>delete invalids[k]);if(errors.length){errors.forEach(e=>invalids[e.name]=e.msg);log("WhatsApp","err","bloqueou: "+errors.map(e=>e.msg).join("; "));render();const bad=bodyEl.querySelector(".wa-invalid");if(bad)bad.scrollIntoView({behavior:"smooth",block:"center"});return}runAction(c["on-click-action"])});f.appendChild(btn);f.appendChild(el("div","wa-managed-by","Gerenciado pela empresa. Saiba mais"));return f}
+  };
+  function render(){const frame=current();frame.screen=screens[frame.id];const screen=frame.screen;sheetEl.innerHTML="";drawTracker(frame.id,state.visited);
+    const top=el("div","wa-topbar");const back=el("button",null,"‹");back.type="button";back.title="Voltar";back.style.visibility=state.stack.length>1?"visible":"hidden";back.addEventListener("click",()=>{state.stack.pop();log("cliente","","voltou para "+current().id+" (botão nativo do WhatsApp)");render()});const close=el("button",null,"✕");close.type="button";close.title="Fechar";close.addEventListener("click",()=>{log("cliente","err","fechou o Flow sem concluir. Nenhum desfecho chega ao n8n; a ação fica em “Interagiu”.");closeFlow()});top.append(back,el("div","wa-title",screen.id==="RESUMO"?"Atendimento "+CLI.marca:(resolve(screen.title)||"")),close);sheetEl.appendChild(top);
+    bodyEl=el("div","wa-body");const footerEl=el("div","wa-footer");footerEl.style.display="none";
+    for(const c of flatten(screen.layout.children)){if(c.type==="Footer"){footerEl.style.display="";footerEl.appendChild(R.Footer(c));continue}const r=R[c.type];bodyEl.appendChild(r?r(c):el("div","wa-caption","componente não suportado: "+c.type))}
+    sheetEl.append(bodyEl,footerEl)}
+  function bubble(html,me,sys){if(sys){const s=el("div","wa-sysmsg");s.innerHTML=html;chatEl.appendChild(s)}else{const b=el("div","wa-bubble"+(me?" me":""));b.innerHTML=html+`<span class="time">${hora()}</span>`;chatEl.appendChild(b)}chatEl.scrollTop=chatEl.scrollHeight}
+  function openFlow(){if(state.open)return;state.open=true;state.completed=false;state.stack=[];state.forms={};state.session={tentativas:0};state.visited=new Set();Object.keys(invalids).forEach(k=>delete invalids[k]);
+    sheetEl=el("div","wa-sheet");phoneEl.appendChild(sheetEl);sheetEl.appendChild(el("div","wa-topbar"));callBackend("INIT",null,{})}
+  function closeFlow(){state.open=false;if(sheetEl){sheetEl.remove();sheetEl=null}drawTracker(null,state.visited)}
+  function complete(p){let resumo="",reacao="",acao="";const nome=CLI.nome?", "+CLI.nome:"";
+    if(p.desfecho==="pagamento_2via"){const n=String(p.titulo_ids||"").split(",").filter(Boolean).length;resumo=`Link de pagamento recebido${n>1?" · "+n+" parcelas":""}`;reacao=`Perfeito${nome}. O link abre o QR Code e o PIX copia e cola. Assim que o pagamento cair, a baixa é automática.`;acao="encerra; a Torre mede o pagamento"}
+    else if(p.desfecho==="comprovante"){resumo=`Pagamento informado · ${p.data_pagamento||"data não informada"} · ${p.forma||""}`;reacao="Obrigado! Agora envie aqui a foto ou o PDF do comprovante. É ele que dá baixa.";acao="aguarda o comprovante no chat"}
+    else if(p.desfecho==="contato_incorreto"){resumo=`Cobrança não reconhecida · ${({desconheco:"não conhece o titular",conheco:"conhece o titular",ex_titular:"ex-titular"})[p.relacao]||""}${p.detalhe?" · "+p.detalhe:""}`;reacao="Registrado. Vamos revisar o cadastro e, se for o caso, parar as mensagens para este número. Você recebe a confirmação por aqui.";acao="grava o caso e encaminha à Valentina (SAC)"}
+    else if(p.desfecho==="titulo_quitado"){resumo="Título já consta pago";reacao="Registramos. Se a cobrança chegou depois do pagamento, nosso time corrige.";acao="registra que a baixa não sincronizou"}
+    else{resumo=`${LABEL[p.assunto]||"Falar com o time"}${p.detalhe?" · "+p.detalhe:""}`;reacao="Já estou te conectando ao time. Atendemos de segunda a quinta das 8h às 18h e sexta das 8h às 17h.";acao="transfere para o time com o assunto marcado"}
+    if(p.quer_atendente==="sim"){reacao+=" Um atendente vai continuar com você por aqui.";acao="transfere para o time (cliente pediu atendente)"}
+    log("tela → n8n","n8n",fmt(p)+"\n→ "+acao);
+    closeFlow();bubble(`<b>Resposta enviada</b><br>${resumo}`,true);setTimeout(()=>bubble(reacao),700);
+    setTimeout(()=>bubble(`Quer simular de novo? Toque em “Ver débitos e pagar” na mensagem acima, ou troque o cliente acima do telefone.`,false,true),1600)}
+  // shell
+  container.innerHTML="";phoneEl=el("div","wa-phone");
+  const bar=el("div","wa-chatbar");const av=el("div","wa-avatar");const im=el("img");im.src=LOGO;im.alt="";av.appendChild(im);const nm=el("div");nm.innerHTML=`<div class="n">${CLI.marca}</div><div class="s">conta comercial · online</div>`;bar.append(av,nm);
+  chatEl=el("div","wa-chat");
+  const inbar=el("div","wa-inputbar");inbar.appendChild(el("div",null,"Mensagem"));
+  phoneEl.append(bar,chatEl,inbar);container.appendChild(phoneEl);
+  bubble("Hoje",false,true);
+  if(CLI.nota)bubble(CLI.nota,false,true);
+  const hsm=el("div","wa-bubble");
+  if(MODO==="receptivo"){
+    bubble("Receptivo: o cliente escreve primeiro. O número da marca responde com o botão do Flow, sem passar por IA.",false,true);
+    bubble("Oi, quero pagar meu boleto",true);
+    hsm.innerHTML=`<b>${CLI.marca}</b><br>Olá${CLI.nome?", "+CLI.nome:""}! Posso te ajudar com a sua cobrança. Toque abaixo para ver seus débitos e resolver por aqui.<span class="time">${hora()}</span><div class="hsm-btn">▤ Ver débitos e pagar</div>`;
+  }else{
+    hsm.innerHTML=`<b>${CLI.marca}</b><br>Olá${CLI.nome?", "+CLI.nome:""}. ${CLI.hsm}<span class="time">${hora()}</span><div class="hsm-btn">▤ Ver débitos e pagar</div>`;
+  }
+  hsm.querySelector(".hsm-btn").addEventListener("click",()=>{if(state.open)return;logEl.innerHTML="";if(MODO==="receptivo")log("cliente → Hyperflow","","escreveu no número da marca → o fluxo de entrada responde com a mensagem de Flow (sem IA)");log("cliente","",MODO==="receptivo"?"tocou no botão da resposta → abre o Flow":"tocou no botão do template → abre o Flow");openFlow()});
+  chatEl.appendChild(hsm);
+  drawTracker(null,state.visited);
+  return{close:closeFlow};
+}
+function start(key){CLI=Object.assign({},SCEN[key]);document.querySelectorAll("#scen button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.s===key)));logEmpty();SIM=mountSim(document.getElementById("phone"))}
+document.getElementById("scen").addEventListener("click",e=>{const b=e.target.closest("button[data-s]");if(!b)return;start(b.dataset.s)});
+document.getElementById("modo").addEventListener("click",e=>{const b=e.target.closest("button[data-m]");if(!b)return;MODO=b.dataset.m;document.querySelectorAll("#modo button").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.m===MODO)));const cur=[...document.querySelectorAll("#scen button")].find(x=>x.getAttribute("aria-pressed")==="true");start(cur?cur.dataset.s:"ok")});
+start("ok");
+</script>

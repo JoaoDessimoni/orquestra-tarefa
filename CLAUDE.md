@@ -18,8 +18,8 @@ Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é
 
 Sequência obrigatória no início de cada turno:
 
-1. Ler a lista de skills disponíveis no `<system-reminder>` (11 skills de conhecimento: finza-contexto, finza-design-system, finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, quimera-nova-demanda, jira, n8n-projeto, torre-projeto + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, etc.).
-2. Considerar os **14 agentes** em `.claude/agents/` e os **17 comandos** em `.claude/commands/`.
+1. Ler a lista de skills disponíveis no `<system-reminder>` (12 skills de conhecimento: finza-contexto, finza-design-system, finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, quimera-nova-demanda, jira, n8n-projeto, torre-projeto, bigquery-finza + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, `bq`, etc.).
+2. Considerar os **15 agentes** em `.claude/agents/` e os **18 comandos** em `.claude/commands/`.
 3. Se o pedido do usuário se encaixar em um comando/skill, **invoque-o automaticamente** via a ferramenta Skill — não execute manualmente nem peça pro usuário digitar o comando.
 
 ### Gatilhos diretos
@@ -46,6 +46,7 @@ Sequência obrigatória no início de cada turno:
 | "demandas do time/da equipe", "o que cada um tá fazendo", status do time inteiro, carga da equipe, visão de gestor sobre o Quimera | `/equipe` (skill `equipe`) → agente `quimera-ops`. Recorte fixo da equipe direta (João Lucas, João Pedro, Leandro, Marcos + supervisor), agrupado por pessoa → status. **Só leitura.** Para agir num ticket, `/quimera`. |
 | Jira, issue, JQL, projeto Jira, Confluence, página/espaço, "abre a issue ABC-123", "busca no Jira/Confluence" | `/jira` (skill `jira`) → agente `jira-ops` via MCP `claude_ai_Atlassian`. **Convive com o Quimera** (são sistemas distintos). Descobre site/projetos ao vivo — não inventa cloudId/key/accountId. |
 | n8n, workflow, automação, node, execução com falha, "o que esse workflow faz", workflow do Bitrix/Hyperflow, métrica/erro de n8n, auditar instância n8n | `/n8n` (skill `n8n-projeto`) → agente `n8n-bridge` via MCP dos 6 ambientes n8n + grafana. **Somente leitura daqui** — criar/alterar workflow é DENTRO do subprojeto `N8N-AGENT/` (`/n8n entrar`). Não confundir com `/quimera`/`/jira`. |
+| BigQuery, SQL, dado, "quanto custou/consumimos", uso vs cobrado, fatura de plataforma, volume/métrica que se responde com query, tabela do BQ, custo Hyperflow | `/bq` (skill `bigquery-finza`) → agente `bq-analyst` via MCP `claude_ai_Google_Cloud_BigQuery`. **Somente leitura** no projeto `blips-bigdata`. Mapa vivo por domínio (hoje: Hyperflow). Análise que vira artefato encadeia em `/analise`. Não confundir com `/torre` (Supabase da Torre) nem com indicadores de squad (`/quimera`). |
 | Torre **código** (campanha/ETL/filtro implementação, Supabase/edge function/migration/RPC, bug da Torre, schema multi-tenant, `vw_titles_live`, Pipeline v2), "como a Torre faz X", consultar o banco da Torre | `/torre` (skill `torre-projeto`) → agente `torre-bridge`. **Contexto + leitura daqui** (Supabase read-only); dev pesado é DENTRO do subprojeto `cobranca-finza/` (`/torre entrar`, 8 agentes próprios). **Não confundir** com a frente de backlog **BTR** (`/backlog`) nem com o overview narrativo (`/contexto`). |
 
 ### Encadeamento
@@ -64,7 +65,7 @@ Quando o pedido cruza 2+ domínios (ex: "analisa essas demandas e gera relatóri
 ```
 orquestra-tarefa/
 ├── .claude/                          # Configuração do agente
-│   ├── agents/                       # Sub-agentes especializados (14)
+│   ├── agents/                       # Sub-agentes especializados (15)
 │   │   ├── finza-researcher.md       # Pesquisa fatos com citação (Docs/, Backlog/contexto)
 │   │   ├── slide-architect.md        # Estrutura outline do deck
 │   │   ├── slide-writer.md           # Redige texto no tom Finza
@@ -78,8 +79,9 @@ orquestra-tarefa/
 │   │   ├── quimera-ops.md            # Opera o Quimera (tickets internos Finza) via MCP — squad IAF
 │   │   ├── jira-ops.md               # Opera o Jira & Confluence (Atlassian) via MCP — convive c/ Quimera
 │   │   ├── n8n-bridge.md             # Ponte read-only p/ subprojeto N8N-AGENT (6 ambientes n8n + grafana)
-│   │   └── torre-bridge.md           # Ponte contexto+leitura p/ subprojeto cobranca-finza (Torre)
-│   ├── commands/                     # Slash commands (17)
+│   │   ├── torre-bridge.md           # Ponte contexto+leitura p/ subprojeto cobranca-finza (Torre)
+│   │   └── bq-analyst.md             # Analista de dados do BigQuery (blips-bigdata) — read-only
+│   ├── commands/                     # Slash commands (18)
 │   │   ├── novo-deck.md              # Orquestra deck completo
 │   │   ├── novo-slide.md             # Adiciona slide a deck existente
 │   │   ├── revisar-deck.md           # Roda reviewer em deck existente
@@ -96,8 +98,9 @@ orquestra-tarefa/
 │   │   ├── equipe.md                 # Visão de gestor: demandas de toda a equipe no Quimera (só leitura)
 │   │   ├── jira.md                   # Opera Jira & Confluence (Atlassian) via MCP
 │   │   ├── n8n.md                    # Ponte read-only p/ N8N-AGENT (workflows, execuções, métricas)
-│   │   └── torre.md                  # Ponte contexto+leitura p/ cobranca-finza (Torre)
-│   ├── skills/                       # Conhecimento canônico (11)
+│   │   ├── torre.md                  # Ponte contexto+leitura p/ cobranca-finza (Torre)
+│   │   └── bq.md                     # Análise de dados no BigQuery (read-only)
+│   ├── skills/                       # Conhecimento canônico (12)
 │   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais (slides)
 │   │   ├── finza-dossie/             # Documentos/relatórios HTML de rolagem única (template.html + fontes Montserrat)
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
@@ -108,7 +111,8 @@ orquestra-tarefa/
 │   │   ├── quimera-nova-demanda/     # Fluxo de abertura de demanda no padrão refinado (Descrição Refinada·Observação·Objetivo) + remove assinatura MCP
 │   │   ├── jira/                     # Catálogo MCP Atlassian (Jira+Confluence), JQL/CQL, descoberta
 │   │   ├── n8n-projeto/              # Mapa do subprojeto N8N-AGENT (ambientes, skills locais, read-only, setup MCP)
-│   │   └── torre-projeto/            # Mapa do subprojeto cobranca-finza (stack, 8 agentes, invariantes, guardrails)
+│   │   ├── torre-projeto/            # Mapa do subprojeto cobranca-finza (stack, 8 agentes, invariantes, guardrails)
+│   │   └── bigquery-finza/           # Mapa vivo do BigQuery blips-bigdata — SKILL.md + 1 arquivo por domínio (hyperflow.md)
 │   ├── hooks/                        # Hooks do harness (registrados em settings.json)
 │   │   └── check-backlog-sync.ps1    # PostToolUse: lembra de regenerar projeções do backlog
 │   ├── settings.json                 # Config do projeto — registra o hook PostToolUse
@@ -241,6 +245,7 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - **Mapa textual ≠ projeção.** `Backlog/contexto/mapa_*.md` é narrativa institucional curada à mão (`context-curator`), com história imutável. `mapa-mental.html` é projeção mecânica do backlog (`mapa-updater`). Nunca edite o JSON de uma projeção à mão — mude o `.md`-fonte e regenere.
 - **Três sistemas de demanda distintos.** `Backlog/` (estratégia interna `.md`, RICE) ≠ **Quimera** (tickets internos Finza, MCP `quimera`) ≠ **Jira/Confluence** (Atlassian externo, MCP `claude_ai_Atlassian`). Um item pode *referenciar* um ticket dos outros dois, mas não são a mesma coisa. Não cruze IDs nem confunda os comandos (`/backlog` · `/quimera` · `/jira`).
 - **Subprojetos acoplados têm fronteira (read-only).** `N8N-AGENT/` (n8n) e `cobranca-finza/` (Torre) são repos próprios — o parent é **roteador + leitura** (`/n8n` · `/torre`), não cockpit de dev. **n8n é sempre read-only** (daqui e de lá): criar/alterar workflow = JSON local + import manual pelo usuário, nunca escrita via MCP/curl. **Na Torre, Claude nunca commita/push/abre PR e nunca escreve no Supabase** (migrations/EF só via CI/CD); leitura/`SELECT` é livre. Dev pesado entra no subprojeto. Essas proteções estão portadas como `deny` no `.claude/settings.json` — não as remova.
+- **BigQuery é read-only e a base de conhecimento cresce junto.** O `/bq` consulta o `blips-bigdata` **somente com `execute_sql_readonly`** — nunca DDL/DML, nunca tabela de apoio (materialização é do time de dados). Toda análise de dinheiro **reconcilia contra fonte independente** e declara a diferença residual em vez de escondê-la; todo número cita a tabela-fonte qualificada. Domínio ou armadilha nova descoberta → **documentar na skill `bigquery-finza` no mesmo turno**, senão o próximo agente repete o erro. Atenção ao recorte multi-empresa (BLIPS × FINZA): várias tabelas gold cobrem só BLIPS.
 - **Torre tem 3 camadas — não as cruze.** Código (`cobranca-finza/`, via `/torre`) ≠ frente de backlog **BTR** (`Backlog/frentes/torre/`, via `/backlog`) ≠ overview narrativo (`Backlog/contexto/torre_de_controle_overview.md`, via `/contexto`).
 
 **Visual:**
@@ -335,6 +340,17 @@ Leitura é livre nos dois; **escrita confirma antes** (dispara notificação/e-m
 /torre [contexto|arquitetura|agentes|skills|db|guia|ef|entrar]                  # cobranca-finza (contexto+leitura)
 ```
 `/n8n` consulta os 6 ambientes n8n + grafana **em somente leitura** (agente `n8n-bridge`); criar/alterar workflow é dentro do `N8N-AGENT/`. `/torre` dá contexto/arquitetura e consulta o Supabase read-only (agente `torre-bridge`); dev pesado é dentro do `cobranca-finza/` (8 agentes próprios). **Pré-requisito:** copiar `.mcp.json.example`→`.mcp.json` e `.env.example`→`.env`, preencher as chaves (guia nas skills `n8n-projeto`/`torre-projeto`) e reiniciar o Claude Code.
+
+### Analisar dados no BigQuery
+```
+/bq <pergunta>                  # ex: "quanto pagamos de Hyperflow nos últimos 6 meses"
+/bq tabelas <termo>             # procura tabela por nome no projeto inteiro
+/bq schema <dataset.tabela>     # schema, partição, descrição
+/bq sql <query>                 # SQL cru, read-only
+/bq mapear <domínio>            # descobre e DOCUMENTA um domínio novo na skill
+/bq dominios                    # lista domínios já mapeados
+```
+Agente `bq-analyst` sobre o projeto `blips-bigdata` (MCP `claude_ai_Google_Cloud_BigQuery`), **somente leitura**. A skill `bigquery-finza` é um **mapa vivo**: um arquivo por domínio, com tabelas, grão, armadilhas e SQL pronto. Domínio coberto hoje: **Hyperflow** (uso × cobrado, faturas, franquia, preços unitários, templates/categoria Meta, rateio por departamento). Cada novo domínio analisado **precisa** virar arquivo de referência na skill — é assim que a base cresce.
 
 ### Manter arquitetura organizada
 ```
