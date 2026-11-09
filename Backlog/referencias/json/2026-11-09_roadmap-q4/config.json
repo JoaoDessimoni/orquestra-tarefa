@@ -1,0 +1,11 @@
+{
+  "trimestre": { "inicio": "2026-09-01", "fim": "2026-12-31", "nome": "Q4 2026" },
+  "metas": { "conclusao": 100, "cycle": 3.7, "intruders": 14 },
+  "periodos": [
+    { "id": "out", "label": "Outubro", "sub": "mês fechado", "fonte": "Quimera · Gestão › Indicadores (print de 09/11/2026)", "criadas": 47, "concluidas": 66, "cycle": 3.5, "cycle_txt": "66 demandas finalizadas no mês", "intruders": 6 },
+    { "id": "nov", "label": "Novembro", "sub": "parcial até 09/11", "fonte": "API do Quimera, 09/11/2026 · cycle time = média do mês", "criadas": 19, "concluidas": 9, "cycle": 3.41, "cycle_txt": "9 demandas finalizadas até 09/11", "intruders": 1 },
+    { "id": "tri", "label": "Trimestre", "sub": "01/09 a 09/11", "fonte": "API do Quimera, 09/11/2026 · cycle time = média do período", "criadas": 193, "concluidas": 206, "cycle": 4.37, "cycle_txt": "206 demandas finalizadas · P90 9,89 d", "intruders": 8 }
+  ],
+  "extras": { "csat": 5.0, "csat_txt": "111 avaliações no trimestre", "espera": 2.35, "ativo": 2.03 },
+  "atualizado_em": "2026-11-09"
+}

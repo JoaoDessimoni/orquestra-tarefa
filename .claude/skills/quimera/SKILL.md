@@ -131,6 +131,7 @@ Todos aceitam `team` e (quando histórico) `period`/`months`. Para o squad IAF, 
 4. **`assigned_to` é UUID, não e-mail.** Se o usuário disser "atribui pro Joao Lucas", traduza para o UUID da tabela.
 5. **Subtarefa herda contexto do pai** — não repasse team/category/requester em `create_subtask`.
 6. Nunca invente `ticket_number` nem `id`. Para localizar, use `list_tickets`/`get_ticket`.
+7. **Descrição sempre em HTML, nunca Markdown** (`create_ticket`, `create_subtask`, `update_ticket_description`). O editor da tela do Quimera grava HTML; Markdown achata num `<p>` só na primeira edição manual. Para demanda nova, use o layout da skill **`quimera-nova-demanda`** §2 (`<p><strong>Descrição Refinada</strong></p>` · Observação · Objetivo, listas em `<ul><li>`).
 
 ---
 

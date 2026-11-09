@@ -1,5 +1,7 @@
 # Prompt para o Claude Design — Principais entregas do Q3/2026 (squad IAF)
 
+> **Atualização 2026-11-06:** o deck foi construído direto no workspace, com os números do Supabase prod: `Apresentacoes/executando/entregas-q3_lideranca_06-11-2026.html`. Desvios em relação a este roteiro: o link de cobrança é do Q4 (primeiro link em 07/10/2026), por isso aparece como "virada do trimestre" e mostra os dados de 07/10 a 06/11. Custos só existem desde 31/08, então o recorte é setembro. Não há meta de custo em prod, e o slide de custo × meta virou "top 5 campanhas + custo por agente". "Bloqueou a Finza" não existe na Meta; no lugar entrou "pediu para parar" (opt_out).
+
 > Período: **trimestre jul–set/2026**. Foco: as 4 entregas com maior valor de negócio, e não o volume total do trimestre (para o volume, ver `roteiro-prompt_claude-design_balanco-torre-q4_14-10-2026.md`).
 > Fontes:
 > - `Apresentacoes/entregues/entregas_roadmap_torre_dossie.html`: R18 Scorização de telefones (Quimera #7317) · R80 Gestão de custos da Torre (#7326) · STIA Torre multi-agentes (#3989)

@@ -49,7 +49,7 @@ Estas ações escrevem no sistema vivo e podem disparar e-mail/notificação a t
 
 ### Criação de card (`create_ticket`) — checklist obrigatório
 0. **GATE ANTI-DUPLICATA — bloqueante, antes de tudo.** Carregue a skill `quimera-nova-demanda` (`.claude/skills/quimera-nova-demanda/SKILL.md` §1) e rode a varredura: `list_tickets(team="ia_automacao_finza", only_parents=true, limit=200)` paginado e **sem filtro de status**, mais um `list_tickets(assigned_to=<UUID>)` por membro do roster (o que está com os desenvolvedores), mais 2–4 sondas `search` por candidata. Cruze **título E descrição** por assinatura `<sistema+ação+objeto>`. **Se a demanda já existe em qualquer status — inclusive `finalizado`/`cancelado` — não crie:** reporte o `#número` existente. Na dúvida, pergunte. Em lote, dedupe também entre as candidatas do próprio lote e mostre a tabela de veredito antes de criar. "Cria essas N demandas" **não** dispensa este passo.
-1. `title` e `description` claros (descrição com contexto, não só o título repetido).
+1. `title` e `description` claros (descrição com contexto, não só o título repetido). **Descrição sempre em HTML** no layout da skill `quimera-nova-demanda` §2 (`<p><strong>Descrição Refinada</strong></p>` · Observação · Objetivo, listas em `<ul><li>`) — nunca Markdown, que o editor do Quimera achata na primeira edição manual.
 2. `team` = `ia_automacao_finza` (default).
 3. `category` ∈ {`Cobrança`, `Recuperação`, `TI`} — se ambíguo, pergunte.
 4. `priority` — se `high`, **exige `justification`**. Sem justificativa concreta, pergunte ou rebaixe para `medium`.

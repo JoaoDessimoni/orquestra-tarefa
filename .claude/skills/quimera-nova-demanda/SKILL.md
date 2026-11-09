@@ -79,25 +79,37 @@ Quando o pedido traz N demandas de uma vez (a situação exata do incidente):
 
 ## 2 · Layout obrigatório da descrição
 
-Toda demanda aberta por esta skill usa **exatamente** estas três seções, nesta ordem, em Markdown:
+Toda demanda aberta por esta skill usa **exatamente** estas três seções, nesta ordem, **em HTML** (não Markdown).
 
-```markdown
-**Descrição Refinada**
-<O quê + causa provável + escopo do trabalho. Frases curtas, SVO, sem jargão.
- Quando houver escopo com passos, use uma lista:>
+> **Por que HTML (decisão do supervisor, 2026-11-06):** o editor da tela do Quimera grava a descrição em HTML. Descrição enviada em Markdown aparece certa até a primeira edição manual — ao salvar pela tela, o editor achata tudo num único `<p>` com os `**` e `-` como texto literal (incidente no #12266). Em HTML, a estrutura sobrevive à edição manual e o supervisor consegue editar direto na tela.
 
-Escopo:
-- <ação 1>
-- <ação 2>
-- <ação 3>
-
-**Observação**
-<Ressalvas técnicas, riscos, o que validar antes, dependências, contexto político.
- É a voz cética — o que pode dar errado / o que investigar antes de agir.>
-
-**Objetivo**
-<O resultado esperado em uma ou duas frases. O "pronto quando…" em linguagem de negócio.>
+```html
+<p><strong>Descrição Refinada</strong></p>
+<p>O quê + causa provável + escopo do trabalho. Frases curtas, SVO, sem jargão.</p>
+<p>Segundo parágrafo, se precisar (um <p> por parágrafo).</p>
+<p>Escopo:</p>
+<ul>
+  <li>ação 1</li>
+  <li>ação 2 com subitens:
+    <ul><li>subitem a;</li><li>subitem b.</li></ul>
+  </li>
+  <li>ação 3</li>
+</ul>
+<p><strong>Observação</strong></p>
+<ul>
+  <li>Ressalva técnica / risco / o que validar antes / dependência / contexto político.</li>
+  <li>É a voz cética — o que pode dar errado, o que investigar antes de agir.</li>
+</ul>
+<p><strong>Objetivo</strong></p>
+<p>O resultado esperado em uma ou duas frases. O "pronto quando…" em linguagem de negócio.</p>
 ```
+
+Regras de marcação:
+- Título de seção = `<p><strong>…</strong></p>` (não `<h1..h6>`, não `**`).
+- Cada parágrafo no seu próprio `<p>`. Lista = `<ul><li>`; sublista = `<ul>` **dentro** do `<li>` pai. Passos ordenados podem usar `<ol>`.
+- Escape `&` como `&amp;` (ex.: `IA &amp; Automação`). Aspas e acentos vão como texto normal.
+- Envie o HTML **numa linha só** (sem quebras/indentação entre tags) — o bloco acima está indentado só para leitura.
+- **Nada de Markdown** dentro do HTML (`**`, `- `, `#`). Nada de `style`, `class`, `<br>` para simular parágrafo, nem tags fora de `p/strong/em/ul/ol/li/a/code`.
 
 Regras de redação (herdadas do tom Finza):
 - Frases curtas, sujeito-verbo-objeto. Sem "sinergia", "alavancar", "ótima notícia".
@@ -114,7 +126,7 @@ Só chega aqui candidata com veredito **NOVA** no gate §1. Confirme/preencha co
 | Campo | Regra |
 |---|---|
 | `title` | Conciso e acionável. |
-| `description` | As **3 seções** da §2, sem assinatura. |
+| `description` | As **3 seções** da §2, **em HTML**, sem assinatura. |
 | `team` | Default `ia_automacao_finza`. |
 | `category` | ∈ {Cobrança, Crédito, DiretoriaFinza, Formalização, IA, JuridicoFinza, Marketing, Operação, Processos, Recuperação, TI}. Default do squad ≈ TI/Cobrança conforme o tema. |
 | `priority` | `low` \| `medium` \| `high`. **`high` exige `justification`** — sem justificativa concreta, não crie como high (pergunte ou rebaixe para medium). |
@@ -156,7 +168,11 @@ Isso acontece **no `create_ticket`** (o campo `source` cai no default `mcp`). O 
    O `update_ticket_description` **substitui** a descrição e **não** re-anexa o rodapé — é o que remove a assinatura.
 3. `get_ticket(ticket_number)` para **confirmar** que a descrição termina na seção **Objetivo**, sem `--- _Created via MCP (source: mcp)_`.
 
-> Não pule o passo 3. A limpeza só está garantida quando verificada — a descrição correta termina no texto do **Objetivo**, sem linha `---` de rodapé de ferramenta.
+> Não pule o passo 3. A limpeza só está garantida quando verificada — a descrição correta termina no `</p>` do **Objetivo**, sem linha `---` de rodapé de ferramenta. Confira também que ela continua em HTML (começa com `<p><strong>Descrição Refinada</strong></p>`, sem `**` literal).
+
+> **Mostrar ao usuário:** no rascunho para aprovação (§4) apresente a descrição **legível** (seções/listas renderizadas em texto), não o HTML cru. O HTML é só o que vai no payload.
+
+> **Editar demanda já existente** (`update_ticket_description`): mesmo formato HTML da §2. Se a descrição atual vier achatada (um `<p>` só com `**`/`-` literais), reconstrua a estrutura em HTML preservando o texto que o usuário editou.
 
 ---
 
@@ -178,13 +194,13 @@ Isso acontece **no `create_ticket`** (o campo `source` cai no default `mcp`). O 
    0f. Varredura falhou (erro/permissão)? NÃO CRIA — reporta e pergunta.
 
 1. Reunir dados da demanda (fonte: roadmap, reunião, pedido do usuário).
-2. Redigir descrição nas 3 seções (§2). Sem assinatura.
+2. Redigir descrição nas 3 seções (§2) EM HTML (<p><strong>, <ul><li>), numa linha. Sem assinatura, sem Markdown.
 3. Resolver assigned_to (UUID) e requester_email (e-mail) — skill `quimera`.
 4. Mostrar rascunho + tabela de veredito + confirmar com o usuário (§4).
 5. create_ticket(...) SÓ das NOVA → guarda { id, ticket_number }.
    → acrescenta o criado ao inventário em memória (próxima candidata do lote enxerga).
 6. update_ticket_description(id, <descrição limpa>)   ← remove o rodapé de MCP.
-7. get_ticket(ticket_number) → confirmar que termina no Objetivo, sem assinatura.
+7. get_ticket(ticket_number) → confirmar que termina no </p> do Objetivo, sem assinatura, ainda em HTML.
 8. Reportar: nº dos tickets criados + campos aplicados + LISTA DAS BLOQUEADAS
    por duplicata, com o #número do ticket já existente. Nunca omitir o que não foi criado.
 ```

@@ -170,6 +170,11 @@ orquestra-tarefa/
     ├── 1on1s/                        # DATADA — 1on1s/<dd-mm-aaaa>/YYYY-MM-DD-1on1-<pessoa>.md
     └── referencias/                  # Artefatos não-markdown (sql/, csv/, json/, prints/, pdf/, docx/)
 
+Harness/                              # Harness de dev GENÉRICO p/ anexar em demandas (NÃO é o .claude/ deste workspace)
+├── agents/                           # software-architect · dba · backend-dev · frontend-dev · qa-engineer · code-reviewer · tech-writer
+│                                     #   autossuficientes, agnósticos a negócio E stack (padrões/convenções/boas práticas)
+└── README.md                         # como usar num projeto
+
 ─── SUBPROJETOS ACOPLADOS (repos git próprios — NÃO são parte deste repo) ───
 
 N8N-AGENT/                            # Repo github.com/blips-ai/N8N-AGENT — conhecimento de n8n da empresa

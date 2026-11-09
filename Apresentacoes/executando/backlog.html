@@ -869,17 +869,6 @@ a:hover{text-decoration:underline}
                       "bloqueia":  [
 
                                    ],
-                      "tags":  [
-                                   "torre",
-                                   "multi-org",
-                                   "rhino",
-                                   "originador",
-                                   "urgente",
-                                   "jessica",
-                                   "xl",
-                                   "cutover",
-                                   "em-execucao"
-                               ],
                       "historia":  "Como gestor de cobrança, quero operar múltiplos originadores na Torre com isolamento de dados, regras e configuração por organização, para absorver Rhino e futuros clientes sem reescrita por carteira nem improviso operacional.",
                       "contexto":  "Iniciativa-mãe da frente Torre — prioridade urgente. 3 docs origem (18/05, 19/05, 20/05). 79 tabelas mapeadas, schema public para recursos compartilhados, demais migram para org, script DDL único para nova org. Execução em curso com Marcos Rodrigues (schema/functions/pacote dev) e João Lucas (aplicação/ETL Rhino). Escopo deste item: schema migration + ETL/migração Rhino + cutover. NÃO cobre UI \u0027perfil por carteira\u0027, RAG por carteira, dashboards multi-org, n8n segregado nem RBAC consolidado — esses pertencem a outros BTRs (BTR03 dashboards, BTR06 inteligência_carteira) ou viram itens novos quando refinados.",
                       "criterios_aceite":  [
@@ -954,12 +943,21 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "Marcos Rodrigues + João Lucas",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "tags":  [
+                                   "torre",
+                                   "multi-org",
+                                   "rhino",
+                                   "originador",
+                                   "urgente",
+                                   "jessica",
+                                   "xl",
+                                   "cutover"
+                               ]
                   },
                   {
                       "id":  "BTR03",
                       "frente":  "torre",
-                      "title":  "Validação conjunta de dashboards E relatórios IA da Torre de Controle",
                       "status":  "em-refinamento",
                       "prioridade":  "media",
                       "sponsor":  "Jéssica",
@@ -997,14 +995,6 @@ a:hover{text-decoration:underline}
                       "bloqueia":  [
 
                                    ],
-                      "tags":  [
-                                   "torre",
-                                   "dashboard",
-                                   "relatorios",
-                                   "validacao",
-                                   "jessica",
-                                   "fusao-btr04"
-                               ],
                       "historia":  "Como gestor de cobrança, quero dashboards da Torre com cálculos e conceitos validados conjuntamente, para tomar decisão com base em métrica calibrada.",
                       "contexto":  "Sem validação, time consome números diferentemente do que foram calculados. Doc Perguntas IA 18/05: divergência 277 vs 2000 protocolos + consulta de 12h = bloqueia validação semântica.",
                       "criterios_aceite":  [
@@ -1074,13 +1064,19 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "title":  "Validação conjunta de dashboards da Torre de Controle",
+                      "tags":  [
+                                   "torre",
+                                   "dashboard",
+                                   "validacao",
+                                   "jessica"
+                               ]
                   },
                   {
                       "id":  "BTR04",
                       "frente":  "torre",
                       "title":  "Validação de cálculos e conceitos dos relatórios IA da Torre",
-                      "status":  "cancelado",
                       "absorvido_por":  "BTR03",
                       "cancelado_em":  "2026-05-26",
                       "motivo_cancelamento":  "Escopo absorvido por BTR03 — mesma metodologia, mesmo dicionário canônico, mesmos stakeholders. Fusão recomendada no refinement PO (vide notas BTR03/04).",
@@ -1178,13 +1174,13 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "status":  "em-curso"
                   },
                   {
                       "id":  "BTR05",
                       "frente":  "torre",
                       "title":  "Implementar comunicação RCS (Rich Communication Services)",
-                      "status":  "validacao",
                       "prioridade":  "baixa",
                       "sponsor":  "Jéssica",
                       "owner":  "João Vinícius",
@@ -1282,7 +1278,8 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "status":  "a-refinar"
                   },
                   {
                       "id":  "BTR06",
@@ -1314,11 +1311,6 @@ a:hover{text-decoration:underline}
                       "bloqueia":  [
 
                                    ],
-                      "tags":  [
-                                   "torre",
-                                   "inteligencia-especifica",
-                                   "cancelado"
-                               ],
                       "historia":  "(CANCELADO) Escopo absorvido por BTR02 — perfil de IA por carteira via filter_definition_id.",
                       "contexto":  "Cancelado em 22/05. Arquitetura já cobre via camada de conhecimento + (futuramente) regras com escopo de filtro.",
                       "criterios_aceite":  [
@@ -1343,7 +1335,14 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "tags":  [
+                                   "torre",
+                                   "inteligencia-especifica",
+                                   "jessica",
+                                   "personalizacao",
+                                   "cancelado"
+                               ]
                   },
                   {
                       "id":  "BTR07",
@@ -1384,16 +1383,6 @@ a:hover{text-decoration:underline}
                       "bloqueia":  [
 
                                    ],
-                      "tags":  [
-                                   "torre",
-                                   "refatoracao",
-                                   "backend",
-                                   "fastapi",
-                                   "postgres",
-                                   "enterprise",
-                                   "xl",
-                                   "postergado"
-                               ],
                       "historia":  "Como time IAF + Plataformas, quero reescrever a Torre com stack enterprise (FastAPI + PostgreSQL, fila com reprocessamento, paralelismo nos disparos, observabilidade robusta), para eliminar débito técnico Supabase, melhorar performance/confiabilidade e refletir o MF com fidelidade.",
                       "contexto":  "Torre cresceu sobre Supabase + Edge Functions com débito arquitetural. POSTERGADA em 19/05 para priorizar BTR02 (multi-org).",
                       "criterios_aceite":  [
@@ -1463,7 +1452,19 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "tags":  [
+                                   "torre",
+                                   "refatoracao",
+                                   "backend",
+                                   "fastapi",
+                                   "postgres",
+                                   "enterprise",
+                                   "performance",
+                                   "fila",
+                                   "xl",
+                                   "postergado"
+                               ]
                   },
                   {
                       "id":  "BTR08",
@@ -1504,15 +1505,6 @@ a:hover{text-decoration:underline}
                       "bloqueia":  [
 
                                    ],
-                      "tags":  [
-                                   "torre",
-                                   "regua",
-                                   "templates",
-                                   "configuracao",
-                                   "jessica",
-                                   "ux",
-                                   "NOVO"
-                               ],
                       "historia":  "Como gestor de cobrança / curador de IA, quero templates de régua + função de cópia entre réguas, para configurar nova régua em minutos e reduzir erro de configuração manual.",
                       "contexto":  "João Pedro Borges criticou em 20/05 a lentidão para configurar réguas. Templates ou cópia aceleram. Complementa BTR02 — quando nova org é criada, templates poupam horas.",
                       "criterios_aceite":  [
@@ -1571,29 +1563,26 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "tags":  [
+                                   "torre",
+                                   "regua",
+                                   "templates",
+                                   "configuracao",
+                                   "jessica",
+                                   "ux"
+                               ]
                   },
                   {
                       "id":  "BTR10",
                       "frente":  "torre",
-                      "title":  "Provisionar Supabase DEV self-hosted (GCP) com dados de prod anonimizados",
-                      "status":  "em-refinamento",
                       "prioridade":  "alta",
                       "sponsor":  "João Vinícius",
                       "owner":  "João Vinícius",
                       "implementador":  "João Vinícius Dessimoni Fernandes",
                       "deadline_alvo":  "2026-Q3",
                       "criada":  "2026-08-07",
-                      "refinada":  "2026-08-07",
                       "valor_negocio":  "alto",
-                      "esforco":  "L",
-                      "rice":  {
-                                   "reach":  7,
-                                   "impact":  7,
-                                   "confidence":  6,
-                                   "effort":  6,
-                                   "score":  4.9
-                               },
                       "origem":  {
                                      "pendencias":  [
 
@@ -1609,21 +1598,6 @@ a:hover{text-decoration:underline}
                       "dependencias":  [
 
                                        ],
-                      "bloqueia":  [
-
-                                   ],
-                      "tags":  [
-                                   "torre",
-                                   "supabase",
-                                   "self-hosted",
-                                   "gcp",
-                                   "dev",
-                                   "anonimizacao",
-                                   "pii",
-                                   "edge-functions",
-                                   "verify-jwt",
-                                   "NOVO"
-                               ],
                       "historia":  "Como time de desenvolvimento da Torre, quero um ambiente Supabase DEV self-hosted no GCP com estrutura e dados de produção replicados, porém com toda a PII anonimizada, para desenvolver e testar contra dados realistas sem risco de vazar dado sensível de cliente e sem depender de produção.",
                       "contexto":  "Origem Quimera #4786 (cancelado 05/08, reatribuído ao João, que vai executar). Duas frentes: (A) clonar prod→dev via túnel IAP + pg_dump/pg_restore, anonimizando email/telefone (dados do time de dev) e CPF/CNPJ (fictícios); (B) router main/index.ts no self-hosted replicando os 38 overrides verify_jwt=false do config.toml (o config.toml não é lido no self-hosted).",
                       "criterios_aceite":  [
@@ -1670,7 +1644,7 @@ a:hover{text-decoration:underline}
                                      "pg_dump/restore via pooler pode falhar por parâmetro não suportado — plano B: rodar de dentro da VM.",
                                      "Router verify_jwt errado abre EF sem auth ou quebra crons/webhooks (não mandam JWT).",
                                      "Lista dos 38 overrides desatualiza sozinha — EF nova se comporta errado sem alarme.",
-                                     "Escopo cresceu de 'clonar dados' (5 SP) para 'clonar + auth self-hosted' — provavelmente 2 itens."
+                                     "Escopo cresceu de \u0027clonar dados\u0027 (5 SP) para \u0027clonar + auth self-hosted\u0027 — provavelmente 2 itens."
                                  ],
                       "observacoes_po":  "Provavelmente 2 itens: manter BTR10 como clone+anonimização (Frente A) e extrair router verify_jwt (Frente B) como BTR10b. Anonimização é gate não-negociável. Deploy das EF está fora de escopo (já é infra decidida). Self-hosted GCP ≠ dev Cloud (dcedqaatdeobbrlwxzha).",
                       "historico":  [
@@ -1686,7 +1660,32 @@ a:hover{text-decoration:underline}
                       "quimera":  4786,
                       "concluida":  null,
                       "responsavel":  "João Vinícius Dessimoni Fernandes",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "title":  "Provisionar Supabase DEV self-hosted (GCP) com 100 clientes anonimizados e ambiente segregado",
+                      "status":  "em-curso",
+                      "refinada":  "2026-08-10",
+                      "esforco":  "M",
+                      "rice":  {
+                                   "reach":  7,
+                                   "impact":  7,
+                                   "confidence":  8,
+                                   "effort":  4,
+                                   "score":  9.8
+                               },
+                      "bloqueia":  [
+                                       "BTR11"
+                                   ],
+                      "tags":  [
+                                   "torre",
+                                   "supabase",
+                                   "self-hosted",
+                                   "gcp",
+                                   "dev",
+                                   "anonimizacao",
+                                   "pii",
+                                   "segregacao",
+                                   "infra"
+                               ]
                   },
                   {
                       "id":  "BCL01",
@@ -1702,13 +1701,6 @@ a:hover{text-decoration:underline}
                       "refinada":  "2026-05-25",
                       "valor_negocio":  "alto",
                       "esforco":  "M",
-                      "rice":  {
-                                   "reach":  7,
-                                   "impact":  7,
-                                   "confidence":  7,
-                                   "effort":  4,
-                                   "score":  8.58
-                               },
                       "origem":  {
                                      "pendencias":  [
                                                         "P25"
@@ -1790,7 +1782,14 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "rice":  {
+                                   "reach":  7,
+                                   "impact":  7,
+                                   "confidence":  7,
+                                   "effort":  4,
+                                   "score":  8.575
+                               }
                   },
                   {
                       "id":  "BCL02",
@@ -2119,13 +2118,6 @@ a:hover{text-decoration:underline}
                       "refinada":  "2026-05-25",
                       "valor_negocio":  "alto",
                       "esforco":  "L",
-                      "rice":  {
-                                   "reach":  6,
-                                   "impact":  8,
-                                   "confidence":  4,
-                                   "effort":  7,
-                                   "score":  2.74
-                               },
                       "origem":  {
                                      "pendencias":  [
                                                         "P17"
@@ -2207,7 +2199,14 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "rice":  {
+                                   "reach":  6,
+                                   "impact":  8,
+                                   "confidence":  4,
+                                   "effort":  7,
+                                   "score":  2.7
+                               }
                   },
                   {
                       "id":  "BES03",
@@ -2244,10 +2243,6 @@ a:hover{text-decoration:underline}
                                                       ]
                                  },
                       "roadmap_vinculado":  "RM02",
-                      "dependencias":  [
-                                           "BES05",
-                                           "BES08"
-                                       ],
                       "bloqueia":  [
                                        "BST03"
                                    ],
@@ -2314,7 +2309,10 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "dependencias":  [
+                                           "BES05"
+                                       ]
                   },
                   {
                       "id":  "BES04",
@@ -2551,9 +2549,6 @@ a:hover{text-decoration:underline}
                       "dependencias":  [
 
                                        ],
-                      "bloqueia":  [
-                                       "BST03"
-                                   ],
                       "tags":  [
                                    "esperanza",
                                    "relatorio",
@@ -2609,7 +2604,10 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "bloqueia":  [
+
+                                   ]
                   },
                   {
                       "id":  "BES07",
@@ -2650,17 +2648,6 @@ a:hover{text-decoration:underline}
                       "bloqueia":  [
                                        "BST03"
                                    ],
-                      "tags":  [
-                                   "esperanza",
-                                   "diagnostico",
-                                   "observabilidade",
-                                   "governanca",
-                                   "kpis",
-                                   "delirio",
-                                   "jessica",
-                                   "NOVO",
-                                   "UMBRELLA"
-                               ],
                       "historia":  "Como gestor de cobrança Finza, quero visão completa da maturidade operacional da Esperanza — governança, confiabilidade, capacidade real, comparativo com humano, gargalos, KPIs estratégicos, para decidir onde investir, frear, escalar a IA com base em dado e não palpite.",
                       "contexto":  "Doc Jéssica lista 14 categorias: governança, delírio, capacidade real, IA vs humano, cobertura, resolução, transferência, evolução, info sistêmicas, protocolos, falhas, classificação, KPIs, objetivo. BES03/04/06 cobrem PARCIALMENTE 3 das 14. ⚠️ Item UMBRELLA — não cobre tudo em sprint.",
                       "criterios_aceite":  [
@@ -2719,7 +2706,16 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "tags":  [
+                                   "esperanza",
+                                   "diagnostico",
+                                   "observabilidade",
+                                   "governanca",
+                                   "kpis",
+                                   "delirio",
+                                   "jessica"
+                               ]
                   },
                   {
                       "id":  "BES08",
@@ -2763,16 +2759,6 @@ a:hover{text-decoration:underline}
                                        "BTR04",
                                        "BES07"
                                    ],
-                      "tags":  [
-                                   "esperanza",
-                                   "dados",
-                                   "governanca",
-                                   "torre",
-                                   "hyper",
-                                   "divergencia",
-                                   "NOVO",
-                                   "qualidade-dados"
-                               ],
                       "historia":  "Como gestor de cobrança, quero reconciliar a contagem de protocolos entre Torre e Hyper, para tomar decisão com base em número único, não em discrepância de 7x entre sistemas.",
                       "contexto":  "Em 15/05 divergência detectada: Torre 277 vs Hyper 2000. Reunião 18/05 mapeou 5 causas possíveis. BLOQUEIA dashboards (BTR03), relatórios (BTR04), volume transferências (BES03), diagnóstico (BES07).",
                       "criterios_aceite":  [
@@ -2829,7 +2815,16 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "tags":  [
+                                   "esperanza",
+                                   "dados",
+                                   "governanca",
+                                   "torre",
+                                   "hyper",
+                                   "divergencia",
+                                   "qualidade-dados"
+                               ]
                   },
                   {
                       "id":  "BVA01",
@@ -3253,7 +3248,6 @@ a:hover{text-decoration:underline}
                       "criada":  "2026-05-22",
                       "refinada":  null,
                       "valor_negocio":  "medio",
-                      "esforco":  "XS",
                       "rice":  null,
                       "origem":  {
                                      "pendencias":  [
@@ -3312,7 +3306,8 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "esforco":  null
                   },
                   {
                       "id":  "BST02",
@@ -3422,7 +3417,6 @@ a:hover{text-decoration:underline}
                   {
                       "id":  "BST03",
                       "frente":  "estrategica",
-                      "title":  "Discovery — definir narrativa o que a IA faz para o negócio Finza",
                       "status":  "a-refinar",
                       "prioridade":  "alta",
                       "sponsor":  "Diretoria",
@@ -3449,11 +3443,6 @@ a:hover{text-decoration:underline}
                                                   ]
                                  },
                       "roadmap_vinculado":  "RM24",
-                      "dependencias":  [
-                                           "BES03",
-                                           "BES06",
-                                           "BES07"
-                                       ],
                       "bloqueia":  [
 
                                    ],
@@ -3518,7 +3507,12 @@ a:hover{text-decoration:underline}
                       "quimera":  null,
                       "concluida":  null,
                       "responsavel":  "João Vinícius",
-                      "prazo_estimado":  false
+                      "prazo_estimado":  false,
+                      "title":  "Discovery — definir narrativa \"o que a IA faz para o negócio Finza\"",
+                      "dependencias":  [
+                                           "BES03",
+                                           "BES06"
+                                       ]
                   },
                   {
                       "id":  "QMR3431",
@@ -12304,9 +12298,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-127",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-38",
@@ -12370,9 +12364,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-38",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-202",
@@ -12436,9 +12430,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-202",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-141",
@@ -12502,9 +12496,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-141",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-107",
@@ -12568,9 +12562,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-107",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-5",
@@ -12634,9 +12628,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-5",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-42",
@@ -12700,9 +12694,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-42",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-199",
@@ -12766,9 +12760,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-199",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-47",
@@ -12832,9 +12826,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-47",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-68",
@@ -12898,9 +12892,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-68",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-201",
@@ -12964,9 +12958,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-201",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-170",
@@ -13030,9 +13024,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-170",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-124",
@@ -13096,9 +13090,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-124",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-39",
@@ -13162,9 +13156,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-39",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-45",
@@ -13228,9 +13222,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-45",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-58",
@@ -13294,9 +13288,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-58",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-10",
@@ -13360,9 +13354,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-10",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-40",
@@ -13426,9 +13420,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-40",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-123",
@@ -13492,9 +13486,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-123",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-4",
@@ -13558,9 +13552,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-4",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-60",
@@ -13631,9 +13625,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-60",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-51",
@@ -13697,9 +13691,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-51",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-175",
@@ -13763,9 +13757,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-175",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-193",
@@ -13829,9 +13823,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-193",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-46",
@@ -13895,9 +13889,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-46",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-88",
@@ -13961,9 +13955,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-88",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-44",
@@ -14027,9 +14021,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-44",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-41",
@@ -14093,9 +14087,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-41",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-49",
@@ -14161,9 +14155,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-49",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-63",
@@ -14227,9 +14221,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-63",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-64",
@@ -14293,9 +14287,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-64",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-56",
@@ -14359,9 +14353,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-56",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-52",
@@ -14425,9 +14419,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-52",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-54",
@@ -14491,9 +14485,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-54",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-34",
@@ -14557,9 +14551,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-34",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-37",
@@ -14623,9 +14617,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-37",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-208",
@@ -14689,9 +14683,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-208",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-55",
@@ -14755,9 +14749,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-55",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-142",
@@ -14821,9 +14815,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-142",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-191",
@@ -14887,9 +14881,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-191",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-144",
@@ -14953,9 +14947,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-144",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-59",
@@ -15019,9 +15013,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-59",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-48",
@@ -15085,9 +15079,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-48",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-2",
@@ -15151,9 +15145,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-2",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-179",
@@ -15217,9 +15211,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-179",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-195",
@@ -15283,9 +15277,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-195",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-105",
@@ -15349,9 +15343,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-105",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-50",
@@ -15415,9 +15409,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-50",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-65",
@@ -15481,9 +15475,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-65",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-135",
@@ -15547,9 +15541,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-135",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-57",
@@ -15613,9 +15607,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-57",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-53",
@@ -15679,9 +15673,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-53",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-43",
@@ -15745,9 +15739,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-43",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-11",
@@ -15811,9 +15805,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-11",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-104",
@@ -15877,9 +15871,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-104",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-180",
@@ -15943,9 +15937,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-180",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-190",
@@ -16009,9 +16003,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-190",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-35",
@@ -16075,9 +16069,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-35",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-209",
@@ -16141,9 +16135,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-209",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-61",
@@ -16207,9 +16201,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-61",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-33",
@@ -16273,9 +16267,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-33",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-143",
@@ -16339,9 +16333,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-143",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-27",
@@ -16406,9 +16400,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-27",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "IAF-21",
@@ -16472,9 +16466,9 @@ a:hover{text-decoration:underline}
                                     ],
                       "notas":  "",
                       "fonte":  "jira",
-                      "categoria":  "null",
                       "jira":  "IAF-21",
-                      "quimera":  null
+                      "quimera":  null,
+                      "categoria":  null
                   },
                   {
                       "id":  "QMR3457",
@@ -16542,8 +16536,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3457
+                      "quimera":  3457,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3467",
@@ -16609,8 +16603,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "TI",
-                      "jira":  "null",
-                      "quimera":  3467
+                      "quimera":  3467,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3529",
@@ -16677,8 +16671,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3529
+                      "quimera":  3529,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3531",
@@ -16745,8 +16739,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3531
+                      "quimera":  3531,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3555",
@@ -16813,8 +16807,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "IA",
-                      "jira":  "null",
-                      "quimera":  3555
+                      "quimera":  3555,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3567",
@@ -16880,8 +16874,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "TI",
-                      "jira":  "null",
-                      "quimera":  3567
+                      "quimera":  3567,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3623",
@@ -16947,8 +16941,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3623
+                      "quimera":  3623,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3624",
@@ -17014,8 +17008,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Recuperação",
-                      "jira":  "null",
-                      "quimera":  3624
+                      "quimera":  3624,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3625",
@@ -17081,8 +17075,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "TI",
-                      "jira":  "null",
-                      "quimera":  3625
+                      "quimera":  3625,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3659",
@@ -17149,8 +17143,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3659
+                      "quimera":  3659,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3664",
@@ -17216,8 +17210,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "TI",
-                      "jira":  "null",
-                      "quimera":  3664
+                      "quimera":  3664,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3690",
@@ -17283,8 +17277,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3690
+                      "quimera":  3690,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3691",
@@ -17350,8 +17344,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "Cobrança",
-                      "jira":  "null",
-                      "quimera":  3691
+                      "quimera":  3691,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3692",
@@ -17417,8 +17411,8 @@ a:hover{text-decoration:underline}
                       "notas":  "",
                       "fonte":  "quimera",
                       "categoria":  "TI",
-                      "jira":  "null",
-                      "quimera":  3692
+                      "quimera":  3692,
+                      "jira":  null
                   },
                   {
                       "id":  "QMR3715",
@@ -19228,10 +19222,684 @@ a:hover{text-decoration:underline}
                       "categoria":  "Cobrança",
                       "jira":  null,
                       "quimera":  3957
+                  },
+                  {
+                      "id":  "BTR11",
+                      "frente":  "torre",
+                      "title":  "Router de autenticação das Edge Functions no self-hosted (verify_jwt) + reconciliar config.toml com a prod",
+                      "status":  "a-refinar",
+                      "prioridade":  "alta",
+                      "sponsor":  "João Vinícius",
+                      "owner":  "João Vinícius",
+                      "implementador":  null,
+                      "deadline_alvo":  "2026-Q3",
+                      "criada":  "2026-08-10",
+                      "refinada":  null,
+                      "valor_negocio":  "alto",
+                      "esforco":  "M",
+                      "rice":  {
+                                   "reach":  5,
+                                   "impact":  8,
+                                   "confidence":  5,
+                                   "effort":  5,
+                                   "score":  4
+                               },
+                      "origem":  {
+                                     "pendencias":  [
+
+                                                    ],
+                                     "reunioes":  [
+
+                                                  ],
+                                     "solicitacoes":  [
+
+                                                      ],
+                                     "analises":  [
+
+                                                  ],
+                                     "quimera":  [
+                                                     "4786"
+                                                 ]
+                                 },
+                      "roadmap_vinculado":  null,
+                      "dependencias":  [
+                                           "BTR10"
+                                       ],
+                      "bloqueia":  [
+
+                                   ],
+                      "tags":  [
+                                   "torre",
+                                   "supabase",
+                                   "self-hosted",
+                                   "edge-functions",
+                                   "verify-jwt",
+                                   "seguranca",
+                                   "router",
+                                   "infra"
+                               ],
+                      "historia":  "Como responsável pela Torre no ambiente self-hosted, quero um router de Edge Functions que replique fielmente a política de autenticação por função que hoje vive no Supabase Cloud, e que se regenere sozinho quando uma EF nova aparecer, para não quebrar crons e webhooks nem deixar funções de frontend abertas sem autenticação.",
+                      "contexto":  "No Supabase Cloud, o supabase/config.toml do monolito controla o verify_jwt de cada função. No self-hosted esse arquivo não é lido — quem decide é o volumes/functions/main/index.ts, um router que o edge-runtime executa antes de cada função. Sem ele: ou todas as EFs exigem JWT (quebra webhook e cron), ou nenhuma exige (buraco de segurança).\n\nA proposta do card — e do DevOps — é gerar o router a partir do config.toml, mantendo uma fonte de verdade única em vez de lista duplicada mantida à mão. A ideia está certa. A premissa não.\n\n### O achado que muda a ordem do trabalho\n\nMedição em prod, 10/08/2026:\n\nO comentário no topo do config.toml diz *\"sync com 47 EFs (atualizado 2026-05-27)\"* — há 62 hoje. Tanto o card quanto o doc do DevOps citam \"38 overrides\"; o arquivo tem 31.\n\nAs 22 divergentes — todas rodando sem JWT em produção agora, e todas tratadas pelo config.toml como Categoria 1 (\"frontend exclusivo, verify_jwt = true por default\"):\n\ncreate-org-schema · daily-sync-orchestrator · ai-config · ai-assistant · ai-orchestrator · ai-playground · ai-proposal-executor · workflow-orchestrator · send-message-v2 · manage-orphan-schemas · unexpose-org-schema · send-invitation-email · export-portfolio · get-dashboard-kpis · get-attribution-kpis · get-monthly-evolution · get-repique-dashboard · generate-actions-report · populate-contract-summaries · rag-documents · rag-download · dispatch-a2a-open-protocols\n\nGerar o router do config.toml antes de reconciliar produz um DEV que difere da prod em 22 funções — e como o config.toml diz uma coisa e a prod faz outra, ninguém percebe.",
+                      "criterios_aceite":  [
+                                               {
+                                                   "id":  "CA-1",
+                                                   "texto":  "Given as 22 divergências, When cada uma é auditada, Then existe registro explícito de qual estado é o correto (config.toml desatualizado ou prod com override indevido) e quem é o caller de cada EF."
+                                               },
+                                               {
+                                                   "id":  "CA-2",
+                                                   "texto":  "Given a auditoria concluída, When o config.toml é corrigido, Then ele declara explicitamente a política de todas as 62 EFs (sem depender de default implícito) e o comentário de cabeçalho reflete a contagem real."
+                                               },
+                                               {
+                                                   "id":  "CA-3",
+                                                   "texto":  "Given o config.toml reconciliado, When o main/index.ts é gerado, Then o router aplica exatamente a mesma política que a prod aplica, função por função."
+                                               },
+                                               {
+                                                   "id":  "CA-4",
+                                                   "texto":  "Given o processo de geração, When uma EF nova é adicionada ao monolito, Then o router se regenera a partir do config.toml sem edição manual de lista duplicada — e o build falha se houver EF sem política declarada."
+                                               },
+                                               {
+                                                   "id":  "CA-5",
+                                                   "texto":  "Given o router publicado no DEV, When um cron ou webhook sem JWT chama sua EF, Then a chamada passa."
+                                               },
+                                               {
+                                                   "id":  "CA-6",
+                                                   "texto":  "Given o router publicado no DEV, When uma EF de frontend é chamada sem JWT válido, Then é rejeitada com 401."
+                                               },
+                                               {
+                                                   "id":  "CA-7",
+                                                   "texto":  "Given o deploy das EFs, When o pipeline roda, Then o diretório main/ sobrevive (não é apagado pelo find ... ! -name \"main\") e o router continua vigente."
+                                               }
+                                           ],
+                      "subtarefas":  [
+                                         {
+                                             "id":  "ST-1",
+                                             "title":  "Auditar as 22 divergências. ⚠️ PO: este é o gate. Para cada EF, identificar o caller real (frontend / cron / EF→EF / externo via x-api-key / webhook) e decidir a política correta. É auditoria de segurança, não configuração.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-2",
+                                             "title":  "Localizar o mapear-webhooks.py. Citado no card e no doc do DevOps como base do gerador, não encontrado em nenhum repo do workspace. Se não existir versionado, escrever o parser do zero.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-3",
+                                             "title":  "Reconciliar o config.toml. Declarar as 62 EFs explicitamente; atualizar o comentário de cabeçalho e as contagens (Regra 21 do CLAUDE.md da Torre: doc e contagem acompanham o código).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-4",
+                                             "title":  "Escrever o gerador do main/index.ts. A partir do config.toml reconciliado. Determinístico, versionado, com falha de build para EF sem política.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-5",
+                                             "title":  "Decidir onde o router vive (Q3): monolito junto das EFs, ou infra-torre-controle. Se é gerado do config.toml, o argumento pesa para o monolito.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-6",
+                                             "title":  "Responder a Q2. Além do verify_jwt, o self-hosted precisa replicar mais do config.toml? Indício de que sim: as 62 EFs usam import_map.json e o mcp-server usa deno.json próprio.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-7",
+                                             "title":  "Testar no DEV. Cron/webhook sem JWT passam; EF de frontend sem JWT bloqueada (CA-5, CA-6).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-8",
+                                             "title":  "Validar sobrevivência no deploy. Rodar o pipeline de EFs e confirmar que main/ não foi sobrescrito (CA-7).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         }
+                                     ],
+                      "premissas":  [
+                                        "No Supabase self-hosted o supabase/config.toml NÃO é lido. Quem decide autenticação por função é volumes/functions/main/index.ts, o router que o edge-runtime executa antes de cada função.",
+                                        "O pipeline de deploy das EFs preserva o diretório main/ na VM (o passo usa find ... ! -name \"main\"), logo o router não é sobrescrito pelo deploy do monolito.",
+                                        "Prod em 10/08/2026: 62 EFs deployadas, 53 com verify_jwt=false e 9 com true. O config.toml declara 31 overrides."
+                                    ],
+                      "riscos":  [
+                                     "Falha silenciosa: gerar o router a partir do config.toml hoje produz um DEV que difere da prod em 22 funções — você acredita ter testado paridade e não testou. É o pior dos modos de falha porque não dispara alarme.",
+                                     "Router exigindo JWT de tudo quebra os crons e webhooks (pg_cron, sistema de pagamento e HyperFlow não mandam JWT). Falha ruidosa, mas derruba a operação.",
+                                     "Router não exigindo JWT de nada deixa as EFs de frontend abertas sem autenticação. É buraco de segurança, não bug de ambiente.",
+                                     "Lista desatualiza sozinha: EF nova criada sem regenerar o router se comporta errado sem alarme. Daí a exigência de geração automática (CA-4).",
+                                     "O script mapear-webhooks.py citado como base do gerador não foi localizado em nenhum repositório do workspace. Pode viver em máquina pessoal — o que é problema para uma peça que se torna dependência de build."
+                                 ],
+                      "observacoes_po":  "A ordem correta é reconciliar → corrigir → gerar. Não gerar → descobrir depois. Inverter a ordem produz exatamente a falha silenciosa que o item existe para evitar.\n\nRouter auto-gerado \u003e lista manual. Concordo com a proposta do card e do DevOps: gerar do config.toml elimina a classe de bug \"EF nova esquecida\". Vale investir na regeneração automática (CA-4) mesmo custando mais que hardcodar hoje.\n\nA ST-1 é o verdadeiro item. Escrever o gerador é trabalho mecânico de meia tarde. Decidir a política de autenticação de 22 funções que hoje rodam abertas em produção é decisão de segurança, e provavelmente revela problema em prod, não só em dev. Se a auditoria concluir que alguma das 22 está com override indevido, isso é um achado de produção e pode virar item próprio.\n\nEscopo de deploy está fechado. O mecanismo (GitHub Actions → tar → gcloud compute scp via IAP → extrai em /opt/supabase/data/project/volumes/functions → docker compose restart functions → smoke test) já foi decidido pelo DevOps. Não reabrir. O que este item entrega é o conteúdo de main/, não o pipeline.\n\nEste item não bloqueia o BTR10. O DEV fica utilizável para desenvolvimento de banco, frontend e SQL sem o router. O router é pré-requisito para testar Edge Functions no self-hosted.",
+                      "historico":  [
+                                        {
+                                            "data":  "2026-08-10",
+                                            "texto":  "Item criado por extração da Frente D do BTR10, conforme recomendação do plano de execução. Motivo da quebra: a frente depende de auditar 22 divergências entre config.toml e o estado deployado em prod — trabalho de segurança, não de provisionamento — e amarrá-la ao clone atrasaria a entrega do DEV utilizável. Herdou as questões Q2 e Q3. Status inicial a-refinar."
+                                        }
+                                    ],
+                      "notas":  "",
+                      "fonte":  "backlog",
+                      "categoria":  null,
+                      "jira":  null,
+                      "quimera":  4786,
+                      "concluida":  null,
+                      "responsavel":  null,
+                      "prazo_estimado":  false
+                  },
+                  {
+                      "id":  "QMR12266",
+                      "frente":  "estrategica",
+                      "title":  "Mapa de Áreas Finza — base e estrutura para o levantamento de carência de automação",
+                      "status":  "refinado",
+                      "prioridade":  "media",
+                      "sponsor":  "João Vinícius",
+                      "owner":  "João Vinícius",
+                      "implementador":  "Leandro Marques Gontijo Jersé",
+                      "deadline_alvo":  null,
+                      "criada":  "2026-11-06",
+                      "refinada":  "2026-11-06",
+                      "valor_negocio":  "alto",
+                      "esforco":  "M",
+                      "rice":  null,
+                      "origem":  {
+                                     "pendencias":  [
+
+                                                    ],
+                                     "reunioes":  [
+
+                                                  ],
+                                     "solicitacoes":  [
+
+                                                      ],
+                                     "quimera":  [
+                                                     "QMR12266"
+                                                 ]
+                                 },
+                      "roadmap_vinculado":  null,
+                      "dependencias":  [
+
+                                       ],
+                      "bloqueia":  [
+
+                                   ],
+                      "tags":  [
+                                   "fonte-quimera",
+                                   "cat-processos",
+                                   "mapa_areas",
+                                   "estrategica"
+                               ],
+                      "historia":  "Como supervisor do squad IAF, quero um mapa único e compartilhado de todas as áreas da Finza com carência de automação, sentimento e ficha de entrevista, para decidir quem é cliente do squad e priorizar o atendimento pela carência real de cada área.",
+                      "contexto":  "Primeira etapa da jornada Mapa de Áreas: descobrir quem é cliente do squad de IA \u0026 Automação na Finza. O mapa vira o registro vivo das áreas que o squad vai atender ao longo do tempo.\n\nJornada prevista: 1. Etapa 1 (este item): base de áreas + estrutura do mapa pronta para entrevista. 2. Etapa 2: entrevistas com cada área e responsáveis (sentimento, trabalho manual, responsabilidades). Vai ter demanda própria. 3. Etapa 3: propostas de automação por área, priorizadas pelo índice de carência.\n\nEstado do artefato em 2026-11-06 (lido do bundle): - Fonte: exportação CSV dos departamentos do Hyperflow, com 30 registros e as colunas Departamento e Responsáveis. Não é organograma. - Por área: situação do levantamento (a_pesquisar, em_levantamento, mapeado, sem_automacao), observações e data de verificação. - Cadastro de automações: tipo (IA, workflow, integração), status operacional e confirmação. Nenhuma automação registrada ainda. - Armazenamento: só no navegador de quem preenche, com exportação e importação em JSON. - Não tem: ranking de carência, sentimento ou ficha de entrevista.",
+                      "criterios_aceite":  [
+                                               {
+                                                   "id":  "CA-1",
+                                                   "texto":  "Dado o mapa publicado, quando abro a lista de áreas, então vejo todas as áreas da Finza, inclusive as que não têm departamento no Hyperflow. Registros de teste, filas de bot, \"Erro\" e \"Todos\" aparecem separados ou não aparecem."
+                                               },
+                                               {
+                                                   "id":  "CA-2",
+                                                   "texto":  "Dado uma área, quando abro o detalhe, então vejo gestor ou ponto focal, número de pessoas e a quantidade de automações e IAs que atendem a área."
+                                               },
+                                               {
+                                                   "id":  "CA-3",
+                                                   "texto":  "Dado uma entrevista em curso, quando preencho a ficha da área, então registro objetivo, responsabilidades, principais processos (frequência, volume, tempo gasto, se é manual), sistemas, dores, data e entrevistador."
+                                               },
+                                               {
+                                                   "id":  "CA-4",
+                                                   "texto":  "Dado uma área entrevistada, quando registro o sentimento, então salvo a nota de 1 a 5 do peso do trabalho manual, a nota de 1 a 5 da relação com o squad de IA e uma frase em destaque. Tudo no nível da área, nunca de uma pessoa."
+                                               },
+                                               {
+                                                   "id":  "CA-5",
+                                                   "texto":  "Dado os campos preenchidos, quando o índice de carência é calculado, então a área recebe a classificação cliente prioritário, cliente potencial ou não-cliente no momento."
+                                               },
+                                               {
+                                                   "id":  "CA-6",
+                                                   "texto":  "Dado dois membros do squad editando, quando um salva, então o outro vê a mesma versão (armazenamento compartilhado, não local)."
+                                               }
+                                           ],
+                      "subtarefas":  [
+                                         {
+                                             "id":  "ST-1",
+                                             "title":  "Completar a base de áreas além do Hyperflow e validar a lista com o gestor ou o RH. ⚠️ PO: a confirmar quem valida.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-2",
+                                             "title":  "Limpar a base: testes, filas \"IA - …\", \"Erro\", \"Todos\".",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-3",
+                                             "title":  "Registrar as automações e IAs existentes por área e levar a contagem para a visão geral.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-4",
+                                             "title":  "Criar a ficha de entrevista por área.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-5",
+                                             "title":  "Criar o campo de sentimento da área (2 notas de 1 a 5 + frase).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-6",
+                                             "title":  "Criar o índice de carência e a classificação de cliente.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-7",
+                                             "title":  "Trocar o armazenamento local por compartilhado. ⚠️ PO: bloqueante para a Etapa 2.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         }
+                                     ],
+                      "premissas":  [
+
+                                    ],
+                      "riscos":  [
+
+                                 ],
+                      "observacoes_po":  "Base não é organograma. O CSV do Hyperflow só mostra quem atende cliente no Hyperflow. Áreas sem departamento lá ficam invisíveis, e são justamente as que mais podem ter trabalho manual escondido.\n\nSentimento por área, nunca por pessoa. Nota associada a um colaborador nomeado vira avaliação individual. Isso gera risco político e fecha as portas da entrevista.\n\nPesos do índice são hipótese. Recalibrar depois das 3 primeiras entrevistas. Sem recalibração, o ranking reflete a opinião do squad, não a carência da área.\n\nArmazenamento compartilhado é gate da Etapa 2. Sem ele, cada entrevistador mantém uma cópia diferente e o mapa deixa de ser fonte única.\n\nTrabalho começou sem card. O Leandro já montava o artefato antes da demanda existir. Este ticket formaliza o trabalho.\n\nFora do escopo: realizar as entrevistas e propor automações. Seguram a Etapa 1 enxuta (5 pts).",
+                      "notas":  "",
+                      "fonte":  "quimera",
+                      "categoria":  "Processos",
+                      "jira":  null,
+                      "quimera":  12266,
+                      "concluida":  null,
+                      "responsavel":  "Leandro Marques Gontijo Jersé",
+                      "prazo_estimado":  false,
+                      "historico":  [
+                                        {
+                                            "data":  "2026-11-06",
+                                            "texto":  "Demanda refinada e criada no Quimera (#12266) com descrição no padrão Descrição Refinada · Observação · Objetivo. Item registrado no backlog estratégico."
+                                        },
+                                        {
+                                            "data":  "2026-11-06",
+                                            "texto":  "Descrição no Quimera regravada em HTML (o editor do Quimera achatou o Markdown após edição manual). Removida a frase sobre as entrevistas terem demanda própria; as próximas etapas serão tratadas em outras demandas."
+                                        }
+                                    ]
+                  },
+                  {
+                      "id":  "QMR12357",
+                      "frente":  "torre",
+                      "title":  "Nova Torre de Controle — especificação técnica do frontend, API Torre e Motor de Disparos",
+                      "status":  "refinado",
+                      "prioridade":  "media",
+                      "sponsor":  "João Vinícius",
+                      "owner":  "João Vinícius",
+                      "implementador":  null,
+                      "deadline_alvo":  null,
+                      "criada":  "2026-11-06",
+                      "refinada":  "2026-11-06",
+                      "valor_negocio":  "alto",
+                      "esforco":  "L",
+                      "rice":  null,
+                      "origem":  {
+                                     "pendencias":  [
+
+                                                    ],
+                                     "reunioes":  [
+
+                                                  ],
+                                     "solicitacoes":  [
+
+                                                      ],
+                                     "quimera":  [
+                                                     "QMR12357"
+                                                 ]
+                                 },
+                      "roadmap_vinculado":  null,
+                      "dependencias":  [
+
+                                       ],
+                      "bloqueia":  [
+
+                                   ],
+                      "tags":  [
+                                   "fonte-quimera",
+                                   "cat-ti",
+                                   "torre",
+                                   "roadmap_torre",
+                                   "motor_disparos",
+                                   "refatoracao"
+                               ],
+                      "historia":  "Como supervisor do squad IAF, quero a especificação técnica completa da nova Torre (frontend, API Torre e Motor de Disparos) escrita no padrão do harness, para começar o desenvolvimento sem decisão estrutural em aberto e com um Motor de Disparos reutilizável por toda a empresa.",
+                      "contexto":  "- Protótipo do frontend cerca de 90% pronto (13 telas: Dashboards, Ações, Agentes, Auditoria, Biblioteca, Campanhas, Clientes, Configurações, Custos, Disparos, Filtros, Link do cliente, Qualidade). - Arquitetura definida: - Frontend Next.js + React + TypeScript + Tailwind + shadcn/ui. - API Torre em FastAPI/Python, com CRUD e regras da Torre. - Motor de Disparos em FastAPI/Python + Temporal, serviço independente e multi-sistema (WhatsApp/Meta, SMS, e-mail, canais futuros).",
+                      "criterios_aceite":  [
+                                               {
+                                                   "id":  "CA-1",
+                                                   "texto":  "Dado o repositório da nova Torre, quando abro .specs/, então vejo specs numeradas (01-…, 02-…) com nome claro e executáveis em ordem, cobrindo API Torre, Motor e frontend."
+                                               },
+                                               {
+                                                   "id":  "CA-2",
+                                                   "texto":  "Dado a spec de stack, quando leio, então a decisão sobre o Temporal (Temporal Cloud ou hospedado por nós) está fechada, com o porquê."
+                                               },
+                                               {
+                                                   "id":  "CA-3",
+                                                   "texto":  "Dado a spec do Motor, quando leio, então ela define:"
+                                               },
+                                               {
+                                                   "id":  "CA-4",
+                                                   "texto":  "contrato de envio independente do canal;"
+                                               },
+                                               {
+                                                   "id":  "CA-5",
+                                                   "texto":  "provedores plugáveis;"
+                                               },
+                                               {
+                                                   "id":  "CA-6",
+                                                   "texto":  "parametrização por configuração;"
+                                               },
+                                               {
+                                                   "id":  "CA-7",
+                                                   "texto":  "idempotência, retry e reprocessamento;"
+                                               },
+                                               {
+                                                   "id":  "CA-8",
+                                                   "texto":  "retorno de status;"
+                                               },
+                                               {
+                                                   "id":  "CA-9",
+                                                   "texto":  "identificação do sistema solicitante;"
+                                               },
+                                               {
+                                                   "id":  "CA-10",
+                                                   "texto":  "limites da Meta (tier, janela de 24h, template), opt-out e LGPD."
+                                               },
+                                               {
+                                                   "id":  "CA-11",
+                                                   "texto":  "Dado as specs, quando reviso, então não há regra de cobrança no Motor (régua, carteira e campanha ficam na API Torre)."
+                                               },
+                                               {
+                                                   "id":  "CA-12",
+                                                   "texto":  "Dado as specs, quando reviso, então existe plano de convivência com a Torre atual e de migração de dados."
+                                               },
+                                               {
+                                                   "id":  "CA-13",
+                                                   "texto":  "Dado o frontend, quando comparo com o protótipo, então os 10% faltantes estão especificados."
+                                               }
+                                           ],
+                      "subtarefas":  [
+                                         {
+                                             "id":  "ST-1",
+                                             "title":  "Spec de stack e arquitetura (inclui decisão do Temporal). ⚠️ PO: gate de tudo que vem depois.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-2",
+                                             "title":  "Specs da API Torre (modelo de dados, contratos).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-3",
+                                             "title":  "Specs do Motor de Disparos (modelo de dados, contratos, workflows, provedores).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-4",
+                                             "title":  "Specs do frontend (telas + 10% faltantes).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-5",
+                                             "title":  "Plano de convivência e migração de dados da Torre atual. ⚠️ PO: sem isso, cutover vira aposta.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         }
+                                     ],
+                      "premissas":  [
+
+                                    ],
+                      "riscos":  [
+
+                                 ],
+                      "observacoes_po":  "Responsável ainda não definido no Quimera.\n\nO Motor é plataforma, não feature da cobrança. Se regra de cobrança vazar para dentro dele, os outros sistemas da empresa não conseguem usar.\n\nTemporal Cloud × hospedado por nós muda custo e operação. Fechar na spec de stack antes de qualquer código.\n\n13 pontos para especificar três sistemas é apertado. Se a spec do Motor crescer, separar em demanda própria.\n\nA Torre atual (Supabase) dispara de dentro do banco. A convivência precisa garantir que só um motor dispare por campanha (risco de envio duplicado).",
+                      "historico":  [
+                                        {
+                                            "data":  "2026-11-06",
+                                            "texto":  "Demanda refinada e criada no Quimera (#12357), com descrição em HTML no padrão Descrição Refinada · Observação · Objetivo. Harness de agentes genéricos criado em Harness/agents/ para anexar à demanda."
+                                        }
+                                    ],
+                      "notas":  "",
+                      "fonte":  "quimera",
+                      "categoria":  "TI",
+                      "jira":  null,
+                      "quimera":  12357,
+                      "concluida":  null,
+                      "responsavel":  null,
+                      "prazo_estimado":  false
+                  },
+                  {
+                      "id":  "QMR12372",
+                      "frente":  "estrategica",
+                      "title":  "Veritas 2.0 — especificação técnica do MVP e formalização do mapa de documentação",
+                      "status":  "refinado",
+                      "prioridade":  "media",
+                      "sponsor":  "João Vinícius",
+                      "owner":  "João Vinícius",
+                      "implementador":  null,
+                      "deadline_alvo":  null,
+                      "criada":  "2026-11-06",
+                      "refinada":  "2026-11-06",
+                      "valor_negocio":  "alto",
+                      "esforco":  "L",
+                      "rice":  null,
+                      "origem":  {
+                                     "pendencias":  [
+
+                                                    ],
+                                     "reunioes":  [
+
+                                                  ],
+                                     "solicitacoes":  [
+
+                                                      ],
+                                     "quimera":  [
+                                                     "QMR12372"
+                                                 ]
+                                 },
+                      "roadmap_vinculado":  null,
+                      "dependencias":  [
+
+                                       ],
+                      "bloqueia":  [
+
+                                   ],
+                      "tags":  [
+                                   "fonte-quimera",
+                                   "cat-ti",
+                                   "veritas",
+                                   "compliance"
+                               ],
+                      "historia":  "Como supervisor do squad IAF, quero as specs técnicas do MVP do Veritas 2.0 e o mapa de documentação finalizado como documento vivo, para começar o desenvolvimento das Fases 0 e 1 com escopo, regras e telas fechados.",
+                      "contexto":  "- O Veritas 2.0 é a ferramenta do Compliance para monitorar a carteira, revisar o efeito das regras e avaliar validações novas sem depender de tecnologia, guiado por 5 agentes de IA (Integrador, Mapeador, Dados, Monitoramento, Gestor). - Stack-alvo da discovery: FastAPI + React. - Roadmap da discovery: - Fase 0, Fundação (4 sem.); - Fase 1, MVP (8 sem.); - Fase 2, Monitorar (6 sem.); - Fase 3, Escalar (4 sem.). - Escopo desta demanda: Fases 0 e 1.",
+                      "criterios_aceite":  [
+                                               {
+                                                   "id":  "CA-1",
+                                                   "texto":  "Dado o repositório do Veritas, quando abro .specs/, então vejo specs numeradas com nome claro, executáveis em ordem, cobrindo a Fundação e o MVP."
+                                               },
+                                               {
+                                                   "id":  "CA-2",
+                                                   "texto":  "Dado as specs, quando reviso, então as regras R1–R16 da discovery aparecem onde se aplicam:"
+                                               },
+                                               {
+                                                   "id":  "CA-3",
+                                                   "texto":  "sem decisão de proposta;"
+                                               },
+                                               {
+                                                   "id":  "CA-4",
+                                                   "texto":  "confirmação com custo;"
+                                               },
+                                               {
+                                                   "id":  "CA-5",
+                                                   "texto":  "cofre;"
+                                               },
+                                               {
+                                                   "id":  "CA-6",
+                                                   "texto":  "mascaramento;"
+                                               },
+                                               {
+                                                   "id":  "CA-7",
+                                                   "texto":  "isolamento por organização;"
+                                               },
+                                               {
+                                                   "id":  "CA-8",
+                                                   "texto":  "segregação de funções;"
+                                               },
+                                               {
+                                                   "id":  "CA-9",
+                                                   "texto":  "auditoria."
+                                               },
+                                               {
+                                                   "id":  "CA-10",
+                                                   "texto":  "Dado o mapa de documentação, quando abro, então toda tela e funcionalidade das Fases 0 e 1 tem objetivo, regras, fluxo, estados e prévia preenchidos."
+                                               },
+                                               {
+                                                   "id":  "CA-11",
+                                                   "texto":  "Dado as telas da Fundação sem protótipo (login, organizações/usuários/chaves, trilha de auditoria), quando reviso o mapa, então elas estão propostas e documentadas."
+                                               },
+                                               {
+                                                   "id":  "CA-12",
+                                                   "texto":  "Dado mapa e specs, quando comparo, então não há divergência entre os dois."
+                                               }
+                                           ],
+                      "subtarefas":  [
+                                         {
+                                             "id":  "ST-1",
+                                             "title":  "Propor e documentar no mapa as telas da Fundação sem protótipo. ⚠️ PO: pré-requisito das specs da Fundação.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-2",
+                                             "title":  "Specs da Fundação (esqueleto, login e perfis, cofre, trilha de auditoria, conector HTTP + catálogo de custo).",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-3",
+                                             "title":  "Specs do MVP:",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-4",
+                                             "title":  "Integrador + 6 pilotos;",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-5",
+                                             "title":  "fontes de dados;",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-6",
+                                             "title":  "variáveis + Mapeador;",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-7",
+                                             "title":  "Playground v1;",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-8",
+                                             "title":  "transações via API;",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-9",
+                                             "title":  "perfil consolidado.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-10",
+                                             "title":  "Refinar o mapa de documentação para todas as telas e funcionalidades das Fases 0 e 1.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         },
+                                         {
+                                             "id":  "ST-11",
+                                             "title":  "Revisão cruzada mapa × specs.",
+                                             "status":  "pendente",
+                                             "esforco":  null,
+                                             "responsavel":  null
+                                         }
+                                     ],
+                      "premissas":  [
+
+                                    ],
+                      "riscos":  [
+
+                                 ],
+                      "observacoes_po":  "Responsável ainda não definido no Quimera.\n\nFases 2 e 3 fora do escopo. O mapa cita como previstas, sem detalhar. Se o escopo crescer, quebrar a demanda.\n\nCustos de bureau estimados (ex.: Sherlocker R$ 0,40*) não podem virar valor fechado na spec.\n\nO Veritas 1 continua: KYC, termos, retiradas, cartão de terceiro e pendências não migram. Qualquer pedido nessa linha é escopo do Veritas 1.\n\n13 pontos para spec de 12 entregas + refinar o mapa é apertado. Revisar depois da spec da Fundação.",
+                      "historico":  [
+                                        {
+                                            "data":  "2026-11-06",
+                                            "texto":  "Demanda refinada e criada no Quimera (#12372), com links da discovery e do mapa de documentação na descrição. Item registrado no backlog estratégico (frente estratégica, até existir frente de compliance)."
+                                        }
+                                    ],
+                      "notas":  "",
+                      "fonte":  "quimera",
+                      "categoria":  "TI",
+                      "jira":  null,
+                      "quimera":  12372,
+                      "concluida":  null,
+                      "responsavel":  null,
+                      "prazo_estimado":  false
                   }
               ],
-    "generated_at":  "2026-06-15",
-    "refinement_pass":  "Sync Quimera (2026-06-15): 32 itens marcados concluídos/cancelados (data+responsável do Quimera) e 27 novas demandas importadas do estado ao vivo (team ia_automacao_finza). Base anterior: 02/06/2026."
+    "generated_at":  "2026-11-06",
+    "refinement_pass":  "Regenerate (2026-11-06): projecao reescrita a partir dos .md de Backlog/frentes/ (270 itens). Novos: QMR12372. Campos de frontmatter sincronizados em 0 itens."
 }
 </script>
 
