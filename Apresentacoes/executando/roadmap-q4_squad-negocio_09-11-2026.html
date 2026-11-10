@@ -83,6 +83,24 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .ddp button .ck{margin-left:auto;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);display:grid;place-items:center;color:#fff}
 .ddp button.on .ck{background:var(--blue);border-color:var(--blue)}
 .ddp button .ck svg{width:12px;height:12px;stroke-width:2.4}
+.dd>summary:hover{border-color:var(--blue-2)}
+.dd>summary.set{border-color:var(--blue);background:var(--blue-ghost);color:var(--blue-d);font-weight:600}
+.dd>summary svg{color:var(--muted)}
+.ddp .ddh{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 10px 4px}
+.ddp button .av{width:22px;height:22px;font-size:9px}
+.ddp button .rd{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;flex:none}
+.ddp button.on .rd{border-color:var(--blue)}
+.ddp button.on .rd::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.ddp button.on{background:var(--blue-ghost);color:var(--blue-d);font-weight:600}
+.ddp hr{border:0;border-top:1px solid var(--line-2);margin:4px 0}
+.tgb{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:9px;background:var(--card);font-size:13px;color:var(--text);white-space:nowrap}
+.tgb:hover{border-color:#F3B4B4;color:var(--bad-t)}
+.tgb svg{color:var(--muted)}
+.tgb.on{background:var(--bad-s);border-color:#F3B4B4;color:var(--bad-t);font-weight:600}
+.tgb.on svg{color:var(--bad-t)}
+.tgc{font-family:var(--mono);font-size:11px;font-weight:700;padding:0 7px;border-radius:99px;background:var(--line-2);color:var(--muted)}
+.tgb.on .tgc{background:var(--bad);color:#fff}
+.tgc:empty{display:none}
 .tog{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text);height:36px;padding:0 8px;cursor:pointer;white-space:nowrap}
 .tog input{accent-color:var(--blue);width:16px;height:16px}
 .clear{border:0;background:none;color:var(--blue);font-size:13px;font-weight:600;padding:0 8px;height:36px;white-space:nowrap}
@@ -314,6 +332,8 @@ body:not(.fit) .kcol{max-height:75vh}
 .dstrip>div>b{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;margin-top:3px;overflow-wrap:anywhere}
 .dstrip>div>b.mono{font-family:var(--mono)}
 .drow{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;align-items:start}
+.plan{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:1000px){.plan{grid-template-columns:minmax(0,1fr)}}
 .src{margin:12px 0 0;font-size:12px;color:var(--muted);padding-top:10px;border-top:1px solid var(--line-2)}
 .drow2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
 .prose{margin:0;font-size:14.5px;line-height:1.65;max-width:75ch}
@@ -345,7 +365,11 @@ body:not(.fit) .kcol{max-height:75vh}
 .hs.cur.bad .dot{border-color:var(--bad);background:var(--bad)}
 .hs .dot svg{width:12px;height:12px;stroke-width:2.6}
 .fld{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted)}
-.fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:8px 11px;font-size:14px;font-weight:400;color:var(--text);width:100%;min-width:0}
+.fld input,.fld select,.fld textarea{border:1px solid var(--line);background-color:var(--card);border-radius:9px;padding:8px 11px;font-size:14px;font-weight:400;color:var(--text);width:100%;min-width:0;height:auto}
+.fld input,.fld select{height:40px}
+.fld select{appearance:none;-webkit-appearance:none;padding-right:34px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F5170' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:16px}
+.fld input[type=date]{font-family:var(--mono);font-size:13px}
+.fld input:hover,.fld select:hover,.fld textarea:hover{border-color:var(--blue-2)}
 .fld input:focus,.fld select:focus,.fld textarea:focus,.obs:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 16%,transparent)}
 .fld textarea{resize:vertical;min-height:64px;line-height:1.5}
 .hacts{display:flex;flex-direction:column;gap:8px}
@@ -427,10 +451,10 @@ details.ed>summary::-webkit-details-marker{display:none}
     <div id="hd"></div>
     <div class="fbar" id="fbar">
       <label class="srch"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input type="search" id="f-q" placeholder="Buscar demanda ou nº do ticket" aria-label="Buscar"></label>
-      <details class="dd" id="f-frd"><summary>Frentes <span id="f-frn"></span><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg></summary><div class="ddp" id="f-fr"></div></details>
-      <select class="sel" id="f-dev" aria-label="Responsável"></select>
-      <select class="sel" id="f-hom" aria-label="Homologação"></select>
-      <label class="tog"><input type="checkbox" id="f-late"> Só atrasadas</label>
+      <details class="dd" id="f-frd"><summary id="f-frs">Frentes <span id="f-frn"></span><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg></summary><div class="ddp" id="f-fr"></div></details>
+      <details class="dd" id="f-devd"><summary id="f-devs"><span id="f-devl">Responsável</span><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg></summary><div class="ddp" id="f-dev"></div></details>
+      <details class="dd" id="f-homd"><summary id="f-homs"><span id="f-homl">Homologação</span><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg></summary><div class="ddp" id="f-hom"></div></details>
+      <button class="tgb" id="f-late" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Só atrasadas<span class="tgc" id="f-latec"></span></button>
       <button class="clear" id="f-clear" hidden>Limpar filtros</button>
     </div>
     <section id="view" aria-live="polite"></section>
@@ -486,7 +510,10 @@ const S={items:{},hom:{},obs:{},recent:[],cfg:null,loaded:false,dbState:'',db:nu
 const all=()=>Object.values(S.items).sort((a,b)=>(a.ord||0)-(b.ord||0));
 const isMk=d=>d.tipo==='marco';
 const qs=d=>d.qs||'sem_ticket';
-function homOf(d){const h=S.hom[d.id];if(h)return h;const z=d.h0||{};return{status:z.s||'nao_iniciada',parecer:z.n||'',resp:z.resp||'',seed:true}}
+function homOf(d){const h=S.hom[d.id];if(h)return h;const z=d.h0||{};let st=z.s||'nao_iniciada';
+  // chegou em validação no Quimera = pronta para homologar (etapa 2 já cumprida)
+  if(st==='nao_iniciada'&&qs(d)==='em_validacao')st='aguardando';
+  return{status:st,parecer:z.n||'',resp:z.resp||'',seed:true}}
 function isLate(d){if(isMk(d))return false;const s=qs(d);if(DONE.has(s)||['cancelado','em_validacao','backlog_futuro'].includes(s))return false;
   if(d.fp&&d.fp<TODAY)return true;if(!d.ir&&d.ip&&d.ip<TODAY&&(s==='sem_ticket'||s==='backlog'))return true;return false}
 function range(d){let s=d.ir||d.ip,e=d.fr||null;
@@ -516,12 +543,20 @@ const late=t=>`<span class="pill" style="--c:#EF4444;--s:#FEE2E2;--t:#B91C1C">${
 function chrome(){
   const a=dn(Q_INI),b=dn(Q_FIM),t=Math.min(Math.max(dn(TODAY),a),b);const pct=Math.round((t-a)/(b-a)*100);const left=Math.max(0,b-dn(TODAY));
   $('#qbox').innerHTML=`<div class="row"><span>Trimestre decorrido</span><b>${pct}%</b></div><div class="track"><div class="fill" style="width:${pct}%"></div></div><div class="row"><span>Hoje, ${br(TODAY)}</span><span>${left} dias restantes</span></div>`;
-  $('#f-dev').innerHTML='<option value="">Todos os responsáveis</option>'+Object.keys(DEVS).map(n=>`<option>${esc(n)}</option>`).join('')+'<option value="_none">Sem responsável</option>';
-  $('#f-hom').innerHTML='<option value="">Toda homologação</option>'+HS.map(h=>`<option value="${h[0]}">${esc(h[1])}</option>`).join('');
   paintFr()}
-function paintFr(){$('#f-fr').innerHTML=Object.entries(FR).map(([k,v])=>`<button class="${S.f.fr.has(k)?'on':''}" style="--c:${v[1]}" data-fr="${k}" aria-pressed="${S.f.fr.has(k)}"><i></i>${esc(v[0])}<span class="ck">${ic('check')}</span></button>`).join('');
-  $('#f-frn').innerHTML=S.f.fr.size?`<b>${S.f.fr.size}</b>`:'';$('#f-clear').hidden=!filtersOn()}
-function syncFilters(){$('#f-q').value=S.f.q;$('#f-dev').value=S.f.dev;$('#f-hom').value=S.f.hom;$('#f-late').checked=S.f.late;paintFr()}
+function paintFr(){const f=S.f;
+  $('#f-fr').innerHTML='<div class="ddh">Frentes</div>'+Object.entries(FR).map(([k,v])=>`<button class="${f.fr.has(k)?'on':''}" style="--c:${v[1]}" data-fr="${k}" aria-pressed="${f.fr.has(k)}"><i></i>${esc(v[0])}<span class="ck">${ic('check')}</span></button>`).join('');
+  $('#f-frn').innerHTML=f.fr.size?`<b>${f.fr.size}</b>`:'';$('#f-frs').classList.toggle('set',f.fr.size>0);
+  const devOpt=(v,l,av)=>`<button class="${f.dev===v?'on':''}" data-fdev="${v}">${av||''}${esc(l)}<span class="rd"></span></button>`;
+  $('#f-dev').innerHTML='<div class="ddh">Responsável técnico</div>'+devOpt('','Todos os responsáveis')+'<hr>'+Object.keys(DEVS).map(n=>devOpt(n,n,avatar(n))).join('')+devOpt('_none','Sem responsável',avatar(null));
+  $('#f-devl').textContent=f.dev?(f.dev==='_none'?'Sem responsável':f.dev):'Responsável';$('#f-devs').classList.toggle('set',!!f.dev);
+  const homOpt=(v,l,c)=>`<button class="${f.hom===v?'on':''}" data-fhom="${v}" style="--c:${c||'transparent'}">${c?'<i></i>':''}${esc(l)}<span class="rd"></span></button>`;
+  $('#f-hom').innerHTML='<div class="ddh">Homologação</div>'+homOpt('','Toda homologação')+'<hr>'+HS.map(h=>homOpt(h[0],h[1],h[2])).join('');
+  $('#f-homl').textContent=f.hom?HM[f.hom].l:'Homologação';$('#f-homs').classList.toggle('set',!!f.hom);
+  const lt=$('#f-late');lt.classList.toggle('on',f.late);lt.setAttribute('aria-pressed',f.late);
+  $('#f-latec').textContent=S.loaded?all().filter(isLate).length||'':'';
+  $('#f-clear').hidden=!filtersOn()}
+function syncFilters(){$('#f-q').value=S.f.q;paintFr()}
 const HEAD={
   painel:['Painel · Q4 2026','O trimestre','em números','Metas do time no Quimera, entregas do roadmap e o andamento da homologação com o negócio.'],
   cronograma:['Cronograma','Quando cada','entrega chega','Entregas no calendário do mês ou na linha do tempo. Clique numa demanda para abrir o detalhe.'],
@@ -537,12 +572,12 @@ function setView(h){
   let v=h||'painel';
   if(v.startsWith('demanda-')){S.demand=v.slice(8);v='demanda'}else if(!['painel','cronograma','quadro'].includes(v))v='painel';
   if(v!=='demanda'){S.prev=v;stopHist()}
-  S.view=v;applyFit();$('#f-frd').open=false;
+  S.view=v;applyFit();document.querySelectorAll('details.dd[open]').forEach(dt=>dt.open=false);
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===(v==='demanda'?S.prev:v)));
   $('#fbar').hidden=v==='demanda';
   render();window.scrollTo(0,0)}
 function render(){const el=$('#view');
-  const D=all().filter(d=>!isMk(d));$('#ct-q').textContent=D.length||'';head();
+  const D=all().filter(d=>!isMk(d));$('#ct-q').textContent=D.length||'';head();$('#f-latec').textContent=S.loaded?all().filter(isLate).length||'':'';
   if(!S.loaded){el.innerHTML=`<div class="empty">${S.dbState==='none'?'Abra este roadmap com sua conta do claude.ai para ver e registrar as demandas.':S.dbState==='slow'?'O banco do roadmap ainda não respondeu. As demandas aparecem assim que a conexão voltar.':'Carregando as demandas do trimestre…'}</div>`;return}
   if(!Object.keys(S.items).length){el.innerHTML='<div class="empty">Nenhuma demanda cadastrada ainda.</div>';return}
   ({painel:rPainel,cronograma:rCron,quadro:rQuadro,demanda:rDemanda})[S.view](el)}
@@ -719,13 +754,13 @@ function rDemanda(el){const d=S.items[S.demand];if(!d){el.innerHTML=`<button cla
   const dfTxt={quimera:'Datas do Quimera',confirmada:'Confirmadas pelo time técnico',sugerida:'Sugeridas, a confirmar',doc:'Do documento de referência'}[d.df]||'—';
   const flow=['nao_iniciada','aguardando','em_andamento','aprovada'];const ci=flow.indexOf(h.status);
   const stepLbl=['Em desenvolvimento','Pronta para homologar','Negócio homologando','Aprovada'];
-  const steps=flow.map((k,i)=>{const cls=h.status==='ajustes'?(i<2?'done':i===2?'cur bad':''):h.status==='nao_aplica'?'':ci>i?'done':ci===i?(k==='aprovada'?'done':'cur'):'';
+  const showH=!mk&&qs(d)==='em_validacao';
+  const steps=flow.map((k,i)=>{const cls=h.status==='ajustes'?(i<2?'done':i===2?'cur bad':''):h.status==='nao_aplica'?'':ci>i?'done':ci===i?(k==='aprovada'||k==='aguardando'?'done':'cur'):'';
     return`<div class="hs ${cls}"><span class="dot">${cls==='done'?ic('check'):i+1}</span><span>${i===2&&h.status==='ajustes'?'Ajustes solicitados':stepLbl[i]}</span></div>`}).join('');
   const rel=(d.rel||[]).map(x=>{const t=Object.values(S.items).find(i=>('#'+i.key)===x||i.id===x);return t?`<button class="chip" style="--c:${fc(t)}" data-open="${t.id}"><i></i>${esc(x.startsWith('#')?x+' · '+t.titulo:t.titulo)}</button>`:`<span class="tkt">${esc(x)}</span>`}).join('');
   const hBtns=canW?[h.status!=='aprovada'?`<button class="btn ok" data-hq="aprovada">${ic('check')}Aprovar homologação</button>`:'',
       h.status!=='ajustes'?`<button class="btn bad" data-hq="ajustes">${ic('warn')}Pedir ajustes</button>`:'',
       !['em_andamento','aprovada'].includes(h.status)?`<button class="btn" data-hq="em_andamento">${ic('play')}Iniciar homologação</button>`:'',
-      h.status==='nao_iniciada'?`<button class="btn" data-hq="aguardando">Marcar como pronta</button>`:'',
       h.status!=='nao_aplica'?`<button class="btn ghost sm" data-hq="nao_aplica">Não se aplica</button>`:''].join(''):'';
   el.innerHTML=`<div class="grid" style="gap:14px">
   <button class="back" data-back>${ic('back','width:16px;height:16px')}Voltar para ${back}</button>
@@ -740,14 +775,18 @@ function rDemanda(el){const d=S.items[S.demand];if(!d){el.innerHTML=`<button cla
       <div><span>Esforço</span><b class="mono">${d.sp?d.sp+' SP':'—'}</b></div>
     </div>
   </div>
-  <div class="drow">
+  <div class="grid" style="gap:14px">
     <div class="card"><div class="ch"><h3>Sobre a demanda</h3></div><p class="prose">${esc(d.desc)}</p>
       ${d.ac?`<div class="ac">${ic('target')}<div><b>Critério de aceite ou próximo passo</b><br>${esc(d.ac)}</div></div>`:''}
       ${rel?`<div style="margin-top:14px"><div class="lbl" style="margin-bottom:8px">Relacionadas</div><div class="rel">${rel}</div></div>`:''}</div>
     <div class="card"><div class="ch"><h3>Planejamento</h3><small>${esc(dfTxt)}</small></div>
-      <div class="dtl"><div class="h"></div><div class="h">Previsto</div><div class="h">Real</div><div class="h">Início</div><div class="v">${brf(d.ip)}</div><div class="v">${brf(d.ir)}</div><div class="h">Entrega</div><div class="v"${lt?' style="color:#B91C1C"':''}>${brf(d.fp)}</div><div class="v"${d.fr?' style="color:#047857"':''}>${brf(d.fr)}</div></div>
-      ${d.df==='sugerida'?`<div class="note">${ic('info')}<span>Datas sugeridas pelo supervisor. O time técnico confirma ao puxar a demanda.</span></div>`:''}
-      <dl class="kv"><dt>No Quimera</dt><dd>${d.key?`Sim · <span class="mono">#${d.key}</span>`:mk?'Não se aplica':'<span style="color:#B91C1C">Ainda não criada</span>'}</dd><dt>Status</dt><dd>${esc(mk?'Marco':QM[qs(d)].l)}</dd><dt>Prioridade</dt><dd style="text-transform:capitalize">${esc(d.prio||'—')}</dd></dl><p class="src"><b>Fonte:</b> ${esc(d.fonte||'—')}</p>
+      <div class="plan">
+        <div><div class="dtl"><div class="h"></div><div class="h">Previsto</div><div class="h">Real</div><div class="h">Início</div><div class="v">${brf(d.ip)}</div><div class="v">${brf(d.ir)}</div><div class="h">Entrega</div><div class="v"${lt?' style="color:#B91C1C"':''}>${brf(d.fp)}</div><div class="v"${d.fr?' style="color:#047857"':''}>${brf(d.fr)}</div></div>
+        ${d.df==='sugerida'?`<div class="note">${ic('info')}<span>Datas sugeridas pelo supervisor. O time técnico confirma ao puxar a demanda.</span></div>`:''}</div>
+        <div><dl class="kv" style="margin:0"><dt>No Quimera</dt><dd>${d.key?`Sim · <span class="mono">#${d.key}</span>`:mk?'Não se aplica':'<span style="color:#B91C1C">Ainda não criada</span>'}</dd><dt>Status</dt><dd>${esc(mk?'Marco':QM[qs(d)].l)}</dd><dt>Prioridade</dt><dd style="text-transform:capitalize">${esc(d.prio||'—')}</dd>${mk?'':`<dt>Homologação</dt><dd>${pillH(d)}</dd>`}</dl>
+        ${!mk&&!showH&&!DONE.has(qs(d))&&qs(d)!=='cancelado'?`<p class="src">A homologação abre quando a demanda chegar em <b>Em validação</b> no Quimera.</p>`:''}
+        <p class="src"><b>Fonte:</b> ${esc(d.fonte||'—')}</p></div>
+      </div>
       ${S.canAdmin?`<details class="ed" style="margin-top:14px"><summary class="btn sm">${ic('edit','width:15px;height:15px')}Editar planejamento</summary><div class="edit">
         <label class="fld">Status no Quimera<select id="e-qs">${QS.map(q=>`<option value="${q[0]}"${qs(d)===q[0]?' selected':''}>${esc(q[1])}</option>`).join('')}</select></label>
         <label class="fld">Nº do ticket<input id="e-key" inputmode="numeric" value="${esc(d.key||'')}"></label>
@@ -755,10 +794,10 @@ function rDemanda(el){const d=S.items[S.demand];if(!d){el.innerHTML=`<button cla
         <label class="fld">Story points<input id="e-sp" inputmode="numeric" value="${esc(d.sp||'')}"></label>
         <label class="fld">Início previsto<input type="date" id="e-ip" value="${esc(d.ip||'')}"></label><label class="fld">Entrega prevista<input type="date" id="e-fp" value="${esc(d.fp||'')}"></label>
         <label class="fld">Início real<input type="date" id="e-ir" value="${esc(d.ir||'')}"></label><label class="fld">Entrega real<input type="date" id="e-fr" value="${esc(d.fr||'')}"></label>
-        <div class="full acts"><button class="btn pri sm" data-save-dem>Salvar planejamento</button><span class="svst" id="e-st"></span></div></div></details>`:''}
+        <div class="full acts"><button class="btn pri sm" data-save-dem>Salvar planejamento</button><button class="btn sm" data-cancel-dem>Cancelar e descartar</button><span class="svst" id="e-st"></span></div></div></details>`:''}
     </div>
   </div>
-  ${mk?'':`<div class="card strip" style="--c:${H.c}"><div class="ch"><h3>Homologação</h3><small>${h.seed?'Situação inicial do roadmap':h.por?'Última mudança: '+esc(nm(h.por))+' · '+when(h.em):''}</small></div>
+  ${!showH?'':`<div class="card strip" style="--c:${H.c}"><div class="ch"><h3>Homologação</h3><small>${h.seed?'Situação inicial do roadmap':h.por?'Última mudança: '+esc(nm(h.por))+' · '+when(h.em):''}</small></div>
     <div class="hcard">
       <div><div class="hstate" style="--s:${H.s};--t:${H.t};--c:${H.c}"><span class="ic">${ic(h.status==='aprovada'?'check':h.status==='ajustes'?'warn':h.status==='em_andamento'?'play':'clock')}</span><div><b>${esc(H.l)}</b><span>${h.resp?'Responsável: '+esc(h.resp):'Responsável no negócio a definir'}</span></div></div>
         ${h.parecer?`<p class="hpar" style="--c:${H.c}">${esc(h.parecer)}</p>`:''}
@@ -768,12 +807,9 @@ function rDemanda(el){const d=S.items[S.demand];if(!d){el.innerHTML=`<button cla
       <div class="hacts">${hBtns}<span class="svst" id="h-st"></span></div>`:'<p class="muted" style="margin:0;font-size:13px;grid-column:span 2">Você está com acesso de leitura. Peça acesso de colaborador para registrar a homologação.</p>'}
     </div></div>`}
   <div class="drow2">
-    <div class="card"><div class="tabs" role="tablist"><button class="${S.dtab==='obs'?'on':''}" data-dtab="obs">Observações do negócio</button><button class="${S.dtab==='reg'?'on':''}" data-dtab="reg">Registro formal</button></div>
-      <div ${S.dtab==='obs'?'':'hidden'}>
-        <textarea class="obs" id="o-txt" placeholder="Escreva o que o negócio precisa formalizar sobre esta demanda: regras, combinados, dúvidas e pedidos de ajuste." ${canW?'':'disabled'}>${esc(o?o.texto:'')}</textarea>
-        <div class="obsh" id="o-st"><span class="live"></span>${o?`Salvo · versão ${o.rev||1} · ${esc(nm(o.por))} · ${when(o.em)}`:'Salva sozinha enquanto você digita. Cada versão fica no histórico.'}</div></div>
-      <div ${S.dtab==='reg'?'':'hidden'} class="grid" style="gap:10px">
-        <p class="muted" style="margin:0;font-size:13px">Para o que precisa ficar formalizado entre negócio e desenvolvimento: uma decisão, uma aprovação, uma mudança de escopo.</p>
+    <div class="card"><div class="ch"><h3>Registro formal</h3><small>vai para o histórico com autor e horário</small></div>
+      <div class="grid" style="gap:10px">
+        <p class="muted" style="margin:0;font-size:13px">Para o que precisa ficar formalizado entre negócio e desenvolvimento: uma decisão, uma aprovação, uma solicitação, uma mudança de escopo.</p>
         <label class="fld">Tipo<select id="r-cat" ${canW?'':'disabled'}>${REGCAT.map(c=>`<option>${esc(c)}</option>`).join('')}</select></label>
         <label class="fld">Registro<textarea id="r-txt" rows="4" placeholder="Ex.: decidido com a Cobrança que a régua só usa telefones com nota acima de 40." ${canW?'':'disabled'}></textarea></label>
         <div class="acts"><button class="btn pri sm" data-reg ${canW?'':'disabled'}>${ic('doc','width:15px;height:15px')}Registrar</button><span class="svst" id="r-st"></span></div></div>
@@ -828,6 +864,10 @@ document.addEventListener('click',e=>{
   if(ds.open){flushObs();location.hash='demanda-'+ds.open;return}
   if(t.hasAttribute('data-back')){flushObs();location.hash=S.prev;return}
   if(ds.fr){S.f.fr.has(ds.fr)?S.f.fr.delete(ds.fr):S.f.fr.add(ds.fr);ls.set('fr',[...S.f.fr]);paintFr();render();return}
+  if(ds.fdev!==undefined){S.f.dev=ds.fdev;$('#f-devd').open=false;paintFr();render();return}
+  if(ds.fhom!==undefined){S.f.hom=ds.fhom;$('#f-homd').open=false;paintFr();render();return}
+  if(t.id==='f-late'){S.f.late=!S.f.late;paintFr();render();return}
+  if(t.hasAttribute('data-cancel-dem')){const dt=t.closest('details');if(dt)dt.open=false;render();return}
   if(ds.hom){S.f.hom=S.f.hom===ds.hom?'':ds.hom;syncFilters();location.hash='quadro';render();return}
   if(ds.late){S.f.late=true;syncFilters();location.hash='quadro';render();return}
   if(ds.go){location.hash=ds.go;return}
@@ -848,7 +888,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('details.dd[open]').forEach(dt=>dt.open=false)});
 document.addEventListener('input',e=>{if(e.target.id==='o-txt')obsInput();if(e.target.id==='f-q'){S.f.q=e.target.value.trim();paintFr();render()}});
 document.addEventListener('focusout',e=>{if(e.target.id==='o-txt')flushObs()});
-document.addEventListener('change',e=>{const id=e.target.id;if(id==='f-dev'){S.f.dev=e.target.value;paintFr();render()}if(id==='f-hom'){S.f.hom=e.target.value;paintFr();render()}if(id==='f-late'){S.f.late=e.target.checked;paintFr();render()}if(id==='cal-st'){ls.set('calstart',e.target.checked);render()}});
+document.addEventListener('change',e=>{if(e.target.id==='cal-st'){ls.set('calstart',e.target.checked);render()}});
 window.addEventListener('hashchange',()=>setView(location.hash.slice(1)));
 window.addEventListener('pagehide',flushObs);
 let rz,lastW=innerWidth;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{applyFit();if(S.view==='cronograma'||S.view==='quadro'||Math.abs(innerWidth-lastW)>150)safeRender();lastW=innerWidth},150)});

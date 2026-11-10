@@ -156,5 +156,8 @@ Visões aceitas: `painel · cronograma · gantt · quadro · demanda-<id>`. Head
 | v1 | 2026-11-09 | 4 visões (painel, calendário, gantt, kanban) + gaveta lateral; seed de 73 itens no db |
 | v2 | 2026-11-09 | tema claro branco + azul (Balanço do ciclo); menu Painel · Cronograma · Quadro; anéis de meta do Quimera; tela própria da demanda |
 | v3 | 2026-11-09 | Cronograma e Quadro sem rolar a página; homologação em card largo embaixo; barras de rolagem estilizadas; filtro de frentes em menu; contraste e responsividade (agenda no celular) |
+| v4 | 2026-11-10 | Homologação só aparece em demanda **Em validação** (etapa 2 "Pronta para homologar" já cumprida); removidas as Observações do negócio da tela (fica só Registro formal); Sobre e Planejamento empilhados; botão "Cancelar e descartar" no Editar planejamento; filtros de responsável/homologação como dropdowns do padrão; "Só atrasadas" virou botão com contador. Reconcile com o Quimera: #12357 em andamento, #12549 e templates na fila, #7562 e #7322 cancelados, novo #12649, templates do lote de 09/11 agregados em #12588. Criada a skill `.claude/skills/roadmap-q4/` (regra no CLAUDE.md) |
+
+> **Manutenção:** antes de qualquer ajuste, carregar a skill `roadmap-q4` — ela define o escopo do quadro e o procedimento de reconcile. A seção "Observações do negócio" citada acima (§1, §2) foi retirada da tela na v4; os docs `obs/` antigos continuam no banco e aparecem no histórico.
 
 Relacionados: memória `roadmap-q4-2026-artefato`, `roadmap-html-quimera-mirror` (roadmap do ciclo anterior), `Apresentacoes/executando/roadmap.html`.
