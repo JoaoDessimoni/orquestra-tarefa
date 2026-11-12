@@ -8,8 +8,8 @@ Você vai criar um deck Finza completo. O usuário forneceu um tema (em `$ARGUME
 
 ## Passo 0 — Carregar contexto
 
-Antes de qualquer agente, carregue mentalmente:
-- `.claude/skills/finza-design-system/SKILL.md`
+Antes de qualquer agente, carregue (via Skill ou Read):
+- **`.claude/skills/finza-deck-animado/SKILL.md`** — padrão canônico do deck animado (template, motor, atos, mockups vivos). O deck SEMPRE nasce de `finza-deck-animado/template.html`.
 - `.claude/skills/finza-tom-voz/SKILL.md`
 - `.claude/skills/finza-contexto/SKILL.md`
 
@@ -23,7 +23,9 @@ Se o usuário não forneceu tudo, pergunte numa única chamada `AskUserQuestion`
 2. **Público.** Ex: "Diretora de produto + 3 PMs."
 3. **Duração prevista.** Ex: "15 minutos."
 4. **Tom específico**? (default: técnico-executivo Finza). Opções: técnico-executivo / técnico-detalhado / comercial / cerimônia.
-5. **Nome do arquivo**. Sugira `<tema-slug>_<destino-slug>_DD-MM-YYYY.html` baseado na data de hoje. Confirme.
+5. **Mensagem central** em uma frase (o que mudou + o que significa) e os **atos** (2 a 4), se o usuário já souber.
+6. **Há produto/tela para mostrar ao vivo?** (celular, WhatsApp, prints reais da ferramenta). Isso define os mockups vivos.
+7. **Nome do arquivo**. Sugira `<tema-slug>_<destino-slug>_DD-MM-YYYY.html` baseado na data de hoje. Confirme.
 
 Se `$ARGUMENTS` veio preenchido, use como tema inicial e pergunte só o que falta.
 
@@ -47,7 +49,7 @@ Invoque `slide-architect` com:
 - Tema, público, duração.
 - Fatos do researcher.
 
-Recebe outline com sequência de slides, conceito por slide, encaixe narrativo, marcação splash.
+Recebe o roteiro: mensagem central, atos (`data-act`), sequência com visual-âncora por slide, mockups vivos a roteirizar e notas do apresentador.
 
 Se o architect levantar pontos abertos que dependem de decisão do usuário, pause e pergunte via `AskUserQuestion`. Não chute.
 
@@ -65,7 +67,7 @@ Invoque `slide-designer` com:
 - Texto do writer.
 - Tipo de cada slide do architect.
 
-Recebe spec visual de cada slide (fundo, componentes, classes, hierarquia).
+Recebe spec visual **e de movimento** de cada slide (slide-base do template, fundo, componentes do catálogo, data-attributes, linha do tempo das demos, interações).
 
 ## Passo 6 — Builder
 
@@ -74,7 +76,7 @@ Invoque `slide-builder` com:
 - Spec visual do designer.
 - Nome do arquivo confirmado no passo 1.
 
-Builder grava o `.html` em `Apresentacoes/executando/<nome>.html`.
+Builder copia `finza-deck-animado/template.html`, monta os slides e grava em `Apresentacoes/executando/<nome>.html`. Verifica sintaxe (`node --check`) e, havendo navegador, percorre o deck.
 
 ## Passo 7 — Reviewer
 

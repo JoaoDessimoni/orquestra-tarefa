@@ -1,9 +1,11 @@
 ---
 name: finza-design-system
-description: Especificação canônica do design system Finza para slides HTML. Use sempre que precisar aplicar paleta, tipografia, layout ou componentes visuais (cards dotted, marcador iaf, numeração olho, hero dark, pílulas) em qualquer apresentação. Carregue esta skill antes de definir layout ou escrever CSS.
+description: LEGADO — design system dos slides Finza no padrão antigo (deck CTO 13/05/2026 — section.slide, marcador iaf, setas de navegação) e tokens de cor básicos. Para QUALQUER deck novo ou slide novo use a skill finza-deck-animado (padrão atual). Carregue esta só para manter um deck legado.
 ---
 
 # Finza Design System — slides HTML
+
+> **⚠ Atualização 2026-11-10 — padrão de slides substituído.** Decks novos seguem a skill **`finza-deck-animado`** (palco 1920×1080, motor de animação, cortinas de ato, mockups vivos, gráficos interativos, `◆ Squad IA`). Ela é a fonte de verdade de layout, componentes, tipografia de palco e movimento. Este arquivo continua válido só como **referência dos tokens de cor básicos** e para manter decks **legados** no padrão do CTO de 13/05/2026 (`section.slide`, `.iaf-mark`, setas de navegação). Onde houver conflito, vale `finza-deck-animado`.
 
 Sistema visual canônico extraído da apresentação corporativa Finza (`Apresentacoes/referencias/Boas Vinda FINZA - Tech - 2026.pdf`) e refinado no deck CTO 13/05/2026. **Não negociável**: cada slide produzido neste workspace segue este sistema.
 

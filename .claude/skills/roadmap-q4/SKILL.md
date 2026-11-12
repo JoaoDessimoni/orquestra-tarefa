@@ -60,7 +60,8 @@ Item novo (§2): `id:"q<nº>"`, `key`, `tipo:"demanda"`, `ord` maior que o atual
 
 Cancelado no Quimera → `qs:"cancelado"` e `h0:{s:"nao_aplica", n:"<motivo do comentário>"}` (só se não houver `homolog/<id>`).
 
-4. Reportar ao João: o que mudou de status, o que entrou, o que ficou de fora e por quê.
+4. **Espelho na página** (desde 11/11): o HTML embute `<script id="qmirror">` (por ticket: `t`,`s`,`d`, comentários `c[]={a,e,dt,x,i}` mostrados na tela da demanda) e `<script id="qmig">` (plano do botão "Sincronizar com Quimera": `dates`, `add`, `del`, `delIds`, `edit`, `refine`, `recon`). A cada reconcile, atualizar também `qmirror` (status + comentários novos via `get_ticket`) e `qmig.recon` com os status atuais — senão o botão de sync devolve status antigos. Isso exige republicar a página (mesmo `file_path`, sem `capabilities`), sempre a partir da versão viva (`Artifact read`).
+5. Reportar ao João: o que mudou de status, o que entrou, o que ficou de fora e por quê. Exclusão pedida pelo João: #12941 (Chamadas Finza) não entra no roadmap.
 
 ## 4. Metas e anéis (`roadmap/config`)
 
@@ -71,7 +72,8 @@ Cancelado no Quimera → `qs:"cancelado"` e `h0:{s:"nao_aplica", n:"<motivo do c
 ## 5. Regras de tela (para ajustes de front)
 
 - Visual: só tema claro, branco + Azul Finza `#1A1AFF`, navy `#0A0A2E`, padrão do *Balanço do ciclo*; tokens no `:root`; Inter + JetBrains Mono; ícones SVG inline (sem libs).
-- Menu: **Painel · Cronograma (Calendário|Gantt) · Quadro**. Demanda abre tela própria `#demanda-<id>`.
+- Menu: **Painel · Visão em 5 minutos (`#resumo`) · Cronograma (Calendário|Gantt) · Quadro**. Demanda abre tela própria `#demanda-<id>`.
+- A Visão em 5 minutos (`rResumo`) é calculada do quadro ao vivo; só os textos de objetivo por frente (`OBJ5`) são fixos no HTML — revisar quando o escopo de uma frente mudar.
 - Cronograma e Quadro não rolam a página (classe `body.fit`); listas rolam por dentro com a barra fina padrão.
 - Filtros são `details.dd` customizados (nunca `<select>` nativo na barra); "Só atrasadas" é botão `.tgb`.
 - Tela da demanda: Sobre → Planejamento (com Editar + Cancelar) → **Homologação só quando `qs==="em_validacao"`** (etapa 2 "Pronta para homologar" já cumprida) → Registro formal | Histórico. Não há mais "Observações do negócio" na tela (os docs `obs/` antigos continuam no histórico).

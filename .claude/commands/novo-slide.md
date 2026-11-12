@@ -20,8 +20,8 @@ Você vai adicionar **um único slide** a um deck `.html` já em `Apresentacoes/
   - Quantos slides já há.
   - Vocabulário visual e classes em uso.
   - Posição alvo do novo slide.
-- Carregue mentalmente:
-  - `.claude/skills/finza-design-system/SKILL.md`
+- Carregue:
+  - **`.claude/skills/finza-deck-animado/SKILL.md`** (padrão do deck animado; o slide novo parte de um slide do `template.html`)
   - `.claude/skills/finza-tom-voz/SKILL.md`
   - `.claude/skills/finza-contexto/SKILL.md`
 
@@ -35,7 +35,7 @@ Pule research se o conceito for puramente narrativo (transição, fechamento) ou
 
 Invoque `slide-writer` apenas para esse 1 slide. Forneça:
 - Conceito.
-- Tipo (capa / escopo / cards / problemas / hero / fechamento — você decide com base no conceito; em dúvida, pergunte).
+- Visual-âncora desejado (consulte o mapa "quero mostrar X, uso Y" em `finza-deck-animado/referencias/componentes.md`; em dúvida, pergunte).
 - Fatos do researcher (se houve).
 - Estilo dos slides vizinhos no deck (para coerência).
 
@@ -51,10 +51,10 @@ Invoque `slide-designer` com:
 Builder **não regenera o arquivo inteiro**. Em vez disso:
 
 1. Abre o `.html` existente.
-2. Localiza o ponto de inserção (`<section class="slide"...>` após o slide alvo).
-3. Insere o novo `<section>` usando `Edit`.
-4. Se o slide novo precisar de classes CSS que não existem, adiciona-as ao bloco `<style>` (também via Edit).
-5. Se houver contador hardcoded (`tot = 9`), atualiza para `tot = 10`.
+2. Localiza o ponto de inserção (`<section class="s ...">` após o slide alvo).
+3. Insere o novo `<section>` via `Edit`, copiado do slide-base do `template.html` indicado pelo designer, com `data-label`, `data-notes`, `data-act` (se abrir ato) e data-attributes de animação.
+4. Se usar componente/demo que o deck ainda não tem, copia do template o CSS e o JS correspondentes (incluindo o registro em `HOOKS`) via Edit.
+5. **Renumera** os kickers `NN ·` dos slides seguintes e corrige os `data-go` do resumo (índices base 0) que apontarem depois do ponto de inserção. O contador `N / M` é automático.
 
 ## Passo 6 — Reviewer
 

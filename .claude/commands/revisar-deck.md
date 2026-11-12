@@ -15,7 +15,7 @@ Pergunte qual via `AskUserQuestion` se houver múltiplos.
 
 ## Execução
 
-Invoque `slide-reviewer` com o caminho do arquivo.
+Invoque `slide-reviewer` com o caminho do arquivo. Ele audita contra `.claude/skills/finza-deck-animado/SKILL.md` (checklist §10 + erros conhecidos §11).
 
 Aguarde o relatório.
 

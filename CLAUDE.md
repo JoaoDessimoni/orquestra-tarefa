@@ -18,7 +18,7 @@ Conforme o contexto crescer, a arquitetura aqui descrita evolui. Este arquivo é
 
 Sequência obrigatória no início de cada turno:
 
-1. Ler a lista de skills disponíveis no `<system-reminder>` (13 skills de conhecimento: finza-contexto, finza-design-system, finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, quimera-nova-demanda, jira, n8n-projeto, torre-projeto, bigquery-finza, roadmap-q4 + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, `bq`, etc.).
+1. Ler a lista de skills disponíveis no `<system-reminder>` (14 skills de conhecimento: finza-contexto, finza-deck-animado, finza-design-system (legado), finza-dossie, finza-tom-voz, po-backlog, finza-mapas, quimera, quimera-nova-demanda, jira, n8n-projeto, torre-projeto, bigquery-finza, roadmap-q4 + skills de comando `backlog`, `reuniao`, `analise`, `relatorio`, `sync`, `mapa`, `contexto`, `quimera`, `jira`, `equipe`, `n8n`, `torre`, `bq`, etc.).
 2. Considerar os **15 agentes** em `.claude/agents/` e os **18 comandos** em `.claude/commands/`.
 3. Se o pedido do usuário se encaixar em um comando/skill, **invoque-o automaticamente** via a ferramenta Skill — não execute manualmente nem peça pro usuário digitar o comando.
 
@@ -33,7 +33,7 @@ Sequência obrigatória no início de cada turno:
 | análise, investigação, comparativo, RFC, post-mortem | `/analise` (skill `analise`) → grava em `Backlog/analises/` |
 | relatório, report, status para terceiros, devolutiva | `/relatorio` (skill `relatorio`) → grava em `Backlog/analises/<dd>/relatorios/` |
 | status semanal, resumo da semana, "como tá o squad" | `/status` |
-| deck, slide, apresentação | pipeline `/novo-deck`, `/novo-slide`, `/revisar-deck` |
+| deck, slide, apresentação, "apresentação animada", "igual à do Q3 / da Torre / do Relatório das IAs", celular/WhatsApp animado em slide | **SEMPRE** carregar a skill `finza-deck-animado` (template + motor + atos + mockups vivos) e rodar o pipeline `/novo-deck`, `/novo-slide`, `/revisar-deck`. Todo deck nasce de `finza-deck-animado/template.html`. |
 | dossiê, documento/relatório HTML de rolagem, "one-pager", "documento da IA X igual ao da Clara", "no padrão do clara.html/dossiê" | skill `finza-dossie` → produz `.html` single-file de scroll (topbar+spy, hero, cards, tabelas, tema claro/escuro). **Não confundir** com slides (`/novo-deck`) nem relatório `.md` de backlog (`/relatorio`). |
 | mapa mental, mapa do agente, "história da Esperanza", narrativa de uma frente | `/mapa <assunto>` (textual) ou `/mapa regenerar` (visual) — agente `context-curator` / `mapa-updater` |
 | atualizar contexto, doc de negócio defasado, overview de sistema, "documenta isso" | `/contexto` (agente `context-curator`) |
@@ -101,8 +101,9 @@ orquestra-tarefa/
 │   │   ├── n8n.md                    # Ponte read-only p/ N8N-AGENT (workflows, execuções, métricas)
 │   │   ├── torre.md                  # Ponte contexto+leitura p/ cobranca-finza (Torre)
 │   │   └── bq.md                     # Análise de dados no BigQuery (read-only)
-│   ├── skills/                       # Conhecimento canônico (13)
-│   │   ├── finza-design-system/      # Paleta, tipografia, padrões visuais (slides)
+│   ├── skills/                       # Conhecimento canônico (14)
+│   │   ├── finza-deck-animado/       # PADRÃO DE SLIDES: deck animado 1920×1080 — SKILL.md + template.html (12 slides, motor, mockups vivos, gráficos) + referencias/
+│   │   ├── finza-design-system/      # LEGADO: padrão de slides antigo (deck CTO 13/05) + tokens básicos
 │   │   ├── finza-dossie/             # Documentos/relatórios HTML de rolagem única (template.html + fontes Montserrat)
 │   │   ├── finza-tom-voz/            # Guia de redação dos slides
 │   │   ├── finza-contexto/           # Resumo do negócio Finza, frentes
@@ -225,15 +226,16 @@ Um slide Finza nasce de 6 etapas. Cada uma tem um sub-agente dedicado em `.claud
 1. RESEARCH      finza-researcher   →  fatos + referências dos docs em Docs/
 2. ARCHITECT     slide-architect    →  outline (slide N de M, conceito, encaixe no deck)
 3. WRITE         slide-writer       →  texto no tom Finza (frases curtas, números, sem jargão)
-4. DESIGN        slide-designer     →  layout (cards/grid/banner/hero) + tokens do design system
-5. BUILD         slide-builder      →  HTML/CSS/JS vanilla single-file
-6. REVIEW        slide-reviewer     →  checklist (paleta, navegação, semântica, acessibilidade)
+4. DESIGN        slide-designer     →  layout + MOVIMENTO (componentes do catálogo, data-attributes, demos vivas em ms)
+5. BUILD         slide-builder      →  copia finza-deck-animado/template.html e monta (vanilla single-file)
+6. REVIEW        slide-reviewer     →  checklist da skill (palco, motor, paleta, movimento, interação, fontes, voz)
 ```
 
 O comando `/novo-deck` orquestra as 6 etapas em sequência. `/novo-slide` injeta um slide num deck existente e roda 3→6. `/revisar-deck` roda só a etapa 6 em qualquer HTML.
 
 **Skills carregadas em todo agente de slide:**
-- `finza-design-system` — paleta, tipografia, padrões visuais (cards dotted, ◆ iaf, numeração olho)
+- `finza-deck-animado` — **padrão canônico**: palco 1920×1080, motor de animação, cortina de ato, capa com órbita + ticker, mockups vivos (celular com dedo simulado, WhatsApp, carrossel), gráficos interativos, narrativa em atos. Referências: deck Q3 (`entregas-q3_lideranca_06-11-2026.html`), Torre (`Torre de Controle - Balanço do ciclo.html`), Relatório IAs.
+- `finza-design-system` — **legado** (só para manter decks no padrão antigo do CTO)
 - `finza-tom-voz` — voz neutra técnico-executiva, frases curtas, números visíveis em azul
 - `finza-contexto` — resumo do negócio Finza para evitar fabricação de fatos
 
@@ -257,8 +259,10 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - **Torre tem 3 camadas — não as cruze.** Código (`cobranca-finza/`, via `/torre`) ≠ frente de backlog **BTR** (`Backlog/frentes/torre/`, via `/backlog`) ≠ overview narrativo (`Backlog/contexto/torre_de_controle_overview.md`, via `/contexto`).
 
 **Visual:**
-- Paleta Finza exata. Sem cores fora dos tokens em `.claude/skills/finza-design-system/`.
-- Cards com `2px dotted var(--finza-blue)`. Marcador `◆ iaf` no canto superior direito.
+- Paleta Finza exata. Sem cores fora dos tokens da skill `finza-deck-animado` (§2).
+- Bloco explicativo em card `2px dotted #1A1AFF`. Marca `◆ Squad IA` no canto superior direito (substituiu o `◆ iaf`).
+- Título ghost + accent: contexto peso 300 `#9C9CB4` + conclusão peso 800 azul. Texto de conteúdo ≥ 24px no palco.
+- Movimento com propósito: todo bloco anima na ordem de leitura; números contam; atos abrem com cortina azul; mockup de produto é demo viva com dado fictício marcado.
 - Sem emojis decorativos. Emojis funcionais (✓ → 🎯 📅 📍) só quando carregam significado.
 
 **Voz:**
@@ -267,8 +271,9 @@ Quando estiver em dúvida, consulte estes princípios antes de produzir conteúd
 - Sem "ótima notícia", "boas perspectivas". Quando incerto, declarar incerteza.
 
 **Stack (slides):**
-- HTML5 + CSS3 + JS vanilla. Single-file. Inter via Google Fonts.
-- Sem React, Vue, Reveal.js, libs de ícone, imagens externas.
+- HTML5 + CSS3 + JS vanilla. Single-file. Inter via Google Fonts. Sempre a partir de `finza-deck-animado/template.html` (motor e navegação não se reescrevem).
+- Sem React, Vue, Reveal.js, libs de gráfico/ícone, imagens externas (prints e fotos embutidos em base64).
+- Exports do Claude Design (bundle com React) são referência visual, não base de código.
 
 ---
 
