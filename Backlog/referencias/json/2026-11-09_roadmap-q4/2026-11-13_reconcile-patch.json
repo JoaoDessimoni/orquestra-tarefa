@@ -1,0 +1,129 @@
+{
+ "atualizado_em": "2026-11-13",
+ "items": {
+  "q12549": {
+   "qs": "em_validacao",
+   "ip": "2026-11-10",
+   "ir": "2026-11-10",
+   "fp": "2026-11-13",
+   "fr": "2026-11-13",
+   "df": "quimera"
+  },
+  "Q12844": {
+   "qs": "em_validacao",
+   "ip": "2026-11-12",
+   "ir": "2026-11-12",
+   "fr": "2026-11-13",
+   "fonte": "Quimera (ia_automacao_finza), leitura de 2026-11-13",
+   "prio": "media",
+   "sol": "Cobrança Finza",
+   "rel": [],
+   "h0": {
+    "s": "nao_iniciada",
+    "n": ""
+   },
+   "ac": "Agendar disparo de 5 min a 30 dias à frente (horário de Brasília), alterar o horário ou cancelar antes da execução; no horário, o título e a parcela são recalculados e quem pagou é pulado."
+  },
+  "q12357": {
+   "ip": "2026-11-09",
+   "df": "quimera"
+  },
+  "q12372": {
+   "ip": "2026-11-16",
+   "df": "sugerida"
+  },
+  "q12239": {
+   "ip": "2026-11-16",
+   "df": "sugerida"
+  },
+  "q10894": {
+   "df": "quimera"
+  },
+  "q10908": {
+   "ip": "2026-10-20",
+   "ir": "2026-10-20",
+   "df": "quimera"
+  },
+  "q10717": {
+   "ip": "2026-10-19",
+   "ir": "2026-10-19",
+   "fp": "2026-11-13",
+   "df": "quimera"
+  },
+  "q6871": {
+   "ip": "2026-10-22",
+   "ir": "2026-10-22",
+   "fp": "2026-11-13",
+   "df": "quimera"
+  },
+  "q12649": {
+   "ir": "2026-11-11"
+  },
+  "q12984": {
+   "ip": "2026-11-12"
+  },
+  "q13003": {
+   "ip": "2026-11-12",
+   "rel": [
+    "#8215",
+    "#8609",
+    "#12188",
+    "#13001"
+   ]
+  },
+  "q13017": {
+   "id": "q13017",
+   "key": 13017,
+   "tipo": "demanda",
+   "ord": 9019,
+   "titulo": "E-mail de cobrança com o boleto em anexo",
+   "frente": "torre",
+   "desc": "<p>A Cobrança pediu para enviar o arquivo do boleto como anexo nos e-mails de cobrança, inclusive em envio massivo. Marcos confirmou que é viável no nível de implementação. Se não der, o chamado é finalizado explicando o motivo.</p>",
+   "ac": "",
+   "qs": "em_andamento",
+   "dev": "Marcos",
+   "sol": "Cobrança Finza",
+   "sp": 3,
+   "prio": "media",
+   "ip": "2026-11-13",
+   "ir": "2026-11-13",
+   "fp": null,
+   "fr": null,
+   "df": "quimera",
+   "fonte": "Quimera (ia_automacao_finza), leitura de 2026-11-13",
+   "h0": {
+    "s": "nao_iniciada",
+    "n": ""
+   },
+   "rel": []
+  },
+  "q13002": {
+   "id": "q13002",
+   "key": 13002,
+   "tipo": "demanda",
+   "ord": 9020,
+   "titulo": "Template WhatsApp com meios de pagamento para o preventivo",
+   "frente": "torre",
+   "desc": "<p>Criar um template de WhatsApp com meios de pagamento para a régua preventiva. O template atual afirma que o boleto venceu; a Cobrança quer enviar também para parcelas que ainda vão vencer.</p>",
+   "ac": "Template aprovado pela Meta como UTILIDADE e disponível na Torre para o preventivo.",
+   "qs": "fila_exec",
+   "dev": "Marcos",
+   "sol": "Cobrança Finza",
+   "sp": 2,
+   "prio": "media",
+   "ip": null,
+   "ir": null,
+   "fp": null,
+   "fr": null,
+   "df": "quimera",
+   "fonte": "Quimera (ia_automacao_finza), leitura de 2026-11-13",
+   "h0": {
+    "s": "nao_iniciada",
+    "n": ""
+   },
+   "rel": [
+    "#13003"
+   ]
+  }
+ }
+}

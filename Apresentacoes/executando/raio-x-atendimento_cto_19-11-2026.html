@@ -1,0 +1,940 @@
+<title>Raio-X do Atendimento</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<style>
+/* Layout: padrão dos decks Finza (finza-deck-animado) traduzido para app web — fundo claro com pontos,
+   faixa navy de destaque, cards brancos raio 20, título ghost+accent, tooltip navy. Tema único (claro) por decisão. */
+:root{
+  --blue:#1A1AFF; --deep:#0F0F8C; --mid:#4D4DFF; --lilac:#7A7AFF; --soft:#E8E8FF;
+  --dark:#0A0A2E; --navy2:#16163F; --navy3:#23235A; --navy4:#3A3A8C;
+  --ghost:#9C9CB4; --ghost2:#C8C8D4; --muted:#5C5C7A; --line:#D8D8E5; --bg:#F2F2F2; --white:#FFFFFF; --track:#F2F2F8;
+  --ok:#10B981; --warn:#F59E0B; --bad:#EF4444;
+  --ok-bg:#D1FAE5; --ok-tx:#047857; --bl-bg:#E8E8FF; --bl-tx:#1A1AFF; --wa-bg:#FEF3C7; --wa-tx:#92400E; --bad-bg:#FEE2E2; --bad-tx:#B91C1C;
+  --f10:#10B981; --f20:#6FCF9F; --f30:#FBBF24; --f60:#F59E0B; --f60p:#EF4444; --fsem:#991B1B;
+  --rec-a:#1A1AFF; --rec-b:#7A7AFF;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:20px; --r-sm:12px;
+  --lift:0 18px 40px rgba(26,26,255,.14);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--dark);font-family:var(--f);font-size:15px;line-height:1.5;
+  background-image:radial-gradient(var(--line) 1.2px,transparent 1.3px);background-size:28px 28px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--white)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.n{font-variant-numeric:tabular-nums}
+.wrap{width:100%;max-width:none;margin:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--white);border-bottom:1px solid var(--line)}
+.top-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0;flex-wrap:wrap}
+.brand .mk{font-weight:700;color:var(--blue);white-space:nowrap}
+.brand .nm{font-weight:300;color:var(--ghost);font-size:17px;white-space:nowrap}
+.brand .nm b{font-weight:800;color:var(--dark)}
+.sim{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--wa-bg);color:var(--wa-tx);border-radius:999px;padding:3px 10px;white-space:nowrap;cursor:help}
+.seg{display:inline-flex;background:var(--track);border-radius:12px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:9px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--white);color:var(--blue);box-shadow:0 1px 3px rgba(10,10,46,.12)}
+.seg button[data-rec="B"][aria-pressed="true"]{color:var(--rec-b)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{padding:10px 14px;font-weight:700;font-size:14px;color:var(--muted);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--blue);border-bottom-color:var(--blue)}
+
+main{padding-block:22px 56px}
+.view{display:flex;flex-direction:column;gap:26px}
+
+.kick{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.h2{font-size:clamp(22px,2.4vw,30px);line-height:1.1;letter-spacing:-.03em;margin:4px 0 0;text-wrap:balance}
+.h2 .g{font-weight:300;color:var(--ghost)} .h2 .k{font-weight:800;color:var(--blue)}
+.lead{color:var(--muted);font-size:14px;margin:6px 0 0;max-width:70ch}
+/* telas largas: seções lado a lado para aproveitar o espaço horizontal */
+.dash-row{display:flex;flex-direction:column;gap:26px;min-width:0}
+.dash-row > section{min-width:0}
+@media (min-width:1400px){.dash-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+@media (min-width:1400px){.dash-row .rules{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1600px){.defs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+
+.cw{background:var(--white);border-radius:var(--r);padding:20px 22px;min-width:0}
+.cd{background:var(--white);border-radius:var(--r);padding:16px 20px;border:2px dotted var(--blue);color:var(--muted);font-size:14px;margin:0}
+.cd b{color:var(--blue)}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:900px){.g2{grid-template-columns:1fr}}
+.lab{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.c-ok{background:var(--ok-bg);color:var(--ok-tx)} .c-bl{background:var(--bl-bg);color:var(--bl-tx)} .c-wa{background:var(--wa-bg);color:var(--wa-tx)} .c-bad{background:var(--bad-bg);color:var(--bad-tx)} .c-nv{background:var(--track);color:var(--muted)}
+.dot{width:9px;height:9px;border-radius:3px;display:inline-block;flex:none}
+.rec{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.rec::before{content:"";width:8px;height:8px;border-radius:2px;background:currentColor}
+.rec-A{color:var(--rec-a)} .rec-B{color:var(--rec-b)}
+.sc{display:inline-flex;align-items:center;justify-content:center;min-width:38px;font-weight:800;border-radius:8px;padding:2px 7px;font-variant-numeric:tabular-nums}
+.s-hi{background:var(--ok-bg);color:var(--ok-tx)} .s-mid{background:var(--wa-bg);color:var(--wa-tx)} .s-lo{background:var(--bad-bg);color:var(--bad-tx)}
+
+.hero{background:var(--dark);border-radius:24px;padding:26px 26px 22px;color:var(--white);position:relative;overflow:hidden;
+  background-image:radial-gradient(var(--navy3) 1.4px,transparent 1.5px);background-size:30px 30px}
+.hero .kick{color:var(--ghost2)}
+.hero .h2{font-size:clamp(26px,3.2vw,40px)} .hero .h2 .g{color:var(--ghost2)} .hero .h2 .k{color:var(--white)} .hero .h2 .k i{font-style:normal;color:var(--lilac)}
+.pill{display:inline-flex;background:var(--blue);color:var(--white);font-weight:600;font-size:13px;border-radius:999px;padding:5px 14px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}
+@media (max-width:1050px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.kpis{grid-template-columns:1fr}}
+.kpi{background:var(--white);color:var(--dark);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:8px;min-width:0;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-4px);box-shadow:var(--lift)}
+.kpi.inv{background:var(--blue);color:var(--white)} .kpi.inv .lab{color:var(--soft)} .kpi.inv .cap{color:var(--soft)}
+.kpi .big{font-size:clamp(40px,4.6vw,60px);font-weight:800;letter-spacing:-.04em;line-height:.95;color:var(--blue)}
+.kpi.inv .big{color:var(--white)}
+.kpi .big small{font-size:.42em;font-weight:800;margin-left:3px;letter-spacing:-.02em}
+.kpi .cap{font-size:13px;color:var(--muted);line-height:1.35}
+.kpi .duo{display:flex;flex-direction:column;gap:6px}
+.kpi .duo div{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.kpi .duo .big{font-size:clamp(30px,3.2vw,42px)}
+.strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:20px;border-top:1px solid var(--navy3);padding-top:16px}
+@media (max-width:1050px){.strip{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:14px}}
+@media (max-width:520px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.strip > div{padding-right:12px;cursor:help;min-width:0}
+.strip .v{font-size:clamp(22px,2.2vw,28px);font-weight:800;color:var(--lilac);letter-spacing:-.03em;line-height:1.1}
+.strip .v small{font-size:.55em;margin-left:2px}
+.strip .l{font-size:12px;color:var(--ghost2);line-height:1.3}
+.strip .v .ab{display:block;font-size:.62em}
+
+.stk{display:flex;height:46px;border-radius:12px;overflow:hidden;gap:2px}
+.stk button{border:0;padding:0 6px;cursor:pointer;min-width:0;color:var(--white);font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden}
+.stk button:hover{filter:brightness(1.08)}
+.fx-f10{background:var(--f10)}.fx-f20{background:var(--f20)}.fx-f30{background:var(--f30)}.fx-f60{background:var(--f60)}.fx-f60p{background:var(--f60p)}.fx-sem{background:var(--fsem)}
+.stk .fx-f20,.stk .fx-f30{color:var(--dark)}
+.bands{display:flex;flex-direction:column;margin-top:14px}
+.band{display:grid;grid-template-columns:118px 86px minmax(0,1fr);gap:12px;align-items:center;padding:9px 6px;border-top:1px solid var(--track);cursor:pointer;border-radius:10px}
+.band:hover{background:var(--track)}
+.band .p{font-size:22px;font-weight:800;letter-spacing:-.03em}
+.band .p small{font-size:12px;color:var(--muted);font-weight:600;display:block;letter-spacing:0}
+.band .r{font-size:13px;color:var(--muted)}
+.band .r b{color:var(--blue)}
+.fxchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;border-radius:999px;padding:4px 10px;color:var(--white);white-space:nowrap;justify-self:start}
+.fxchip.fx-f20,.fxchip.fx-f30{color:var(--dark)}
+@media (max-width:520px){.band{grid-template-columns:110px minmax(0,1fr)}.band .r{grid-column:1/-1}}
+
+.hb{display:flex;flex-direction:column;gap:4px}
+.hbr{display:grid;grid-template-columns:22px minmax(0,190px) minmax(0,1fr) 46px;gap:10px;align-items:center;padding:7px 6px;border-radius:10px;cursor:pointer}
+.hbr:hover{background:var(--track)}
+.hbr .i{font-size:12px;font-weight:700;color:var(--ghost);text-align:right}
+.hbr .nm{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbr .nm small{display:block;font-size:11.5px;color:var(--muted);font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.hbr .tr{height:14px;background:var(--track);border-radius:7px;overflow:hidden}
+.hbr .fl{display:block;height:100%;border-radius:7px;background:var(--blue)}
+.hbr.ref .fl{background:repeating-linear-gradient(135deg,var(--lilac) 0 6px,var(--soft) 6px 12px)}
+.hbr.ref .nm{color:var(--lilac)}
+.hbr .v{font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.more{margin-top:8px;background:none;border:0;color:var(--blue);font-weight:700;font-size:13px;cursor:pointer;padding:6px}
+@media (max-width:520px){.hbr{grid-template-columns:18px minmax(0,1fr) 42px}.hbr .tr{grid-column:2/4;grid-row:2}}
+
+.rf{display:flex;flex-direction:column;gap:8px}
+.rfi{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--track);cursor:pointer;border:1px solid transparent}
+.rfi:hover{border-color:var(--blue);background:var(--white)}
+.rfi .t{font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--bad);min-width:84px;font-variant-numeric:tabular-nums;line-height:1.1}
+.rfi .t.sem{color:var(--fsem);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.rfi .w{font-size:13px;min-width:0}
+.rfi .w b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rfi .w span{color:var(--muted)}
+
+.heat{display:grid;grid-template-columns:34px repeat(24,minmax(14px,1fr));gap:3px;min-width:430px}
+.heat .hl{font-size:10.5px;color:var(--ghost);text-align:center;font-weight:600}
+.heat .dl{font-size:11px;color:var(--muted);font-weight:600;align-self:center}
+.heat .c{aspect-ratio:1;border-radius:4px;background:var(--track);cursor:help}
+.scroll-x{overflow-x:auto}
+.hleg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:12px;color:var(--muted);align-items:center}
+.hleg span{display:inline-flex;gap:6px;align-items:center}
+
+.mix{display:flex;height:30px;border-radius:10px;overflow:hidden;gap:2px}
+.mix span{display:flex;align-items:center;justify-content:center;color:var(--white);font-size:12px;font-weight:800;min-width:0;cursor:help}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.trio div{background:var(--track);border-radius:14px;padding:12px;cursor:help;min-width:0}
+.trio .v{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.trio .l{font-size:12px;color:var(--muted)}
+
+/* ---------- clientes e conversas: tela de altura fixa ---------- */
+html.fixed,html.fixed body{height:100%;overflow:hidden}
+html.fixed body{display:flex;flex-direction:column}
+html.fixed header.top{flex:none;position:relative;top:auto}
+html.fixed main{flex:1;min-height:0;display:flex;flex-direction:column;padding-block:12px;max-width:none;width:100%;margin:0;align-self:stretch}
+html.fixed header.top .wrap{max-width:none}
+html.fixed main > .view{flex:1;min-height:0}
+.pv{display:flex;flex-direction:column;gap:12px;height:100%;min-height:0}
+.fbar{flex:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--white);border-radius:16px;padding:10px 12px}
+.search{flex:1 1 220px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--track);border-radius:12px;padding:0 12px;border:2px solid transparent}
+.search:focus-within{border-color:var(--blue);background:var(--white)}
+.search input{border:0;background:transparent;padding:8px 0;width:100%;min-width:0;outline:none;font-size:13px}
+.dd{position:relative;min-width:0}
+.ddb{display:inline-flex;align-items:center;gap:8px;background:var(--track);border:2px solid transparent;border-radius:12px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--dark);cursor:pointer;white-space:nowrap;max-width:260px}
+.ddb small{color:var(--muted);font-weight:600;font-size:12px}
+.ddb .val{overflow:hidden;text-overflow:ellipsis}
+.ddb.on{background:var(--soft);color:var(--blue)}
+.ddb.on small{color:var(--blue);opacity:.75}
+.ddb[aria-expanded="true"]{border-color:var(--blue);background:var(--white)}
+.ddb::after{content:"";width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);opacity:.55;flex:none}
+.ddb[aria-expanded="true"]::after{transform:translateY(1px) rotate(-135deg)}
+.ddp{position:absolute;top:calc(100% + 6px);left:0;z-index:20;background:var(--white);border-radius:16px;box-shadow:0 18px 40px rgba(10,10,46,.2);border:1px solid var(--line);padding:6px;min-width:230px;width:max-content;max-width:min(340px,calc(100vw - 32px));max-height:min(420px,60vh);overflow:auto;display:flex;flex-direction:column;gap:2px;animation:ddin .16s ease-out}
+@keyframes ddin{from{opacity:0;transform:translateY(-4px)}}
+.ddp.right{left:auto;right:0}
+.ddo{display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:8px 10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--dark)}
+.ddo:hover{background:var(--track)}
+.ddo[aria-checked="true"]{color:var(--blue);background:var(--soft)}
+.ddo::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--line);flex:none;box-sizing:border-box}
+.ddo[aria-checked="true"]::before{border:4px solid var(--blue)}
+.ddo.chk::before{border-radius:4px}
+.ddo.chk[aria-checked="true"]::before{background:var(--blue);border:2px solid var(--blue);box-shadow:inset 0 0 0 2px var(--white)}
+.ddsearch{border:0;background:var(--track);border-radius:10px;padding:8px 10px;margin:2px 2px 6px;font-size:13px;outline:none}
+.ddsec{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ghost);padding:10px 10px 2px}
+.badge{background:var(--blue);color:var(--white);border-radius:999px;font-size:11px;padding:1px 7px;font-weight:800}
+.fcount{margin-left:auto;font-size:13px;color:var(--muted);white-space:nowrap;display:flex;gap:10px;align-items:center}
+.fcount b{color:var(--dark)}
+.clear{border:0;background:none;color:var(--blue);font-weight:700;font-size:13px;cursor:pointer;padding:0}
+.btn{border:0;background:var(--blue);color:var(--white);border-radius:12px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer}
+.btn.ghost{background:var(--track);color:var(--dark)}
+.btn.sm{padding:6px 10px;font-size:12px;border-radius:10px}
+.btn:hover{filter:brightness(1.05)}
+.ex{flex:1;min-height:0;display:grid;grid-template-columns:320px minmax(0,1fr) 340px;grid-template-rows:minmax(0,1fr);gap:12px}
+.pane{min-height:0;min-width:0;width:100%;display:flex;flex-direction:column;background:var(--white);border-radius:var(--r);overflow:hidden}
+.pane-h{flex:none;padding:12px 14px;border-bottom:1px solid var(--track);display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.pane-b{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:10px;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.pane-b::-webkit-scrollbar,.ddp::-webkit-scrollbar{width:8px}
+.pane-b::-webkit-scrollbar-track,.ddp::-webkit-scrollbar-track{background:transparent}
+.pane-b::-webkit-scrollbar-thumb,.ddp::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px;border:2px solid transparent;background-clip:content-box}
+.pane-b:hover::-webkit-scrollbar-thumb,.ddp:hover::-webkit-scrollbar-thumb{background:var(--ghost);background-clip:content-box}
+.ddp{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.convp .pane-b{scrollbar-color:var(--ghost2) transparent}
+.msg{overflow-wrap:anywhere}
+/* cabeçalho da conversa: estrutura fixa — botões nunca mudam de lugar */
+.convp .pane-h{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;flex-wrap:nowrap}
+.convh{gap:5px}
+.convh .t1,.convh .t2{flex-wrap:nowrap;overflow:hidden;white-space:nowrap;min-width:0;height:26px;align-items:center}
+.convh .t1 > *,.convh .t2 > *{flex:none}
+.convh .fit{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;display:inline-flex;gap:6px}
+.convh .nm2{display:block;color:var(--muted);font-size:13px}
+.convp .acts{flex-wrap:nowrap;justify-content:flex-end}
+.pnav span{min-width:56px;text-align:center}
+.evbtn{min-width:112px;justify-content:center}
+@media (max-width:760px){.convp .pane-h{grid-template-columns:minmax(0,1fr)}.convp .acts{justify-content:flex-start}}
+.clist{display:flex;flex-direction:column;gap:6px}
+.cc{border-radius:14px;background:var(--track);border:2px solid transparent}
+.cc.on{border-color:var(--blue);background:var(--white)}
+.ci{width:100%;border:0;background:none;padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;text-align:left;border-radius:12px}
+.ci:hover{background:rgba(26,26,255,.04)}
+.ci .ph{font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.ci .nm{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci .fl{display:flex;gap:5px;align-items:center;justify-content:flex-end}
+.plist{display:flex;flex-direction:column;gap:3px;padding:0 8px 8px}
+.plist .lab{padding:4px 6px 2px}
+.pi{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;border:0;background:var(--track);text-align:left;padding:8px 10px;border-radius:10px;cursor:pointer;font-size:12.5px;color:var(--dark)}
+.pi:hover{background:var(--soft)}
+.pi[aria-selected="true"]{background:var(--blue);color:var(--white)}
+.pi[aria-selected="true"] .sc{background:var(--white)}
+.pi .d{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pi .a{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.85}
+.convh{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+.convh .t1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.convh .ph{font-size:20px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.convh .t2{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.pnav{display:inline-flex;align-items:center;gap:4px;background:var(--track);border-radius:10px;padding:3px}
+.pnav button{border:0;background:none;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:800;color:var(--dark)}
+.pnav button:hover:not([disabled]){background:var(--white);color:var(--blue)}
+.pnav button[disabled]{opacity:.3;cursor:default}
+.pnav span{font-size:12px;font-weight:700;padding:0 4px;font-variant-numeric:tabular-nums}
+.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.convp .pane-b{background:var(--track);padding:16px}
+.convp .chat{background:none;border-radius:0;padding:0;max-height:none;overflow:visible}
+.evp .x2,.back,.evbtn,.evscrim{display:none}
+@media (max-width:1250px){
+  .ex{grid-template-columns:300px minmax(0,1fr)}
+  .evp{display:none}
+  .evbtn{display:inline-flex}
+  .ex.evopen .evp{display:flex;position:fixed;top:0;right:0;bottom:0;width:min(400px,94vw);z-index:41;border-radius:0;border-left:3px solid var(--blue);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .ex.evopen .evscrim{display:block}
+  .evp .x2{display:inline-flex}
+}
+@media (max-width:760px){
+  .ex{grid-template-columns:1fr}
+  .ex:not(.detail) .convp{display:none}
+  .ex.detail .listp{display:none}
+  .back{display:inline-flex}
+  .ddb{max-width:170px}
+  .fcount{margin-left:0;width:100%}
+}
+/* ---------- ranking de atendentes ---------- */
+.at-t{display:flex;flex-direction:column}
+.atr{display:grid;grid-template-columns:26px minmax(0,1.3fr) minmax(0,1.6fr) 64px 56px 64px 52px;gap:12px;align-items:center;padding:9px 8px;border-radius:12px;cursor:pointer;border-top:1px solid var(--track)}
+.atr:hover{background:var(--track)}
+.atr.h{cursor:default;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:0;border-bottom:1px solid var(--line);border-radius:0}
+.atr.h:hover{background:none}
+.atr.h span{cursor:help}
+.atr .pos{font-weight:800;color:var(--ghost);text-align:right;font-variant-numeric:tabular-nums}
+.atr .nm{min-width:0}
+.atr .nm b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atr .nm small{color:var(--muted);font-size:12px}
+.atr .bar{display:flex;align-items:center;gap:10px;min-width:0}
+.atr .tr{flex:1;height:12px;background:var(--track);border-radius:6px;overflow:hidden}
+.atr .fl{display:block;height:100%;border-radius:6px}
+.atr .bv{font-weight:800;min-width:58px;text-align:right;font-variant-numeric:tabular-nums;font-size:14px}
+.atr .c{text-align:right;font-variant-numeric:tabular-nums;font-size:13px}
+.atr.ref{cursor:help}
+.atr.ref .nm b,.atr.ref .bv{color:var(--lilac)}
+.atr.ref .fl{background:repeating-linear-gradient(135deg,var(--lilac) 0 6px,var(--soft) 6px 12px)}
+.g2 .atr{grid-template-columns:22px minmax(0,1.2fr) minmax(0,1.4fr) 52px}
+.g2 .atr .hs{display:none}
+@media (max-width:760px){.atr{grid-template-columns:22px minmax(0,1fr) 48px}.atr .bar{grid-column:2/4;grid-row:2}.atr .hs{display:none}.atr.h{display:none}.atr .c:last-child{grid-row:1;grid-column:3}}
+
+.chat{background:var(--track);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:8px;max-height:640px;overflow-y:auto}
+.msg{max-width:80%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.4}
+.msg .who{display:block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;opacity:.7}
+.msg .ts{display:block;font-size:11px;opacity:.6;margin-top:3px;text-align:right;font-variant-numeric:tabular-nums}
+.msg.cliente{align-self:flex-start;background:var(--white);border-bottom-left-radius:4px}
+.msg.humano{align-self:flex-end;background:var(--dark);color:var(--white);border-bottom-right-radius:4px}
+.msg.ia{align-self:flex-end;background:var(--blue);color:var(--white);border-bottom-right-radius:4px}
+.msg.audio{font-style:italic}
+.msg.hl{box-shadow:0 0 0 3px var(--f30)}
+.sys{align-self:center;font-size:11.5px;color:var(--muted);background:var(--white);border-radius:999px;padding:3px 12px;font-weight:600}
+.gap{align-self:center;font-size:11.5px;font-weight:800;border-radius:999px;padding:3px 11px;color:var(--white);cursor:help}
+.gap.fx-f20,.gap.fx-f30{color:var(--dark)}
+.ev{display:flex;flex-direction:column;gap:14px}
+.ev .bs{display:flex;align-items:center;gap:14px}
+.ring{width:84px;height:84px;flex:none}
+.ev .facts{display:flex;flex-wrap:wrap;gap:6px}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;font-size:13px;margin:0}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:700;text-align:right}
+details.dx{border-top:1px solid var(--track);padding-top:10px}
+details.dx summary{cursor:pointer;font-weight:700;font-size:13px;color:var(--blue);list-style:none}
+details.dx summary::-webkit-details-marker{display:none}
+details.dx summary::before{content:"+ "} details.dx[open] summary::before{content:"− "}
+.dc{display:grid;grid-template-columns:minmax(0,120px) minmax(0,1fr) 34px;gap:8px;align-items:center;font-size:12.5px;margin-top:8px;cursor:help}
+.dc .tr{height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.dc .fl{display:block;height:100%;background:var(--blue);border-radius:4px}
+.dc b{text-align:right;font-variant-numeric:tabular-nums}
+.just{font-size:13px;color:var(--muted);border-left:3px solid var(--soft);padding-left:10px;margin-top:10px}
+.just b{color:var(--dark)}
+.just q{display:block;margin-top:3px;font-style:italic;color:var(--blue);cursor:pointer}
+.empty{color:var(--ghost);font-size:15px;font-weight:600;padding:36px 16px;text-align:center}
+
+.wl{display:flex;flex-direction:column;gap:6px}
+.wi{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr) 48px;gap:12px;align-items:center;padding:8px 6px;border-radius:10px;cursor:help}
+.wi:hover{background:var(--track)}
+.wi .nm{font-weight:700;font-size:14px}
+.wi .nm small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.wi .tr{height:16px;background:var(--track);border-radius:8px;overflow:hidden}
+.wi .fl{display:block;height:100%;background:var(--blue);border-radius:8px}
+.wi.obj .fl{background:var(--dark)}
+.wi .v{font-size:22px;font-weight:800;color:var(--blue);text-align:right;letter-spacing:-.03em}
+@media (max-width:520px){.wi{grid-template-columns:minmax(0,1fr) 44px}.wi .tr{grid-column:1/-1}}
+.rules{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+@media (max-width:900px){.rules{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:420px){.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rule{border-radius:14px;padding:12px;background:var(--track);display:flex;flex-direction:column;gap:6px;cursor:help;min-width:0}
+.rule .v{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.lim{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 6px;border-top:1px solid var(--track);cursor:help;font-size:14px;font-weight:600}
+.lim b{font-size:18px;font-weight:800;color:var(--blue)}
+pre.prompt{background:var(--dark);color:var(--soft);border-radius:var(--r);padding:20px;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;margin:0;max-height:460px;overflow:auto}
+.defs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.def{background:var(--white);border-radius:16px;padding:14px 16px}
+.def h3{font-size:14px;margin:0 0 4px;font-weight:800}
+.def p{margin:0;color:var(--muted);font-size:13.5px}
+
+#tip{position:fixed;z-index:30;max-width:300px;background:var(--dark);color:var(--white);border-radius:14px;padding:10px 14px;font-size:13px;line-height:1.4;pointer-events:none;box-shadow:0 12px 32px rgba(10,10,46,.28)}
+#tip b{display:block;color:var(--lilac);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.scrim{position:fixed;inset:0;background:rgba(10,10,46,.45);z-index:40}
+aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(520px,94vw);background:var(--white);border-left:3px solid var(--blue);z-index:41;overflow-y:auto;
+  padding:calc(22px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) 24px;display:flex;flex-direction:column;gap:14px;animation:slin .35s cubic-bezier(.25,1,.5,1)}
+@keyframes slin{from{transform:translateX(40px);opacity:0}}
+aside.panel .x{align-self:flex-end;border:0;background:var(--track);border-radius:10px;padding:6px 12px;font-weight:700;cursor:pointer}
+aside.panel .bigp{font-size:52px;font-weight:800;letter-spacing:-.04em;color:var(--blue);line-height:1}
+aside.panel table{width:100%;border-collapse:collapse;font-size:13px}
+aside.panel th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px;border-bottom:1px solid var(--line)}
+aside.panel td{padding:7px 6px;border-bottom:1px solid var(--track)}
+aside.panel td.r,aside.panel th.r{text-align:right}
+.fonte{font-size:12px;color:var(--muted);border-top:1px solid var(--track);padding-top:10px;margin:0}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--dark);color:var(--white);padding:10px 16px;border-radius:12px;font-size:13px;z-index:50}
+.state{background:var(--white);border-radius:var(--r);padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.state h2{margin:0;font-size:20px;font-weight:800;text-wrap:balance}
+.state p{margin:0;color:var(--muted);font-size:14px;max-width:58ch}
+.state .ldbar{width:min(280px,70%);height:6px;border-radius:999px;background:var(--track);overflow:hidden;margin:6px 0}
+.state .ldbar i{display:block;width:40%;height:100%;border-radius:999px;background:var(--blue);animation:ld 1.2s ease-in-out infinite}
+@keyframes ld{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand"><span class="mk">◆ Squad IA</span><span class="nm">Raio-X do <b>Atendimento</b></span><span class="sim" tabindex="0" data-tip="Extração::Chats do Hyperflow lidos no BigQuery, de 20/08 a 18/11/2026. O tempo de resposta cobre todos os protocolos. A avaliação por IA ainda não rodou.">dados extraídos em 19/11/2026</span></div>
+      <div class="seg" role="group" aria-label="Recorte" id="segRec">
+        <button data-rec="A" aria-pressed="true" data-tip="FINZA::Todo o Hyperflow da FINZA, todos os departamentos.">FINZA</button>
+        <button data-rec="B" aria-pressed="false" data-tip="BLIPS · Cobrança::Chats do Hyperflow BLIPS que passaram por uma das 20 filas de cobrança.">BLIPS · Cobrança</button>
+        <button data-rec="AB" aria-pressed="false" data-tip="Comparar::Os dois recortes lado a lado. Os números nunca se somam.">Comparar</button>
+      </div>
+      <div class="seg" role="group" aria-label="Relógio" id="segClock">
+        <button data-clock="com" aria-pressed="true" data-tip="Relógio comercial::Conta só seg–sex, 8h às 18h. Mensagem das 23h respondida às 8h não vira atraso.">Comercial</button>
+        <button data-clock="cor" aria-pressed="false" data-tip="Relógio corrido::Conta o tempo de parede, inclusive noite e fim de semana.">Corrido</button>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Visões">
+      <a href="#dashboard" data-view="dashboard">Visão geral</a>
+      <a href="#protocolos" data-view="protocolos">Clientes e conversas</a>
+      <a href="#metodologia" data-view="metodologia">Como medimos</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+<div id="tip" hidden></div>
+<div id="layer"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+"use strict";
+/* Raio-X do Atendimento — dados reais. Regras de cálculo: specs 03 (tempo) e 05 (score).
+   DATA vem de arquivos publicados ao lado da página (data/meta.json, data/idx_<rec>.json, data/m/<rec>_<nnn>.json — spec 06).
+   O banco do artefato guarda só config/geral, prompts/<v> e pesos/<v>. */
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=(n,d=0)=>(n==null||isNaN(n))?"—":n.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=(a,b)=>b?100*a/b:0;
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
+const quant=(a,q)=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);return s[Math.min(s.length-1,Math.floor(q*s.length))]};
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const MIN=60000, DAY=86400000;
+const dt=ms=>{const d=new Date(ms);return `${String(d.getUTCDate()).padStart(2,"0")}/${String(d.getUTCMonth()+1).padStart(2,"0")} ${String(d.getUTCHours()).padStart(2,"0")}:${String(d.getUTCMinutes()).padStart(2,"0")}`};
+const fmin=m=>m==null?"sem resposta":m<1?`${fmt(m*60)} s`:m<60?`${fmt(m,m<10?1:0)} min`:`${fmt(m/60,1)} h`;
+const mv=m=>m==null?["—",""]:m<1?[fmt(m*60),"s"]:m<60?[fmt(m,1),"min"]:[fmt(m/60,1),"h"];
+const tip=(t,b)=>`data-tip="${esc(t)}::${esc(b)}"`;
+
+const CFG={
+  exp:{dias:[1,2,3,4,5],ini:8,fim:18},
+  faixas:[{k:"f10",lbl:"até 10 min",leit:"Dentro do esperado."},{k:"f20",lbl:"10 a 20 min",leit:"Aceitável."},{k:"f30",lbl:"20 a 30 min",leit:"Cliente já percebe a demora."},{k:"f60",lbl:"30 a 60 min",leit:"Atraso. Vale olhar a escala."},{k:"f60p",lbl:"mais de 1 h",leit:"<b>Red flag.</b> Cliente esperou mais de uma hora."},{k:"sem",lbl:"sem resposta",leit:"<b>Não atendimento.</b> A última mensagem do cliente ficou sem resposta."}],
+  notasAgil:{f10:100,f20:85,f30:70,f60:45,f60p:15,sem:0},
+  tetos:{sem:30,f60p:60},
+  penal:{informacao_incorreta_grave:15,promessa_indevida:10,exposicao_dados:15,ameaca:20,transferencia_sem_contexto:5},penalMax:30,
+  penalDesc:{informacao_incorreta_grave:"Informação errada que prejudica o cliente (valor, prazo, condição).",promessa_indevida:"Promete algo fora da política, como desconto não autorizado.",exposicao_dados:"Expõe dado pessoal de forma indevida.",ameaca:"Ameaça ou constrange o cliente na cobrança.",transferencia_sem_contexto:"Cliente precisou repetir tudo depois da transferência."},
+  crit:[{k:"agilidade",lbl:"Agilidade",desc:"Tempo medido nas mensagens. Não passa pelo LLM."},{k:"resolucao",lbl:"Resolução",desc:"Resolveu, ou o cliente sai sabendo o próximo passo e quando."},{k:"clareza",lbl:"Clareza e correção",desc:"Informação certa e completa: valores, datas, links."},{k:"conducao",lbl:"Condução",desc:"Oferece a saída (2ª via, acordo, prazo) sem o cliente pedir."},{k:"empatia",lbl:"Empatia e tom",desc:"Cordial, reconhece o problema, sem tom seco."},{k:"conformidade",lbl:"Conformidade",desc:"Sem promessa indevida, sem expor dado, sem ameaça."},{k:"desfecho",lbl:"Desfecho",desc:"Cliente termina mais calmo do que começou."}],
+  pesos:{agilidade:25,resolucao:20,clareza:15,conducao:10,empatia:10,conformidade:10,desfecho:10},
+  assuntos:{"cobranca.segunda_via":"2ª via de boleto","cobranca.acordo_renegociacao":"Acordo e renegociação","cobranca.atraso_juros_multa":"Juros e multa","cobranca.contestacao":"Contestação de débito","taxa.condicoes":"Taxa e condições","formalizacao.contrato_assinatura":"Contrato e assinatura","formalizacao.documentos":"Documentos","pagamento.confirmacao_baixa":"Confirmação de pagamento","cancelamento_distrato":"Cancelamento e distrato","equipamento_suporte":"Equipamento e suporte","cadastro_dados":"Cadastro","outros":"Outros"}
+};
+const FX=Object.fromEntries(CFG.faixas.map(f=>[f.k,f]));
+const REC={A:{nome:"FINZA"},B:{nome:"BLIPS · Cobrança"}};
+const assN=k=>CFG.assuntos[k]||"Assunto não avaliado";
+const TIPO_L={so_ia:"só IA",ia_humano:"IA → humano",so_humano:"só humano"};
+
+function bizMin(a,b){if(b<=a)return 0;let t=a,tot=0;while(t<b){const d=new Date(t),d0=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());
+  if(CFG.exp.dias.includes(d.getUTCDay())){const s=Math.max(t,d0+CFG.exp.ini*3600e3),e=Math.min(b,d0+CFG.exp.fim*3600e3);if(e>s)tot+=e-s}t=d0+DAY}return tot/MIN}
+const faixaDe=m=>m==null?"sem":m<=10?"f10":m<=20?"f20":m<=30?"f30":m<=60?"f60":"f60p";
+const IA_MIN_MS=3000; // resposta da IA em menos de 3 s não é plausível: o turno ganha rap:true e fica fora da medição da IA (respIA, mediana da IA, mapa de calor)
+/* Encerramento do cliente: o último bloco do cliente, sem réplica, só com cortesia curta (ok, obrigado, tchau, emoji…)
+   depois de pelo menos um turno respondido. Não é "sem resposta" e fica fora da pior espera e da mediana. */
+const CORT_RE=/\b(?:muito obrigad[oa]|obrigad[oa]|obrigadao|obgd?[oa]?|brigad[oa]|agradeco|grat[oa]|valeu|vlw|flw|falou|blz|beleza|ta (?:bom|bem|certo|otimo|ok|joia)|tudo (?:bem|certo|ok|bom|joia)|ok|okay|oks|certo|certinho|perfeito|combinado|entendi|entendido|show|top|joia|bom dia|boa tarde|boa noite|amem|de nada|por nada|tchau|ate (?:mais|logo|breve|amanha))\b/g;
+const CORT_OK=new Set("muito mesmo viu entao pela pelo por atencao ajuda retorno e a o moca moco amigo amiga querida querido senhor senhora sr sra dr dra pra para voce vc tambem tb tbm deus abencoe te lhe fica fique com um uma otimo otima bom boa dia tarde noite semana fim final de trabalho descanso abraco abs k rs ai ja ta tudo bem igualmente tmj legal".split(" "));
+function ehCortesia(texto){
+  const t=String(texto??"").trim();
+  if(!t||t.length>40||/[?\[\]\d]/.test(t))return false;
+  const semEmoji=t.replace(/[\p{Extended_Pictographic}\p{Emoji_Modifier}‍️]/gu,""),temEmoji=semEmoji.length<t.length;
+  const n=semEmoji.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z]+/g," ").replace(/([a-z])\1+/g,"$1").trim();
+  if(!n)return temEmoji;
+  let nucleo=0;const resto=n.replace(CORT_RE,()=>{nucleo++;return " "}).trim();
+  if(!nucleo)return false;
+  return !resto||resto.split(/\s+/).every(w=>CORT_OK.has(w));
+}
+function fechaMet(turnos,assumir,transf){
+  const val=turnos.filter(x=>!x.enc),nt=val.length;
+  const pior=k=>val.some(x=>x[k]==null)?null:Math.max(0,...val.map(x=>x[k]));
+  const med=k=>median(val.filter(x=>x[k]!=null).map(x=>x[k]));
+  const resp=(w,k)=>mean(val.filter(x=>x.por===w&&!x.rap&&x[k]!=null).map(x=>x[k]));
+  return {turnos,pior:{cor:pior("cor"),com:pior("com")},mediana:{cor:med("cor"),com:med("com")},faixaCor:nt?faixaDe(pior("cor")):null,faixaCom:nt?faixaDe(pior("com")):null,
+    primeira:{cor:turnos[0]?.cor??null,com:turnos[0]?.com??null},semResposta:val.some(x=>x.cor==null),encerramento:turnos.some(x=>x.enc),
+    respIA:{cor:resp("ia","cor"),com:resp("ia","com")},respHum:{cor:resp("humano","cor"),com:resp("humano","com")},
+    assumir:assumir==null?null:{cor:assumir,com:bizMin(transf,transf+assumir*MIN)}};
+}
+function metricas(p){
+  const turnos=[];let bloco=null,btx=[],assumir=null;
+  for(const m of p.msgs){
+    if(m.autor==="cliente"){if(bloco==null){bloco=m.ts;btx=[]}btx.push(m.texto)}
+    else if(m.autor!=="sistema"){if(bloco!=null){const t={ini:bloco,cor:(m.ts-bloco)/MIN,com:bizMin(bloco,m.ts),por:m.autor};if(m.autor==="ia"&&m.ts-bloco<IA_MIN_MS)t.rap=true;turnos.push(t);bloco=null}
+      if(m.autor==="humano"&&p.transf!=null&&assumir==null)assumir=(m.ts-p.transf)/MIN}}
+  if(bloco!=null){const enc=turnos.length>0&&btx.every(ehCortesia);turnos.push(enc?{ini:bloco,cor:null,com:null,por:"enc",enc:true}:{ini:bloco,cor:null,com:null,por:null})}
+  return fechaMet(turnos,assumir,p.transf);
+}
+function notaAgil(p,clk){const np=CFG.notasAgil[p.met[clk==="com"?"faixaCom":"faixaCor"]];return p.met.turnos.length-(p.met.encerramento?1:0)>=3&&p.met.mediana[clk]!=null?.7*np+.3*CFG.notasAgil[faixaDe(p.met.mediana[clk])]:np}
+function score(p,clk){
+  if(!p.met.turnos.length)return{score:null,parcial:true,semTurno:true,ag:null,base:null,teto:null,pen:0}; // disparo sem mensagem do cliente: sem espera, sem score
+  const ag=notaAgil(p,clk),P=CFG.pesos;
+  if(!p.aval)return{score:Math.round(ag),parcial:true,ag,base:ag,teto:null,pen:0};
+  const L=p.aval.lados.humano||p.aval.lados.ia;let base=P.agilidade*ag;
+  for(const c of CFG.crit)if(c.k!=="agilidade")base+=P[c.k]*L[c.k].nota;base/=100;
+  const fx=p.met[clk==="com"?"faixaCom":"faixaCor"],teto=fx==="sem"?CFG.tetos.sem:fx==="f60p"?CFG.tetos.f60p:null;
+  const pen=Math.min(CFG.penalMax,p.aval.flags.reduce((s,f)=>s+(CFG.penal[f]||0),0));
+  return{score:Math.max(0,Math.min(100,Math.round(Math.min(base,teto??100)-pen))),parcial:false,ag,base,teto,pen};
+}
+
+const DATA={A:null,B:null};
+const S={rec:"A",clk:"com",view:"dashboard",rank:"atendentes",sel:{cli:null,prot:null},filt:{},detail:false,hl:null,dd:null,ddq:"",evOpen:false,_plist:[]};
+const PMAP=new Map(),CMAP=new Map();
+let AGG={};
+function rescore(){AGG={};for(const r of["A","B"])if(DATA[r])for(const p of DATA[r].protocolos)p.sc=score(p,S.clk)}
+const recs=()=>S.rec==="AB"?["A","B"]:[S.rec];
+const fxk=p=>p.met[S.clk==="com"?"faixaCom":"faixaCor"];
+const isRed=p=>{const k=fxk(p);return k==="f60p"||k==="sem"};
+const scls=s=>s==null?"":s>=75?"s-hi":s>=50?"s-mid":"s-lo";
+const SEM_CLI=`<span class="chip c-nv" ${tip("Sem mensagem do cliente","Disparo que o cliente não respondeu. Conta no total de protocolos, mas não tem espera nem score.")}>sem mensagem do cliente</span>`;
+const fxChip=k=>k==null?SEM_CLI:`<span class="fxchip fx-${k}" ${tip(FX[k].lbl,FX[k].leit.replace(/<[^>]+>/g,""))}>${FX[k].lbl}</span>`;
+const fxDot=k=>k==null?`<span class="dot" style="background:var(--ghost2)"></span>`:`<span class="dot fx-${k}"></span>`;
+const scTxt=p=>p.sc.score==null?"—":p.sc.score+(p.sc.parcial?"*":"");
+const recTag=r=>`<span class="rec rec-${r}">${REC[r].nome}</span>`;
+const findP=id=>PMAP.get(id);
+const findC=id=>CMAP.get(id);
+
+/* ----- carregador: arquivos publicados ao lado da página ----- */
+const LOAD={meta:null,st:{A:"idle",B:"idle"},err:{A:null,B:null},gen:{A:0,B:0},timer:{},lotes:new Map()};
+const AUT=["cliente","humano","ia","sistema"],TIPOS_MSG=["texto","audio","imagem","documento","video","template","sistema"];
+const CAP=n=>{try{return window.claude&&window.claude.use?window.claude.use(n).catch(()=>null):Promise.resolve(null)}catch(e){return Promise.resolve(null)}};
+async function getJSON(u){const r=await fetch(u);if(!r.ok)throw new Error(`${u} respondeu HTTP ${r.status}`);return r.json()}
+function turnosDe(flat,inicio){const out=[];
+  for(let i=0;i<flat.length;i+=3){const ini=inicio+flat[i],d=flat[i+1];
+    out.push(d===-2?{ini,cor:null,com:null,por:"enc",enc:true}:d===-1?{ini,cor:null,com:null,por:null}:flat[i+2]===2?{ini,cor:d/MIN,com:bizMin(ini,ini+d),por:"ia",rap:true}:{ini,cor:d/MIN,com:bizMin(ini,ini+d),por:flat[i+2]===0?"ia":"humano"})}
+  return out}
+function decMsgs(arr,nomes){const out=[];let ts=arr[0];
+  for(let i=1;i<arr.length;i++){const r=arr[i];ts+=r[0];out.push({ts,autor:AUT[r[1]],texto:r[2],atendente:r[3]!=null&&r[3]>=0?nomes[r[3]]:null,tipo:TIPOS_MSG[r[4]??(r[1]===3?6:0)]})}
+  return out}
+function montarRec(r,parts){
+  const M=LOAD.meta.rec[r],d=parts[0].dic,ats=M.ats;
+  const clientes=parts[0].cli.map(c=>({id:c[0],rec:r,telefone:c[1],cnpjs:c[2],ambiguo:!!c[3],nome:c[4],lote:c[5],protocolos:[]})),protocolos=[];
+  for(const part of parts)for(const a of part.prot){const c=clientes[a[2]],inicio=a[7],transf=a[8]==null?null:inicio+a[8];
+    const p={id:a[0],protocol:a[1],rec:r,cliente:c.id,assunto:null,tipo:d.tipo[a[3]],depto:d.depto[a[4]],atendentes:a[5].map(i=>d.nome[i]),atId:a[6]<0?null:ats[a[6]].id,inicio,msgs:null,transf,fonte:d.fonte[a[9]],
+      aberto:!!(a[10]&1),broadcast:!!(a[10]&2),receptivo:!!(a[10]&4),outlier:!!(a[10]&8),audio:!!(a[10]&16),aval:null};
+    p.met=fechaMet(turnosDe(a[12],inicio),a[11]==null?null:a[11]/MIN,transf);p.sc=score(p,S.clk);
+    c.protocolos.push(p.id);protocolos.push(p);PMAP.set(p.id,p)}
+  for(const c of clientes)CMAP.set(c.id,c);
+  DATA[r]={clientes,protocolos,ats,deptos:[...new Set(protocolos.map(p=>p.depto))].sort(),nomes:[...new Set(protocolos.flatMap(p=>p.atendentes))].sort(),iaRot:M.ia_rotulo||"IA"};
+}
+function loadRec(r){
+  const g=++LOAD.gen[r];LOAD.st[r]="loading";LOAD.err[r]=null;
+  clearTimeout(LOAD.timer[r]);LOAD.timer[r]=setTimeout(()=>{if(LOAD.gen[r]===g&&LOAD.st[r]==="loading"){LOAD.st[r]="slow";rerender()}},10000);
+  (async()=>{if(!LOAD.meta)LOAD.meta=await getJSON("data/meta.json");return Promise.all(LOAD.meta.rec[r].idx.map(getJSON))})()
+    .then(parts=>{if(LOAD.gen[r]!==g)return;montarRec(r,parts);AGG={};LOAD.st[r]="ok"})
+    .catch(e=>{if(LOAD.gen[r]!==g)return;LOAD.st[r]="err";LOAD.err[r]=String(e&&e.message||e)})
+    .finally(()=>{if(LOAD.gen[r]!==g)return;clearTimeout(LOAD.timer[r]);rerender()});
+}
+function loadLote(r,n){const k=r+n;let pr=LOAD.lotes.get(k);
+  if(!pr){pr=getJSON(`${LOAD.meta.rec[r].lote_prefixo}${String(n).padStart(3,"0")}.json`);LOAD.lotes.set(k,pr);pr.catch(()=>LOAD.lotes.delete(k));
+    if(LOAD.lotes.size>6)LOAD.lotes.delete(LOAD.lotes.keys().next().value)}
+  return pr}
+async function loadMsgs(c){if(c.msgsOk)return;const L=await loadLote(c.rec,c.lote),chats=L.c[c.id]||{};
+  for(const id of c.protocolos){const p=PMAP.get(id);if(!p.msgs)p.msgs=decMsgs(chats[id]||[0],L.n)}c.msgsOk=true}
+function pedirMsgs(c){if(c.msgsOk||c.msgsLoading)return;c.msgsLoading=true;c.msgsErr=null;
+  loadMsgs(c).catch(e=>{c.msgsErr=String(e&&e.message||e)}).finally(()=>{c.msgsLoading=false;if(S.view==="protocolos"&&S.sel.cli===c.id)rerender()})}
+/* estado da tela enquanto o recorte não está pronto: carregando, erro (10 s ou falha) ou vazio */
+function estadoHTML(){
+  const rs=recs();for(const r of rs)if(LOAD.st[r]==="idle")loadRec(r);
+  const nomes=rs.filter(r=>LOAD.st[r]!=="ok").map(r=>REC[r].nome).join(" e ");
+  const bad=rs.find(r=>LOAD.st[r]==="err"||LOAD.st[r]==="slow");
+  if(bad){const lento=LOAD.st[bad]==="slow";return `<div class="view"><section class="state" role="alert"><span class="kick">${esc(nomes)}</span><h2>${lento?"Os dados estão demorando para chegar":"Não consegui carregar os dados"}</h2>
+    <p>${lento?"O índice do recorte tem alguns megabytes e ainda não terminou de baixar. Pode ser a conexão. Se ele chegar, a tela abre sozinha.":"A página busca os dados em arquivos publicados junto com ela. Um deles não respondeu."}</p>
+    ${LOAD.err[bad]?`<p class="n">Detalhe: ${esc(LOAD.err[bad])}</p>`:""}<button class="btn" data-retry>Tentar de novo</button></section></div>`}
+  if(nomes)return `<div class="view"><section class="state" role="status" aria-live="polite"><span class="kick">${esc(nomes)}</span><h2>Carregando protocolos e tempos de resposta</h2><div class="ldbar"><i></i></div>
+    <p>As conversas só são baixadas quando você abre um cliente.</p></section></div>`;
+  if(rs.every(r=>!DATA[r].protocolos.length))return `<div class="view"><section class="state"><span class="kick">${esc(rs.map(r=>REC[r].nome).join(" e "))}</span><h2>Nenhum protocolo neste recorte</h2>
+    <p>A extração de 19/11/2026 não trouxe nenhum chat para este recorte. Escolha outro recorte no topo.</p></section></div>`;
+  return null;
+}
+
+function agg(r){
+  const key=r+S.clk;if(AGG[key])return AGG[key];
+  const P=DATA[r].protocolos,clk=S.clk,ev=P.filter(p=>p.aval),PT=P.filter(p=>p.met.turnos.length); // PT: só protocolos com mensagem do cliente
+  const prim=P.filter(p=>p.tipo!=="so_ia").map(p=>p.met.primeira[clk]).filter(x=>x!=null);
+  const fx=Object.fromEntries(CFG.faixas.map(f=>[f.k,0]));PT.forEach(p=>fx[fxk(p)]++);
+  const cliAval=new Set(ev.map(p=>p.cliente)),cliFr=new Set(ev.filter(p=>p.aval.frustracao_atendimento.presente).map(p=>p.cliente));
+  const tipos={so_ia:0,ia_humano:0,so_humano:0},porAt=new Map();
+  for(const p of P){tipos[p.tipo]++;if(p.atId){let a=porAt.get(p.atId);if(!a)porAt.set(p.atId,a=[]);a.push(p)}}
+  return AGG[key]={P,PT,ev,n:P.length,nT:PT.length,nCli:DATA[r].clientes.length,fx,primMed:median(prim),primP90:quant(prim,.9),
+    iaMed:median(P.map(p=>p.met.respIA[clk]).filter(x=>x!=null)),humMed:median(P.map(p=>p.met.respHum[clk]).filter(x=>x!=null)),assumMed:median(P.map(p=>p.met.assumir?.[clk]).filter(x=>x!=null)),
+    redPct:pct(fx.f60p,PT.length),semPct:pct(fx.sem,PT.length),scoreMed:mean(ev.map(p=>p.sc.score)),
+    frustPct:cliAval.size?pct(cliFr.size,cliAval.size):null,resolvPct:ev.length?pct(ev.filter(p=>p.aval.resolvido==="sim").length,ev.length):null,tipos,porAt,rank:null,heat:null};
+}
+
+const KPI_DEF={
+  red:{t:"Red flag",d:"Protocolos em que o cliente esperou mais de 1 hora por uma resposta, em pelo menos um momento da conversa.",c:"Para cada protocolo, pegamos a maior espera entre a mensagem do cliente e a resposta seguinte. Acima de 60 minutos, é red flag."},
+  sem:{t:"Sem resposta",d:"Protocolos em que a última mensagem do cliente nunca foi respondida.",c:"É o sinal mais direto de não atendimento. Fica numa categoria própria, separada do red flag."},
+  prim:{t:"1ª resposta humana",d:"Quanto o cliente espera até a primeira resposta, em atendimentos com uma pessoa.",c:"Mostramos a mediana (metade dos clientes espera menos que isso) e o p90 (9 em cada 10 esperam menos que isso). A média não é usada porque poucos casos muito longos a distorcem."},
+  score:{t:"Score médio",d:"Nota de 0 a 100 do atendimento, combinando agilidade e qualidade da conversa.",c:"A qualidade é avaliada por IA numa amostra de protocolos. Os pesos estão em 'Como medimos'."}
+};
+
+function kpiCard(key,cls,val,unit,cap){return `<div class="kpi ${cls}" data-kpi="${key}" ${tip(KPI_DEF[key].t,KPI_DEF[key].d+" Clique para detalhes.")} role="button" tabindex="0"><span class="lab">${KPI_DEF[key].t}</span><span class="big n">${val}<small>${unit}</small></span><span class="cap">${cap}</span></div>`}
+function kpiDuo(key,cls,vals){return `<div class="kpi ${cls}" data-kpi="${key}" ${tip(KPI_DEF[key].t,KPI_DEF[key].d+" Clique para detalhes.")} role="button" tabindex="0"><span class="lab">${KPI_DEF[key].t}</span><div class="duo">${vals.map(([r,v,u])=>`<div><span class="rec rec-${r}" ${cls==="inv"?'style="color:#fff"':""}>${REC[r].nome}</span><span class="big n">${v}<small>${u}</small></span></div>`).join("")}</div></div>`}
+function heroHTML(){
+  const rs=recs(),A=rs.map(agg);let kpis;
+  if(rs.length===1){const a=A[0],[pm,pu]=mv(a.primMed),[p9,p9u]=mv(a.primP90);
+    kpis=kpiCard("red","inv",fmt(a.redPct,1),"%",`${fmt(a.fx.f60p)} protocolos com espera acima de 1 h`)+
+      kpiCard("sem","",fmt(a.semPct,1),"%",`${fmt(a.fx.sem)} clientes ficaram sem resposta`)+
+      kpiCard("prim","",pm,pu,`mediana · 9 em 10 esperam até ${p9} ${p9u}`)+
+      kpiCard("score","",fmt(a.scoreMed),a.scoreMed==null?"":"/100",`${fmt(a.ev.length)} protocolos avaliados pela IA`);}
+  else{kpis=kpiDuo("red","inv",A.map((a,i)=>[rs[i],fmt(a.redPct,1),"%"]))+kpiDuo("sem","",A.map((a,i)=>[rs[i],fmt(a.semPct,1),"%"]))+
+      kpiDuo("prim","",A.map((a,i)=>{const[v,u]=mv(a.primMed);return[rs[i],v,u]}))+kpiDuo("score","",A.map((a,i)=>[rs[i],fmt(a.scoreMed),""]));}
+  const sv=(f,lbl,t,b)=>`<div ${tip(t,b)} tabindex="0"><div class="v n">${rs.length===1?f(A[0]):A.map(a=>`<span class="ab">${f(a)}</span>`).join("")}</div><div class="l">${lbl}</div></div>`;
+  const strip=sv(a=>fmt(a.n),"protocolos","Protocolos","Atendimentos (chats) iniciados no período.")+
+    sv(a=>fmt(a.nCli),"clientes","Clientes","Telefones distintos que falaram com a empresa.")+
+    sv(a=>{const[v,u]=mv(a.assumMed);return `${v}<small>${u}</small>`},"para assumir após a IA","Tempo para assumir","Da transferência da IA até a primeira fala do humano. Mediana.")+
+    sv(a=>{const[v,u]=mv(a.iaMed);return `${v}<small>${u}</small>`},"resposta da IA","Resposta da IA","Tempo mediano de resposta da IA, da mensagem do cliente até a resposta. Resposta em menos de 3 s fica fora da medição.")+
+    sv(a=>a.frustPct==null?"—":`${fmt(a.frustPct)}<small>%</small>`,"frustrados com o atendimento","Frustração","Clientes que mostraram irritação causada pelo atendimento (demora, repetição, não resolução). Não conta irritação com a dívida.")+
+    sv(a=>a.resolvPct==null?"—":`${fmt(a.resolvPct)}<small>%</small>`,"resolvidos","Resolvidos","Protocolos avaliados em que o problema foi resolvido.");
+  return `<section class="hero">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><span class="kick">${rs.map(r=>REC[r].nome).join(" × ")} · ${esc(LOAD.meta.janela.rotulo)}</span><span class="pill">${S.clk==="com"?"Relógio comercial":"Relógio corrido"}</span></div>
+    <h2 class="h2"><span class="g">Quanto o cliente</span> <span class="k">espera <i>sem resposta</i></span></h2>
+    <div class="kpis">${kpis}</div><div class="strip">${strip}</div></section>`;
+}
+const colHead=(rs,r)=>rs.length>1?`<div style="margin-bottom:10px">${recTag(r)}</div>`:"";
+function faixasHTML(){
+  const rs=recs();
+  const col=r=>{const a=agg(r);
+    const stk=CFG.faixas.map(f=>{const v=a.fx[f.k],w=pct(v,a.nT);return w?`<button class="fx-${f.k}" style="flex:${w}" data-band="${f.k}" data-r="${r}" ${tip(f.lbl,`${fmt(v)} protocolos (${fmt(w,1)}%). Clique para ver as conversas.`)}>${w>=7?fmt(w)+"%":""}</button>`:""}).join("");
+    const bands=CFG.faixas.map(f=>`<div class="band" data-band="${f.k}" data-r="${r}" role="button" tabindex="0">${fxChip(f.k)}<span class="p n">${fmt(pct(a.fx[f.k],a.nT))}%<small>${fmt(a.fx[f.k])} protoc.</small></span><span class="r">${f.leit}</span></div>`).join("");
+    return `<div class="cw">${colHead(rs,r)}<div class="stk">${stk}</div><div class="bands">${bands}</div></div>`};
+  return `<section><div class="sec-head"><div><span class="kick">Faixas de espera</span><h2 class="h2"><span class="g">A pior espera de</span> <span class="k">cada protocolo</span></h2></div><span class="lead">Clique numa faixa para abrir as conversas.</span></div>
+    <div class="grid ${rs.length>1?"g2":""}">${rs.map(col).join("")}</div></section>`;
+}
+function atendHTML(){
+  const rs=recs();
+  const col=r=>{
+    const a=agg(r),clk=S.clk;
+    const rows=a.rank||(a.rank=DATA[r].ats.map(at=>{const ps=a.porAt.get(at.id)||[],pt=ps.filter(p=>p.met.turnos.length),w=ps.map(p=>p.met.respHum[clk]).filter(x=>x!=null),ev=ps.filter(p=>p.aval);
+      return{at,n:ps.length,med:median(w),p90:quant(w,.9),red:pct(pt.filter(isRed).length,pt.length),sc:mean(ev.map(p=>p.sc.score))}})
+      .sort((x,y)=>(x.med??1e12)-(y.med??1e12)||x.at.nome.localeCompare(y.at.nome,"pt-BR"))); // sem resposta medida vai para o fim
+    const mx=Math.max(1,...rows.map(x=>x.med??0));
+    const iaMed=a.iaMed;
+    const line=(x,i)=>`<div class="atr" data-f="${esc(JSON.stringify({at:x.at.nome}))}" data-r="${r}" role="button" tabindex="0" ${tip(x.at.nome,`${x.n} protocolos · resposta mediana ${fmin(x.med)} · 9 em 10 respostas em até ${fmin(x.p90)} · red flag ou sem resposta em ${fmt(x.red)}% · score ${fmt(x.sc)}. Clique para ver as conversas.`)}>
+      <span class="pos">${i}</span><span class="nm"><b>${esc(x.at.nome)}</b><small>${esc(x.at.depto)}</small></span>
+      <span class="bar"><span class="tr"><span class="fl fx-${faixaDe(x.med)}" style="width:${x.med==null?0:Math.max(3,100*x.med/mx)}%"></span></span><span class="bv">${fmin(x.med)}</span></span>
+      <span class="c hs">${fmin(x.p90)}</span><span class="c hs">${fmt(x.n)}</span><span class="c hs" style="color:${x.red>=15?"var(--bad)":"inherit"};font-weight:${x.red>=15?800:400}">${fmt(x.red)}%</span><span class="c"><span class="sc ${scls(x.sc)}">${fmt(x.sc)}</span></span></div>`;
+    return `<div class="cw">${colHead(rs,r)}<div class="at-t">
+      <div class="atr h"><span></span><span>Atendente</span><span ${tip("Resposta mediana","Metade das respostas desse atendente sai antes desse tempo.")}>Resposta mediana ⓘ</span><span class="c hs" ${tip("p90","9 em cada 10 respostas saem antes desse tempo.")}>p90 ⓘ</span><span class="c hs" ${tip("Protocolos","Protocolos em que o atendente atuou no período.")}>Protoc. ⓘ</span><span class="c hs" ${tip("Red flag","Protocolos com espera acima de 1 h ou sem resposta.")}>Red flag ⓘ</span><span class="c" ${tip("Score","Score médio de qualidade, na amostra avaliada pela IA.")}>Score ⓘ</span></div>
+      ${rows.map((x,i)=>line(x,i+1)).join("")}
+      <div class="atr ref" ${tip("Referência: IA","Tempo mediano de resposta da IA. Não entra no ranking, serve de comparação.")} tabindex="0"><span class="pos">ref</span><span class="nm"><b>${esc(DATA[r].iaRot)}</b><small>agente de IA</small></span><span class="bar"><span class="tr"><span class="fl" style="width:${iaMed==null?0:Math.max(3,100*iaMed/mx)}%"></span></span><span class="bv">${fmin(iaMed)}</span></span><span class="c hs"></span><span class="c hs"></span><span class="c hs"></span><span class="c"></span></div>
+    </div></div>`};
+  const tot=rs.reduce((s,r)=>s+DATA[r].ats.length,0);
+  return `<section><div class="sec-head"><div><span class="kick">Ranking de atendentes · todos os ${tot}</span><h2 class="h2"><span class="g">Quem responde</span> <span class="k">mais rápido</span></h2></div><span class="lead">Do mais rápido ao mais lento, pela resposta mediana. Clique num nome para ver as conversas.</span></div>
+    <div class="grid ${rs.length>1?"g2":""}">${rs.map(col).join("")}</div></section>`;
+}
+function ondeHTML(){
+  const rs=recs();
+  const heat=r=>{const a=agg(r);if(a.heat)return a.heat;const cells={};a.PT.forEach(p=>p.met.turnos.forEach(t=>{if(t.cor==null||t.rap)return;const d=new Date(t.ini),k=d.getUTCDay()+"_"+d.getUTCHours();(cells[k]=cells[k]||[]).push(S.clk==="com"?t.com:t.cor)}));
+    const dias=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];let h=`<div class="heat"><span></span>${[...Array(24).keys()].map(x=>`<span class="hl">${x%3===0?x+"h":""}</span>`).join("")}`;
+    [1,2,3,4,5,6,0].forEach(d=>{h+=`<span class="dl">${dias[d]}</span>`;for(let x=0;x<24;x++){const v=cells[d+"_"+x],m=v?median(v):null;
+      h+=`<span class="c" style="${v?`background:var(--${faixaDe(m)});opacity:${Math.min(1,.4+v.length/10)}`:""}" ${tip(`${dias[d]} · ${x}h`,v?`Espera mediana de ${fmin(m)} em ${v.length} mensagens de cliente.`:"Nenhuma mensagem de cliente nesse horário.")}></span>`}});
+    return a.heat=h+"</div>"};
+  const mix=r=>{const a=agg(r),t=a.tipos,n=a.n,P=a.P,clk=S.clk;
+    const iaSc=mean(P.filter(p=>p.tipo==="so_ia"&&p.aval).map(p=>p.sc.score)),hum=mean(P.filter(p=>p.tipo!=="so_ia"&&p.aval).map(p=>p.sc.score));
+    const[iv,iu]=mv(a.iaMed),[hv,hu]=mv(a.humMed);
+    const seg=(k,lbl,col,d)=>`<span style="flex:${t[k]};background:${col}" ${tip(lbl,`${fmt(t[k])} protocolos (${fmt(pct(t[k],n))}%). ${d}`)}>${pct(t[k],n)>=10?fmt(pct(t[k],n))+"%":""}</span>`;
+    return `<div class="mix">${seg("so_ia","Só IA","var(--blue)","A IA atendeu do início ao fim.")}${seg("ia_humano","IA → humano","var(--lilac)","Começou na IA e foi transferido.")}${seg("so_humano","Só humano","var(--dark)","Sem passagem pela IA.")}</div>
+      <div class="hleg"><span><i class="dot" style="background:var(--blue)"></i> Só IA</span><span><i class="dot" style="background:var(--lilac)"></i> IA → humano</span><span><i class="dot" style="background:var(--dark)"></i> Só humano</span></div>
+      <div class="trio"><div ${tip("Resposta da IA","Mediana do tempo de resposta da IA. Resposta em menos de 3 s fica fora da medição.")} tabindex="0"><div class="v n" style="color:var(--blue)">${iv}<small style="font-size:.5em"> ${iu}</small></div><div class="l">resposta da IA</div></div>
+      <div ${tip("Resposta humana","Mediana do tempo de resposta das pessoas.")} tabindex="0"><div class="v n">${hv}<small style="font-size:.5em"> ${hu}</small></div><div class="l">resposta humana</div></div>
+      <div ${tip("Score IA × humano","Score médio dos protocolos avaliados: só IA × com humano.")} tabindex="0"><div class="v n"><span style="color:var(--blue)">${fmt(iaSc)}</span><span style="color:var(--ghost);font-weight:300"> × </span>${fmt(hum)}</div><div class="l">score IA × humano</div></div></div>`};
+  const blk=r=>`<div class="grid g2"><div class="cw">${colHead(rs,r)}<span class="lab">Espera por hora × dia</span><div class="scroll-x" style="margin-top:10px">${heat(r)}</div>
+       <div class="hleg">${["f10","f20","f30","f60","f60p"].map(k=>`<span><i class="dot fx-${k}"></i>${FX[k].lbl}</span>`).join("")}</div></div>
+     <div class="cw">${colHead(rs,r)}<span class="lab">IA × humano</span><div style="margin-top:12px">${mix(r)}</div></div></div>`;
+  return `<section><div class="sec-head"><div><span class="kick">Quando e quem</span><h2 class="h2"><span class="g">Onde a espera</span> <span class="k">se concentra</span></h2></div><span class="lead">Passe o mouse nas células para ver o detalhe.</span></div>
+    <div class="grid">${rs.map(blk).join("")}</div></section>`;
+}
+function assuntosHTML(){
+  const rs=recs();
+  const col=r=>{const ev=agg(r).ev,g={};
+    if(!ev.length)return `<div class="cw">${colHead(rs,r)}<div class="empty">A avaliação por IA ainda não rodou.<br><span style="font-weight:400;font-size:14px">Os assuntos aparecem aqui quando a conversa completa chegar pelo Desk.</span></div></div>`;
+    ev.forEach(p=>(g[p.assunto]=g[p.assunto]||[]).push(p));
+    const arr=Object.entries(g).sort((x,y)=>y[1].length-x[1].length).slice(0,6),mx=arr[0]?.[1].length||1;
+    return `<div class="cw">${colHead(rs,r)}<div class="hb">${arr.map(([k,ps],i)=>{const fr=pct(ps.filter(p=>p.aval.frustracao_atendimento.presente).length,ps.length);
+      return `<div class="hbr" data-f="${esc(JSON.stringify({assunto:k}))}" data-r="${r}" role="button" tabindex="0" ${tip(assN(k),`${ps.length} protocolos avaliados · score médio ${fmt(mean(ps.map(p=>p.sc.score)))} · ${fmt(fr)}% com frustração. Clique para ver.`)}><span class="i">${i+1}</span><span class="nm">${esc(assN(k))}<small>${fmt(fr)}% frustrados</small></span><span class="tr"><span class="fl" style="width:${pct(ps.length,mx)}%;background:${r==="B"?"var(--lilac)":"var(--blue)"}"></span></span><span class="v">${fmt(pct(ps.length,ev.length))}%</span></div>`}).join("")}</div></div>`};
+  return `<section><div class="sec-head"><div><span class="kick">Assuntos</span><h2 class="h2"><span class="g">Do que o cliente</span> <span class="k">fala</span></h2></div><span class="lead">Assunto principal dos protocolos avaliados pela IA.</span></div>
+    <div class="grid ${rs.length>1?"g2":""}">${rs.map(col).join("")}</div></section>`;
+}
+function renderDashboard(){
+  return `<div class="view">${heroHTML()}${S.rec==="AB"?faixasHTML()+atendHTML()+ondeHTML()+assuntosHTML():`<div class="dash-row">${faixasHTML()}${assuntosHTML()}</div>${atendHTML()}${ondeHTML()}`}</div>`;
+}
+
+function filtrar(){
+  const f=S.filt,out=[];
+  for(const r of recs()){const D=DATA[r];
+    for(const c of D.clientes){
+      if(f.q){const q=f.q.toLowerCase(),qd=q.replace(/\D/g,""),hay=(c.telefone+" "+c.cnpjs.join(" ")+" "+(c.nome||"")).toLowerCase();if(!hay.includes(q)&&!(qd.length>=3&&hay.replace(/\D/g,"").includes(qd)))continue}
+      if(f.cnpj==="com"&&!c.cnpjs.length)continue;if(f.cnpj==="sem"&&c.cnpjs.length)continue;if(f.cnpj==="amb"&&!c.ambiguo)continue;
+      if(f.recorrente&&c.protocolos.length<2)continue;
+      const ps=c.protocolos.map(id=>PMAP.get(id)).filter(p=>{
+        if(f.depto&&p.depto!==f.depto)return false;if(f.at&&!p.atendentes.includes(f.at))return false;if(f.tipo&&p.tipo!==f.tipo)return false;
+        if(f.faixa&&fxk(p)!==f.faixa)return false;if(f.red&&!isRed(p))return false;if(f.assunto&&p.assunto!==f.assunto)return false;
+        if(f.frust&&!p.aval?.frustracao_atendimento.presente)return false;if(f.resolvido&&p.aval?.resolvido!==f.resolvido)return false;
+        if(f.aval&&!p.aval)return false;if(f.fonte&&p.fonte!==f.fonte)return false;if(f.audio&&!p.audio)return false;return true});
+      if(ps.length)out.push({c,ps:ps.sort((a,b)=>b.inicio-a.inicio),r});
+    }}
+  out.forEach(x=>{x.sc=mean(x.ps.map(p=>p.sc.score).filter(v=>v!=null));x.red=x.ps.some(isRed);x.fr=x.ps.some(p=>p.aval?.frustracao_atendimento.presente)}); // score do cliente ignora protocolos sem score
+  return out.sort((a,b)=>(a.sc??1e9)-(b.sc??1e9));
+}
+/* dropdown no padrão do artefato */
+function dd(id,label,opts,val,o={}){
+  const open=S.dd===id,cur=opts.find(x=>x[0]===val),q=(S.ddq||"").toLowerCase();
+  const list=opts.filter(x=>!q||x[1].toLowerCase().includes(q));
+  return `<div class="dd"><button class="ddb ${val?"on":""}" data-dd="${id}" aria-expanded="${open}" aria-haspopup="listbox" ${tip(label,o.t||"Clique para escolher.")}><small>${label}</small><span class="val">${esc(cur?cur[1]:(o.all||"Todos"))}</span></button>
+   ${open?`<div class="ddp ${o.right?"right":""}" role="listbox" aria-label="${esc(label)}">${o.search?`<input class="ddsearch" id="dds" placeholder="Buscar ${esc(label.toLowerCase())}…" value="${esc(S.ddq||"")}" aria-label="Buscar">`:""}
+   <button class="ddo" role="option" data-ddv="${id}" data-v="" aria-checked="${!val}">${o.all||"Todos"}</button>${list.map(x=>`<button class="ddo" role="option" data-ddv="${id}" data-v="${esc(x[0])}" aria-checked="${val===x[0]}">${esc(x[1])}</button>`).join("")}</div>`:""}</div>`;
+}
+const MAIS_KEYS=["red","frust","aval","recorrente","audio","depto","tipo","resolvido","cnpj","fonte"];
+function maisHTML(deptos){
+  const f=S.filt,open=S.dd==="mais",n=MAIS_KEYS.filter(k=>f[k]).length;
+  const chk=(k,l)=>`<button class="ddo chk" role="menuitemcheckbox" data-tgl="${k}" aria-checked="${!!f[k]}">${l}</button>`;
+  const rad=(key,arr)=>[["","Todos"],...arr].map(([v,l])=>`<button class="ddo" role="menuitemradio" data-set="${key}" data-v="${esc(v)}" aria-checked="${(f[key]||"")===v}">${esc(l)}</button>`).join("");
+  return `<div class="dd"><button class="ddb ${n?"on":""}" data-dd="mais" aria-expanded="${open}" ${tip("Mais filtros","Atalhos, departamento, tipo de atendimento, resolvido, CNPJ e fonte da conversa.")}><small>Filtros</small><span class="val">${n?`<span class="badge">${n}</span>`:"Mais"}</span></button>
+   ${open?`<div class="ddp right" role="menu" aria-label="Mais filtros">
+    <div class="ddsec">Atalhos</div>${chk("red","Red flag ou sem resposta")}${chk("frust","Cliente frustrado com o atendimento")}${chk("aval","Só avaliados pela IA")}${chk("recorrente","Cliente com 2 protocolos ou mais")}${chk("audio","Tem áudio não transcrito")}
+    <div class="ddsec">Atendimento</div>${rad("tipo",[["so_ia","Só IA"],["ia_humano","IA → humano"],["so_humano","Só humano"]])}
+    <div class="ddsec">Resolução</div>${rad("resolvido",[["sim","Resolvido"],["parcial","Resolvido em parte"],["nao","Não resolvido"]])}
+    <div class="ddsec">CNPJ</div>${rad("cnpj",[["com","Com CNPJ"],["sem","Sem CNPJ"],["amb","CNPJ ambíguo"]])}
+    <div class="ddsec">Fonte da conversa</div>${rad("fonte",[["API completa","Completa (API)"],["BQ completa","BigQuery completa"],["BQ amostra","BigQuery amostra"],["BQ reconstrução","BigQuery reconstrução"]])}
+    <div class="ddsec">Departamento</div>${rad("depto",deptos.map(d=>[d,d]))}
+   </div>`:""}</div>`;
+}
+function renderProtocolos(){
+  const f=S.filt,rs=recs(),res=filtrar();
+  const uni=k=>rs.length===1?DATA[rs[0]][k]:[...new Set(rs.flatMap(r=>DATA[r][k]))].sort(),deptos=uni("deptos"),ats=uni("nomes"); // listas prontas desde a carga
+  if(!res.find(x=>x.c.id===S.sel.cli))S.sel={cli:res[0]?.c.id||null,prot:null};
+  const cur=res.find(x=>x.c.id===S.sel.cli);
+  if(cur&&!cur.ps.find(p=>p.id===S.sel.prot))S.sel.prot=cur.ps[0].id;
+  S._plist=cur?cur.ps.map(p=>p.id):[];
+  const prot=cur?cur.ps.find(p=>p.id===S.sel.prot):null;
+  if(cur&&prot&&!prot.msgs&&!cur.c.msgsErr)pedirMsgs(cur.c); // mensagens vêm do lote do cliente, sob demanda
+  const nP=res.reduce((s,x)=>s+x.ps.length,0),nF=Object.keys(f).filter(k=>f[k]).length;
+  const list=res.length?res.slice(0,300).map(x=>{const on=x.c.id===S.sel.cli;return `<div class="cc ${on?"on":""}">
+      <button class="ci" data-cli="${x.c.id}" aria-expanded="${on}"><span class="ph">${esc(x.c.telefone)}</span><span class="fl"><span class="sc ${scls(x.sc)}" ${tip("Score médio","Média dos protocolos deste cliente que passam nos filtros.")}>${fmt(x.sc)}</span></span>
+      <span class="nm">${S.rec==="AB"?recTag(x.r)+" · ":""}${esc(x.c.nome||"Sem cadastro no CRM")}</span><span class="fl">${x.red?`<span class="dot" style="background:var(--bad)" ${tip("Red flag","Tem protocolo com espera acima de 1 h ou sem resposta.")}></span>`:""}${x.fr?`<span class="dot" style="background:var(--warn)" ${tip("Frustrado","A IA viu frustração com o atendimento.")}></span>`:""}<span style="font-size:12px;color:var(--muted);font-weight:600" ${tip("Protocolos","Quantos protocolos deste cliente passam nos filtros.")}>${x.ps.length} protoc.</span></span></button>
+      ${on?`<div class="plist" role="listbox" aria-label="Protocolos do cliente"><span class="lab">${x.ps.length===1?"1 protocolo":`${x.ps.length} protocolos`} · escolha um</span>${x.ps.map(p=>`<button class="pi" role="option" data-prot="${p.id}" aria-selected="${p.id===S.sel.prot}" ${tip(`Protocolo ${p.protocol}`,`${assN(p.assunto)} · ${p.met.turnos.length?"pior espera "+fmin(p.met.pior[S.clk]):"sem mensagem do cliente"} · ${TIPO_L[p.tipo]}`)}>${fxDot(fxk(p))}<span class="a"><span class="d">${dt(p.inicio)}</span> · ${esc(assN(p.assunto))}</span><span class="sc ${scls(p.sc.score)}">${scTxt(p)}</span></button>`).join("")}</div>`:""}</div>`}).join(""):`<div class="empty">Nenhum cliente com esses filtros.</div>`;
+  return `<div class="view pv">
+  <section class="fbar" aria-label="Filtros">
+    <label class="search" for="fq"><span aria-hidden="true" style="color:var(--ghost);font-size:17px">⌕</span><input id="fq" type="search" placeholder="Telefone, CNPJ ou nome" value="${esc(f.q||"")}"></label>
+    ${dd("faixa","Espera",CFG.faixas.map(x=>[x.k,x.lbl]),f.faixa,{all:"Qualquer",t:"Pior espera do protocolo."})}
+    ${dd("assunto","Assunto",Object.entries(CFG.assuntos),f.assunto,{t:"Assunto principal identificado pela IA."})}
+    ${dd("at","Atendente",ats.map(x=>[x,x]),f.at,{search:true,t:"Quem atendeu o protocolo."})}
+    ${maisHTML(deptos)}
+    <span class="fcount"><span><b class="n">${fmt(res.length)}</b> clientes · <b class="n">${fmt(nP)}</b> protocolos</span>${nF?`<button class="clear" id="fclear">Limpar filtros</button>`:""}</span>
+  </section>
+  <div class="ex ${S.detail?"detail":""} ${S.evOpen?"evopen":""}">
+    <section class="pane listp" aria-label="Clientes"><div class="pane-h"><span class="lab">Clientes · pior score primeiro</span></div><div class="pane-b"><div class="clist">${list}</div></div></section>
+    ${cur&&prot?(prot.msgs?convHTML(cur,prot):convWait(cur)):`<section class="pane convp"><div class="pane-b empty">Escolha um cliente na lista.</div></section><section class="pane evp"></section>`}
+  </div></div>`;
+}
+function convWait(x){const c=x.c;
+  return `<section class="pane convp" aria-label="Conversa"><div class="pane-h"><div class="convh"><div class="t1"><button class="btn ghost sm back" id="back">← Clientes</button><span class="ph">${esc(c.telefone)}</span><span class="fit nm2">${esc(c.nome||"Sem cadastro no CRM")}</span></div></div></div>
+    <div class="pane-b empty" role="status">${c.msgsErr?`Não consegui carregar a conversa.<br><span style="font-weight:400;font-size:14px">${esc(c.msgsErr)}</span><br><button class="btn sm" data-retrymsgs="${esc(c.id)}" style="margin-top:12px">Tentar de novo</button>`:"carregando conversa…"}</div></section><section class="pane evp"></section>`}
+function convHTML(x,p){
+  const c=x.c,i=S._plist.indexOf(p.id),n=S._plist.length;
+  let html="",last=null;const tm=new Map(p.met.turnos.map(t=>[t.ini,t]));
+  p.msgs.forEach((m,k)=>{
+    if(m.autor==="sistema"){html+=`<div class="sys">${esc(m.texto)} · ${dt(m.ts)}</div>`;return}
+    if(m.autor!=="cliente"&&last!=null){const t=tm.get(last);if(t){const v=S.clk==="com"?t.com:t.cor,fk=faixaDe(v);html+=`<div class="gap fx-${fk}" ${tip("Espera",`O cliente esperou ${fmin(v)} (${S.clk==="com"?"relógio comercial":"relógio corrido"}).`)}>esperou ${fmin(v)}</div>`}last=null}
+    if(m.autor==="cliente"&&last==null)last=m.ts;
+    html+=`<div class="msg ${m.autor} ${m.tipo==="audio"?"audio":""} ${S.hl===k?"hl":""}" data-mi="${k}"><span class="who">${m.autor==="cliente"?"Cliente":esc(m.atendente)}</span>${esc(m.texto)}<span class="ts">${dt(m.ts)}</span></div>`});
+  if(last!=null)html+=tm.get(last)?.enc?`<div class="sys" ${tip("Encerramento do cliente","O cliente só agradeceu ou se despediu depois de ser atendido. Não conta como falta de resposta.")}>encerramento do cliente</div>`
+    :`<div class="gap fx-sem" ${tip("Sem resposta","Esta mensagem do cliente nunca foi respondida.")}>cliente sem resposta</div>`;
+  const cnpj=c.cnpjs.length?c.cnpjs.map(v=>`<span class="chip c-nv n" ${tip("CNPJ","Vem do CRM BLIPS, cruzado pelo telefone.")}>${esc(v)}</span>`).join(""):`<span class="chip c-nv" ${tip("Sem CNPJ","O telefone não foi encontrado no CRM.")}>sem CNPJ</span>`;
+  return `<section class="pane convp" aria-label="Conversa">
+    <div class="pane-h"><div class="convh">
+      <div class="t1"><button class="btn ghost sm back" id="back">← Clientes</button><span class="ph">${esc(c.telefone)}</span><span class="fit nm2">${esc(c.nome||"Sem cadastro no CRM")}</span></div>
+      <div class="t2">${recTag(x.r)}<span class="fit">${cnpj}</span>${c.ambiguo?`<span class="chip c-wa" ${tip("CNPJ ambíguo","O telefone está ligado a mais de um CNPJ no CRM.")}>ambíguo</span>`:""}</div>
+      <div class="t2">${fxChip(fxk(p))}<span>Protocolo <b class="n" style="color:var(--dark)">${p.protocol}</b></span><span>· ${dt(p.inicio)}</span><span class="fit">· ${esc(p.depto)}</span>${p.fonte==="BQ completa"?`<span class="chip c-ok" ${tip("Conversa completa","Histórico completo do BigQuery (chat_history).")}>conversa completa</span>`:p.fonte.startsWith("BQ")?`<span class="chip c-wa" ${tip("Fonte aproximada","O BigQuery não tem todas as mensagens deste chat. Os tempos podem variar.")}>fonte aproximada</span>`:`<span class="chip c-ok" ${tip("Conversa completa","Mensagens vindas da API do Hyperflow.")}>conversa completa</span>`}</div>
+    </div>
+    <div class="acts"><span class="pnav" ${tip("Protocolos do cliente","Troque entre os protocolos deste cliente.")}><button data-pnav="-1" ${i<=0?"disabled":""} aria-label="Protocolo anterior">‹</button><span>${String(i+1).padStart(2,"0")} / ${String(n).padStart(2,"0")}</span><button data-pnav="1" ${i>=n-1?"disabled":""} aria-label="Próximo protocolo">›</button></span>
+      <button class="btn sm evbtn" data-evopen ${tip("Avaliação","Abre o score e a análise da IA deste protocolo.")}>Avaliação · <span class="n">${p.sc.score==null?"—":String(p.sc.score).padStart(2,"0")}</span></button>
+      <button class="btn ghost sm" data-export="${c.id}" ${tip("Exportar","Baixa o JSON com metadados, protocolos, mensagens e avaliações deste cliente.")}>Baixar JSON</button></div></div>
+    <div class="pane-b"><div class="chat">${html}</div></div></section>
+   <div class="scrim evscrim" data-evclose></div>
+   <section class="pane evp" aria-label="Avaliação"><div class="pane-h"><span class="lab">Avaliação do protocolo</span><button class="btn ghost sm x2" data-evclose>Fechar ✕</button></div><div class="pane-b">${evalHTML(p)}</div></section>`;
+}
+function ring(s){const r=36,c=2*Math.PI*r,col=s>=75?"var(--ok)":s>=50?"var(--warn)":"var(--bad)";return `<svg class="ring" viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="${r}" fill="none" stroke="var(--track)" stroke-width="8"/><circle cx="42" cy="42" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(c*s/100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 42 42)"/><text x="42" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="24" font-weight="800" fill="#0A0A2E">${s}</text></svg>`}
+function evalHTML(p){
+  const sc=p.sc,a=p.aval;
+  const met=`<dl class="kv"><dt>Pior espera</dt><dd>${p.met.turnos.length?fmin(p.met.pior[S.clk]):"—"}</dd><dt>1ª resposta</dt><dd>${p.met.turnos.length?fmin(p.met.primeira[S.clk]):"—"}</dd>${p.met.assumir?`<dt>Assumir após IA</dt><dd>${fmin(p.met.assumir[S.clk])}</dd>`:""}<dt>Atendimento</dt><dd>${p.tipo==="so_ia"?"Só IA":p.tipo==="ia_humano"?"IA → humano":"Só humano"}</dd><dt>Atendente</dt><dd>${esc(p.atendentes.at(-1)||"—")}</dd></dl>`;
+  if(sc.semTurno)return `<div class="ev"><div class="bs"><div>${SEM_CLI}<div class="lead" style="margin:8px 0 0">Disparo que o cliente não respondeu. Conta no total de protocolos, mas não tem espera nem score.</div></div></div>${met}</div>`;
+  if(!a)return `<div class="ev"><div class="bs" ${tip("Score parcial","A avaliação por IA ainda não rodou. O score usa só a agilidade.")}>${ring(sc.score)}<div><b>Score só de agilidade</b><div class="lead" style="margin:2px 0 0">A avaliação por IA ainda não rodou.</div></div></div>${met}</div>`;
+  const L=a.lados.humano||a.lados.ia,fr=a.frustracao_atendimento;
+  const facts=`<span class="chip c-bl" ${tip("Assunto","Assunto principal identificado pela IA.")}>${esc(assN(a.assunto_principal))}</span><span class="chip ${a.resolvido==="sim"?"c-ok":a.resolvido==="parcial"?"c-wa":"c-bad"}" ${tip("Resolução","Se o problema do cliente foi resolvido na conversa.")}>${a.resolvido==="sim"?"resolvido":a.resolvido==="parcial"?"resolvido em parte":a.resolvido==="nao"?"não resolvido":"indeterminado"}</span>${fr.presente?`<span class="chip c-bad" ${tip("Frustração com o atendimento",`Intensidade ${fr.intensidade} de 3. Motivo: ${fr.motivos.join(", ")}.`)}>frustrado · ${esc(fr.motivos.join(", "))}</span>`:`<span class="chip c-ok" ${tip("Sem frustração","O cliente não mostrou irritação com o atendimento.")}>sem frustração</span>`}`;
+  const dec=CFG.crit.map(c=>{const v=c.k==="agilidade"?sc.ag:L[c.k].nota;return `<div class="dc" ${tip(c.lbl,`${c.desc} Nota ${fmt(v)} × peso ${CFG.pesos[c.k]} = ${fmt(CFG.pesos[c.k]*v/100,1)} pontos.`)}><span>${c.lbl}</span><span class="tr"><span class="fl" style="width:${v}%"></span></span><b>${fmt(v)}</b></div>`}).join("");
+  const adj=`${sc.teto!=null?`<p class="lead" style="margin:8px 0 0">Limitado a <b>${sc.teto}</b> por ${fxk(p)==="sem"?"falta de resposta":"espera acima de 1 h"}.</p>`:""}${sc.pen?`<p class="lead" style="margin:4px 0 0">Penalidade de <b>−${sc.pen}</b>: ${a.flags.filter(f=>CFG.penal[f]).map(f=>f.replace(/_/g," ")).join(", ")}.</p>`:""}`;
+  const just=["resolucao","clareza","conducao","empatia","conformidade","desfecho"].map(k=>`<div class="just"><b>${CFG.crit.find(c=>c.k===k).lbl} · ${L[k].nota}.</b> ${esc(L[k].justificativa)}<q data-ev="${esc(L[k].evidencia)}" ${tip("Evidência","Trecho da conversa usado pela IA. Clique para achar a mensagem.")}>${esc(L[k].evidencia)}</q></div>`).join("");
+  const tv=v=>v>0?"+"+v:String(v);
+  return `<div class="ev"><div class="bs">${ring(sc.score)}<div><b>Score do atendimento</b><div class="lead" style="margin:2px 0 0" ${tip("Temperatura do cliente","De −2 (irritado) a +2 (satisfeito), no começo e no fim da conversa.")}>Temperatura ${tv(a.temperatura.inicio)} → ${tv(a.temperatura.fim)}</div></div></div>
+    <div class="facts">${facts}</div><p style="margin:0;font-size:14px">${esc(a.resumo)}</p>${met}
+    <details class="dx"><summary>Como chegou em ${sc.score}</summary>${dec}${adj}</details>
+    <details class="dx"><summary>Justificativas da IA</summary>${just}</details></div>`;
+}
+
+const PROMPT_V1=`Você é auditor de qualidade de atendimento ao cliente de uma financeira de equipamentos, com foco em cobrança. Avalie o ATENDIMENTO, nunca o cliente.
+
+CRITÉRIOS (nota 0–100, por lado presente: humano e IA)
+• resolução — resolveu, ou o cliente sai sabendo o próximo passo e quando
+• clareza — informação correta e completa (valores, datas, links, procedimento)
+• condução — oferece a saída sem o cliente pedir (2ª via, acordo, prazo, canal)
+• empatia — cordial, personalizado, reconhece o problema
+• conformidade — sem promessa indevida, sem expor dados, sem ameaça
+• desfecho — cliente termina mais calmo do que começou
+Âncoras: 90–100 exemplar · 70–89 bom · 50–69 aceitável · 30–49 ruim · 0–29 inaceitável.
+Não avalie velocidade: o tempo já é medido nas métricas.
+
+TEMPERATURA E FRUSTRAÇÃO
+• temperatura no início e no fim: −2 irritado … +2 satisfeito
+• frustração com o atendimento: só o que o atendimento causou (demora, repetição, não resolução, transferências, informação errada, tom)
+• frustração com a dívida ou o produto: registra, não penaliza
+
+ASSUNTOS
+2ª via · acordo/renegociação · juros e multa · contestação · taxa e condições · contrato e assinatura · documentos · confirmação de pagamento · cancelamento/distrato · equipamento · cadastro · outros
+
+SAÍDA
+JSON estrito. Evidência = trecho literal de até 200 caracteres. Sem evidência, nota máxima 60.
+Sem dado pessoal no resumo: telefone, CPF/CNPJ, e-mail e links viram [dado].`;
+let PROMPT_TXT=PROMPT_V1,PROMPT_VER="v1";
+function renderMetodologia(){
+  return `<div class="view">
+  <section class="hero"><span class="kick">Como medimos</span><h2 class="h2"><span class="g">Um score de</span> <span class="k">0 a 100 <i>por atendimento</i></span></h2>
+    <p style="color:var(--ghost2);max-width:70ch;margin:10px 0 0">25 pontos vêm do tempo de resposta, medido nas mensagens. 75 pontos vêm da qualidade da conversa, avaliada por IA. Esta tela é só de leitura.</p></section>
+  <div class="dash-row"><section><div class="sec-head"><div><span class="kick">Pesos</span><h2 class="h2"><span class="g">O que pesa</span> <span class="k">no score</span></h2></div><span class="lead">Passe o mouse para ver o que cada critério mede.</span></div>
+    <div class="cw"><div class="wl">${CFG.crit.map(c=>`<div class="wi ${c.k==="agilidade"?"obj":""}" ${tip(c.lbl,c.desc)} tabindex="0"><span class="nm">${c.lbl}<small>${c.k==="agilidade"?"medido nas mensagens":"avaliado pela IA"}</small></span><span class="tr"><span class="fl" style="width:${CFG.pesos[c.k]*3.2}%"></span></span><span class="v n">${CFG.pesos[c.k]}</span></div>`).join("")}</div></div></section>
+  <section><div class="sec-head"><div><span class="kick">Agilidade</span><h2 class="h2"><span class="g">A pior espera</span> <span class="k">vira nota</span></h2></div></div>
+    <div class="cw"><div class="rules">${CFG.faixas.map(f=>`<div class="rule" ${tip(f.lbl,`Nota de agilidade ${CFG.notasAgil[f.k]}. ${f.leit.replace(/<[^>]+>/g,"")}`)} tabindex="0">${fxChip(f.k)}<span class="v n">${CFG.notasAgil[f.k]}</span></div>`).join("")}</div>
+    <p class="lead" style="margin-top:12px">Com 3 ou mais trocas na conversa, a nota mistura 70% da pior espera com 30% da espera mediana. Assim, um único atraso não define o atendimento inteiro.</p></div></section>
+  </div>
+  <div class="grid g2">
+   <section class="cw"><span class="lab">Limites do score</span><div style="margin-top:8px">
+     <div class="lim" ${tip("Teto: sem resposta","Se o cliente ficou sem resposta, o score não passa de 30, mesmo que o resto da conversa seja bom.")} tabindex="0"><span>Cliente sem resposta</span><b>até ${CFG.tetos.sem}</b></div>
+     <div class="lim" ${tip("Teto: red flag","Se o cliente esperou mais de 1 hora, o score não passa de 60.")} tabindex="0"><span>Espera acima de 1 h</span><b>até ${CFG.tetos.f60p}</b></div></div></section>
+   <section class="cw"><span class="lab">Penalidades · no máximo −${CFG.penalMax}</span><div style="margin-top:8px">${Object.entries(CFG.penal).map(([k,v])=>`<div class="lim" ${tip(k.replace(/_/g," "),CFG.penalDesc[k])} tabindex="0"><span style="text-transform:capitalize">${k.replace(/_/g," ")}</span><b>−${v}</b></div>`).join("")}</div></section>
+  </div>
+  <section><div class="sec-head"><div><span class="kick">Avaliador</span><h2 class="h2"><span class="g">O que a IA</span> <span class="k">lê em cada conversa</span></h2></div>
+    <span class="chip c-bl" ${tip("Versão ativa",`Prompt ${PROMPT_VER}, criado em 19/11/2026. A avaliação por IA ainda não rodou.`)} tabindex="0">prompt ${esc(PROMPT_VER)} · ativo</span></div>
+    <pre class="prompt">${esc(PROMPT_TXT)}</pre></section>
+  <p class="cd"><b>Para mudar pesos ou prompt:</b> peça no Claude Code, por exemplo <i>"reprocessa o Raio-X do atendimento com o peso de resolução em 25"</i>. Pesos recalculam na hora. Um prompt novo reavalia a amostra e a versão anterior fica guardada para comparação.</p>
+  <section><div class="sec-head"><div><span class="kick">Definições</span><h2 class="h2"><span class="g">Como ler</span> <span class="k">cada número</span></h2></div></div>
+   <div class="defs">
+    <div class="def"><h3>Recortes</h3><p><b>FINZA</b>: todo o Hyperflow FINZA. <b>BLIPS · Cobrança</b>: chats que passaram por uma das 20 filas de cobrança. Os dois nunca se somam.</p></div>
+    <div class="def"><h3>Espera</h3><p>Da primeira mensagem do cliente sem resposta até a próxima fala da IA ou de uma pessoa. Mensagem automática de fila não conta como resposta. Resposta da IA em menos de 3 s não é plausível e fica fora da medição da IA.</p></div>
+    <div class="def"><h3>Relógio comercial</h3><p>Conta só de segunda a sexta, das 8h às 18h. O relógio corrido conta tudo.</p></div>
+    <div class="def"><h3>Encerramento do cliente</h3><p>Se a última mensagem do cliente é só um agradecimento ou uma despedida curta (ok, obrigado, 👍) e ele já tinha sido respondido antes, o protocolo não conta como sem resposta. Esse último bloco fica fora da pior espera e da mediana.</p></div>
+    <div class="def"><h3>Sem mensagem do cliente</h3><p>Disparo que o cliente não respondeu. Conta no total de protocolos, mas fica fora das faixas de espera, do red flag e do score.</p></div>
+    <div class="def"><h3>Amostra avaliada</h3><p>A avaliação por IA ainda não rodou: ela espera a conversa completa chegar pelo Desk. Até lá, o score é só de agilidade. O tempo de resposta cobre 100% dos protocolos com mensagem do cliente.</p></div>
+    <div class="def"><h3>Fonte da conversa</h3><p>Hoje tudo vem do BigQuery, e <b>a maior parte das conversas aparece incompleta ou só com o disparo</b>. Não têm nenhuma mensagem do cliente 17.765 protocolos do FINZA e 29.028 do BLIPS. O FINZA é reconstrução, com cerca de 50% das mensagens e mediana de 3 mensagens por conversa. O BLIPS tem histórico completo em 34% dos chats (mediana de 11 mensagens); o restante é amostra (mediana de 4) e aparece como "fonte aproximada". Áudio quase todo sem transcrição. A conversa completa depende da carga pelo Desk, ainda pendente.</p></div>
+    <div class="def"><h3>CNPJ</h3><p>Vem do CRM BLIPS, cruzado pelo telefone: 87% dos chats em FINZA e 80% em BLIPS têm CNPJ. Telefone ligado a mais de um CNPJ aparece como ambíguo.</p></div>
+   </div></section></div>`;
+}
+
+const layer=document.getElementById("layer");
+let lastFocus=null;
+function openPanel(html){lastFocus=document.activeElement;layer.innerHTML=`<div class="scrim" data-close></div><aside class="panel" role="dialog" aria-modal="true"><button class="x" data-close>Fechar ✕</button>${html}</aside>`;layer.querySelector(".x").focus()}
+function closePanel(){if(!layer.innerHTML)return;layer.innerHTML="";if(lastFocus&&document.contains(lastFocus))lastFocus.focus()}
+function kpiPanel(k){const d=KPI_DEF[k],rs=recs(),A=rs.map(agg);
+  const val=a=>k==="red"?`${fmt(a.redPct,1)}%`:k==="sem"?`${fmt(a.semPct,1)}%`:k==="prim"?fmin(a.primMed):`${fmt(a.scoreMed)}`;
+  openPanel(`<span class="kick">Indicador</span><h2 class="h2"><span class="k">${d.t}</span></h2>${rs.map((r,i)=>`<div>${recTag(r)}<div class="bigp n">${val(A[i])}</div></div>`).join("")}
+   <p style="margin:0">${d.d}</p><p class="lead" style="margin:0">${d.c}</p>
+   ${k==="red"||k==="sem"?`<button class="btn" data-go="${esc(JSON.stringify({faixa:k==="red"?"f60p":"sem"}))}">Ver essas conversas</button>`:""}
+   <p class="fonte">Fonte: Hyperflow (BigQuery) · ${esc(LOAD.meta.janela.rotulo)} · relógio ${S.clk==="com"?"comercial":"corrido"} · extraído em 19/11/2026</p>`)}
+
+const tipEl=document.getElementById("tip");
+function showTip(el){const raw=el.getAttribute("data-tip");if(!raw)return;const[t,b]=raw.split("::");tipEl.innerHTML=`<b>${esc(t)}</b>${esc(b||"")}`;tipEl.hidden=false;
+  const r=el.getBoundingClientRect(),w=tipEl.offsetWidth,h=tipEl.offsetHeight;let x=r.left+r.width/2-w/2,y=r.top-h-10;
+  if(y<8)y=r.bottom+10;x=Math.max(8,Math.min(innerWidth-w-8,x));tipEl.style.left=x+"px";tipEl.style.top=y+"px"}
+document.addEventListener("mouseover",e=>{const el=e.target.closest("[data-tip]");if(el)showTip(el);else tipEl.hidden=true});
+document.addEventListener("focusin",e=>{const el=e.target.closest("[data-tip]");if(el)showTip(el)});
+document.addEventListener("focusout",()=>tipEl.hidden=true);
+document.addEventListener("scroll",()=>tipEl.hidden=true,true);
+
+const app=document.getElementById("app");
+function render(){
+  tipEl.hidden=true;
+  const st=S.view==="metodologia"?null:estadoHTML(),lst=app.querySelector(".listp .pane-b"),top=lst?lst.scrollTop:0;
+  document.documentElement.classList.toggle("fixed",S.view==="protocolos"&&!st);
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.dataset.view===S.view?"page":"false"));
+  document.querySelectorAll("#segRec button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.rec===S.rec));
+  document.querySelectorAll("#segClock button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.clock===S.clk));
+  app.innerHTML=st||(S.view==="protocolos"?renderProtocolos():S.view==="metodologia"?renderMetodologia():renderDashboard());
+  if(top){const el=app.querySelector(".listp .pane-b");if(el)el.scrollTop=top} // a lista de clientes não volta ao topo a cada clique
+}
+function rerender(){const id=document.activeElement&&document.activeElement.id;render();if(id==="fq"||id==="dds")refocus(id)} // render disparado por carga assíncrona: não rouba o foco da busca
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2600)}
+function route(){const h=location.hash.slice(1);S.view=["dashboard","protocolos","metodologia"].includes(h)?h:"dashboard";S.dd=null;render();scrollTo(0,0)}
+function goFilter(f,r){closePanel();S.filt=f;if(r&&S.rec!=="AB")S.rec=r;S.sel={cli:null,prot:null};S.detail=false;S.evOpen=false;if(location.hash==="#protocolos")render();else location.hash="protocolos"}
+function openProt(id){closePanel();const p=findP(id);if(S.rec!=="AB")S.rec=p.rec;S.filt={};S.sel={cli:p.cliente,prot:p.id};S.detail=true;if(location.hash==="#protocolos")render();else location.hash="protocolos"}
+function refocus(id){const el=document.getElementById(id);if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}}
+addEventListener("hashchange",route);
+document.getElementById("segRec").addEventListener("click",e=>{const b=e.target.closest("button");if(b){S.rec=b.dataset.rec;S.dd=null;render()}});
+document.getElementById("segClock").addEventListener("click",e=>{const b=e.target.closest("button");if(b){S.clk=b.dataset.clock;S.dd=null;rescore();render()}});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(S.dd){S.dd=null;S.ddq="";render();return}if(S.evOpen){S.evOpen=false;render();return}closePanel()}
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches('[role="button"]')){e.preventDefault();e.target.click()}
+});
+document.addEventListener("click",e=>{
+  const t=e.target;
+  if(S.dd&&!t.closest(".dd")){S.dd=null;S.ddq="";render();return}
+  if(t.closest("[data-close]")){closePanel();return}
+  if(t.closest("[data-retry]")){for(const r of recs())if(LOAD.st[r]!=="ok")LOAD.st[r]="idle";render();return}
+  const rm=t.closest("[data-retrymsgs]");if(rm){const c=findC(rm.dataset.retrymsgs);if(c)c.msgsErr=null;render();return}
+  const go=t.closest("[data-go]");if(go){goFilter(JSON.parse(go.dataset.go));return}
+  const k=t.closest("[data-kpi]");if(k){kpiPanel(k.dataset.kpi);return}
+  const band=t.closest("[data-band]");if(band){goFilter({faixa:band.dataset.band},band.dataset.r);return}
+  const op=t.closest("[data-open]");if(op){openProt(op.dataset.open);return}
+  const ff=t.closest("[data-f]");if(ff){goFilter(JSON.parse(ff.dataset.f),ff.dataset.r);return}
+  const ddb=t.closest("[data-dd]");if(ddb){S.dd=S.dd===ddb.dataset.dd?null:ddb.dataset.dd;S.ddq="";render();if(S.dd)refocus("dds");return}
+  const ddv=t.closest("[data-ddv]");if(ddv){S.filt[ddv.dataset.ddv]=ddv.dataset.v||undefined;S.dd=null;S.ddq="";S.sel={cli:null,prot:null};render();return}
+  const tgl=t.closest("[data-tgl]");if(tgl){S.filt[tgl.dataset.tgl]=!S.filt[tgl.dataset.tgl]||undefined;render();return}
+  const set=t.closest("[data-set]");if(set){S.filt[set.dataset.set]=set.dataset.v||undefined;render();return}
+  if(t.closest("#fclear")){S.filt={};S.dd=null;render();return}
+  const cl=t.closest("[data-cli]");if(cl){if(S.sel.cli!==cl.dataset.cli){S.sel={cli:cl.dataset.cli,prot:null};S.hl=null}S.detail=innerWidth<=760?false:S.detail;render();return}
+  const pr=t.closest("[data-prot]");if(pr){S.sel.prot=pr.dataset.prot;S.hl=null;S.detail=true;render();return}
+  const nav=t.closest("[data-pnav]");if(nav){const i=S._plist.indexOf(S.sel.prot)+ +nav.dataset.pnav;if(S._plist[i]){S.sel.prot=S._plist[i];S.hl=null;render()}return}
+  if(t.closest("#back")){S.detail=false;render();return}
+  if(t.closest("[data-evopen]")){S.evOpen=true;render();return}
+  if(t.closest("[data-evclose]")){S.evOpen=false;render();return}
+  const ev=t.closest("[data-ev]");if(ev){const p=findP(S.sel.prot),i=p.msgs.findIndex(m=>m.texto.includes(ev.dataset.ev.slice(0,18)));S.hl=i>=0?i:null;S.evOpen=false;render();const el=app.querySelector(`[data-mi="${i}"]`);if(el)el.scrollIntoView({block:"center",behavior:"smooth"});else toast("Não achei esse trecho na conversa.");return}
+  const ex=t.closest("[data-export]");if(ex){exportar(findC(ex.dataset.export));return}
+});
+async function exportar(c){
+  try{await loadMsgs(c)}catch(e){toast("Não consegui carregar as conversas deste cliente.");return}
+  const json=JSON.stringify({recorte:REC[c.rec].nome,extraido_em:"2026-11-19",cliente:{telefone:c.telefone,cnpjs:c.cnpjs,ambiguo:c.ambiguo,nome_crm:c.nome},protocolos:c.protocolos.map(id=>{const p=findP(id),nt=p.met.turnos.length;
+    return{chat_id:p.id,protocol:p.protocol,inicio:new Date(p.inicio).toISOString(),depto:p.depto,tipo:p.tipo,fonte:p.fonte,pior_espera_min:nt?p.met.pior[S.clk]:null,faixa:fxk(p),sem_resposta:p.met.semResposta,encerramento_cliente:p.met.encerramento,score:p.sc.score,avaliacao:p.aval,
+      mensagens:p.msgs.map(m=>({ts:new Date(m.ts).toISOString(),autor:m.autor,atendente:m.atendente||null,tipo:m.tipo,texto:m.texto}))}})},null,2);
+  const dl=await CAP("downloads");
+  if(dl){try{await dl.save({filename:`raio-x_${c.rec==="A"?"finza":"blips-cobranca"}_${c.id.replace(/[^\w-]/g,"")}.json`,data:json});toast("JSON do cliente baixado");return}
+    catch(e){if(e&&e.code==="declined")return;if(e&&e.code==="rate_limited"){toast("Já existe um download aguardando confirmação.");return}}}
+  try{await navigator.clipboard.writeText(json);toast("Download indisponível aqui. JSON do cliente copiado.")}catch(e){toast("Não consegui baixar nem copiar o JSON nesta tela.")}
+}
+app.addEventListener("input",e=>{
+  if(e.target.id==="fq"){S.filt.q=e.target.value||undefined;clearTimeout(app._q);app._q=setTimeout(()=>{S.sel={cli:null,prot:null};render();refocus("fq")},250)}
+  if(e.target.id==="dds"){S.ddq=e.target.value;render();refocus("dds")}
+});
+/* banco do artefato: só configuração (config/geral, pesos/<v>, prompts/<v>). Sem acesso ou vazio, valem os padrões embutidos. */
+function aplicarCfg(g,pe,pr){
+  const obj=o=>o&&typeof o==="object"&&!Array.isArray(o),num=v=>typeof v==="number"&&isFinite(v);
+  if(obj(g)){
+    if(obj(g.notas_agilidade)&&CFG.faixas.every(f=>num(g.notas_agilidade[f.k])))CFG.notasAgil=g.notas_agilidade;
+    if(obj(g.tetos)&&num(g.tetos.sem)&&num(g.tetos.f60p))CFG.tetos=g.tetos;
+    if(obj(g.penalidades)&&Object.values(g.penalidades).every(num))CFG.penal=g.penalidades;
+    if(num(g.penal_max))CFG.penalMax=g.penal_max;
+    if(obj(g.assuntos))CFG.assuntos=g.assuntos;
+    const e=g.expediente;
+    if(obj(e)&&Array.isArray(e.dias)&&num(e.ini)&&num(e.fim)&&JSON.stringify([e.dias,e.ini,e.fim])!==JSON.stringify([CFG.exp.dias,CFG.exp.ini,CFG.exp.fim])){
+      CFG.exp={dias:[...e.dias],ini:e.ini,fim:e.fim}; // expediente mudou: refaz o relógio comercial de todos os turnos já carregados
+      for(const r of["A","B"])if(DATA[r])for(const p of DATA[r].protocolos){for(const t of p.met.turnos)if(t.cor!=null)t.com=bizMin(t.ini,t.ini+Math.round(t.cor*MIN));p.met=fechaMet(p.met.turnos,p.met.assumir?p.met.assumir.cor:null,p.transf)}}
+  }
+  if(obj(pe)&&obj(pe.pesos)&&CFG.crit.every(c=>num(pe.pesos[c.k]))&&CFG.crit.reduce((s,c)=>s+pe.pesos[c.k],0)===100)CFG.pesos=pe.pesos;
+  if(obj(pr)&&typeof pr.texto==="string"&&pr.texto.trim())PROMPT_TXT=pr.texto;
+  rescore();rerender();
+}
+CAP("db").then(async db=>{if(!db)return;
+  try{const g=(await db.doc("config/geral").get()).data();if(!g)return;
+    const ver=v=>typeof v==="string"&&/^[\w.-]+$/.test(v)?v:"v1",vp=ver(g.pesos_ativos),vr=ver(g.prompt_ativo);
+    const[pe,pr]=await Promise.all([db.doc("pesos/"+vp).get(),db.doc("prompts/"+vr).get()]);
+    if(pr.exists)PROMPT_VER=vr;aplicarCfg(g,pe.data(),pr.data())}
+  catch(e){/* quem não é dono/editor não lê o banco: seguem os padrões */}});
+route();
+</script>

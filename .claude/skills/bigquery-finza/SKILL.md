@@ -55,6 +55,7 @@ Achou algo relevante e duradouro? **Documente aqui** (novo arquivo de domínio +
 |---|---|---|
 | **Hyperflow** (atendimento WhatsApp/RCS, uso × cobrança) | [`hyperflow.md`](./hyperflow.md) | faturas, uso faturável, franquia, preços unitários, templates WhatsApp e categoria Meta, rateio por departamento, volume de atendimento |
 | **Agentes de IA** (Esperanza, Valentina) | [`agentes-ia.md`](./agentes-ia.md) | protocolos (`silver_torre`), canal proativo × receptivo, transferência no desk e departamento, custo LLM por agente (`s1_custos_ia`), câmbio |
+| **Atendimento em nível de mensagem** (validado 2026-11-18) | [`atendimento-mensagens.md`](./atendimento-mensagens.md) | log de mensagens (`bronze_hyperflow.chat_history` v2 só BLIPS/leads; reconstrução `lastMessage` FINZA), regra de autor validada, deptos de Cobrança, CNPJ via telefone, auditor (`silver_auditoria.*`), transcrição (`helper_messages`), turnos de IA (`actions_interaction_logs`), SQL de extração FINZA × BLIPS-Cobrança |
 
 <!-- Próximos domínios entram aqui conforme o João pedir: custos de IA (s1_custos_ia), Bitrix, Torre de Controle, Sankhya, etc. -->
 

@@ -1,0 +1,114 @@
+{
+ "atualizado_em": "2026-11-18T11:40:00-03:00",
+ "items": {
+  "Q12844": {
+   "qs": "finalizado",
+   "fr": "2026-11-18",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 18/11/2026.",
+    "resp": ""
+   }
+  },
+  "q10894": {
+   "qs": "finalizado",
+   "fr": "2026-11-18",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 18/11/2026.",
+    "resp": ""
+   }
+  },
+  "q12009": {
+   "qs": "finalizado",
+   "fr": "2026-11-18",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 18/11/2026.",
+    "resp": ""
+   }
+  },
+  "q12239": {
+   "qs": "em_validacao",
+   "fp": "2026-11-18",
+   "df": "quimera",
+   "ir": "2026-11-16",
+   "fr": "2026-11-17"
+  },
+  "q12372": {
+   "qs": "em_andamento",
+   "ir": "2026-11-17"
+  },
+  "q12530": {
+   "fp": "2026-11-13",
+   "df": "quimera",
+   "ir": "2026-11-10"
+  },
+  "q12588": {
+   "fp": "2026-11-13",
+   "df": "quimera",
+   "ir": "2026-11-11"
+  },
+  "q12649": {
+   "qs": "finalizado",
+   "fr": "2026-11-18",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 18/11/2026.",
+    "resp": ""
+   }
+  },
+  "q12941": {
+   "ir": "2026-11-12"
+  },
+  "q13001": {
+   "qs": "finalizado",
+   "fr": "2026-11-18",
+   "ir": "2026-11-16",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 18/11/2026.",
+    "resp": ""
+   }
+  },
+  "q13006": {
+   "ir": "2026-11-12"
+  },
+  "q13017": {
+   "qs": "finalizado",
+   "fr": "2026-11-18",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 18/11/2026.",
+    "resp": ""
+   }
+  },
+  "q13054": {
+   "ir": "2026-11-12"
+  },
+  "q13433": {
+   "qs": "em_andamento",
+   "ir": "2026-11-17"
+  },
+  "q13457": {
+   "ir": "2026-11-16"
+  },
+  "q13521": {
+   "qs": "fila_exec",
+   "fp": "2026-12-02",
+   "df": "quimera",
+   "dev": "João Pedro",
+   "sp": 8
+  },
+  "q13545": {
+   "qs": "finalizado",
+   "fr": "2026-11-17",
+   "ir": "2026-11-17",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 17/11/2026.",
+    "resp": ""
+   }
+  }
+ }
+}

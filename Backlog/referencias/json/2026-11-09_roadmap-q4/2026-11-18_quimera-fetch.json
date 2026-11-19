@@ -1,0 +1,1701 @@
+{
+ "6871": {
+  "t": "KIT PREVENTIVO - IA LÍVIA",
+  "s": "bloqueado",
+  "d": "<p>Solicito que a Lívia faça o KIT PREVENTIVO, o que este KIT CONTEMPLA:<br><br><em>1- Contrato</em><br><em>2- Nota Fiscal</em><br><em>3- Demonstrativo de Débito</em><br><em>4- Boletim de ocorrência (será inserido de forma manual, não pela Lívia)</em><br><em>5- CCB - CÉDULA DE CRÉDITO BANCÁRIA (EMITIDA PELA CELCOIN)</em></p>",
+  "edd": "2026-11-13",
+  "res": null,
+  "sca": "2026-11-03T19:22:33.20609+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 2,
+  "c": [
+   {
+    "a": null,
+    "uid": "79e9880d-3f4d-48ae-8b42-0412dda24b7c",
+    "e": null,
+    "dt": "2026-09-03T20:42:12.679479+00:00",
+    "x": "Olá, qual status?",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "79e9880d-3f4d-48ae-8b42-0412dda24b7c",
+    "e": null,
+    "dt": "2026-10-16T20:29:35.250571+00:00",
+    "x": "Boa tarde, gostaria de um posicionamento, visto que a Lívia já produz o Kit e precisamos colocar apenas  CCB da qual podemos extrair do site da CELCOIN que possui API para tal. Aguardo retorno.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-03T19:22:29.718288+00:00",
+    "x": "Atualização: Kit Preventivo e Kit Ajuizamento pela Lívia (03/11/2026)\n\nOlá, pessoal! Segue onde estamos com os 6 comandos combinados em 31/10: Kit Preventivo e Kit Ajuizamento para cada modalidade (BLIPS, IDEAL sem financiamento e FINZA/IDEAL com financiamento). Testamos tudo com contratos reais.\n\nO QUE JÁ FUNCIONA\n\nPara contratos BLIPS e IDEAL, a Lívia já monta os dois kits:\n- Kit Preventivo: contrato assinado, nota fiscal, demonstrativo de débito e e-mails de cobrança, sem a carta AR.\n- Kit Ajuizamento: as mesmas peças e também a carta AR da MRS.\n\nMelhorias feitas nesta etapa:\n- A Lívia agora identifica corretamente se o contrato é Blips, Ideal ou financiado pela Finza. Antes, todo contrato era tratado como Blips.\n- Os contratos da Ideal passaram a trazer os e-mails da caixa de cobrança da própria Ideal. Em um contrato de teste eram 8 e-mails e agora são 84, incluindo notificação extrajudicial, constituição em mora e cancelamento.\n- O demonstrativo de débito parou de duplicar parcelas em cerca de 170 contratos, onde o valor saía em dobro.\n- A multa ficou correta em todos os códigos de empresa (10% Blips, 2% Ideal). Em alguns contratos ela saía zerada.\n- Clientes com muitos e-mails não ficam mais com a pasta marcada como \"incompleta\" por causa de um único e-mail que falhou. A Lívia tenta de novo e, se ainda faltar algum, avisa quantos foram salvos.\n- Quando o contrato não tem e-mail de cobrança ou não tem débito em aberto, a Lívia informa \"não há\" em vez de apontar falha.\n- Nas vendas, a nota fiscal agora aparece como \"Nota Fiscal de Venda\". Antes aparecia como \"Nota Fiscal de Remessa\".\n\nContratos financiados pela Finza (CCB): por enquanto, a Lívia avisa que esse kit ainda está em desenvolvimento e não monta nada, para não gerar um kit errado.\n\nO QUE JÁ TEMOS PARA OS CONTRATOS COM CCB\n- O contrato de compra e venda assinado, que cita a CCB.\n- A nota fiscal de venda, da aba Frete da Plataforma.\n- A carta AR da MRS. Verificamos que metade das CCBs em atraso já recebeu carta, então a Lívia consegue buscá-la como faz hoje.\n\nQUAIS ACESSOS A LÍVIA USA HOJE\n- Base de dados da Blips (BigQuery): dados do contrato, do cliente e das parcelas.\n- Caixas de e-mail de cobrança da Blips e da Ideal: os e-mails do kit.\n- Plataforma Blips (usuário de serviço da IA): a nota fiscal.\n- Portal da MRS (usuário BLIPS): a carta AR.\n- Google Drive: a pasta do kit.\nAinda não tem acesso à Celcoin, à caixa de e-mail de cobrança da Finza nem à base de dados da Finza. São justamente as três pendências abaixo.\n\nO QUE FALTA E PRECISAMOS DE AJUDA PARA CONSEGUIR\n1. A CCB assinada e endossada. Ela só existe no sistema da Celcoin. Precisamos de quem tenha acesso à conta da Celcoin para liberar o acesso à API (documentação e credenciais). Um PDF de exemplo de uma CCB também ajudaria.\n2. Os e-mails de cobrança da Finza. Os contratos com CCB não aparecem nas caixas de e-mail da Blips nem da Ideal. Precisamos saber qual é o e-mail de cobrança da Finza e de alguém com acesso a essa caixa para conectá-la à Lívia.\n3. Acesso aos dados das CCBs. Os dados existem no ambiente de dados da Finza, mas a Lívia ainda não tem permissão para lê-los. Precisamos que o responsável pelo ambiente de dados da Finza libere esse acesso. O pedido técnico já está descrito para o time de dados.\n4. O demonstrativo de débito da CCB (com vencimento antecipado e parcelas a vencer trazidas a valor presente, tendo a Finza como credora). Fica com a gente, assim que tivermos o acesso do item 3.\n\nRESUMO\nOs kits Blips e Ideal (preventivo e ajuizamento) estão prontos. Para os contratos com CCB, dependemos de três liberações: o acesso à Celcoin, a caixa de e-mail da Finza e a permissão de dados da Finza. Quem pode nos ajudar com cada uma delas?\n\nEnquanto aguardamos essas três liberações, a demanda fica como \"Bloqueado\". O mesmo comentário foi feito nas demandas #6871 (Kit Preventivo) e #10717 (Kit Ajuizamento Finza/CCB), que estão sendo tocadas em paralelo.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-06T13:43:47.572517+00:00",
+    "x": "Atualização (06/11/2026): correção sobre os e-mails de cobrança da CCB\n\nNo comentário de 03/11 listamos como pendência \"a caixa de e-mail de cobrança da Finza\". Esse item não é necessário: os e-mails dos contratos com CCB são os mesmos da régua que o Kit Ajuizamento já usa.\n\nTestamos com as 12 CCBs com maior atraso:\n- 12 de 12 têm e-mails de cobrança na caixa da Ideal (lembretes, bloqueio, notificação extrajudicial, cancelamento);\n- 9 de 12 também têm e-mails mais antigos na caixa da Blips (alguns com o assunto \"FINZA |\");\n- a Lívia encontra todos pelo número do contrato, como já faz hoje.\n\nJá ajustamos o kit para que, nos contratos com CCB, a Lívia busque os e-mails nas caixas da Ideal e da Blips.\n\nOutras atualizações:\n- O acesso aos dados das CCBs foi liberado pelo time de dados (service account nova da Lívia). Com isso, o demonstrativo de débito da CCB fica com a gente e já pode ser desenvolvido.\n\nO que ainda depende de outra área: só a CCB assinada e endossada para a FINZA, que está na plataforma da Celcoin. Precisamos de quem administra a conta da Celcoin para liberar o acesso à API (documentação e credenciais). Um PDF de exemplo de uma CCB também ajudaria.\n\nO mesmo comentário foi feito na #10717.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-11T16:53:13.722586+00:00",
+    "x": "Atualização (11/11/2026): a CCB assinada não depende mais da Celcoin. Ela vem da API da própria Finza, e a etapa da Lívia que baixa a CCB e salva na pasta do kit já está pronta e testada (contrato 12602418). O PDF já traz o termo de endosso para o FINZA FIDC nas últimas páginas.\n\nA mesma etapa serve para o Kit Preventivo e para o Kit Ajuizamento. Falta ligar no kit junto com o demonstrativo de débito da CCB, que depende das confirmações de regras pedidas na #10717.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-11T17:24:27.7532+00:00",
+    "x": "Atualização (11/11/2026): deixamos na #10717 um resumo consolidado dos dois kits FINZA/CCB (Preventivo e Ajuizamento), com o que já está pronto, o que falta e as confirmações que precisamos de você:\nhttps://quimera.blips.com.br/tickets/10717\n\nExemplos de Kit Preventivo gerados pela Lívia com clientes reais (ainda sem o demonstrativo da CCB, que depende das regras pedidas na #10717):\n- Contrato 12602418: https://drive.google.com/drive/folders/1F4uRDw4PM4LaEQBGhMlg4YuCwqN11GJl\n- Contrato 12603553: https://drive.google.com/drive/folders/1aRac6IPAyWeggC34XZMWn7iqu8nWAL8A",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "backlog_futuro",
+    "dt": "2026-09-02T18:13:47.194095+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "backlog_futuro",
+    "para": "backlog",
+    "dt": "2026-10-19T12:49:32.802538+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-10-19T12:49:36.758289+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "bloqueado",
+    "dt": "2026-10-20T13:26:38.948382+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-10-22T14:01:15.587963+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-10-22T14:01:16.976576+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-11-03T12:45:07.698804+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-03T19:22:33.20609+00:00",
+    "por": null,
+    "uid": null
+   }
+  ]
+ },
+ "8442": {
+  "t": "Torre de Controle — negativar CPF de avalista, além do CNPJ do contrato",
+  "s": "backlog_futuro",
+  "d": "<p><strong>O que preciso</strong></p><p>Hoje a Torre negativa apenas o documento do contato vinculado ao contrato — na prática, o CNPJ da empresa. Quando a CCB (FINZA) tem avalista qualificado, esse CPF também é parte obrigada e deveria entrar na negativação.</p><p>Pedido: incluir o CPF do avalista como parte negativável nos contratos em que existir essa qualificação.</p><p><strong>Regra de negócio</strong></p><p>Negativar o avalista quando:</p><ol><li><p>a CCB do contrato tiver signatário com qualificação de <strong>avalista</strong>, e</p></li><li><p>esse avalista tiver <strong>assinatura registrada</strong> (não basta estar cadastrado no pedido), e</p></li><li><p>o contrato atingir o mesmo gatilho que hoje dispara a negativação do CNPJ.</p></li></ol><p>A negativação do avalista acompanha a do contrato: mesma régua, mesmo gatilho, e a reversão de uma reverte a outra.</p><p><strong>Fonte do dado</strong></p><p>Projeto <code>finza-prod-481500</code>, dataset <code>silver</code>:</p><ul><li><p><code>silver_signature_request</code> — pedido de assinatura da CCB (<code>origin_ref</code> = <code>silver_proposal.public_id</code>)</p></li><li><p><code>silver_signature_request_signer</code> — signatários; <code>title = 'Avalista'</code>, <code>document_number</code> = CPF, <code>signed_at</code> = data da assinatura</p></li></ul><p>Ponto de atenção: <code>title</code> só é preenchido a partir de ago/2026.<br><br><strong>O que provavelmente muda na Torre</strong></p><p><code>org_finza_contacts</code> tem um único <code>document</code> por contato e não existe entidade de coobrigado. Então o trabalho deve envolver três frentes:</p><ol><li><p>ingestão do avalista a partir das tabelas de assinatura</p></li><li><p>vínculo contrato → avalista (novo relacionamento ou contato secundário)</p></li><li><p>ajuste da regra de negativação para acionar os dois documentos</p></li></ol><p>A modelagem fica a critério de vocês — só sinalizo para dimensionar o esforço.</p><p><strong>Critério de aceite</strong></p><p>Um contrato com avalista assinado, ao atingir o gatilho, gera registro de negativação para o CNPJ <strong>e</strong> para o CPF do avalista, com reversão espelhada.</p>",
+  "edd": null,
+  "res": null,
+  "sca": "2026-09-23T18:33:03.671893+00:00",
+  "asg": null,
+  "sp": null,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-09-23T12:30:26.158133+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "backlog",
+    "dt": "2026-09-23T18:16:44.131773+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "backlog",
+    "para": "backlog_futuro",
+    "dt": "2026-09-23T18:33:03.671893+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "10717": {
+  "t": "Demonstrativo de Débito CCB | NOTIFICAÇÕES",
+  "s": "bloqueado",
+  "d": "<p>Prezados,</p><p>Preciso concluir a estruturação do Kit de Ajuizamento para ações de Busca e Apreensão e Execução de Cédula de Crédito Bancário – CCB.</p><p>Esse kit consiste em um conjunto de documentos que serão reunidos pela Lívia – IA Jurídico, de modo que o material seja entregue de forma completa e pronta para o ajuizamento. Quero implementar essa mesma possibilidade também nos casos da FINZA.</p><p>Hoje, já temos:</p><p>Cédula de Crédito Bancário – CCB: aqui, preciso verificar se o sistema da Celcoin possui API que permita à Lívia – IA Jurídico acessar e buscar a CCB diretamente no sistema. Isso é necessário para que ela consiga montar o kit de forma automatizada;</p><p>Notificação extrajudicial via AR: automação pronta;</p><p>Notificação por e-mail: automação pronta.</p><p>Permanecem pendentes:</p><p>Demonstrativo atualizado do débito: precisamos desenvolver um documento específico, de acordo com as condições previstas na CCB e no respectivo CET. Esse demonstrativo também é importante para o próprio usuário, que, ao acessar a plataforma, deverá conseguir visualizar a evolução da dívida.</p><p>O demonstrativo deverá apresentar de forma clara a evolução do débito, incluindo o vencimento antecipado, além dos juros remuneratórios, juros de mora, multa e demais encargos contratuais aplicáveis.</p><p>Já temos modelos semelhantes utilizados na BLIPS e na IDEAL e, se necessário, posso disponibilizá-los como referência. No entanto, neste caso, precisaremos desenvolver um modelo específico, pois se trata de uma Cédula de Crédito Bancário.</p><p>Também precisamos padronizar os disparos dessas notificações e o arquivamento dos respectivos comprovantes, para que o jurídico receba o kit completo no momento do ajuizamento.</p><p>A ideia é garantir um fluxo mais seguro, ágil e padronizado para a recuperação judicial do crédito.</p>",
+  "edd": "2026-11-13",
+  "res": null,
+  "sca": "2026-11-03T19:22:34.653721+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 5,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-10-19T18:53:48.716761+00:00",
+    "x": "[Comentário editado em 26/10: simplificamos as perguntas. A maior parte conseguimos resolver internamente, lendo as próprias CCBs e reaproveitando o funcionamento do Kit Ajuizamento. Ficaram só estas duas.]\n\nOlá Sara, espero que esteja melhor!\n\nJá mapeamos tudo o que existe hoje e montamos o plano do kit da Finza. Ele segue o mesmo modelo do Kit Ajuizamento: a Lívia monta uma pasta no Drive com a CCB, a carta com AR, os e-mails de notificação enviados ao cliente e o demonstrativo de débito.\n\n1) MODELOS\nPode anexar aqui os modelos de demonstrativo da BLIPS e da IDEAL que mencionou? Se tiver um demonstrativo de CCB já usado em algum processo (mesmo feito manualmente), ajuda a conferirmos os números.\n\n2) DOCUMENTOS DO KIT\nAlém das quatro peças acima, falta algum documento para o ajuizamento? Por exemplo:\n- nota fiscal de venda do equipamento (prova do bem na Busca e Apreensão);\n- termo de cessão ou endosso, quando a CCB foi cedida ao FIDC. Neste caso, quem deve aparecer como credor no demonstrativo?\n\nO cálculo do demonstrativo (juros remuneratórios, mora, multa e vencimento antecipado) vai seguir as cláusulas da própria CCB. Se houver alguma regra que não esteja na cédula, é só nos avisar.\n\nTambém estamos verificando internamente de onde baixar a CCB assinada, que fica com as plataformas de assinatura (WeSign e Celcoin).\n\nObrigado!",
+    "i": false
+   },
+   {
+    "a": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f",
+    "e": null,
+    "dt": "2026-10-20T13:26:17.961285+00:00",
+    "x": "@Sara Clara Teixeira ",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "79e9880d-3f4d-48ae-8b42-0412dda24b7c",
+    "e": null,
+    "dt": "2026-10-20T13:38:26.148578+00:00",
+    "x": "@Marcos Rodrigues de Oliveira Júnior obrigada pelo retorno.\n\nVou te responder até 22/10 por questão de saúde... te retorno nesta data.",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "79e9880d-3f4d-48ae-8b42-0412dda24b7c",
+    "e": null,
+    "dt": "2026-10-29T19:08:44.587615+00:00",
+    "x": "1) MODELOS\n\nAinda não temos um modelo de demonstrativo de débito específico para a CCB, pois esse é um documento que precisaremos desenvolver.\n\nOs demonstrativos de débito da BLIPS e da IDEAL já foram desenvolvidos e são utilizados pela Lívia no kit ajuizamento. Entretanto, o cálculo da CCB é diferente, pois deverá considerar o vencimento antecipado de toda a dívida, incluindo as parcelas vencidas e vincendas, com o cálculo do saldo devedor a valor presente.\n\nPor isso, precisaremos desenvolver um modelo específico para a CCB, que discrimine os valores vencidos e vincendos, mas que apresente no saldo devedor total a dívida integral, considerando os ajustes e encargos previstos na cédula.\n\n2) DOCUMENTOS DO KIT\n\nAlém das quatro peças mencionadas, temos os seguintes pontos:\n\n- Nota fiscal de venda do equipamento:** estará disponível na plataforma BLIPS, na aba FRETE.\n- CCB assinada e endossada:** na plataforma Celcoin, temos acesso à CCB assinada e endossada para a FINZA. A plataforma WeSign é utilizada para a assinatura dos clientes e avalistas.\n- Credor no demonstrativo:** deverá constar sempre a FINZA, uma vez que a CCB é cedida e endossada para ela. Para fins de identificação no demonstrativo, poderá ser utilizado apenas o nome FINZA.\n\nO cálculo do demonstrativo seguirá as regras estabelecidas na própria CCB, incluindo os juros remuneratórios, juros de mora, multa e vencimento antecipado, conforme as cláusulas contratuais aplicáveis.\n\nO que é o vencimento antecipado?\n\nO vencimento antecipado acontece quando ocorre uma situação prevista na própria Cédula de Crédito Bancário (CCB), que permite exigir o pagamento de toda a dívida antes das datas originalmente estabelecidas para cada parcela.\n\nPor exemplo, se o cliente financiou um equipamento e deixou de pagar algumas parcelas, e a cédula prevê o vencimento antecipado nessa situação, a FINZA poderá exigir o saldo total da dívida, sem precisar aguardar o vencimento de cada parcela futura, observadas as condições contratuais e legais aplicáveis.\n\nNesse caso, o cálculo deverá considerar tanto as parcelas que já venceram e não foram pagas quanto aquelas que ainda venceriam no futuro.\n\nComo as parcelas futuras seriam pagas ao longo do tempo, será necessário trazer seus valores a valor presente, ou seja, recalcular quanto representam na data atual, aplicando os ajustes financeiros previstos na cédula.\n\nAssim, o demonstrativo deverá mostrar separadamente os valores vencidos e vincendos, mas o saldo devedor total deverá contemplar toda a dívida, e não apenas as parcelas vencidas, como ocorre atualmente nos demonstrativos da BLIPS e da IDEAL.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-10-30T13:40:34.192912+00:00",
+    "x": "Oi Sara, bom dia! Deixa eu só confirmar um trem, porque acho que confundi as duas demandas (Kit Preventivo e Kit Ajuizamento da Finza).\n\nO Kit Preventivo tem as mesmas peças do Kit Ajuizamento? Hoje o Kit Ajuizamento tem:\n- Contrato\n- Carta de notificação com AR (MRS)\n- E-mails de cobrança\n- Demonstrativo de débito\n- Nota fiscal\n\nA diferença entre os dois seria esta?\n- O Kit Preventivo não leva a carta MRS nem os e-mails.\n- Ele inclui a CCB emitida pela Celcoin e o Boletim de Ocorrência (esse vocês colocam manualmente).\n\nE, junto com a criação do Kit Preventivo, você precisa que o Kit Ajuizamento seja atualizado para os casos da Finza (CCB), passando a ter:\n- CCB assinada e endossada para a FINZA (Celcoin)\n- Demonstrativo específico de CCB, com o vencimento antecipado da dívida inteira (parcelas vencidas e vincendas a valor presente)\n- Nota fiscal de venda do equipamento (aba FRETE da plataforma)\n\nPara eu não montar nada errado, você consegue separar os casos para mim? Para cada situação, me diz qual kit a Lívia deve gerar e com quais peças. Por exemplo:\n- Contrato de locação da Blips: Kit Ajuizamento com quais peças? E o Kit Preventivo, se aplica?\n- Contrato de locação da Ideal: mesma pergunta.\n- Contrato da Finza com CCB (venda financiada): Kit Ajuizamento com quais peças? E o Kit Preventivo, com quais peças?\n\nSe tiver, me fala também em que momento cada kit é pedido (o preventivo antes de qual etapa, e o de ajuizamento quando). Assim eu já deixo a Lívia escolhendo o kit certo conforme o caso.\n\nPara facilitar, segue um resumo do que entendi até agora. É só me dizer o que está certo e corrigir o que estiver errado:\n\n*CENÁRIO 1 - LOCAÇÃO BLIPS*\nKit Ajuizamento (já funciona hoje, sem mudança):\n- Contrato de locação assinado\n- Carta de notificação com AR (MRS)\n- E-mails de cobrança (lembrete, bloqueio, retirada, distrato)\n- Demonstrativo de débito (parcelas vencidas, multa de 10% e juros de 1% ao mês)\n- Nota fiscal de remessa em comodato\nKit Preventivo: não se aplica? (confirmar)\n\n*CENÁRIO 2 - LOCAÇÃO IDEAL*\nKit Ajuizamento (já funciona hoje, sem mudança):\n- Contrato de locação assinado\n- Carta de notificação com AR (MRS)\n- E-mails de cobrança (lembrete, bloqueio, retirada, distrato)\n- Demonstrativo de débito (parcelas vencidas, multa de 2% e juros de 1% ao mês)\n- Nota fiscal de remessa em comodato\nKit Preventivo: não se aplica? (confirmar)\n\n*CENÁRIO 3 - FINZA COM CCB (VENDA FINANCIADA)*\nKit Preventivo (novo):\n- Contrato\n- Nota fiscal de venda do equipamento (aba FRETE da plataforma)\n- Demonstrativo de débito (o mesmo de hoje ou já o novo, específico de CCB? confirmar)\n- Boletim de Ocorrência (inserido manualmente por vocês)\n- CCB assinada e endossada para a FINZA (Celcoin)\n\nKit Ajuizamento (atualizado):\n- CCB assinada e endossada para a FINZA (Celcoin)\n- Carta de notificação com AR (MRS)\n- E-mails de notificação\n- Demonstrativo de débito específico de CCB (vencimento antecipado da dívida inteira, parcelas vencidas e vincendas a valor presente, credor FINZA)\n- Nota fiscal de venda do equipamento (aba FRETE da plataforma)\n- Contrato de compra e venda: entra também? (confirmar)\n\nFicou alguma peça faltando ou sobrando em algum cenário? Obrigado!\n",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "79e9880d-3f4d-48ae-8b42-0412dda24b7c",
+    "e": null,
+    "dt": "2026-10-31T14:18:58.628297+00:00",
+    "x": "Isso mesmo, Marcos! Seguem os esclarecimentos para estruturarmos os kits na Lívia.\n\nPrecisamos ter 6 comandos distintos, considerando três modalidades de operação e dois tipos de kit.\n\n### 1. KIT PREVENTIVO (NOVO)\n\nO Kit Preventivo se aplica a todas as modalidades: BLIPS, IDEAL e FINZA/IDEAL com financiamento.\n\nA principal diferença em relação ao Kit Ajuizamento é que não será incluída a notificação enviada pela MRS (AR).\n\n1.1. Kit Preventivo – BLIPS\n- Contrato assinado;\n- E-mails de cobrança;\n- Demonstrativo de débito;\n- Nota fiscal.\n\n1.2. Kit Preventivo – IDEAL sem financiamento\n- Contrato assinado;\n- E-mails de cobrança;\n- Demonstrativo de débito;\n- Nota fiscal.\n\n1.3. Kit Preventivo – FINZA/IDEAL com financiamento\n- Contrato;\n- E-mails de cobrança;\n- CCB assinada e endossada para a FINZA (Celcoin);\n- Demonstrativo de débito específico da CCB (a desenvolver);\n- Nota fiscal de venda do equipamento.\n\nImportante: O Kit Preventivo mantém os e-mails de cobrança. A exclusão é apenas da notificação MRS (AR).\n\n### 2. KIT AJUIZAMENTO\n\n2.1. Kit Ajuizamento – BLIPS\n\nPermanece como funciona atualmente, sem alterações:\n- Contrato assinado;\n- Notificação MRS (AR);\n- E-mails de cobrança;\n- Demonstrativo de débito;\n- Nota fiscal.\n\n2.2. Kit Ajuizamento – IDEAL sem financiamento\n\nTambém permanece como funciona atualmente:\n- Contrato assinado;\n- Notificação MRS (AR);\n- E-mails de cobrança;\n- Demonstrativo de débito;\n- Nota fiscal.\n\n2.3. Kit Ajuizamento – FINZA/IDEAL com financiamento\n\nPrecisamos desenvolver/adequar essa modalidade para incluir:\n- Contrato, quando aplicável;\n- CCB assinada e endossada para a FINZA (Celcoin);\n- Notificação MRS (AR);\n- E-mails de cobrança;\n- Demonstrativo de débito específico da CCB, considerando o vencimento antecipado, as parcelas vencidas e as vincendas a valor presente;\n- Nota fiscal de venda do equipamento (aba FRETE da plataforma).\n\n### 3. COMANDOS QUE PRECISAMOS TER NA LÍVIA\n\nKit Preventivo:\n1. Kit Preventivo BLIPS;\n2. Kit Preventivo IDEAL sem financiamento;\n3. Kit Preventivo FINZA/IDEAL com financiamento.\n\nKit Ajuizamento:\n1. Kit Ajuizamento BLIPS – permanece como está;\n2. Kit Ajuizamento IDEAL – permanece como está;\n3. Kit Ajuizamento FINZA – incluir CCB e demonstrativo específico do financiamento.\n\n### 4. DIFERENÇA ENTRE OS KITS\n\nO Kit Preventivo será utilizado para organização e análise documental antes do ajuizamento, sem necessidade de incluir a notificação MRS.\n\nO Kit Ajuizamento será solicitado quando o caso estiver sendo preparado para ingresso da ação judicial, incluindo a documentação necessária à demanda.\n\n### 5. PONTOS QUE PRECISAM SER DESENVOLVIDOS\n\n- Integração da CCB assinada e endossada pela Celcoin;\n- Desenvolvimento do demonstrativo de débito específico para financiamento/CCB, considerando os encargos contratuais e o vencimento antecipado;\n- Disponibilização desse demonstrativo tanto no Kit Preventivo quanto no Kit Ajuizamento FINZA.\n\nEm resumo: BLIPS e IDEAL sem financiamento permanecem com os Kits de Ajuizamento atuais. Precisamos criar os três Kits Preventivos e adequar o Kit Ajuizamento FINZA para contemplar as particularidades da CCB e do financiamento.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-03T19:22:31.368848+00:00",
+    "x": "Atualização: Kit Preventivo e Kit Ajuizamento pela Lívia (03/11/2026)\n\nOlá, pessoal! Segue onde estamos com os 6 comandos combinados em 31/10: Kit Preventivo e Kit Ajuizamento para cada modalidade (BLIPS, IDEAL sem financiamento e FINZA/IDEAL com financiamento). Testamos tudo com contratos reais.\n\nO QUE JÁ FUNCIONA\n\nPara contratos BLIPS e IDEAL, a Lívia já monta os dois kits:\n- Kit Preventivo: contrato assinado, nota fiscal, demonstrativo de débito e e-mails de cobrança, sem a carta AR.\n- Kit Ajuizamento: as mesmas peças e também a carta AR da MRS.\n\nMelhorias feitas nesta etapa:\n- A Lívia agora identifica corretamente se o contrato é Blips, Ideal ou financiado pela Finza. Antes, todo contrato era tratado como Blips.\n- Os contratos da Ideal passaram a trazer os e-mails da caixa de cobrança da própria Ideal. Em um contrato de teste eram 8 e-mails e agora são 84, incluindo notificação extrajudicial, constituição em mora e cancelamento.\n- O demonstrativo de débito parou de duplicar parcelas em cerca de 170 contratos, onde o valor saía em dobro.\n- A multa ficou correta em todos os códigos de empresa (10% Blips, 2% Ideal). Em alguns contratos ela saía zerada.\n- Clientes com muitos e-mails não ficam mais com a pasta marcada como \"incompleta\" por causa de um único e-mail que falhou. A Lívia tenta de novo e, se ainda faltar algum, avisa quantos foram salvos.\n- Quando o contrato não tem e-mail de cobrança ou não tem débito em aberto, a Lívia informa \"não há\" em vez de apontar falha.\n- Nas vendas, a nota fiscal agora aparece como \"Nota Fiscal de Venda\". Antes aparecia como \"Nota Fiscal de Remessa\".\n\nContratos financiados pela Finza (CCB): por enquanto, a Lívia avisa que esse kit ainda está em desenvolvimento e não monta nada, para não gerar um kit errado.\n\nO QUE JÁ TEMOS PARA OS CONTRATOS COM CCB\n- O contrato de compra e venda assinado, que cita a CCB.\n- A nota fiscal de venda, da aba Frete da Plataforma.\n- A carta AR da MRS. Verificamos que metade das CCBs em atraso já recebeu carta, então a Lívia consegue buscá-la como faz hoje.\n\nQUAIS ACESSOS A LÍVIA USA HOJE\n- Base de dados da Blips (BigQuery): dados do contrato, do cliente e das parcelas.\n- Caixas de e-mail de cobrança da Blips e da Ideal: os e-mails do kit.\n- Plataforma Blips (usuário de serviço da IA): a nota fiscal.\n- Portal da MRS (usuário BLIPS): a carta AR.\n- Google Drive: a pasta do kit.\nAinda não tem acesso à Celcoin, à caixa de e-mail de cobrança da Finza nem à base de dados da Finza. São justamente as três pendências abaixo.\n\nO QUE FALTA E PRECISAMOS DE AJUDA PARA CONSEGUIR\n1. A CCB assinada e endossada. Ela só existe no sistema da Celcoin. Precisamos de quem tenha acesso à conta da Celcoin para liberar o acesso à API (documentação e credenciais). Um PDF de exemplo de uma CCB também ajudaria.\n2. Os e-mails de cobrança da Finza. Os contratos com CCB não aparecem nas caixas de e-mail da Blips nem da Ideal. Precisamos saber qual é o e-mail de cobrança da Finza e de alguém com acesso a essa caixa para conectá-la à Lívia.\n3. Acesso aos dados das CCBs. Os dados existem no ambiente de dados da Finza, mas a Lívia ainda não tem permissão para lê-los. Precisamos que o responsável pelo ambiente de dados da Finza libere esse acesso. O pedido técnico já está descrito para o time de dados.\n4. O demonstrativo de débito da CCB (com vencimento antecipado e parcelas a vencer trazidas a valor presente, tendo a Finza como credora). Fica com a gente, assim que tivermos o acesso do item 3.\n\nRESUMO\nOs kits Blips e Ideal (preventivo e ajuizamento) estão prontos. Para os contratos com CCB, dependemos de três liberações: o acesso à Celcoin, a caixa de e-mail da Finza e a permissão de dados da Finza. Quem pode nos ajudar com cada uma delas?\n\nEnquanto aguardamos essas três liberações, a demanda fica como \"Bloqueado\". O mesmo comentário foi feito nas demandas #6871 (Kit Preventivo) e #10717 (Kit Ajuizamento Finza/CCB), que estão sendo tocadas em paralelo.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-06T13:43:48.885722+00:00",
+    "x": "Atualização (06/11/2026): correção sobre os e-mails de cobrança da CCB\n\nNo comentário de 03/11 listamos como pendência \"a caixa de e-mail de cobrança da Finza\". Esse item não é necessário: os e-mails dos contratos com CCB são os mesmos da régua que o Kit Ajuizamento já usa.\n\nTestamos com as 12 CCBs com maior atraso:\n- 12 de 12 têm e-mails de cobrança na caixa da Ideal (lembretes, bloqueio, notificação extrajudicial, cancelamento);\n- 9 de 12 também têm e-mails mais antigos na caixa da Blips (alguns com o assunto \"FINZA |\");\n- a Lívia encontra todos pelo número do contrato, como já faz hoje.\n\nJá ajustamos o kit para que, nos contratos com CCB, a Lívia busque os e-mails nas caixas da Ideal e da Blips.\n\nOutras atualizações:\n- O acesso aos dados das CCBs foi liberado pelo time de dados (service account nova da Lívia). Com isso, o demonstrativo de débito da CCB fica com a gente e já pode ser desenvolvido.\n\nO que ainda depende de outra área: só a CCB assinada e endossada para a FINZA, que está na plataforma da Celcoin. Precisamos de quem administra a conta da Celcoin para liberar o acesso à API (documentação e credenciais). Um PDF de exemplo de uma CCB também ajudaria.\n\nO mesmo comentário foi feito na #6871.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-06T13:59:12.696322+00:00",
+    "x": "Oi Sara! Começamos o demonstrativo de débito da CCB. A parte de dados já está pronta: para cada CCB a Lívia já traz o cabeçalho (nº da CCB, cliente, emissão, valor financiado, IOF, TAC, taxa de juros, CET, equipamento, credor FINZA) e o cronograma original com a situação de cada parcela (paga, vencida ou a vencer).\n\nExemplo real, contrato 12602418 (48 parcelas de R$ 646,00, juros de 5,09% a.m.), em 06/11/2026:\n- 7 parcelas vencidas e não pagas: R$ 4.522,00 (sem encargos ainda)\n- 41 parcelas a vencer: R$ 26.486,00 no valor nominal\n- as 41 a vencer trazidas a valor presente pela taxa da própria CCB: R$ 11.415,13\n\nPara fechar o cálculo, precisamos que você confirme algumas regras. A maior parte está nas cláusulas da CCB:\n\n1. Multa: qual o percentual?\n2. Juros de mora: qual a taxa (ex.: 1% ao mês)? Simples, pro rata dia?\n3. Juros remuneratórios: continuam correndo sobre as parcelas vencidas até a data do cálculo, junto com a mora?\n4. Data do vencimento antecipado: é a data do cálculo, a data da notificação extrajudicial ou a do primeiro atraso?\n5. Valor presente das parcelas a vencer: pode ser pela taxa de juros da própria CCB (como no exemplo acima)? Ou há outra taxa/regra?\n6. Correção monetária: a CCB prevê algum índice?\n7. Parcelas renegociadas ou com boleto reemitido: alguns clientes tiveram boletos reemitidos com nova data e valor. No demonstrativo usamos sempre o vencimento e o valor originais da CCB. Está certo? E quando o cliente pagou uma parcela renegociada por valor diferente do original, consideramos a parcela quitada?\n\nAjudaria muito se você puder anexar aqui o PDF de uma CCB (de preferência de um destes contratos em atraso: 12602418, 12603553 ou 12600417). Com ele conferimos as cláusulas e já validamos o cálculo com você.\n\nDuas dúvidas de escopo da descrição desta demanda:\n- \"Esse demonstrativo também é importante para o próprio usuário, que, ao acessar a plataforma, deverá conseguir visualizar a evolução da dívida\": mostrar o demonstrativo para o cliente na Plataforma faz parte desta demanda ou fica para uma demanda separada (com o time da Plataforma)? O cálculo que estamos fazendo já fica pronto para ser reaproveitado lá.\n- \"Padronizar os disparos dessas notificações e o arquivamento dos respectivos comprovantes\": a Lívia monta o kit buscando o que já foi enviado (e-mails nas caixas de cobrança e carta na MRS). Padronizar os disparos é da régua de cobrança. Você espera alguma mudança da nossa parte nisso?\n\nObrigado!",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-11T16:53:12.531413+00:00",
+    "x": "Atualização (11/11/2026): CCB assinada resolvida e proposta de regras do demonstrativo\n\n1) CCB ASSINADA: RESOLVIDA, SEM PRECISAR DA CELCOIN\nA CCB assinada vem da API da própria Finza (consulta pelo número do contrato). Já está pronta a etapa da Lívia que baixa a CCB e salva na pasta do kit. Testamos com o contrato 12602418 e funcionou. Ela ainda não está ligada ao kit, porque falta o demonstrativo CCB.\n\n2) TERMO DE ENDOSSO\nO PDF da CCB assinada já traz, nas últimas páginas, o \"TERMO DE ENDOSSO nº <número da CCB>\": endossante VIA CAPITAL SCD, endossatário FINZA FIDC. Conferimos nas 3 CCBs de exemplo (12602418, 12603553 e 12600417). Ou seja, o kit já leva a CCB e o termo de endosso no mesmo arquivo.\n\nDois pontos para o jurídico avaliar nesse termo, que aparecem nas 3 CCBs:\n- O CNPJ do endossatário (FINZA FIDC) está igual ao da Via Capital (48.632.754/0001-90).\n- A data do contrato de promessa de endosso está em branco (\"FIRMADO ENTRE ENDOSSANTE E ENDOSSATÁRIO, EM , ...\").\n\nPergunta: esse termo dentro da CCB basta para o ajuizamento, ou vocês precisam de um termo de endosso separado, assinado pela Via Capital?\n\n3) PROPOSTA DE REGRAS DO DEMONSTRATIVO\nLemos as cláusulas das 3 CCBs (o modelo é o mesmo) e montamos as respostas às perguntas de 06/11 a partir delas. Só precisamos que você confirme ou corrija:\n\na) Credora no demonstrativo: FINZA (endossatária).\nb) Parcelas vencidas: valor da parcela + juros de mora de 1% ao mês, pro rata dia, do vencimento até a data do cálculo (cláusula 8ª, §1º, \"a\").\nc) Multa de 2% sobre o total da parcela vencida + juros de mora (cláusula 8ª, §1º, \"b\").\nd) Vencimento antecipado: todas as parcelas a vencer passam a ser exigíveis na data do cálculo do kit (cláusula 11ª, \"a\": basta uma parcela não paga).\ne) Parcelas a vencer: trazidas a valor presente pela taxa de juros da própria CCB (ex.: 5,09% a.m. na 12602418), com a redução proporcional dos juros da cláusula 13ª. Sem multa e sem mora sobre elas.\nf) Correção monetária: não aplicar, porque a CCB não define índice.\ng) Honorários de 20% (cláusula 8ª, §2º): mostrar como linha separada no demonstrativo, ou deixar de fora porque entram na petição?\nh) Parcelas renegociadas ou com boleto reemitido: usar o vencimento e o valor originais da CCB.\n\nPontos que a CCB não deixa claros:\n- Juros de mora de \"1% ao mês, ou fração\": é pro rata dia (como na proposta) ou mês cheio a cada fração de mês?\n- Base da mora: a CCB fala em \"principal acrescido dos juros remuneratórios\". Usamos o valor total da parcela. Está certo?\n- Data do vencimento antecipado: data do cálculo (proposta), data da 1ª parcela em atraso ou data da notificação?\n\nCom essas confirmações fechamos o cálculo e o PDF do demonstrativo CCB e ligamos tudo no kit.\n\nO mesmo resumo foi feito na #6871.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-11T17:24:26.770692+00:00",
+    "x": "Atualização: Kit Preventivo e Kit Ajuizamento FINZA/CCB, o que já foi feito e o que precisamos de você\n\nOlá, Sara! Segue um resumo consolidado de onde estamos e do que falta para liberar os kits dos contratos com financiamento (CCB). Ele substitui as perguntas dos comentários anteriores.\n\n==================================================\n1. O QUE JÁ ESTÁ PRONTO\n==================================================\n\nKits BLIPS e IDEAL (sem financiamento)\n- Kit Preventivo e Kit Ajuizamento funcionando para as duas modalidades, como combinado em 31/10.\n- O demonstrativo de débito continua como funciona hoje (só parcelas vencidas, multa de 10% na BLIPS e 2% na IDEAL, juros de 1% a.m.).\n\nKit FINZA/IDEAL com financiamento (CCB): peças prontas\n- Contrato de compra e venda: a Lívia já busca.\n- E-mails de cobrança: a Lívia busca nas caixas da IDEAL e da BLIPS. Testamos com as 12 CCBs com mais atraso, e todas têm e-mails.\n- Nota fiscal de venda do equipamento (aba FRETE da plataforma): pronta, sai como \"Nota Fiscal de Venda\".\n- Carta AR da MRS (só no Kit Ajuizamento): mesma busca do kit atual.\n- CCB assinada: RESOLVIDA. Não precisamos mais da Celcoin. A CCB assinada vem da API da própria Finza, consultada pelo número do contrato. A etapa da Lívia que baixa a CCB e salva na pasta do kit está pronta e testada (contrato 12602418).\n- Termo de endosso: vem no mesmo PDF da CCB, nas últimas páginas (\"TERMO DE ENDOSSO nº <número da CCB>\", endossante VIA CAPITAL SCD, endossatário FINZA FIDC).\n- Dados para o demonstrativo: a Lívia já lê o cabeçalho da CCB (número, cliente, emissão, valor, taxa, CET) e o cronograma de parcelas com a situação de cada uma (paga, vencida ou a vencer). Também já calcula o valor presente das parcelas a vencer.\n\nKits de exemplo, com clientes reais\nMontamos 3 kits pela Lívia, pelo mesmo caminho do kit oficial, para você ver como estão ficando:\n\n- Kit Ajuizamento, contrato 12602418: contrato, carta AR da MRS, 13 e-mails de cobrança, nota fiscal de venda e CCB assinada com o termo de endosso.\n  https://drive.google.com/drive/folders/16NbcNE7g9Sx0jHsOvGC0KJi9SENKXMhW\n- Kit Preventivo, contrato 12602418: as mesmas peças, sem a carta MRS (dá para comparar os dois kits do mesmo cliente).\n  https://drive.google.com/drive/folders/1F4uRDw4PM4LaEQBGhMlg4YuCwqN11GJl\n- Kit Preventivo, contrato 12603553: contrato, 13 e-mails de cobrança, nota fiscal de venda e CCB assinada.\n  https://drive.google.com/drive/folders/1aRac6IPAyWeggC34XZMWn7iqu8nWAL8A\n\nObservações:\n- O demonstrativo de débito ainda não está nos kits. Não colocamos o demonstrativo atual da BLIPS/IDEAL porque, para a CCB, ele sairia errado (só com as parcelas vencidas). Ele entra assim que as regras do item 3 forem confirmadas.\n- O Kit Ajuizamento do 12603553 não foi gerado porque esse contrato ainda não tem carta registrada na MRS. A Lívia avisa isso automaticamente.\n- Se faltar ou sobrar alguma peça nos kits, é só nos avisar.\n\nEnquanto o demonstrativo da CCB não fica pronto, a Lívia continua respondendo que o kit FINZA está em desenvolvimento, para não gerar um kit incompleto. Os kits acima foram gerados numa versão de teste.\n\n==================================================\n2. O QUE AINDA FALTA DA NOSSA PARTE\n==================================================\n\n- Demonstrativo de débito da CCB. Como você pediu, ele é diferente do demonstrativo da BLIPS e da IDEAL: considera o vencimento antecipado da dívida inteira, mostra separadamente as parcelas vencidas (com encargos) e as a vencer (trazidas a valor presente), e o saldo devedor total contempla a dívida integral, com FINZA como credora. Vamos aproveitar o mesmo modelo visual do demonstrativo atual, numa versão CCB. Depende das confirmações do item 3.\n- Incluir a CCB e o demonstrativo CCB nos kits FINZA (Preventivo e Ajuizamento) e liberar os dois comandos.\n- Testar com contratos reais e te enviar um kit de exemplo para validação antes de liberar.\n\n==================================================\n3. O QUE PRECISAMOS DE VOCÊ\n==================================================\n\n3.1 Confirmar as regras do demonstrativo da CCB\nMontamos as regras a partir das cláusulas da própria CCB. Conferimos 3 CCBs (contratos 12602418, 12603553 e 12600417), e as três usam o mesmo modelo. Basta confirmar ou corrigir cada item:\n\na) Credora no demonstrativo: FINZA (endossatária).\nb) Juros de mora: 1% ao mês, proporcional aos dias de atraso, do vencimento de cada parcela até a data do cálculo (cláusula 8ª, §1º, \"a\").\nc) Multa: 2% sobre o total da parcela vencida + juros de mora (cláusula 8ª, §1º, \"b\").\nd) Vencimento antecipado: com qualquer parcela em atraso, todas as parcelas a vencer passam a ser cobradas (cláusula 11ª, \"a\").\ne) Parcelas a vencer: trazidas a valor presente pela taxa de juros da própria CCB, com redução proporcional dos juros (cláusula 13ª). Sobre elas não incidem multa nem mora. Exemplo: no contrato 12602418 a taxa é de 5,09% a.m.\nf) Correção monetária: não aplicar, porque a CCB não prevê índice.\ng) Parcelas renegociadas ou com boleto reemitido: usar sempre o valor e o vencimento originais da CCB.\n\nExemplo da regra aplicada a uma parcela de R$ 646,00 vencida há 60 dias:\n- juros de mora: 1% x 2 meses = R$ 12,92\n- multa: 2% de R$ 658,92 = R$ 13,18\n- total da parcela no demonstrativo: R$ 672,10\n\n3.2 Pontos que a CCB não deixa claros\n1. A CCB fala em mora de \"1% ao mês, ou fração\". Calculamos proporcional aos dias (ex.: 15 dias = 0,5%) ou cobramos o mês cheio a cada fração de mês?\n2. A CCB diz que a mora incide \"sobre o valor do principal, acrescido dos juros remuneratórios\". Usamos o valor total da parcela (principal + juros). Está correto?\n3. Qual data usamos como vencimento antecipado: a data do cálculo (quando o kit é gerado), a data da primeira parcela em atraso ou a data da notificação extrajudicial?\n4. Honorários de 20% (cláusula 8ª, §2º): devem aparecer como linha no demonstrativo ou ficam só na petição?\n\n3.3 Termo de endosso\nNas 3 CCBs conferidas, o termo de endosso que vem no PDF tem dois pontos que precisam da avaliação do jurídico:\n- o CNPJ do endossatário (FINZA FIDC) está igual ao da endossante Via Capital (48.632.754/0001-90);\n- a data do contrato de promessa de endosso está em branco (\"FIRMADO ENTRE ENDOSSANTE E ENDOSSATÁRIO, EM , ...\").\nEsse termo que vem dentro da CCB é suficiente para o ajuizamento, ou vocês precisam de um termo de endosso separado (por exemplo, assinado pela Via Capital)?\n\n3.4 Escopo (pendentes desde 06/11)\n- Na descrição desta demanda, você comentou que o demonstrativo deveria ser visível para o cliente na plataforma. Isso faz parte desta demanda ou fica para uma demanda separada, com o time da plataforma? O cálculo que estamos fazendo já poderá ser reaproveitado lá.\n- \"Padronizar os disparos das notificações e o arquivamento dos comprovantes\": a Lívia monta o kit buscando o que já foi enviado (e-mails nas caixas de cobrança e a carta na MRS). Você espera alguma mudança da nossa parte nisso, ou fica com a régua de cobrança?\n\n==================================================\n4. PRÓXIMOS PASSOS\n==================================================\n1. Você responde os itens 3.1 a 3.4.\n2. Fechamos o demonstrativo CCB, incluímos nos kits de exemplo e te enviamos o do contrato 12602418 para conferência dos valores.\n3. Com a sua validação, liberamos o Kit Preventivo e o Kit Ajuizamento FINZA na Lívia.\n\nEnquanto isso, a demanda segue como \"Bloqueado\", aguardando as confirmações. O mesmo resumo vale para a #6871 (Kit Preventivo).\n\nObrigado!",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "79e9880d-3f4d-48ae-8b42-0412dda24b7c",
+    "e": null,
+    "dt": "2026-11-17T12:18:17.026433+00:00",
+    "x": "Bom dia!\n\nAnalisei as condições previstas nas CCBs e podemos seguir com o desenvolvimento do demonstrativo de débito específico para as operações de financiamento da FINZA.\n\nMinha intenção é manter um cálculo padronizado, conservador e juridicamente defensável, evitando cobranças excessivas, divergências nos valores e aumento desnecessário das custas judiciais.\n\nAbaixo, detalho as regras que considero adequadas e como gostaria que fossem aplicadas no sistema.\n\n### 1. Juros de mora – 1% ao mês\n\nVamos utilizar juros de mora de 1% ao mês, proporcionais aos dias de atraso, sem capitalização dos juros moratórios.\n\nPara o desenvolvimento, vamos considerar o mês comercial de 30 dias:\n\n- Taxa mensal: 1%.\n- Taxa diária: 1% ÷ 30 = 0,033333...% ao dia.\n- Início da contagem: primeiro dia após o vencimento da obrigação.\n- Término: data-base do demonstrativo.\n\nPor exemplo, uma parcela de R$ 646,00 vencida há 60 dias terá juros de mora de R$ 12,92.\n\nPeço que o sistema utilize a taxa diária completa, sem arredondar previamente para 0,03%, evitando diferenças no resultado.\n\n### 2. Multa moratória – 2%\n\nEmbora alguns modelos de CCB prevejam multa de 4%, optei por padronizar a cobrança em 2%, adotando uma condição mais favorável ao devedor.\n\nA multa deverá ser aplicada uma única vez sobre o valor da parcela vencida, acrescido dos juros de mora, sem incidência de nova multa a cada mês de atraso.\n\nExemplo de uma parcela de R$ 646,00 com 60 dias de atraso:\n\n- Parcela original: R$ 646,00.\n- Juros de mora: R$ 12,92.\n- Multa de 2%: R$ 13,18.\n- Total atualizado: R$ 672,10.\n\nEssa será a metodologia conservadora que pretendo adotar, independentemente da existência de percentual contratual superior, mantendo a identificação dos encargos originalmente previstos em cada CCB.\n\n### 3. Vencimento antecipado – quando podemos cobrar toda a dívida?\n\nConforme a cláusula 11ª das CCBs analisadas, a falta de pagamento de qualquer parcela permite à credora declarar o vencimento antecipado de toda a dívida, independentemente de notificação.\n\nExemplo prático:\n\nImagine que o cliente tenha contratado 36 parcelas e deixe de pagar a parcela com vencimento em 10/06/2026.\n\nA partir de 11/06/2026, já existe inadimplência e a credora poderá declarar o vencimento antecipado.\n\nIsso significa que poderemos exigir não apenas a parcela vencida, mas também o saldo das demais parcelas, mesmo que seus vencimentos originais sejam futuros.\n\nEntretanto, precisamos diferenciar duas situações:\n\n- Primeira parcela inadimplida: é o fato que autoriza o vencimento antecipado, conforme a CCB.\n- Vencimento antecipado efetivo: ocorre quando a credora exerce essa faculdade, tornando exigível o saldo integral.\n\nPara o desenvolvimento, peço que o sistema identifique automaticamente a primeira parcela inadimplida e registre a data em que o vencimento antecipado foi declarado ou efetivamente exercido.\n\nNão devemos presumir que todas as parcelas venceram automaticamente no primeiro dia de atraso, pois a cláusula estabelece uma faculdade da credora.\n\n### 4. Data-base do cálculo – quando será utilizada e como os juros serão calculados?\n\nQuero deixar bem clara a diferença entre a data em que podemos exigir a dívida e a data utilizada para calcular o valor atualizado do débito.\n\nPrimeiro: quando podemos exigir a dívida?\n\nConforme a cláusula 11ª da CCB, a falta de pagamento de qualquer parcela permite à credora declarar o vencimento antecipado de toda a dívida, independentemente de notificação.\n\nPor exemplo, se o cliente tinha uma parcela com vencimento em 10/06/2026 e não realizou o pagamento, a partir de 11/06/2026 já existe inadimplência e podemos declarar o vencimento antecipado, passando a exigir o saldo integral da operação, inclusive as parcelas futuras, com o devido desconto dos juros remuneratórios ainda não incorridos.\n\nPortanto, não precisamos esperar a data da notificação ou da emissão do demonstrativo para ter o direito de declarar o vencimento antecipado.\n\nSegundo: o que é a data-base do cálculo?\n\nA data-base será sempre o dia em que gerarmos o demonstrativo de débito.\n\nEla serve para determinar até qual dia os valores serão atualizados. Ou seja, o sistema deverá calcular os juros de mora acumulados desde o vencimento de cada obrigação até a data em que o demonstrativo for emitido.\n\nExemplo prático:\n\nImagine a seguinte situação:\n\n- 10/06/2026: vencimento da primeira parcela não paga.\n- 11/06/2026: primeiro dia de atraso, quando já podemos declarar o vencimento antecipado.\n- 20/06/2026: data hipotética em que declaramos o vencimento antecipado.\n- 17/11/2026: data em que geramos o demonstrativo de débito.\n\nNesse exemplo:\n\nData do vencimento antecipado: 20/06/2026.\n\nData-base do cálculo: 17/11/2026.\n\nPortanto, o demonstrativo apresentará o valor da dívida atualizado em 17/11/2026, considerando os encargos aplicáveis e o desconto dos juros futuros.\n\nA parcela vencida em 10/06/2026 terá os juros de mora calculados proporcionalmente aos dias de atraso, desde 11/06/2026 até 17/11/2026.\n\nA multa moratória de 2% será aplicada uma única vez sobre a base definida, sem cobrança de nova multa a cada mês.\n\nQuanto às parcelas futuras, elas deverão ser consideradas em razão do vencimento antecipado, com o desconto dos juros remuneratórios futuros, observando a data em que o saldo se tornou exigível e os critérios contratuais.\n\nTerceiro: o que acontece se gerarmos outro demonstrativo em uma data diferente?\n\nSe emitirmos um demonstrativo em 17/11/2026, o sistema calculará os encargos devidos até esse dia.\n\nSe precisarmos atualizar o demonstrativo em 30/11/2026, a nova data-base será 30/11/2026, e o sistema deverá recalcular os valores, considerando os dias adicionais de atraso e eventuais pagamentos realizados.\n\nIsso não significa que o vencimento original ou a data do vencimento antecipado mudaram. O que muda é apenas a data até a qual estamos atualizando a dívida.\n\nPara o desenvolvimento da Lívia, a regra será:\n\n1. Identificar a primeira parcela inadimplida e sua data de vencimento original.\n2. Reconhecer que, a partir do primeiro dia de atraso, a CCB permite à credora declarar o vencimento antecipado.\n3. Registrar separadamente a data em que o vencimento antecipado foi efetivamente declarado.\n4. Definir automaticamente a data-base como o dia da geração do demonstrativo.\n5. Calcular os juros de mora de 1% ao mês, proporcionalmente aos dias de atraso, até a data-base, sobre os valores devidos, respeitando o vencimento original das parcelas e os efeitos do vencimento antecipado.\n6. Aplicar a multa de 2% uma única vez, sem incidência diária ou mensal sucessiva.\n7. Trazer as parcelas futuras a valor presente, descontando os juros remuneratórios futuros, conforme as condições da CCB.\n8. Recalcular automaticamente os valores sempre que um novo demonstrativo for emitido.\n\nResumindo: podemos exercer o direito de exigir a dívida integral desde o primeiro dia de atraso, mediante a declaração do vencimento antecipado prevista na CCB. Entretanto, para efeito de cálculo, utilizaremos sempre a data em que o demonstrativo for gerado, atualizando os juros e demais encargos devidos até aquele dia.\n\nAssim, a Lívia conseguirá demonstrar quando a dívida passou a ser exigível e quanto ela efetivamente representa na data da emissão do demonstrativo, sem confundir os dois momentos.\n\n### 5. Parcelas vencidas e parcelas a vencer\n\nQuero que o demonstrativo separe os valores em dois grupos.\n\nA. Parcelas vencidas\n\nSão aquelas cujo vencimento original já ocorreu e que não foram pagas.\n\nPara cada parcela, o sistema deverá:\n\n1. Identificar o valor original.\n2. Verificar a data do vencimento.\n3. Calcular os dias de atraso até a data-base.\n4. Aplicar juros de mora de 1% ao mês, proporcionais aos dias.\n5. Aplicar multa única de 2%.\n6. Considerar pagamentos parciais e eventuais renegociações válidas.\n\nB. Parcelas a vencer\n\nSão aquelas que ainda não atingiram seu vencimento originalmente previsto, mas que poderão ser exigidas em razão do vencimento antecipado.\n\nNesse caso, o sistema deverá:\n\n1. Identificar as parcelas futuras.\n2. Considerar o saldo exigível em razão do vencimento antecipado.\n3. Descontar os juros remuneratórios futuros, utilizando a taxa da própria CCB e a metodologia contratual.\n4. Trazer os valores a valor presente.\n5. Evitar a cobrança de juros futuros que não sejam devidos em razão da antecipação.\n\nImportante: não quero que o sistema simplesmente some todas as parcelas futuras pelo valor integral, porque elas contêm juros remuneratórios referentes a períodos que ainda não decorreram.\n\nTambém não devemos aplicar automaticamente juros de mora sobre o valor integral das parcelas futuras sem antes apurar corretamente o saldo antecipado.\n\n### 6. Correção monetária e honorários advocatícios\n\nPara o demonstrativo, vamos adotar:\n\n- Correção monetária: não incluir índice autônomo, pois as CCBs analisadas não estabelecem um índice específico de atualização monetária.\n- Honorários contratuais de 20%: não incluir no demonstrativo.\n- Custas judiciais: não incluir antecipadamente no saldo contratual.\n\nMinha intenção é que o demonstrativo apresente o crédito efetivamente exigido, sem acrescentar os honorários contratuais de 20%.\n\nEventuais honorários sucumbenciais e custas processuais seguirão o tratamento aplicável no processo judicial.\n\n### 7. Parcelas renegociadas ou boletos reemitidos\n\nPrecisamos diferenciar as situações:\n\nSimples reemissão de boleto: quando não houver alteração contratual, vamos utilizar os valores e vencimentos originais da CCB.\n\nRenegociação formalizada: quando houver alteração válida das condições de pagamento, vamos considerar os novos valores e vencimentos pactuados.\n\nEssa diferenciação é importante para evitar a cobrança de valores que já tenham sido renegociados.\n\n### 8. Identificação da credora e termos de endosso\n\nQuanto aos termos de endosso, identifiquei as inconsistências apontadas. Temos enfrentado erros recorrentes na emissão das CCBs pela Celcoin, especialmente na identificação das partes e nas informações dos documentos.\n\nVou pontuar formalmente as inconsistências identificadas e providenciar os aditivos necessários para a regularização documental.\n\nTambém verificarei a cadeia de titularidade para garantir que o demonstrativo identifique corretamente a credora atual, conforme os instrumentos de cessão ou endosso.\n\nAssim que tiver avanços nas correções e nos aditivos, informarei o andamento e as providências adotadas.\n\n### 9. Estrutura final do demonstrativo da CCB\n\nPara facilitar minha análise jurídica e a conferência dos valores, gostaria que o demonstrativo apresentasse:\n\nIdentificação da operação:\n\n- Número da CCB e número do contrato.\n- Nome do emitente e CPF/CNPJ.\n- Credora atual.\n- Data da primeira parcela inadimplida.\n- Data do vencimento antecipado.\n- Data-base do cálculo.\n\nComposição do débito:\n\n- Parcelas originalmente vencidas.\n- Juros de mora aplicados.\n- Multa moratória.\n- Parcelas antecipadas trazidas a valor presente.\n- Pagamentos e abatimentos realizados.\n- Saldo devedor total atualizado.\n\nTambém preciso que seja possível identificar a taxa de juros remuneratórios utilizada para o desconto das parcelas futuras e os critérios empregados nos cálculos.\n\n### 10. Integração com os kits de ajuizamento\n\nApós a validação e implementação, quero que o demonstrativo da CCB integre automaticamente o Kit Ajuizamento.\n\nQuanto ao contrato nº 12603553, compreendi que o kit não foi gerado em razão da ausência de carta registrada na MRS. Podemos manter esse alerta automático, observando os documentos exigidos para cada modalidade de ação.\n\nPeço que a Lívia continue apontando a ausência de documentos obrigatórios e impedindo a conclusão do kit quando faltar um documento essencial ao ajuizamento.\n\nEm resumo, o fluxo que espero é:\n\n1. Identificar a primeira parcela inadimplida.\n2. Verificar a possibilidade de vencimento antecipado conforme a CCB.\n3. Identificar ou registrar quando a credora declarou a antecipação.\n4. Utilizar a data de geração do demonstrativo como data-base.\n5. Atualizar as parcelas vencidas e calcular o saldo antecipado a valor presente.\n6. Aplicar os critérios de mora e multa definidos.\n7. Considerar pagamentos, abatimentos e renegociações.\n8. Consolidar o saldo devedor, identificando a credora atual.\n9. Gerar o demonstrativo e integrá-lo ao kit correspondente.\n\nMinha intenção é que a Lívia realize os cálculos automaticamente, com critérios uniformes, permitindo que eu confira a composição do débito e utilize o documento com segurança nas medidas de recuperação de crédito.\n\nCaso identifiquem alguma limitação técnica ou situação não contemplada nessas regras, podem me encaminhar para avaliarmos antes da implementação.\n\nObrigada!",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-10-17T02:23:04.177342+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-10-19T17:16:46.416704+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-10-19T18:53:28.473218+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-11-03T12:45:06.468445+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-03T19:22:34.653721+00:00",
+    "por": null,
+    "uid": null
+   }
+  ]
+ },
+ "10894": {
+  "t": "Valentina V2 — Métricas exclusivas do painel (base comum, SAC e cobrança)",
+  "s": "finalizado",
+  "d": "**Descrição Refinada**\n\nAcompanha o #8351 (Valentina V2). Com a fusão da Valentina e da Esperanza num agente único, o painel da Valentina na Torre de Controle (Agente IA › Métricas) precisa ser refeito. O painel atual mede tráfego (mensagens e protocolos), não resultado. Esta demanda implementa as métricas exclusivas da Valentina unificada: 23 indicadores, sendo 11 comuns, 6 de SAC e 6 de cobrança (herdadas da Esperanza).\n\nGuia completo de implementação (fórmulas, gráficos, casos de borda, pré-requisitos e critério de pronto de cada passo):\nhttps://claude.ai/artifact/7JauWgdG7mpE1TCzTLyWbz?sk=MRaZ6qPmoar3yELR-XuzJg\n\nMétricas — Base comum (passo 1B, parametrizadas por agente_id e reaproveitadas pela Clara depois):\n- C-00 — Tentativas e taxa de retorno\n- C-01 — Volume atendido\n- C-02 — Taxa de contenção\n- C-03 — Desfecho do atendimento (indicador-mestre da base)\n- C-04 — Transbordo × Transferência\n- C-05 — Motivos de transferência\n- C-06 — Cobertura de classificação\n- C-07 — Alcance → resposta\n- C-08 — Status das tentativas (saúde da base)\n- C-09 — Chamadas entre agentes (A2A)\n- C-10 — Custo do agente (por tentativa, por atendimento e por real recuperado)\n\nMétricas — SAC (passo 1C):\n- VAL-01 — Resolução no primeiro contato (indicador-mestre do SAC)\n- VAL-02 — Assuntos atendidos\n- VAL-03 — Contenção por assunto\n- VAL-04 — Tempo de primeira resposta (mediana e P90)\n- VAL-05 — Índice de atrito (com cobertura)\n- VAL-06 — Reincidência em 7 dias\n\nMétricas — Cobrança, ex-Esperanza (passo 1D):\n- ESP-01 — Valor recuperado pela IA (indicador-mestre da cobrança)\n- ESP-02 — Atribuição da recuperação (IA, assistido, humano, espontâneo)\n- ESP-03 — Taxa de recuperação da base contatada\n- ESP-04 — Curva de recência do pagamento\n- ESP-05 — Conversão do funil de cobrança\n- ESP-06 — Recuperação por faixa de atraso\n\nRegra de atribuição da cobrança: janela de recência de 15 dias com atribuição ao último toque. Cada pagamento recebe uma única classificação, e as quatro classes somam 100% do valor recuperado.\n\nEscopo:\n- Passo 0 — Fundação de dados: PR-01 (log de tentativas com status do canal), PR-04 (tag única de pedido de humano), PR-05 (estado \"Sem retorno do cliente\"), PR-09 (carimbos de entrega e de primeira resposta), PR-12 (nome do solicitante A2A normalizado), PR-13 (grão automático do eixo: diário até 60 dias, mensal acima).\n- Passo 1A — Fusão no modelo de métricas: tipo único para transferencia_por_solicitacao com de-para datado (PR-03), catálogo de motivos unificado, corte por domínio SAC × Cobrança, recorte de organizações e mês da fusão registrado como quebra de série.\n- Passo 1B — Base comum C-00 a C-10, com custo consolidado do agente (PR-11).\n- Passo 1C — Bloco SAC VAL-01 a VAL-06, com uma intenção principal por protocolo (PR-10).\n- Passo 1D — Bloco Cobrança ESP-01 a ESP-06, com contrato/CPF e canal registrados no protocolo (PR-06) e base de pagamentos exposta (PR-07).\n- Sair do painel: Acurácia do atendimento (substituída por C-02 e C-03). Sentimento em três fatias vira VAL-05, ranking de tags vira C-05 e a conversão da corte observada vira ESP-05.\n\n**Observação**\n\n- Depende do #8351. A fusão precisa estar definida antes do passo 1A: catálogo de tags, recorte de organizações e regra de histórico.\n- É o recorte da Valentina dentro do #7562 (Escopo Métricas IA | Torre de Controle). O painel da Clara (Onda 2) fica fora desta demanda.\n- O bloco de cobrança é o de maior risco. Sem PR-06 e PR-07 não existe nenhuma métrica de recuperação: a conversa não se liga ao dinheiro.\n- Decisões da fusão ainda a confirmar: corte obrigatório por domínio na base comum; histórico da Esperanza visível com marca de quebra em C-04, C-05 e C-09; chamadas Valentina ↔ Esperanza saindo do C-09; recorte de organizações (a Esperanza operava em Blips e Finza, a Valentina só em Finza), que deve ser decidido antes do passo 1B; rateio de custo por domínio para o custo por real recuperado.\n- Os gráficos do guia são maquetes com dados ilustrativos. Eles definem forma e grão, não valor.\n- Um passo só começa quando o critério de pronto do anterior estiver cumprido.\n\n**Objetivo**\n\nPainel da Valentina unificada no ar com os 23 indicadores. Todo card tem eixo de tempo e fórmula de contrato, a Acurácia sai do painel e o valor recuperado pela IA (ESP-01) é publicado como indicador-mestre da cobrança.",
+  "edd": "2026-11-18",
+  "res": "2026-11-18T09:00:03.420844+00:00",
+  "sca": "2026-11-18T09:00:03.420844+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 13,
+  "c": [
+   {
+    "a": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f",
+    "e": null,
+    "dt": "2026-10-29T13:19:33.282193+00:00",
+    "x": "Pessoal, segue atualização da preparação da Valentina para homologação, das decisões da Fase 1 e das pendências.\n1. Código integrado e publicado\nA preparação de deploy foi revisada e integrada à branch valentina, preservando as funcionalidades atuais de mídia, RAG, contexto e métricas.\nCommit de integração: cf170cb.\nCommit posterior de diagnóstico do CI: 34ee4e0.\nA entrega inclui Dockerfile, PostgreSQL, migrações, coordenação da fila entre instâncias, perfil de atendimento sem SQLite, exportador de métricas e runbook.\nO workflow atual executa testes, build e smoke. Ainda não publica imagem no Artifact Registry nem realiza deploy.\n2. Validação local realizada\nRuff, formatação e mypy passaram.\nSuíte completa inicial: 4.333 testes passaram e 5 falharam. As falhas foram corrigidas.\nApós as correções, 169 testes dos fluxos afetados e 14 testes de revalidação passaram.\nCobertura acumulada: 96,66%.\nA suíte completa não foi repetida após as correções; os 34 testes E2E que exigem ambiente específico ficaram fora do gate.\nBuild e smoke Docker da versão final passaram, com PostgreSQL real descartável e integrações externas simuladas.\nForam validados migrações até a versão 2, runtime sem DDL, autenticação, readiness, deduplicação e persistência da fila.\nO contêiner encerrou em 5 segundos, com saída 0, no cenário testado.\nEvidências e limitações estão no relatório de revisão.\n3. CI bloqueado — configuração da deploy key pendente\nO CI no GitHub não passou: está bloqueado antes da instalação das dependências porque o secret VALENTINA_CORE_SSH_KEY não está disponível. Consequentemente, os testes e o build ainda não executaram no GitHub Actions.\nO commit 34ee4e0 adicionou uma validação que informa essa pendência claramente. A execução correspondente confirmou o bloqueio.\nPropomos a seguinte divisão de responsabilidades:\n\n\nResponsável\n\n\nAção\n\n\nDevOps\n\n\nGerar um par de chaves exclusivo para o CI da Valentina e salvar a chave privada como secret Actions VALENTINA_CORE_SSH_KEY em finza-org/finza-assistents-squad-ai.\n\n\nAdministrador do blips-ai/blips-agents-core\n\n\nAutorizar o acesso e cadastrar a chave pública como deploy key somente leitura, sem permissão de escrita.\n\n\nLeandro / equipe da aplicação\n\n\nIdentificar ou acionar o administrador do core, acompanhar o desbloqueio e conferir a execução dos testes após a configuração.\nO responsável administrativo pelo core ainda precisa ser identificado. A chave privada deve ser cadastrada diretamente no secret, sem compartilhamento no chamado.\nApós essa configuração, será necessário reexecutar o CI. A aprovação dos testes locais não substitui essa validação na esteira.\n4. Alinhamento da Fase 1\nHostnames: propomos valentina-stage.finza.com.br e valentina.finza.com.br. A confirmação com o responsável pelo DNS permanece pendente.\nGateway e Hyperflow: ainda precisamos confirmar se o Gateway exige IP fixo de saída e se o Hyperflow possui IPs conhecidos de origem. A necessidade de URL HTTPS estável para receber o webhook está definida.\nAPI e worker: propomos mantê-los no mesmo processo, com coordenação da fila no Postgres implementada e testada localmente. O Cloud Run deverá manter CPU disponível fora das requisições e mínimo de uma instância.\nDependência privada: seguir com a deploy key somente leitura, conforme a divisão proposta acima.\nEscopo da homologação: encontrar cliente, transferência, pagamento, BigQuery (busca_contratual e pesquisar_salvador) e liberação, preservando o RAG atual. Esse escopo não ativa automaticamente ferramentas nem substitui a validação dos acessos.\n5. Demais dependências do DevOps\nProvisionamento e configuração de Cloud Run, PostgreSQL privado, papéis separados de migração/runtime e limites de conexão.\nSecret Manager, permissões e conectividade.\nIdentificadores e permissões de WIF e Artifact Registry, para a equipe da aplicação completar a publicação por SHA no workflow.\nCloud Run Job de migração antes da atualização do serviço.\nDNS, certificado, Load Balancer/Cloud Armor, probes e alertas.\nExecução/agendamento do exportador de métricas, que exige conexão direta ao Postgres para sua trava de sessão.\n6. Pendências compartilhadas com aplicação e integrações\nPermanecem pendentes a confirmação dos requisitos de IP, chave própria LiteLLM, projeto Langfuse, credenciais das ferramentas, views/grants BigQuery e homologação funcional real de todo o escopo. A liberação mantém o bloqueio operacional existente até sua validação e autorização específicas.\nNenhuma imagem foi publicada, nenhum deploy foi realizado e o webhook não foi alterado. Este chamado permanece restrito à homologação; produção terá chamado próprio após o aceite do stage.",
+    "i": true
+   },
+   {
+    "a": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+    "e": null,
+    "dt": "2026-11-03T16:01:53.846773+00:00",
+    "x": "Atualização da #10894 — Métricas da Valentina unificada\n\nJá publicado em produção\nO dashboard oficial da Base Comum (01P) reúne séries de C-00, C-01, C-04, C-05, C-06, C-07, C-08, C-09 e C-10, com dados reais e cobertura parcial. C-02 e C-03 continuam pendentes da fonte de classificação e desfecho.\n\nC-01 está disponível em uma série provisória autorizada, pela data do primeiro envio observado. A2A e custos ainda possuem limitações de cobertura; custo por real recuperado depende da validação financeira.\n\nSAC — em testes\nVAL-04 IA possui mediana e P90 publicados em test, com amostra limitada. A medição atual vai do recebimento no servidor ao aceite do envio pelo Gateway, sem comprovar entrega ao cliente.\n\nVAL-04 humano permanece suspenso até existir evidência da primeira resposta humana após o encaminhamento. Os demais indicadores SAC dependem de registros confiáveis de resolução, assunto, atrito e reincidência. Encerramento por inatividade não está sendo tratado como resolução.\n\nCobrança — painel experimental\nFoi reconciliado o período de 01 a 29/10/2026 da FINZA: 938 títulos e R$ 1.410.987,20 registrados na Torre, com conferência diária dos totais.\n\nEsse valor corresponde ao acumulado nos títulos pagos, não à recuperação comprovadamente atribuída à IA. O painel está identificado como experimental. Para concluir os ESP oficiais, ainda precisamos de pagamentos por evento, estornos, horários efetivos, saldo no momento do contato e histórico completo dos contatos.\n\nOrigem dos dados\n• Torre/Supabase: ações de cobrança, callbacks de status, protocolos, contratos e títulos, nos schemas org_finza e org_blips.\n• Hyperflow/BigQuery: service_chats, tb_chat_timeline, tb_departments_ref e tb_chat_messages, nos projetos BLIPS e FINZA. A tabela de mensagens contém snapshots e não representa um histórico completo.\n• Valentina: registros de execução, transferências, chamadas A2A e eventos de envio.\n• Langfuse: observabilidade, custos disponíveis e publicação dos indicadores e gráficos.\n\nOs painéis estão separados em Base Comum, SAC e Cobrança. Foram realizados testes locais, revisão independente, reconciliações com as fontes e leitura dos dados publicados. A matriz dos 23 indicadores distingue implementação, testes, integração real, publicação e certificação.\n\nA demanda permanece aberta. A publicação parcial não representa a conclusão ou certificação dos 23 indicadores. O espelho dos painéis na Torre continua no objetivo final.\n\nPainéis\n\nBase Comum — produção:\nhttps://obs.blips-labs.com/project/cmuwn0ntv004xlm07t51njm5f/dashboards/cmw0lkj9t0071lp07vonya9a0?dateRange=1790823600000-1793674799999\n\nSAC — testes:\nhttps://obs.blips-labs.com/project/cmuwn0ntv004xlm07t51njm5f/dashboards/cmw01oih20063lp07ttgy1gt4?dateRange=1792897200000-1793588399999\n\nCobrança — experimental:\nhttps://obs.blips-labs.com/project/cmuwn0ntv004xlm07t51njm5f/dashboards/cmw01oilk0065lp07yytd3f25?dateRange=1790823600000-1793329199999",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-10-20T16:58:02.806462+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-10-22T18:38:57.233598+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-10-27T13:25:48.391458+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-10-27T19:51:19.974435+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-10T12:36:32.714398+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_validacao",
+    "dt": "2026-11-15T20:52:57.851424+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-18T09:00:03.420844+00:00",
+    "por": null,
+    "uid": null
+   }
+  ]
+ },
+ "10908": {
+  "t": "Lívia V2 — Refatorar o agente Lívia na nova stack (Agno + Langfuse)",
+  "s": "finalizado",
+  "d": "**Descrição Refinada**\n\nMesma refatoração do #8351 (Valentina V2), agora para a Lívia, a IA do Jurídico Finza. A Lívia apoia os analistas da operação em temas jurídicos e de distrato: liminares deferidas, contato com técnicos, abertura de OS e kits de documentos jurídicos. Esta demanda reescreve a Lívia em código na nova stack do time: Python + FastAPI + Agno no agente, Langfuse na observabilidade e LiteLLM como gateway de modelos. É o mesmo padrão validado na POC (#8494) e aplicado na Valentina V2.\n\nTecnologias auxiliares:\nhttps://obs.blips-labs.com\nhttps://litellm.blips-labs.com\n\nGuia de métricas (base comum):\nhttps://claude.ai/artifact/7JauWgdG7mpE1TCzTLyWbz?sk=MRaZ6qPmoar3yELR-XuzJg\n\nEscopo:\n- Discovery da implementação atual: onde a Lívia roda, prompts, tools, canal e integrações (Bitrix, Hyperflow, sistema do tribunal). Registrar o resultado no card.\n- Transcrever para Agno sem mudar regra de negócio na migração. O modelo conversa; o backend controla permissões, regras, repetição de operação e registro.\n- Preservar a regra central: a Lívia é facilitadora, e a decisão jurídica é sempre humana.\n- Incorporar os fluxos em andamento no mesmo agente: Kit Preventivo (#6871) e Kit de Ajuizamento / Demonstrativo de Débito CCB (#10717).\n- Telemetria no Langfuse (traces e custo por conversa) e modelos via LiteLLM.\n- Golden set e testes de regressão com casos reais do Jurídico, antes da virada.\n- Virada controlada: piloto antes de desligar a versão atual.\n- Métricas: ligar a base comum C-00 a C-10 do #10894 no agente_id da Lívia e definir com o Jurídico as métricas próprias da Lívia, que não estão no guia.\n\n**Observação**\n\n- A Lívia é o agente menos documentado do squad: não há registro consolidado de onde ela roda nem métricas. O discovery é o primeiro entregável e pode mudar o tamanho desta demanda.\n- #6871 e #10717 estão bloqueados aguardando o Jurídico e mexem no mesmo agente. Decidir se entram direto na V2 ou no fluxo atual, para não desenvolver duas vezes.\n- O público da Lívia é interno (analistas), não o cliente final. Parte da base comum (C-00 tentativas, C-07 alcance, C-08 saúde da base) pode não se aplicar. Validar quais indicadores comuns fazem sentido.\n- No roadmap de 22/04, Distrato e Retirada de Equipamentos viraram fluxos na Torre com prompts por régua, não agentes separados. Confirmar a fronteira entre a Lívia e esses fluxos antes de fechar o escopo.\n- Depende do padrão consolidado na Valentina V2 (#8351) e da base comum de métricas do #10894.\n\n**Objetivo**\n\nLívia em produção na stack Agno + Langfuse, com comportamento equivalente ao atual, implementação documentada e painel com a base comum aplicável mais as métricas próprias acordadas com o Jurídico.",
+  "edd": "2026-11-18",
+  "res": "2026-11-17T12:43:19.640103+00:00",
+  "sca": "2026-11-17T12:43:19.640103+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 8,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-10-20T17:20:40.677208+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-10-20T19:44:49.463831+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-04T11:44:17.208679+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-11-05T13:06:17.729188+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-05T15:02:52.143222+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_validacao",
+    "dt": "2026-11-16T08:57:24.097929+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-17T12:43:19.640103+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "12009": {
+  "t": "Flow Cobrança",
+  "s": "finalizado",
+  "d": "<p>Olá, pessoal! Boa tarde!</p><p><br>Espero que estejam bem!<br><br>Venho formalizar o modelo de autoatendimento de cobrança no WhatsApp Flows, desenhado pela Operação e já validado com a gerência. A ideia foi construir um fluxo pensado em duas frentes ao mesmo tempo: a experiência do cliente e as necessidades da Operação. Abaixo deixo o contexto, o que está sendo entregue e os próximos passos.<br><br></p><p> OBJETIVO<br>Hoje boa parte do contato de cobrança depende do time para tarefas que o cliente consegue resolver sozinho. Com o Flow, o cliente resolve o financeiro sem sair do WhatsApp:<br><br></p><p> Pagar uma parcela por vez, com Pix (QR Code e copia e cola), boleto ou cartão (link do QUITA+)<br></p><p> Informar um pagamento que ainda não apareceu, com comprovante obrigatório<br></p><p> Pedir ajuda, com assunto e relato, já direcionado à fila certa<br></p><p> Solicitar condições especiais (reparcelamento ou renegociação), só para as carteiras elegíveis: FIDC Kanastra-Votorantim, FIDC Alpe, carteira própria Blips e carteira própria Ideal, sem renegociação ativa e sem reparcelamento<br><br></p><p> GANHOS PARA A OPERAÇÃO<br>- Todo atendimento chega tabulado: fila, assunto, relato, contrato, parcela, motivo do atraso e tela de origem<br>- Dúvida sobre a cobrança vai para o N2 (IA); os demais assuntos vão para o N3 (analistas de cobrança)<br>- O motivo do atraso passa a ser coletado em toda parcela vencida, gerando dados para a régua e para a gestão da carteira<br>- Pix e boleto separados, para medirmos a preferência dos clientes<br><br>O desenho segue as regras da Meta para WhatsApp Flows: 6 telas e 10 ligações entre elas, que é o máximo permitido. O fluxograma abaixo mostra todos os caminhos:<br><br></p><p><br><br></p><p> MATERIAL ENTREGUE<br>1. Fluxograma com todos os caminhos (acima)<br>2. Simulador navegável:&nbsp;<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://claude.ai/artifact/1aKQmFaWgwwGHBep5b4BkY?sk=bsOVGvkwMS1DLmkcceqsTQ#play-15dd8cd198dd\">https://claude.ai/artifact/1aKQmFaWgwwGHBep5b4BkY?sk=bsOVGvkwMS1DLmkcceqsTQ#play-15dd8cd198dd</a>&nbsp; — mostra as telas como o cliente verá, com dados fictícios, nas visões Playground, Tree e Diagram<br>3. Arquivo do Flow pronto para o Flow Builder: flow_cobranca.json (dentro do simulador)<br>4. Documento técnico (ARQUITETURA_<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://FLOWS.md\">FLOWS.md</a>): rotas, dados que o endpoint precisa enviar, integrações e pontos a validar<br>5. Histórico de todas as decisões (<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://CHANGELOG.md\">CHANGELOG.md</a>), para facilitar a rastreabilidade<br><br></p><p> O QUE PRECISAMOS DE VALIDAÇÃO<br>1. Validar o flow_cobranca.json no Flow Builder da Meta, principalmente os 3 pontos do documento técnico (o principal: confirmar se avisos que voltam para a mesma tela contam como ligação)<br>2. Endpoint: gerar Pix, boleto e link de cartão do QUITA+ em tempo real; consultar a baixa do pagamento; informar a carteira do contrato e os indicadores de renegociação e reparcelamento; enviar os itens das notas de suprimentos<br>3. Pix no chat: começar enviando o código como mensagem de texto e, numa segunda etapa, migrar para a mensagem de cobrança da Meta com o botão \"Copiar código Pix\" e atualização de status<br>4. Tabulação e direcionamento N2/N3 no Blip<br><br></p><p> PRAZO<br>Peço, por gentileza, que nos retornem com o prazo estimado para a implantação, considerando a validação no Flow Builder e as integrações acima. Se algum ponto não for viável, me sinalizem para ajustarmos juntos antes do desenvolvimento.<br><br></p><p> PRÓXIMOS PASSOS<br>Com o Flow de cobrança encaminhado, a Operação segue para o desenho dos Flows de formalização e de SAC, no mesmo modelo: desenho, validação com a gerência e entrega do material para vocês.<br><br>Fico à disposição para apresentar o simulador e tirar qualquer dúvida. Contem comigo!</p>",
+  "edd": "2026-11-13",
+  "res": "2026-11-18T09:00:03.162029+00:00",
+  "sca": "2026-11-18T09:00:03.162029+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 5,
+  "c": [
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-11T21:39:39.292517+00:00",
+    "x": "Olá @Renato Lemes da Silva Costa! Analisamos o modelo do Flow de cobrança e ele é viável. Para fechar o desenvolvimento, precisamos das definições abaixo:\n\n1. Parcela \"Expirado\": cerca de 19% dos contratos têm a parcela mais atrasada nesse status, que precisa ser reemitida antes de ser paga. Sugerimos que o Flow não ofereça o pagamento dessa parcela e encaminhe o cliente para os analistas (N3). Nesses casos, o aviso \"pague primeiro a parcela mais atrasada\" deve aparecer ou ser omitido?\n2. Cartão de crédito: hoje a integração com o QUITA+ existe apenas dentro da plataforma e não pode ser incluída no Flow. Sugerimos que o Flow mantenha a opção de cartão e encaminhe o cliente para os analistas (N3). Podemos seguir assim?\n3. Cliente com dívida em mais de uma marca: 112 clientes da Finza também devem para Blips, Ideal ou suprimentos. No número da Finza, o cliente deve ver só a dívida da Finza ou todas as dívidas?\n4. Contrato com parcelas em mais de uma carteira (cerca de 10% dos contratos, quase todos KANASTRA + carteira própria Blips): ele é elegível a Condições especiais?\n5. \"FIDC KANASTRA - Votorantim\": é o BLIPS FIDC, o fundo da Blips com conta no Votorantim? Por favor, confirmem.\n6. Nome curto dos equipamentos: 84% dos nomes passam de 30 caracteres, o limite da tela. Vocês conseguem nos enviar uma lista com o nome atual de cada equipamento e um nome curto de até 30 caracteres (cerca de 270 equipamentos)? Se não for possível, cortamos o nome com \"…\".\n7. Contrato sem parcela para pagar pelo Flow (por exemplo, com pendência de informação ou só com parcelas a reemitir): qual mensagem o cliente deve ver e para qual fila ele deve ir?\n8. Campo \"Conte o que houve\" no motivo do atraso: a Meta não permite mostrar o campo só depois que o cliente escolhe o motivo. Por isso, ele vai aparecer sempre que houver parcela vencida, com a orientação de que é obrigatório para \"Máquina com defeito\", \"Não estou utilizando a máquina\" e \"Outro motivo\". O sistema vai exigir o relato nesses três casos. Vocês estão de acordo?\n9. Pix copia e cola: o WhatsApp Flows não tem um campo próprio para exibir o código Pix. Ele aparece numa caixa de texto e, se o cliente digitar algo nela, o código é substituído. Temos dois caminhos: (a) um link que leva o cliente à página de pagamento, onde ele copia o código; ou (b) enviar o código copia e cola numa mensagem no chat. Os dois podem conviver. Qual caminho vocês preferem?",
+    "i": false
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-12T13:33:38.664142+00:00",
+    "x": "Mapa de calor para espelhar na torre\n",
+    "i": true
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-16T16:39:50.524958+00:00",
+    "x": "Olá! O Flow de cobrança no WhatsApp já está pronto para o teste com o time de negócio, no número Finza Oficial e com dados reais dos clientes.\n\nSegue em anexo o Roteiro de Teste do Flow de Cobrança. Ele explica:\n- como o teste funciona;\n- o que fazer antes de começar;\n- os cuidados;\n- o passo a passo;\n- os 10 cenários a validar, com o resultado esperado de cada um.\n\nResumo de como funciona: você informa na página de teste o seu WhatsApp e o CPF/CNPJ de um cliente Finza. Chega uma mensagem de lembrete da Finza. Ao responder, você recebe o atendimento já com os dados daquele cliente.\n\nAntes de começar:\n1. Envie ao João Pedro o seu número com DDD, para ser incluído na lista de testadores.\n2. Combine com o Financeiro quais clientes serão usados.\n\nCuidados importantes:\n- O Pix e o boleto gerados são reais. Não pague.\n- Os protocolos também são reais.\n- Nesta fase, o atendimento ainda não é transferido para a fila do time.\n\nComo validar: siga os cenários da seção 6 do roteiro. Reporte ao João Pedro apenas o que estiver divergente do resultado esperado, com:\n- o cenário;\n- o horário;\n- os 4 últimos dígitos do CPF/CNPJ;\n- o que apareceu;\n- um print.\n\nAceite: os 10 cenários se comportam como descrito no roteiro, ou as divergências reportadas foram corrigidas. Com o aceite, seguimos para a transferência às filas N2/N3 e para a liberação nos números da Blips e da Ideal.\n![IAF-12009 - Roteiro de Teste do Flow de Cobranca.docx](attachment://6180d8aa-36f6-4386-a04a-95029a9a8b64/1794847190282_01924046-4c63-4845-95c5-63f3879df071_iaf-12009-roteiro-de-teste-do-flow-de-cobranca.docx)\n",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-04T11:54:46.842597+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-09T12:56:36.049728+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-14T00:41:50.245759+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-18T09:00:03.162029+00:00",
+    "por": null,
+    "uid": null
+   }
+  ]
+ },
+ "12239": {
+  "t": "Ligações Hyperflow V2 - Finza 2#10013",
+  "s": "em_validacao",
+  "d": "<p>Boa tarde Senhores(as),</p><p></p><ul><li><p>Quando não atendemos a ligação não está gerando protocolo no departamento de origem.</p></li><li><p>Entre a consulta dos dados do cliente, verificação jurídica e afins não está com som de fundo ficando mudo.</p></li><li><p>Ligação não está tocando para todos agentes disponíveis do departamento antes de transbordar para o próximo departamento.</p></li><li><p>Erro: \"A telefonia não conseguiu alcançar o softphone do agente (500)\".</p></li><li><p>Acesso completo ao banco de dados que informaram disponibilizar.</p></li><li><p>Atendente disponível e não toca pra ele, fica \"travado\".</p></li><li><p>Cliente com protocolo em aberto está com delay pra tocar no Hyper do atendente de 8seg. Além de primeiro aparecer um pop simples e depois aparecer o novo feito pelo Hyper junto com a música de ring pro atendente.</p></li><li><p>Ligação ativa manual pela central de ligações não está dando certo apresentando o erro \" Nenhuma rota de saída atende este número\".</p></li><li><p>Telefone com protocolo aberto passou pela URA de dígitos não tocando pro agente no qual estava com protocolo aberto e disponível.</p></li><li><p>Algumas vezes ao ligar pro número da Finza no whatsapp ele não toca ou toca só 1x e da não atendida como se não estivesse configurado a URA.</p></li></ul><p></p><p>Acabou os créditos pra continuar os testes ficou pendente testar se:</p><ul><li><p>Cliente com protocolo aberto no telefone X ligar no telefone Y se toca, e onde toca.</p></li><li><p>Cliente com protocolo em aberto caso não atendido pelo atendente qual comportamento? Aplica o rodizio normalmente?</p></li><li><p>Cliente com protocolo em aberto e o atendente offline qual comportamento?</p></li></ul><p></p><p>Grato J</p>",
+  "edd": "2026-11-18",
+  "res": null,
+  "sca": "2026-11-17T16:58:49.180735+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 5,
+  "c": [
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-17T15:24:29.273342+00:00",
+    "x": "### 1. Decisões (regras técnicas e de negócio)\n\n- **Item 5 (acesso ao banco de dados):** fora do escopo da área de IA. O solicitante deve buscar o time de dados (decisão do usuário, 16/11/2026). Referência para o pedido: o BQ já tem `bigquery___finza.call_events` desde 27/10.\n- **Correções no [URA] (aplicadas no rascunho em 16/11 15:58 BRT a pedido do usuário; publicadas em 16/11 17:42 BRT):**\n  1. O [1] só trata como \"voltou da fila\" quando a execução não é `call.created`. Religar em até 2 min derrubava a ligação (caso real em 05/11 17:03).\n  2. O [32] ficou sem feriados. Com feriados, o áudio de feriado nunca tocava.\n  3. O horário passou para logo depois do [4]. Fora do expediente, o cliente passava pela consulta ao BigQuery e pelo menu antes de ouvir \"encerrado\".\n  4. Jurídico com 1 CNPJ vai direto ao Jurídico, porque o menu era ignorado. Com vários CNPJs continua no menu, porque a escolha e os 4 dígitos mudam o destino.\n  5. O menu repete 1 vez antes de mandar ao SAC.\n  6. Os 4 dígitos fecham por tempo, porque o áudio não pede `#`.\n  7. Erro no SAC não tenta o SAC de novo.\n- **Pausa automática fica ligada (16/11, usuário):** é requisito do escopo da IAF-10013 (\"não atendeu, o sistema pausa o analista; a pausa é só no canal de voz\"). A Finza não pediu para mudar. Descartada a C1 original da investigação (desligar). Os itens 3 e 6 se resolvem com orientação (\"Retomar chamadas de voz\"), mais membros nas filas e o teto de tempo das filas. O toque por atendente ficou em 10 s.\n- **Teto de tempo da fila (item 3, 17/11, usuário):** a fila só toca para todos se o tempo máximo dela for pelo menos o toque por atendente × o número de atendentes. Com o toque de 10 s, o teto é 10 s × atendentes. Abaixo disso, a fila transborda antes de chegar ao último. É uma regra de operação: toda vez que entra ou sai alguém da fila, ou que o toque muda, o teto de cada fila precisa ser recalculado.\n- **Descartado:** voltar a abrir o protocolo pelo nó Iniciar/Atualizar atendimento, que dá 500 em ligação (IAF-10013 §12–14).\n- **Não aplicado (A6):** ligar o erro de [35.1]–[35.10] ao [2]. A leitura do Desk em 17/11 mostrou que toda cadeia termina no SAC, então a mudança está liberada. Fica para quando o usuário aprovar e houver nova publicação.\n- **Testes de ligação (17/11, usuário):** feitos pelo time de negócio, pelos 6 passos do comentário 2.\n- **Pontos de plataforma (17/11, usuário):** o time de negócio fala diretamente com o Hyperflow, com as perguntas listadas no comentário 2. O time de IA não abre chamado.\n- **Áudios do [URA] (17/11):** as trocas de áudio do rascunho anterior, feitas pelo usuário e publicadas em 16/11, foram conferidas. Os 9 arquivos respondem 200 e estão em WAV PCM 8 kHz mono, as transcrições batem e as 12 filas usam a mesma música de espera. A exceção é o loop \"nora-digitando\" do [5], cerca de 26 dB abaixo do olá, que pode soar como silêncio (item 2). Ação: subir o volume dele.\n- **Protocolo da não atendida (item 1, 17/11, usuário):** o protocolo nasce onde a ligação morreu, ou seja, na última fila da cadeia, que é o SAC. É o comportamento da plataforma e fica como está. Se o negócio não concordar, a Finza fala direto com o Hyperflow para avaliar um desenvolvimento. Descartadas: tirar o transbordo das faixas e abrir o protocolo pelo fluxo ou pelo n8n. A revisão (A2) ainda aponta que, quando a fila devolve por \"sem agente online\", talvez nenhum protocolo seja aberto (pergunta 3 ao Hyperflow, no comentário 2).\n- **Ligação ativa (item 8, 17/11, usuário):** a Finza ainda não faz ligação ativa nesse formato. A regra de saída não será criada agora, e o item sai da validação.",
+    "i": true
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-17T15:34:48.516373+00:00",
+    "x": "Analisamos os 10 pontos levantados no teste das ligações. Abaixo está o que já foi feito, o que fica com vocês e como validar.\n\nO que já foi ajustado\n- Filas: o tempo máximo de cada fila foi ajustado para a ligação tocar para todos os atendentes antes de passar para a próxima fila. A regra é 10 segundos × o número de atendentes da fila (2 atendentes = 20 s, 3 = 30 s).\n- Cliente com protocolo aberto: a ligação agora toca por 20 segundos para o atendente do protocolo antes de ir para a URA. Antes eram 10 segundos.\n- URA (no ar desde 16/11 às 17:42):\n  - quem desliga e liga de novo logo em seguida não cai mais em \"não há agentes\";\n  - fora do horário, o aviso de atendimento encerrado toca logo no começo;\n  - o áudio de feriado voltou a funcionar;\n  - cliente do Jurídico com um só CNPJ não passa pelo menu;\n  - o menu repete uma vez se a pessoa não digitar nada;\n  - não é mais preciso apertar # depois dos 4 dígitos do CNPJ.\n- Silêncio durante a consulta (item 2):agora existe um som de fundo enquanto consultamos os dados do cliente\n- Ligação que tocava 1 vez e caía (item 10): era falta de crédito de ligação entre 05/11 e 12/11. Desde 12/11 não houve mais recusa.\n\nO que fica com vocês\n1. Orientar a equipe: quem deixar uma ligação tocar sem atender fica pausado só no telefone. Para voltar a receber ligações, é preciso clicar em \"Retomar chamadas de voz\".\n2. Manter o tempo das filas: toda vez que alguém entrar ou sair de uma fila, o tempo máximo dela precisa ser refeito pela regra acima.\n3. Atendentes online: o atendente só recebe ligação quando está online no softphone.\n4. Falar diretamente com o Hyperflow sobre os pontos de plataforma:\n   - Erro \"A telefonia não conseguiu alcançar o softphone do agente (500)\";\n   - Aviso duplicado: na ligação de cliente com protocolo aberto, aparece um aviso simples antes do pop do softphone;\n   - Protocolo no departamento de origem: se quiserem que o protocolo da ligação não atendida nasça no departamento de origem. Hoje ele nasce na última fila por onde a ligação passou, que é o SAC.\n5. Acesso ao banco de dados: esse pedido é com o time de dados.\n\nComo validar\n1. Ligar de um número sem protocolo aberto: ouvir a Nora, o som de fundo durante a consulta e o menu, sem silêncio.\n2. Ligar com protocolo aberto pelo mesmo WhatsApp: deve tocar para o atendente do protocolo. Se ele não atender em 20 s, a ligação vai para a URA.\n3. Deixar uma ligação tocar sem atender: o atendente fica pausado, a ligação passa para o próximo da fila e, depois de \"Retomar chamadas de voz\", ele volta a receber. Numa fila com 2 ou mais atendentes, a ligação deve tocar para todos antes de ir para a próxima fila.\n4. Desligar na fila e ligar de novo em seguida: a ligação entra normalmente.\n5. Ligar fora do horário: o aviso de atendimento encerrado toca logo no começo.\n6. Deixar uma ligação sem atendimento até o fim das filas: o protocolo é aberto no SAC.\n\nAceite: os 6 passos acima funcionando. Se algum não funcionar, nos mandem o horário da ligação e o número que ligou, que analisamos pelo histórico.",
+    "i": false
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-17T15:36:49.747208+00:00",
+    "x": "Comentário técnico (interno, time de IA)\n\nFontes\n- Atividade da chamada (Conversas → Ligações → Histórico)\n- bigquery___finza.call_events, desde 27/10, que bate com o LIST_CALLS\n- GET_USAGE_INFO\n- Leitura do Desk em 17/11, por volta de 11:40\n- Artefatos em demandas/_workspace/IAF-12239/\n\nCausa por item\n\n┌──────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─────────────────────────────┬──────────────────┐\n│ Item │                                                                           Causa                                                                           │           Certeza           │      Classe      │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 1    │ O protocolo da não atendida nasce na última fila da cadeia, o SAC (16/11 12:52, protocolo 1611265413088). Provavelmente não nasce quando a fila devolve   │ plausível                   │ plataforma       │\n│      │ por \"sem agente online\"                                                                                                                                   │                             │                  │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 2    │ O loop \"nora-digitando\" do [5] tem RMS ≈ 100 (≈ −50 dBFS), contra ≈ 2.000 no olá (≈ −24 dBFS). Ao telefone soa como silêncio durante a consulta ao BQ     │ provável (medido no         │ áudio            │\n│      │                                                                                                                                                           │ arquivo)                    │                  │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 3    │ Tempo máximo da fila menor que toque × atendentes, somado à pausa automática e a filas com 1–2 membros                                                    │ confirmado, resolvido em    │ Desk             │\n│      │                                                                                                                                                           │ 17/11                       │                  │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 4    │ Erro 500 do softphone em 16/11 às 12:53:19 e 12:53:28, agente Raquel Medeiros, externalId 10.0.7.107-1794844367.4698                                      │ ocorrência confirmada       │ plataforma       │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 6    │ Pausa só na voz; o 500 do item 4 também pode explicar                                                                                                     │ plausível                   │ Desk /           │\n│      │                                                                                                                                                           │                             │ plataforma       │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 7    │ O atraso de 8 s é da URA (05/11: [5] 17:02:53 → transferência 17:03:08). O pop duplo                                         │ confirmado                  │ URA / plataforma │\n- Atividade da chamada (Conversas → Ligações → Histórico)\n- bigquery___finza.call_events, desde 27/10, que bate com o LIST_CALLS\n- GET_USAGE_INFO\n- Leitura do Desk em 17/11, por volta de 11:40\n- Artefatos em demandas/_workspace/IAF-12239/\n\nCausa por item\n\n┌──────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─────────────────────────────┬──────────────────┐\n│ Item │                                                                           Causa                                                                           │           Certeza           │      Classe      │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 1    │ O protocolo da não atendida nasce na última fila da cadeia, o SAC (16/11 12:52, protlmente não nasce quando a fila devolve   │ plausível                   │ plataforma       │\n│      │ por \"sem agente online\"                                                                                                                                   │                             │                  │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 2    │ O loop \"nora-digitando\" do [5] tem RMS ≈ 100 (≈ −50 dBFS), contra ≈ 2.000 no olá (≈ mo silêncio durante a consulta ao BQ     │ provável (medido no         │ áudio            │\n│      │                                                                                                                                                           │ arquivo)                    │                  │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 3    │ Tempo máximo da fila menor que toque × atendentes, somado à pausa automática e a fil                                         │ confirmado, resolvido em    │ Desk             │\n│      │                                                                                                                                                           │ 17/11                       │                  │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 4    │ Erro 500 do softphone em 16/11 às 12:53:19 e 12:53:28, agente Raquel Medeiros, exter698                                      │ ocorrência confirmada       │ plataforma       │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 6    │ Pausa só na voz; o 500 do item 4 também pode explicar                                                                                                     │ plausível                   │ Desk /           │\n│      │                                                                                                                              │                             │ plataforma       │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 7    │ O atraso de 8 s é da URA (05/11: [5] 17:02:53 → transferência 17:03:08). O pop duplo é da plataforma                                                      │ confirmado                  │ URA / plataforma │\n├──────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 8    │ Nenhuma regra de saída cadastrada. Fora de uso: a ligação ativa ainda não é usada nesse formato                                                           │ confirmado                  │ Desk             │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 9    │ Ligação direta de 10 s (20 s desde 17/11). O protocolo é encontrado pelo número de WhatsApp                                                               │ confirmado                  │ por desenho      │\n├──────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────┼──────────────────┤\n│ 10   │ De 05/11 17:20 a 12/11 10:42: 22 de 22 rejected, por quota_exceeded ou recusa de cobrança. Nenhuma recusa depois de 12/11 10:45                           │ confirmado                  │ crédito          │\n└──────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────┴──────────────────┘\n\nMagnitude (13/10–13/11): 95 ligações de clientes, de 56 telefones. 13 foram atendidas (13,7%). De 27/10 a 04/11 não havia agente de voz online, e todas as ligações voltaram para a URA e caíram no [3].\n\n[URA] 6ac3aec81bf6991f6ab38113: rascunho de 16/11 15:58, publicado em 16/11 17:42, conferido\n- [1] só trata como volta da fila se input.event !== 'call.created'.\n- [32] sem a opção de feriados.\n- Horário conferido no começo: [4] → [31] → [5], e [28] → [33].\n- [10]: c1 = Jurídico com 1 CNPJ vai para [27]; c2 = Jurídico com vários CNPJs vai para [15].\n- [15] com maxAttempts 2; [24] com finishKey timeout.\n- Erro do [35.11] vai para [2].\n- [28] sem ura_depto_nome; o título do [11] perdeu o \"[TESTE H5]\".\n- validate_flow: válido, 49 nós.\n\nMudanças antigas que foram junto na publicação (trocas de áudio feitas pelo usuário)\n- Áudios: os 9 respondem HTTP 200 e estão em WAV PCM 8 kHz mono 16 bit. As transcrições batem com cada nó.\n- Transferências: as 12 transferências apontam para a fila certa e usam a mesma música de espids de fila do [35a] e do [28] são os mesmos.\n- Defeito: só o volume do loop do [5].\n- Uso real depois da publicação:\n  - 16/11 às 18:10 e 18:30, fora do horário: 14 s, o mesmo tempo do áudio \"encerrado\";\n  - 17/11 às 10:13, fila 08–30: atendida;\n  - 17/11 às 11:18, SAC: atendida.\n- O fluxo continua como \"publicado com alterações\": houve mudança depois das 17:42 que o MCP não mostra.\n\nDesk (lido em 17/11)\n- Filas: toque de 10 s por agente nas 11 filas. Tempo máximo de 20 s nas filas de 2 membros e de 10 s nas de 1; todas cumprem toque × membros.\n- Transbordo: Cobrança → 01–07 → 08–30 → 31–60 → 61–90 → 91+ → SAC. Jurídico, Novos Originadores, Formalização e Retirada vão direto para o SAC. Toda cadeia termina no SAC.\n- Membros: Eduarda (Jurídico), Luiza e Pedro (Retirada) com voz ativa. Recebem ligações quand\n- Ligação direta: 20 s em Financeiro, Financeiro III e Oficial.\n- Regras de saída: nenhuma.\n- Fila 91+: abre o protocolo em \"Cobrança - 91 a 120 dias\".\n- Licenças: 15. Três estão sem fila e só fazem ligações.\n\nPendências do time de IA\n- Subir o volume do loop \"nora-digitando\" no [5] e publicar.\n- Com aprovação: ligar o erro do [35.1]–[35.10] ao [2], já que toda cadeia termina no SAC.\n- Ressalvas menores:\n  - o [4] não zera ura_digitos_cnpj, então o CNPJ de uma ligação pode valer na seguinte;\n  - o Code do [25] tem comentários;\n  - a URA segue rodando depois que o cliente desliga (404 na transferência).\n- Manter o user.ura_debug_volta no [2] até um teste confirmar que a volta da fila não usa cal\n\nCom o time de negócio\n- Testes de ligação: os 6 passos de validação, incluindo religar em menos de 2 minutos e ligar com o dono do protocolo pausado.\n- Perguntas ao Hyperflow, levadas por eles diretamente: erro 500 do softphone, aviso duplicadrotocolo quando ninguém está online, recusas de 14/10 e 22/10, e protocolo no departamento deorigem.\n\n---\n\nO volume do loop foi medido só no arquivo; ainda não ouvi o áudio numa ligação real.\n",
+    "i": true
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-09T12:58:47.822137+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-16T17:14:06.8148+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-17T16:58:49.180735+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   }
+  ]
+ },
+ "12266": {
+  "t": "Mapa de Áreas Finza",
+  "s": "finalizado",
+  "d": "<p><strong>Descrição Refinada</strong></p><p>O squad de IA &amp; Automação vai mapear todas as áreas da Finza para saber onde está o trabalho manual e quais áreas são clientes potenciais do squad. Esta demanda cobre a primeira etapa: a base de áreas e a estrutura do mapa pronta para receber as entrevistas.</p><p>O artefato atual (Mapa de áreas Finza) já tem áreas, pessoas, situação do levantamento e cadastro de automações. Falta completar a base, a carência, o sentimento e o roteiro de entrevista.</p><p>Escopo:</p><ul><li><p>Completar a base de áreas além do cadastro do Hyperflow, incluindo as áreas sem departamento no Hyperflow. Para cada área: gestor ou ponto focal e número de pessoas.</p></li><li><p>Limpar a base: tirar ou separar registros de teste, filas de bot (\"IA - …\"), \"Erro\" e \"Todos\".</p></li><li><p>Registrar as automações e IAs que já atendem cada área. Levar a contagem por área para a visão geral.</p></li><li><p>Criar a ficha de entrevista por área, para preencher na conversa: objetivo da área, responsabilidades, principais processos (frequência, volume, tempo gasto, se é manual), sistemas usados, dores, data da entrevista e entrevistador.</p></li><li><p>Criar o campo de sentimento da área, com duas notas de 1 a 5 e uma frase em destaque:</p><ul><li><p>quanto o trabalho manual pesa hoje;</p></li><li><p>como a área vê o squad de IA (não conhece, conhece ou já foi atendida, com a satisfação).</p></li></ul></li><li><p>Criar o índice de carência de automação a partir de volume manual, repetição, número de pessoas, automação existente e sentimento.</p></li><li><p>Classificar cada área como cliente prioritário, cliente potencial ou não-cliente no momento.</p></li></ul><p><strong>Observação</strong></p><ul><li><p>O cadastro do Hyperflow não é organograma. A lista final de áreas precisa ser validada com o gestor ou o RH, a confirmar.</p></li><li><p>O sentimento e a carência são registrados por área, nunca por pessoa. Uma nota sobre um colaborador nomeado vira avaliação individual e trava as entrevistas.</p></li><li><p>Os pesos do índice de carência são uma proposta inicial. Recalibrar depois das 3 primeiras entrevistas.</p></li><li><p>Hoje os dados ficam só no navegador de quem edita. Sem armazenamento compartilhado, cada entrevistador gera uma versão diferente do mapa.</p></li><li><p>Fora do escopo: realizar as entrevistas e propor automações por área. Os dois entram como demandas seguintes.</p></li></ul><p><strong>Objetivo</strong></p><p>Ter um mapa único e compartilhado de todas as áreas da Finza, com as automações existentes e a ficha de entrevista pronta. Isso permite começar as conversas com as áreas na semana seguinte e priorizar o squad pela carência real de cada área.</p>",
+  "edd": "2026-11-18",
+  "res": "2026-11-17T13:03:54.633636+00:00",
+  "sca": "2026-11-17T13:03:54.633636+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 5,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-06T14:05:00.498557+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-09T12:50:34.045371+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-11T17:04:02.595307+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-11-12T12:10:12.839485+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "finalizado",
+    "dt": "2026-11-17T13:03:54.633636+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "12357": {
+  "t": "Nova Torre de Controle — especificação técnica do frontend, API Torre e Motor de Disparos",
+  "s": "em_andamento",
+  "d": "<p><strong>Descrição Refinada</strong></p><p>A Torre de Controle vai ser reescrita. O protótipo do frontend está cerca de 90% pronto, com 13 telas: Dashboards, Ações, Agentes, Auditoria, Biblioteca, Campanhas, Clientes, Configurações, Custos, Disparos, Filtros, Link do cliente e Qualidade. Esta demanda cobre a especificação técnica completa antes do desenvolvimento, seguindo os agentes do harness anexados.</p><p>Arquitetura definida:</p><ul><li><strong>Frontend:</strong> Next.js (App Router) + React + TypeScript + Tailwind + shadcn/ui.</li><li><strong>API Torre:</strong> FastAPI/Python. Faz o CRUD e concentra as regras da Torre.</li><li><strong>Motor de Disparos:</strong> FastAPI/Python + Temporal. Serviço independente para fila, retry, resiliência e entrega. A Torre é o primeiro cliente, mas o motor vai atender qualquer sistema da empresa que precise disparar mensagem (WhatsApp/Meta, SMS, e-mail e canais futuros).</li></ul><p>Escopo:</p><ul><li>Specs numeradas e com nome claro (01-…, 02-…), executadas em ordem, cobrindo a API Torre, o Motor de Disparos e o frontend.</li><li>Os 10% que faltam no frontend, já especificados em código.</li><li>O Motor de Disparos especificado como plataforma:<ul><li>contrato de envio que não depende do canal;</li><li>canais e provedores plugáveis;</li><li>tudo parametrizável por configuração;</li><li>idempotência, retry e reprocessamento de falhas;</li><li>retorno de status de entrega;</li><li>identificação do sistema que pediu o envio.</li></ul></li></ul><p><strong>Observação</strong></p><ul><li>A Torre atual segue em produção durante a reescrita. A spec precisa trazer o plano de convivência e de migração de dados.</li><li>O Motor vai atender outros sistemas além da cobrança. Então nada de regra de cobrança dentro dele: régua, carteira e campanha ficam na API Torre.</li><li>Decisão pendente sobre o Temporal: Temporal Cloud ou hospedado por nós. Isso afeta custo e operação e precisa ser fechado na spec de stack antes do desenvolvimento.</li><li>Limites e regras da Meta precisam estar na spec do Motor: limite de envio por tier, janela de 24h, aprovação e custo de template. Opt-out e LGPD também.</li><li>O protótipo é referência visual. O código do frontend segue o padrão do harness, não é copiado do protótipo.</li></ul><p><strong>Objetivo</strong></p><p>Ter a especificação completa da nova Torre (frontend, API Torre e Motor de Disparos) aprovada e no padrão do harness. Assim o desenvolvimento começa sem decisão estrutural em aberto, e o Motor nasce pronto para ser usado por toda a empresa.</p>",
+  "edd": "2026-11-20",
+  "res": null,
+  "sca": "2026-11-09T18:11:35.107382+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 13,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-06T17:33:25.47938+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-09T18:11:35.107382+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   }
+  ]
+ },
+ "12372": {
+  "t": "Veritas 2.0 — especificação técnica do MVP e formalização do mapa de documentação",
+  "s": "em_andamento",
+  "d": "<p><strong>Descrição Refinada</strong></p><p>O Veritas 2.0 é a nova ferramenta do Compliance para monitorar a carteira, revisar o efeito das regras atuais e avaliar validações novas (bureau, variável, regra) sem depender do time de tecnologia, guiado por 5 agentes de IA. A discovery e o protótipo navegável já existem. Esta demanda é o primeiro passo do desenvolvimento e tem duas entregas:</p><ol><li>as especificações técnicas do MVP;</li><li>o mapa de documentação do Veritas finalizado e refinado, como documento vivo e formalização do sistema.</li></ol><p>Referências:</p><ul><li>Discovery do Veritas 2.0 (visão, regras, protótipo e roadmap): <a href=\"https://claude.ai/artifact/T5htEJMzz6viTwntizo5iP?sk=4vt-Y2EtiwV43eDcJ4ANOQ#visao\">https://claude.ai/artifact/T5htEJMzz6viTwntizo5iP?sk=4vt-Y2EtiwV43eDcJ4ANOQ#visao</a></li><li>Mapa de documentação do Veritas (documento vivo, entrega desta demanda): <a href=\"https://claude.ai/artifact/4D3tN2qWeYRRiDG6ojRHZv?sk=o9olVTVKWQ61Fy8iamJa9g\">https://claude.ai/artifact/4D3tN2qWeYRRiDG6ojRHZv?sk=o9olVTVKWQ61Fy8iamJa9g</a></li></ul><p>Arquitetura definida na discovery: backend em FastAPI e frontend em React, com o design system da Finza.</p><p>Escopo, a Fase 0 (Fundação) e a Fase 1 (MVP) da discovery:</p><ul><li><strong>Fundação:</strong><ul><li>esqueleto do backend e do frontend;</li><li>login com Google e perfis de acesso;</li><li>cofre de segredos e trilha de auditoria;</li><li>conector HTTP genérico com catálogo de custo.</li></ul></li><li><strong>MVP:</strong><ul><li>Agente Integrador com os 6 pilotos de bureau;</li><li>fontes de dados (BigQuery e planilha);</li><li>catálogo de variáveis com o Mapeador;</li><li>Playground v1 com relatório;</li><li>transações e eventos da jornada via API;</li><li>perfil consolidado por CPF/CNPJ.</li></ul></li><li><strong>Specs</strong> numeradas e com nome claro (01-…, 02-…), executadas em ordem, seguindo os agentes do harness anexados.</li><li><strong>Mapa de documentação</strong> com todas as telas e funcionalidades do MVP preenchidas: objetivo, regras, fluxo, estados e prévia. Ele precisa ficar coerente com as specs e com as regras invioláveis da discovery.</li></ul><p><strong>Observação</strong></p><ul><li>Fases 2 e 3 ficam fora do escopo: monitoramentos e alertas, dossiê, link avulso, Agente Gestor e painel de efetividade. O mapa pode citá-las como previstas, sem detalhar.</li><li>As regras invioláveis R1 a R16 da discovery precisam aparecer nas specs, em especial:<ul><li>o Veritas não decide proposta;</li><li>nada executa ou cobra sem confirmação com custo estimado;</li><li>segredo nunca sai do cofre;</li><li>dado pessoal sempre mascarado;</li><li>isolamento por organização;</li><li>quem cria não aprova;</li><li>toda escrita fica na trilha de auditoria.</li></ul></li><li>A Fundação inclui telas que ainda não têm protótipo: login e acesso, organizações, usuários e chaves, e trilha de auditoria. Elas precisam ser propostas e documentadas no mapa antes da spec.</li><li>O Veritas 1 continua em operação. KYC, termos, retiradas, cartão de terceiro e pendências não migram.</li><li>Alguns custos de bureau dos pilotos são estimativas a confirmar (ex.: Sherlocker). A spec de custo não pode tratá-los como valor fechado.</li></ul><p><strong>Objetivo</strong></p><p>Ter as specs do MVP aprovadas e o mapa de documentação do Veritas pronto como documento vivo e formalização do sistema. Assim o desenvolvimento das Fases 0 e 1 começa com escopo, regras e telas fechados.</p>",
+  "edd": "2026-11-27",
+  "res": null,
+  "sca": "2026-11-17T16:58:50.124448+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 13,
+  "c": [
+   {
+    "a": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f",
+    "e": null,
+    "dt": "2026-11-12T13:45:32.300008+00:00",
+    "x": "@João Pedro da Silva Neto faz um prototipo novo do veritas seguindo o desing nosso aqui, segue os exemplo:\n\ntorre: https://claude.ai/artifact/QjKowHWFg9X1qd2hivLLTk?sk=7C5l1oJfMmbVc0xqVmyZIQ\nhub: https://claude.ai/artifact/CYNfdZ19eZu56sjjFrANtL?sk=FRIUiUblpobUTl2rtTjuGw#jurimetria",
+    "i": true
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-06T18:46:04.478313+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-17T16:58:50.124448+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   }
+  ]
+ },
+ "12530": {
+  "t": "Alteração na regra de atribuição Bitrix 2#12026",
+  "s": "finalizado",
+  "d": "<p>Bom dia Senhores(as)</p><p></p><p>Verifiquei que eu descrevi mal uma regra que seria a do novos originadores. Caso no cobrança 4.0 o cliente seja novo originador todos devem ser atribuidos pra maria eduarda mesmo os do adimplente.</p><p></p><p>Grato J</p>",
+  "edd": "2026-11-13",
+  "res": "2026-11-12T13:20:53.605235+00:00",
+  "sca": "2026-11-12T13:20:53.605235+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 2,
+  "c": [
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-11T17:20:58.109212+00:00",
+    "x": "Decisões\n\n- Novo Originador vence todas as regras na Cobrança 4.0 (solicitante, #12530, 09/11). Card com a flag Novo Originador = Y em qualquer raia de cobrança vai para a Maria Eduarda (3265). Essa regra é avaliada antes de Preventivo, das faixas de atraso e das raias fixas, e substitui a decisão de 04/11 da IAF-12026 (\"Preventivo sempre Larissa, sem exceção\").\n- \"Todos\" foi lido ao pé da letra. A regra também vale para Suprimentos (que seria da Eduarda Zucheti) e para as faixas de 1 a 90 dias. Hoje são 0 casos nas duas. Se Suprimentos tiver que ficar com a Eduarda Zucheti, é um ajuste de uma linha.\n- A flag vem do próprio card no Bitrix. Ela já é gravada e mantida pela esteira de cobrança a partir da base. Descartamos recalcular \"novo originador\" no fluxo de responsável, porque isso duplicaria a regra.\n- Etapas fora do mapa e a entrada (NEW) não mudam. A flag não esconde o alerta de raia desconhecida.\n- Só cards abertos. Os 28 cards já encerrados com a flag continuam com a Larissa.\n- Fora do escopo: o gatilho d-10 do Preventivo continua mandando para a Larissa sem olhar a flag. Ele está ativo, mas não tem execuções. Se for chamado, a atualização seguinte corrige.",
+    "i": true
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-11T17:21:35.333959+00:00",
+    "x": "A regra foi ajustada: todo card de cliente de novo originador na Cobrança 4.0 fica com a Maria Eduarda, inclusive os do adimplente (preventivo). Ela vale para qualquer raia de cobrança, e também valeria para Suprimentos e para as faixas de 1 a 90 dias se aparecer algum caso. Hoje não há nenhum.\n\nJá está valendo (11/11, 14:01): 8 cards preventivos passaram da Larissa para a Maria Eduarda. Os outros 10 cards de novo originador já estavam com ela. Cards encerrados não foram mexidos.\n\nComo validar:\n1. Abra os cards 169145, 169667, 170175, 170275, 170293, 171465, 171931 e 171939 na Cobrança 4.0. O responsável deve ser a Maria Eduarda.\n2. Filtre a raia Preventivo por responsável = Larissa. Nenhum card de novo originador deve aparecer.\n3. Na raia Novos Originadores, os 10 cards seguem com a Maria Eduarda.\n\nAceite: confirmar os três passos acima.",
+    "i": false
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-11T17:21:45.389377+00:00",
+    "x": "Técnico\n\n- Tipo e ambiente: construção (correção de regra) em n8n-prod-automacao. O BHz não enxergava a flag porque o espelho yF7b não selecionava ufCrm55_1785176069559. Isso foi confirmado no Find cards da exec 9044543.\n- Patch 1 — yF7b4134msLQ4Nu8 / fields_json: +1 campo no SELECT_1070. O espelho é recriado a cada rodada, então não precisa de backfill.\n- Patch 2 — BHzWjt0KKc7c8WYi / Responsável + Contagem: +7 linhas. RESP_NOVO_ORIGINADOR = 3265 fica no topo de responsavelDoCard e vale só para raias em RESP_POR_RAIA ou RAIAS_POR_FAIXA.\n- Prova: 20 asserts ok. Comparando vivo × proposto no Bitrix de 11/11 12:41, foram 8 alvos diferentes, todos UC_ZYBT7T 3753 → 3265. O validate_workflow deu 0 erros no node alterado.\n- Aplicado em 11/11 às 13:19 BRT (BHz 403b0245, yF7b c7c88689). O código está igual ao proposto e as arestas são as mesmas. O n8n_validate_workflow repete o resultado de antes (só os falsos positivos conhecidos).\n- Validado em 11/11 às 14:01 BRT (W7ea0 manual 9050824 → yF7b 9050981 → BHz 9051011):\n  - 6.312/6.312 cards vieram com o campo novo;\n  - 18 saíram como Novo Originador → 3265, e 8 deles foram escritos;\n  - o batch deu 17/17 ok, sem erro, e os 8 ids voltaram com assignedById = 3265.\n- Incidente: um teste manual parcial do yF7b (9048559, às 13:18) apagou o espelho (9.279 docs) sem reinserir, e ele ficou vazio até a rodada das 14:01. Não houve duplicidade, porque a W7ea0 deduplica pelo Bitrix ao vivo. Baixar a execução completa do yF7b via REST coincidiu com 502 na automacao, como já tinha acontecido em 04/11.\n- Ressalvas do revisor: o d-10 (yX8d7) está ativo e não olha a flag (risco aceito, a rodada seguinte corrige). Os robôs do portal na entrada da raia não foram auditados.\n- Herança: a IAF-0000 (v5) precisa levar a regra \"flag Novo Originador = Y → 3265 em toda a 203\".",
+    "i": true
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-09T12:57:24.74222+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-10T12:53:54.565866+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-11T17:05:32.821409+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-12T13:20:53.605235+00:00",
+    "por": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012"
+   }
+  ]
+ },
+ "12549": {
+  "t": "Acionamento Bitrix",
+  "s": "finalizado",
+  "d": "<p>Bom dia Senhores(as),</p><p></p><p>Atualmente o acionamento do bitrix vai pro departamento Cobrança - Bitrix e quando o cliente responde é redirecionado. Porém avaliei junto com a gestão e será melhor pro nosso acompanhamento da produtividade operacional já gerar o protocolo vinculado no agente e departamento do agente logo no acionamento não sendo mais após a resposta do cliente. Sendo igual a opção do coexistence de gerar protocolo ao enviar mensagem.</p><p></p><p>Outro ponto é que o acionamento Bitrix está ficando preso conforme imagem abaixo:</p><img class=\"kb-img\" src=\"attachment://4343f5c1-078f-4a06-8428-24c47df301a6/1794229831208_image.png\" alt=\"image.png\"><p></p><p>Grato J</p>",
+  "edd": "2026-11-13",
+  "res": "2026-11-13T19:30:46.55638+00:00",
+  "sca": "2026-11-13T19:30:46.55638+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 2,
+  "c": [
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-13T17:37:25.270769+00:00",
+    "x": "1. Decisões\n\n- O departamento do acionamento é o da faixa/raia do card (11/11). \"Cobrança - Bitrix\" sai do caminho.\n- O chat vai para o operador já no acionamento (13/11), igual ao \"gerar protocolo ao enviar mensagem\" do coexistence. O bot envia a mensagem sem esperar resposta e transfere na hora para o responsável do card, no departamento calculado.\n  - Fica aceito que o card perde a tarefa \"Cliente respondeu\" e o \"Sem resposta\".\n  - Fica aceito também que todo acionamento entra na fila do operador, inclusive os ~80% que não respondem.\n- O departamento é calculado no n8n, pelo card (ufCrm55DiasAtraso + raia), e não pelo e-mail do agente. maria.silva e raquel.soares estão em 01–07 e em 08–30 ao mesmo tempo, e respondem por 39% das transferências. A regra é:\n  - raia Suprimentos → Cobrança - Suprimentos;\n  - preventivo ou atraso ≤ 0 → Cobrança;\n  - 1–7, 8–30, 31–60, 61–90 dias → departamento da faixa (na Finza também 91–120).\n- Fallback (11/11): se não houver departamento ativo para a faixa/raia, vai para o departamento do e-mail do agente, desde que ele esteja em um único departamento de cobrança. Senão, vai para \"Cobrança\". Jurídico, RCS e Email não contam como departamento de cobrança (interpretação, a confirmar).\n- A flag Novo Originador conta como a raia, igual ao BHz. No Blips não há departamento ativo para ela, então cai no fallback (a confirmar).\n- O agente vem do email_atendente, no departamento calculado. Se a transferência ao agente falhar, o chat cai em \"Na fila\" do departamento em vez de ficar com o bot sem dono.\n- Sem resposta, o bot não encerra (11/11 e 13/11). O fechamento vem da inatividade configurada no Desk. Não houve piloto, porque o bot não segura mais o chat.\n- Vale para Blips e Finza (11/11).\n- Departamentos com nome duplicado (Finza \"Cobrança\" e Blips \"Cobrança - Suprimentos\", cada um com 1 ativo e 1 inativo): ficam sem renomear. Em 13/11 foi confirmado que a transferência por nome ignora o inativo. A documentação do Hyperflow não cobre isso.\n- Fora desta entrega: o errorWorkflow no zwrm3H6pvxvSOdhX e a limpeza dos // do Extrair comentario. A mudança em produção fica só no que o chamado pede.",
+    "i": true
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-13T17:38:58.532896+00:00",
+    "x": "O que muda: no acionamento, o protocolo já nasce com o responsável do card, no departamento da faixa de atraso (01 a 07, 08 a 30, 31 a 60, 61 a 90, Suprimentos). É igual ao \"gerar protocolo ao enviar mensagem\" do coexistence. O robô só envia a mensagem e sai, e o card no Bitrix recebe \"Mensagem enviada. Atendimento aberto com você no Hyperflow!\". O robô não encerra mais quem não responde: o fechamento segue a inatividade configurada no departamento.\n\nIsso tem duas consequências: todo acionamento entra na fila do responsável, inclusive de quem nunca responde, e o card deixa de receber \"Cliente respondeu\" e \"Sem resposta\".\n\nEstá no ar desde 13/11 às 12:29, na Blips/Ideal e na Finza. Os chats que já estavam presos em \"Cobrança - Bitrix\" antes disso não se movem sozinhos. Para liberá-los, filtrem no Histórico de chats \"Na fila\" + \"Departamento atual = Cobrança - Bitrix\" e transfiram para o departamento da faixa do card.\n\nComo validar:\n1. Acionem pelo Bitrix um card da faixa 31 a 60 dias. O protocolo deve aparecer já com o responsável do card, no departamento \"Cobrança - 31 a 60 dias\", e o card deve receber \"Mensagem enviada. Atendimento aberto com você no Hyperflow!\".\n2. Deixem um acionamento sem resposta. Ele deve ser fechado pela inatividade configurada no departamento.\n3. Depois de alguns dias, o filtro \"Na fila\" + \"Cobrança - Bitrix\" deve ficar vazio.",
+    "i": false
+   },
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-13T17:39:08.701066+00:00",
+    "x": "3. Técnico\n\n- Causa-raiz (certeza alta, 12 de 12 casos): o build de 22/10 10:36 BRT do Lz@cNhy5t trocou o departamento onde o chat ficava estacionado: saiu Inatividade (67ab54a7…) e entrou Cobrança - Bitrix (6ada0ffd…, 0 agentes).\n  - Sequência de um caso: sem resposta → Finish attendance em 24h → resposta tardia → eVWa@JYAh → aX7yjxIi1 Transfer human - Departamento (-N1ckULWPf). Esse nó devolve o chat ao último departamento com flow.agent='', daí o \"Nome:\" vazio.\n  - A guarda Departamento inatividade? do eVWa só cobria o departamento Inatividade.\n  - A Finza não foi afetada, porque estacionava em Inatividade.\n  - Hipóteses H2, H3 e H4 refutadas: 219 de 219 transferências por e-mail funcionaram.\n- Magnitude: 2.016 acionamentos na Blips entre 22/10 e 10/11.\n\n| Resultado                             | %     |\n|---------------------------------------|-------|\n| HSM não entregue                      | 16,3% |\n| Responderam em menos de 24h           | 11,3% |\n| Sem resposta                          | 80,5% |\n| Responderam depois de 24h (os presos) | 0,9%  |\n  Foram 3, 7 e 2 presos por semana, com mediana de 69h na fila.\n- n8n zwrm3H6pvxvSOdhX (prod-automacao): o Resolver canal calcula departamento e departamento_origem, e os 9 HTTP mandam departamento = {{ $json.departamento }}. Aplicado em 13/11, com os HTTP prontos às 14:01 BRT. Autoteste 17/17, mais 29 casos do revisor, e validate_workflow sem erros.\n- Hyperflow:\n  - O Init/update an attendance só aceita departamento fixo. Por isso entrou um conditional Departamento do card? e um upsert por departamento.\n  - O envio agora é sem waitInput e sem Start Inactivity 24h, e o notificar envio tem o log novo.\n  - Logo depois do envio, o Transfer human transfere com agente por e-mail e transferByDepartmentVariable por nome.\n  - Se essa transferência falhar, o H5b faz o handover sem agente.\n  - O Studio não permite que o protocolo fique com o agente e o bot continue ouvindo ao mesmo tempo. Por isso o retorno \"Cliente respondeu\"/\"Sem resposta\" saiu.\n  - Roteiro e ids em 03-proposta-workflow.md, §2 e §2b.\n- Publicação (13/11):\n  - Lz@cNhy5t: 14:28 BRT, versão 14.\n  - ul8ogXl86: 14:29 BRT, versão 7.\n  - Conferido pelo rascunho, idêntico ao backup -depois-h7.json e sem edição depois da publicação. O grafo do build não foi aberto.\n- Ressalvas:\n  - Não foi testado se a transferência para um agente no limite de maxChats falha (e vai para o H5b) ou entra na fila dele.\n  - Se o fechamento por inatividade no Desk manda CSAT depende da configuração de cada departamento.\n  - A tabela e-mail → departamento é fixa, montada em 11/11.\n- Fora (candidatos a demanda própria):\n  - errorWorkflow: o candidato é JH5hOIcLLLalQQc1, porque o id que está em patterns/error-handling.md está morto.\n  - Os // do Extrair comentario (contexto IAF-9033).\n  - 90 acionamentos encerrados em menos de 1h por falha de HSM.\n  - A Torre enviando template para chat preso.",
+    "i": true
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-10T12:16:31.745228+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-10T12:53:55.440341+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-11T17:05:33.928006+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "em_validacao",
+    "para": "em_andamento",
+    "dt": "2026-11-11T17:20:49.96305+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-13T16:19:02.190082+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-13T19:30:46.55638+00:00",
+    "por": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012"
+   }
+  ]
+ },
+ "12588": {
+  "t": "Template WhatsApp: torre_tp_novidade_portal",
+  "s": "finalizado",
+  "d": "Solicitação de template WhatsApp (HSM) aberta pela Torre de Controle.\n\n**Aprovar ou reprovar na Torre:** https://cobranca.finza.com.br/templates?tab=solicitacoes&request=844610a2-1d41-44c0-a5b0-574127c625e6\n\n- **Nome:** `torre_tp_novidade_portal`\n- **Categoria:** Utilidade (`UTILITY`)\n- **Idioma:** pt_BR\n- **WABAs-alvo:** Blips, Finza, Ideal\n- **Solicitante:** renato.costa@blips.com.br (org `blips`)\n\nAdicionar ao DESK: não\n\n**Cabeçalho:** 💻 Portal do Cliente\n\n**Corpo:**\n> Olá! Temos uma novidade para facilitar o seu dia a dia por aqui.\n>\n> Agora você pode acompanhar suas parcelas, emitir segundas vias e realizar pagamentos instantâneos via PIX direto no nosso novo Portal do Cliente. Tudo rápido, seguro e na palma da sua mão.\n>\n> Sua comodidade é a nossa prioridade. Acesse agora mesmo pelo botão abaixo e confira a situação do seu contrato.\n\n**Rodapé:** Equipe de Atendimento\n\n**Botões:**\n- Link: \"Acessar Portal 🔗\" -> https://cobranca.finza.com.br/c/{{1}}\n  - link dinâmico: o final ({{1}}) é preenchido no envio; exemplo: https://cobranca.finza.com.br/c/AAAAAAAAAAAAAAAAAAAAAAexemploexemploexemplo\n\n---\n_Created via MCP (source: mcp)_",
+  "edd": "2026-11-13",
+  "res": "2026-11-12T13:21:59.62871+00:00",
+  "sca": "2026-11-12T13:21:59.62871+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 1,
+  "c": [
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-11T16:46:14.115885+00:00",
+    "x": "Reprovado na Torre por leandro.gontijo@blips.com.br.\n\nMotivo: O template possui características de MARKETING porque seu objetivo principal é divulgar o novo Portal do Cliente e incentivar sua utilização, e não comunicar uma atualização específica de contrato, parcela ou pagamento. Apesar de mencionar funcionalidades financeiras, a mensagem utiliza linguagem promocional, como \"temos uma novidade\" e \"acesse agora mesmo\", o que pode justificar sua classificação como MARKETING pela Meta.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-10T12:19:22.723473+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-11T16:20:48.223048+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-11T16:46:29.911048+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_validacao",
+    "para": "bloqueado",
+    "dt": "2026-11-11T17:01:32.485442+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_validacao",
+    "dt": "2026-11-12T00:57:26.642514+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-12T13:21:59.62871+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "12649": {
+  "t": "Telefone & Email inativo | Torre de Controle",
+  "s": "finalizado",
+  "d": "<p>Boa tarde Senhores(as),</p><p></p><p>Peço apoio no seguinte, será necessário ajustar em todas fontes de dados da torre de controle pra evitar que isso ocorra:</p><p></p><p>Onde está a informação: na tabela de contratos do Módulo Financeiro (bronze_mongodb_<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://moduloFinanceiro.deals\">moduloFinanceiro.deals</a>), na lista de contatos do cliente, customer.contacts. Cada contato traz:</p><p>- type: \"Telefone\", \"Celular\" ou \"E-mail\"</p><p>- value: o número ou o e-mail</p><p>- status: \"Ativo\" ou \"Inativo\" (é esta a coluna que diz se o contato vale)</p><p>- deactivated_at: data em que foi desativado</p><p>O problema:</p><p>- Telefone: a consulta pega o telefone de <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://negotiation.contractor.business\">negotiation.contractor.business</a>_data.cellphone, da Plataforma. A Plataforma não sabe que o número foi desativado no Módulo.</p><p>- E-mail: a consulta pega o primeiro e-mail de customer.contacts sem olhar o status. Pode sair um e-mail inativo.</p><p>Como filtrar:</p><p>1. Telefone: comparar o celular da Plataforma com os telefones de customer.contacts, só pelos dígitos e pelos 8 finais. O Módulo grava o mesmo número com ou sem +55, com ou sem espaço.</p><p>   - Se o número aparece só com status = 'Inativo', não usar. No lugar, usar o telefone com status = 'Ativo' mais recente (maior created_at).</p><p>   - Se o mesmo número também aparece como \"Ativo\" num registro em outro formato, mantém. O Módulo inativa o registro antigo e recadastra o número quando alguém edita o contato.</p><p>2. E-mail: considerar só type = 'E-mail' com status = 'Ativo', pegando o mais recente por created_at.</p><p>3. status vazio deve contar como \"Ativo\". Hoje não há nenhum caso, mas protege registros antigos.</p><p>Tamanho hoje: 8 contratos (49 títulos) com celular inativo, todos com outro telefone ativo no Módulo, e 2 contratos com e-mail inativo.</p><p></p><p></p><p>Grato J</p>",
+  "edd": "2026-11-18",
+  "res": "2026-11-18T13:15:43.102801+00:00",
+  "sca": "2026-11-18T13:15:43.102801+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 2,
+  "c": [
+   {
+    "a": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012",
+    "e": null,
+    "dt": "2026-11-16T12:43:01.474432+00:00",
+    "x": "[Solicitação de ajustes] Me tira uma dúvida, foi aplicado a solução na organização Blips e Finza da torre e em todas fontes de dados?\n\nSuprimentos ou Equipamentos\nDisponível, Pago, humano etc...?",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-16T19:00:13.855653+00:00",
+    "x": "Oi João! Sim, foi aplicado nas duas organizações, Blips e Finza, em todas as fontes de Equipamentos: Disponível, Pagos e Cobrança Humano. São 3 fontes por organização, todas alteradas juntas em 11/11 e conferidas de novo hoje (16/11). Os 10 contratos afetados (9 Blips, 1 Finza) já estão com o telefone/e-mail ativo do Módulo. A exceção é o 12501982, que não tem título em aberto e por isso não recebe cobrança.\n\nSuprimentos não entraram na mudança, porque as fontes de suprimento vêm do Sankhya e não leem os contatos do Módulo Financeiro. Na prática:\n- cliente que tem equipamento e suprimento usa o telefone e o e-mail das fontes de equipamento, que já estão corrigidas;\n- cliente só de suprimento recebe o telefone da Plataforma e o e-mail do Sankhya, sem a checagem de status do Módulo.\n\nSe quiser essa mesma trava para os clientes só de suprimento (cruzar com o Módulo pelo CPF/CNPJ), consigo medir quantos seriam afetados e aplicar.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-10T12:15:54.757283+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-11T18:52:27.646002+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-12T13:13:48.920504+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_validacao",
+    "para": "em_andamento",
+    "dt": "2026-11-16T12:43:07.049168+00:00",
+    "por": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-16T19:00:15.424987+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-18T13:15:43.102801+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "12844": {
+  "t": "Agendamento Disparos",
+  "s": "finalizado",
+  "d": "<p>Bom dia Senhores(as),</p><p></p><p>Na aba disparos não tem a ação de agendar o disparo:</p><img class=\"kb-img\" src=\"attachment://1eb0e4ef-d066-4905-8d6f-434937015d1b/1794397792427_image.png\" alt=\"image.png\"><p></p><p>Grato J</p>",
+  "edd": "2026-11-20",
+  "res": "2026-11-18T13:15:27.324841+00:00",
+  "sca": "2026-11-18T13:15:27.324841+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 3,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-13T14:14:43.225084+00:00",
+    "x": "Entregue e já em produção.\n\nOnde validar: Torre de Controle > Disparos > \"Novo disparo\" (e também a aba \"Dados externos\").\n\n1) Monte um disparo como de costume: escolha os clientes, o tipo de ação e a mensagem. Ao lado do botão \"Disparar\" agora existe o botão \"Agendar\".\n2) Clique em \"Agendar\" e escolha data e hora. O horário é sempre o de Brasília, mesmo se o seu computador estiver em outro fuso. Dá para agendar de 5 minutos a 30 dias à frente.\n3) Confirme. A tela volta para um disparo novo e aparece o aviso \"Disparo agendado para dd/mm/aaaa hh:mm\".\n4) Vá em Disparos > \"Histórico\". O agendamento aparece no topo como \"Agendado para dd/mm hh:mm por <seu nome>\", com as opções \"Alterar horário\", \"Cancelar agendamento\" e \"Ver detalhes\".\n5) No horário marcado, o card passa para \"Executando\" e depois para o lote normal. O lote mostra quantas ações foram criadas e quantos clientes foram pulados.\n\nComo funciona no horário:\n- Os clientes que você marcou ficam guardados. Nos envios de negativação e notificação, os contratos escolhidos também ficam guardados.\n- Na hora do envio, o sistema recalcula o título e a parcela de cada cliente. Quem pagou nesse meio-tempo, ou não tem mais nada a cobrar, é pulado e aparece contado como \"sem título cobrável\".\n- Em \"Dados externos\", as linhas do arquivo ficam guardadas e saem no horário escolhido.\n\nO que NÃO muda depois de agendar:\n- Só o horário pode ser alterado. Para trocar a lista de clientes ou a mensagem, cancele e agende de novo.\n- Alterar e cancelar só funcionam enquanto o agendamento ainda não começou. Depois disso a tela avisa que ele já foi executado ou cancelado.\n- O filtro da carteira não é reavaliado no horário: valem os clientes marcados no momento do agendamento.\n- Não há agendamento recorrente (todo dia ou toda semana). Cada agendamento roda uma vez.\n- O ritmo de envio da organização continua valendo. Um agendamento grande sai aos poucos, como um disparo normal.\n- Ignorar a blocklist continua restrito a proprietário e administrador, e é conferido no momento de agendar.\n\nSugestão de teste: agende um disparo pequeno, de 2 ou 3 clientes, para daqui a uns 10 minutos, troque o horário uma vez e acompanhe o card no Histórico até virar lote.",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012",
+    "e": null,
+    "dt": "2026-11-16T13:38:58.497518+00:00",
+    "x": "[Solicitação de ajustes] Realizei o teste porém não recebi o RCS mesmo falando que foi enviado peço que verifiquem e o email mesmo após 30 min não enviou. Avaliar o envio e recebimento na modalidade de agendamento de disparos por favor. Além de delay/cache na atualização, agendei 10:05 porém 10:10 ainda estava falando que nada foi disparado e ainda estava agendado pra 10:05, como se fosse um bug visual.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-16T18:50:41.410973+00:00",
+    "x": "Voltando nos três pontos que você levantou. Conferimos o seu teste de hoje: o agendamento rodou às 10:05 em ponto e criou as três mensagens, WhatsApp, RCS e e-mail.\n\n1) Tela parada em \"Agendado para 10:05\": você está certo, é um defeito nosso. O disparo saiu no horário, mas o Histórico não se atualizou sozinho e continuou mostrando o estado anterior até a página ser recarregada. Vamos corrigir já, para o card passar sozinho para \"Executando\" e depois para o lote, sem precisar recarregar. Aviso aqui quando estiver em produção.\n\n2) E-mail que não saiu: ele saiu, mas às 11:16, 71 minutos depois do horário agendado. O agendamento não teve relação com o atraso. Na hora do seu disparo havia cerca de 1.500 e-mails de campanhas do fim de semana na fila de envio da Blips, e o seu entrou na mesma fila, com a mesma prioridade. Um disparo feito na hora pelo botão \"Disparar\" teria esperado o mesmo tempo.\n\nPrecisamos da sua decisão sobre como isso deve funcionar:\n- Opção A: disparos, imediatos ou agendados, passam na frente das campanhas e saem logo. Em compensação, as campanhas da fila atrasam um pouco mais.\n- Opção B: manter como está, com disparos respeitando a ordem da fila junto com as campanhas.\n- Se preferir outra regra, por exemplo prioridade só para disparos pequenos ou só para alguns canais, é só dizer.\n\n3) RCS que não chegou: do lado da Torre está tudo certo. A mensagem foi enviada às 10:06 e o provedor confirmou o recebimento. O que acontece depois disso fica no Hyperflow, e vou olhar lá o que houve com essa mensagem. Um detalhe que pode ajudar: dessa vez você usou a integração \"[HUMANO] RCS - Blips\", e nos seus testes anteriores, que chegaram, foi a \"[IA] RCS - Blips\". Volto aqui com o resultado.",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012",
+    "e": null,
+    "dt": "2026-11-16T19:45:38.221038+00:00",
+    "x": "Entendido, sobre o RCS fico no aguardo e a correção do \"bug visual\". Sobre a prioridade pode priorizar as da aba disparos atrasando os demais da campanha.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-16T21:37:39.816922+00:00",
+    "x": "Os dois ajustes já estão em produção.\n\nOnde validar: Torre de Controle > Disparos > \"Novo disparo\" > \"Agendar\", e depois Disparos > \"Histórico\".\n\n1) Tela que não atualizava: corrigido. Com a aba \"Histórico\" aberta, o card agora troca de estado sozinho, sem precisar recarregar a página. Poucos segundos depois do horário marcado ele passa de \"Agendado\" para \"Executando\" e depois vira o lote, como no seu teste das 10:05.\n\n2) Demora do e-mail: definimos que o disparo agendado passa na frente das campanhas. No horário marcado, as mensagens agendadas entram no começo da fila de envio do canal e saem antes das mensagens de campanha que estiverem esperando. No seu teste, o e-mail esperou 71 minutos atrás de cerca de 1.500 e-mails de campanha; com essa mudança, ele sairia logo após o horário.\n\n3) RCS: conferimos de novo e não é do nosso lado. A Torre enviou o RCS às 10:06 e o provedor confirmou o recebimento, igual aos seus testes anteriores. O agendamento está funcionando corretamente. Peço que você verifique, no aparelho do número 34 99186-9713:\n- se o RCS está ativo, ou seja, se a opção de chat do aplicativo de mensagens (Google Mensagens) está ligada e conectada;\n- se a mensagem não chegou em outra conversa ou na pasta de spam do aplicativo de mensagens;\n- se o número está com dados móveis ou Wi-Fi ativos no horário do envio.\n\nSugestão de teste: agende para daqui a uns 5 minutos um disparo pequeno com WhatsApp e e-mail, deixe a aba \"Histórico\" aberta e acompanhe o card mudar sozinho.\n\nO que não muda:\n- Só o disparo agendado ganhou prioridade. O disparo feito na hora pelo botão \"Disparar\" continua respeitando a ordem da fila junto com as campanhas.\n- Um agendamento grande sai inteiro na frente das campanhas daquele canal, e elas atrasam na mesma proporção.\n- O ritmo de envio da organização continua valendo.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T13:36:44.079676+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-12T20:12:38.246538+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-13T14:14:48.687287+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "em_andamento",
+    "dt": "2026-11-16T13:39:01.305528+00:00",
+    "por": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-16T21:38:26.635587+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-18T13:15:27.324841+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "12905": {
+  "t": "Disparos: fila de E-mail/RCS travada por parcelas aguardando a parcela anterior (parcel_order_wait)",
+  "s": "finalizado",
+  "d": "SINTOMA\nNo Historico de Disparos, os lotes \"Em massa\" de E-mail (1.043 acoes) e RCS (1.043 acoes) de 11/11 09:13 ficaram com cerca de 900 acoes em \"Pendente / Processando\" por horas. O ultimo envio de E-mail foi as 11:34 BRT e o de RCS as 12:04 BRT. O WhatsApp do mesmo horario terminou normalmente.\n\nTAMANHO (org_blips, medido em 11/11 15:15 BRT, somando lotes de 10/11 e 11/11)\n- E-mail: 3.666 pendentes (1.012 parcelas seq>=2, 1.119 parcelas seq 1 e 1.535 de disparo comum, que nao e por parcela)\n- RCS: 3.850 pendentes (1.067 parcelas seq>=2, 1.206 parcelas seq 1 e 1.577 de disparo comum)\n\nO scheduled-action-processor roda todo minuto e termina com sent: 0 e 280 skipped, todos com skipped_reason = parcel_order_wait.\n\nCAUSA\n1. claim_org_dispatch_actions_v2 escolhe as acoes por (priority, id). O id e um uuid aleatorio, entao a ordem nao tem relacao com o numero da parcela.\n2. O guard de ordem do Disparo por parcela (IAF-8609, regra 54) adia por 60s a parcela seq>=2 que ainda tem irma de seq menor pendente.\n3. 60s e o mesmo intervalo do cron, entao a acao adiada volta a ser elegivel na rodada seguinte e reaparece no topo da fila.\n4. Cada vez que uma parcela 1 chegava ao topo, ela era enviada e saia da fila. Com o tempo, o topo de cada canal (50 de e-mail, 20 de RCS) ficou so com parcelas seq>=2 que esperam uma irma de id MAIOR. Essa irma nunca entra no lote do minuto.\nMedido: das 50 primeiras acoes da fila de cada canal, as 50 sao parcelas seq>=2 bloqueadas por uma irma que esta mais atras na fila. Resultado: um livelock em que a cota do minuto vai inteira em adiamento e nenhum envio acontece, inclusive dos disparos comuns.\n\nCORRECAO PROPOSTA\n- O claim passa a ordenar tambem pelo numero da parcela (metadata->parcel_dispatch->seq, com 1 como padrao), dentro da mesma prioridade, para a parcela anterior sair antes da seguinte.\n- Avaliar: adiamento do parcel_order_wait diferente de 60s, para a acao nao voltar sempre na rodada seguinte.\n- Teste SQL cobrindo o cenario: parcela seq 2 com id menor que a seq 1 deve ter a seq 1 pega antes.\n\nPONTO DE NEGOCIO\nCerca de metade da fila e de 10/11. Quando a fila destravar, essas mensagens saem com um dia de atraso. Decidir se cancela os lotes de ontem antes.\n\nACHADO SEPARADO (fora do escopo deste card)\nO process-webhook-retries registra a cada minuto \"Skipping org_blips: column webhook_retry_queue.next_retry_at does not exist\". A fila de retry de callbacks nao esta sendo processada para org_blips.\n\n---\n_Created via MCP (source: mcp)_",
+  "edd": "2026-11-13",
+  "res": "2026-11-17T00:20:32.276636+00:00",
+  "sca": "2026-11-17T00:20:32.276636+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 3,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-11T19:36:19.959815+00:00",
+    "x": "Entregue e já em produção desde hoje, 11/11, às 16:24. Vale também para as ações que já estavam paradas: não é preciso criar nenhum disparo novo.\n\nOnde validar: Torre de Controle > Disparos > Histórico\n\n1) Abra os dois lotes \"Em massa\" de hoje às 09:13, o de E-mail e o de RCS (1.043 ações cada). Até as 16:23 eles estavam parados com cerca de 900 ações em \"Pendente / Processando\" cada, e nenhum envio desde o fim da manhã.\n2) Atualize a tela de tempos em tempos. O número de \"Enviado\" volta a subir a cada minuto. Entre 16:24 e 16:33 saíram 233 e-mails e 121 RCS.\n3) Faça o mesmo com os lotes de 10/11: eles também estavam parados e voltaram para a fila.\n\nO que esperar no ritmo:\n- O e-mail sai a até 50 por minuto. A fila, somando os lotes de ontem e de hoje (cerca de 3.200), deve zerar em umas 2 horas.\n- O RCS sai a até 20 por minuto. São cerca de 3.550 na fila, então ele leva de 3 a 4 horas. Se precisar ir mais rápido, dá para aumentar em Configurações > Velocidade de disparo.\n\nO que não muda:\n- No modo \"Uma mensagem por parcela\", as parcelas seguintes de um mesmo cliente ainda podem ficar alguns minutos em \"Pendente\" enquanto a anterior sai. É a ordem sendo respeitada, como antes. A diferença é que elas não seguram mais o envio dos outros clientes nem dos disparos comuns.\n- As mensagens que estavam paradas saem agora, com o atraso acumulado. Os lotes de 10/11 estão sendo enviados com mais de um dia de atraso. Se algum deles não deveria mais sair, cancele pelo Histórico, que o que ainda estiver em \"Pendente\" deixa de ser enviado.\n- Parte dos RCS volta como \"Falhou\" com \"Aparelho não possui suporte ao RCS\". É o celular do cliente que não aceita RCS, igual aos outros disparos.\n\nUm aviso não relacionado: encontramos outra fila interna da Blips, a de reprocessamento de retornos dos canais, sem rodar. Ela vai num card separado.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-11T20:11:43.913393+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-12T13:13:16.874581+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "finalizado",
+    "para": "cancelado",
+    "dt": "2026-11-17T00:20:16.340998+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "cancelado",
+    "para": "finalizado",
+    "dt": "2026-11-17T00:20:32.276636+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   }
+  ]
+ },
+ "12941": {
+  "t": "Chamadas Finza",
+  "s": "finalizado",
+  "d": "<p>Boa tarde Senhores(as),</p><p></p><p>Chamadas do Hyper Finza estão sendo recusadas por conta de billing:</p><p></p><img class=\"kb-img\" src=\"attachment://2a624f56-e097-4781-9b47-766d72dea590/1794429008598_image.png\" alt=\"image.png\"><p></p><p>Grato J</p><p></p>",
+  "edd": "2026-11-13",
+  "res": "2026-11-16T12:55:18.510761+00:00",
+  "sca": "2026-11-16T12:55:18.510761+00:00",
+  "asg": "34a15ef4-cfb6-4c4a-86e8-e069b068677f",
+  "sp": 2,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T13:41:13.651839+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-12T13:41:20.695318+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "em_andamento",
+    "para": "finalizado",
+    "dt": "2026-11-16T12:55:18.510761+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "12972": {
+  "t": "Configuração CCB Valentina v2",
+  "s": "finalizado",
+  "d": "<p>Configurar o envio de link/pdf Valentina V2</p>",
+  "edd": null,
+  "res": "2026-11-12T01:00:16.137013+00:00",
+  "sca": "2026-11-12T01:00:16.137013+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 3,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T01:00:10.61552+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "fila_exec",
+    "para": "finalizado",
+    "dt": "2026-11-12T01:00:16.137013+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   }
+  ]
+ },
+ "12984": {
+  "t": "Testes e validação Valentina em Stg",
+  "s": "finalizado",
+  "d": "<p>Testes de validação do agente Valentina que esta em stg, testes de ferramentas, respostas, prompt, etc.</p>",
+  "edd": "2026-11-13",
+  "res": "2026-11-17T13:06:12.632496+00:00",
+  "sca": "2026-11-17T13:06:12.632496+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 3,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T12:13:43.521456+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-12T12:13:47.643163+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-15T20:52:59.50953+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-17T13:06:12.632496+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "13001": {
+  "t": "Aprovação dos testes",
+  "s": "finalizado",
+  "d": "<p>Bom dia Senhores(as),</p><p></p><p>Segue formalização conforme falamos:</p><img class=\"kb-img\" src=\"attachment://5e6ddd15-64e4-42ac-9340-27133b6b5fa9/1794490978269_image.png\" alt=\"image.png\"><p></p><p>Grato J</p><p></p>",
+  "edd": "2026-11-20",
+  "res": "2026-11-18T13:15:29.019161+00:00",
+  "sca": "2026-11-18T13:15:29.019161+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 3,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-17T00:20:31.080227+00:00",
+    "x": "Pronto. A Finza agora tem o mesmo funcionamento de imagem, áudio e cobrança por parcela que a Blips já usava.\n\nO que fizemos\n1) Templates na Meta: criamos na conta de WhatsApp da Finza os 3 templates que a Blips usa, com o mesmo nome e o mesmo conteúdo: \"teste_8215_imagem\", \"teste_8215_audio\" e \"torre_tp_parcela_pagamento_1\". Os 3 foram aprovados e estão ativos na Torre (Finza).\n2) Fluxos do Hyperflow da Finza: os dois fluxos de cobrança passaram a receber a imagem, o áudio e o valor da parcela vindos da Torre. Entraram os ramos de cada template:\n- imagem: a mensagem sai com a imagem escolhida no disparo no topo;\n- áudio: a mensagem sai com o botão \"Ouvir mensagem\" e, quando o cliente toca, o fluxo manda o áudio escolhido no disparo;\n- parcela: a mensagem sai como cartão de pagamento, com o valor e os botões \"Copiar código Pix\" e \"Copiar código do boleto\".\n3) Mensagens especiais com conversa aberta: imagem, áudio e cartão saem no formato certo mesmo quando o cliente já falou com a Finza no dia. Antes, nesse caso, sairia só o texto.\n4) Cobrança por parcela: no disparo \"Uma mensagem por parcela\", da 2ª parcela em diante a mensagem passa mesmo com o atendimento da IA aberto. Assim todas as parcelas chegam, e não só a primeira.\n5) Integrações da Torre (Finza): as integrações [IA] passaram a enviar o valor da parcela, que o cartão usa.\n6) Catálogo de templates: a sincronização de templates da Finza passou a trazer os templates de imagem e áudio, para eles aparecerem no Disparos.\n\nFizemos backup dos dois fluxos antes da mudança.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-17T00:20:33.019352+00:00",
+    "x": "Já em produção e testado ponta a ponta em 16/11, com um cliente de teste e um celular nosso.\n\nOnde validar: Torre de Controle > Disparos > Novo disparo (org Finza), canal WhatsApp, integração com [IA] no nome.\n\n1) Imagem: escolha o template \"teste_8215_imagem\", preencha as 3 variáveis e suba uma imagem no campo de imagem do cabeçalho. Chega com a imagem no topo e o texto preenchido. No nosso teste chegou às 20:40.\n2) Áudio: escolha \"teste_8215_audio\" e suba um áudio no campo de áudio. Chega a mensagem com o botão \"Ouvir mensagem\". Ao tocar, chega o áudio como nota de voz. No teste, o áudio chegou 1 minuto depois do toque.\n3) Parcela: escolha \"torre_tp_parcela_pagamento_1\", marque \"Uma mensagem por parcela\" e limite a 3 parcelas. Chegam 3 cartões, da parcela mais antiga para a mais nova, com cerca de 1 minuto entre eles. Cada um traz o valor e os botões \"Copiar código Pix\" e \"Copiar código do boleto\". No teste, as 3 saíram às 20:59, 21:00 e 21:01, e nenhuma ficou como \"Em Atendimento\".\n\nO que não muda:\n- Os outros templates da Finza seguem chegando exatamente como antes.\n- Use a integração com [IA] no nome para cobrar por parcela. Pela integração [HUMANO], só a primeira parcela passa quando há atendimento aberto.\n- Áudio continua só no WhatsApp. No RCS, o provedor não aceita, como já acontece na Blips.\n- Os nomes \"teste_8215_imagem\" e \"teste_8215_audio\" são os mesmos usados na Blips. Se quiserem textos definitivos, criamos templates novos com o conteúdo que vocês mandarem.\n\nValidei os três testes no celular e está tudo funcionando. Pode repetir com qualquer contato de teste.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T17:53:25.255349+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-16T19:22:48.841696+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-17T00:20:40.273371+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-18T13:15:29.019161+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "13002": {
+  "t": "Aprovação do teste de novo modelo de template",
+  "s": "fila_exec",
+  "d": "<p>Bom dia Senhores(as),</p><p></p><p>Segue formalização conforme falamos Marcos:</p><img class=\"kb-img\" src=\"attachment://c8561c9c-2e7d-4590-8896-003f62fa9a4c/1794491051259_image.png\" alt=\"image.png\"><p></p><p>Grato J</p><p></p>",
+  "edd": "2026-11-25",
+  "res": null,
+  "sca": "2026-11-12T17:53:20.538053+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 2,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-17T11:46:43.726019+00:00",
+    "x": "Preciso que você me de mais detalhes de como quer o template\n",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T17:53:20.538053+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "13003": {
+  "t": "Hyperflow Finza: replicar imagem, áudio e disparo por parcela que já funcionam na Blips",
+  "s": "finalizado",
+  "d": "<p>Na Torre, imagem/áudio (8215) e disparo por parcela com botão de pagamento (8609/12188) já valem para todas as orgs. O que ficou só na Blips foi a parte de fora da Torre: flows do Hyperflow, templates na Meta e corpo das integrações.</p><p><strong>Situação da Finza em prod (12/11):</strong> 0 ações com imagem/áudio e 0 WhatsApp por parcela nos últimos 40 dias; nenhuma das 16 integrações WhatsApp tem <code>title_current_value_decimal</code> no corpo (Blips: 16 de 16); <code>torre_tp_parcela_pagamento_1</code> já aprovado e sincronizado.</p><p><strong>Escopo:</strong></p><ul><li>Flow WhatsApp da Finza: repassar <code>media_url</code>/<code>audio_url</code>, nó de template com imagem no cabeçalho, ramo do áudio após o botão, ramo do <code>torre_tp_parcela_pagamento_1</code> (cartão de pagamento).</li><li>Integrações WhatsApp da Finza: acrescentar <code>title_current_value_decimal</code>.</li><li>Templates de imagem e áudio na WABA da Finza.</li><li>Teste ponta a ponta em telefone de teste.</li></ul><p>Fora: áudio no RCS (provedor recusa também na Blips).</p>\n\n---\n_Created via MCP (source: mcp)_",
+  "edd": null,
+  "res": "2026-11-17T00:20:54.43574+00:00",
+  "sca": "2026-11-17T00:20:54.43574+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 5,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-17T00:09:39.394661+00:00",
+    "x": "Pronto. A Finza agora tem o mesmo funcionamento de imagem, áudio e cobrança por parcela que a Blips já usava.\n\nO que fizemos\n1) Templates na Meta: criamos na conta de WhatsApp da Finza os 3 templates que a Blips usa, com o mesmo nome e o mesmo conteúdo: \"teste_8215_imagem\", \"teste_8215_audio\" e \"torre_tp_parcela_pagamento_1\". Os 3 foram aprovados e estão ativos na Torre (Finza).\n2) Fluxos do Hyperflow da Finza: os dois fluxos de cobrança passaram a receber a imagem, o áudio e o valor da parcela vindos da Torre. Entraram os ramos de cada template:\n- imagem: a mensagem sai com a imagem escolhida no disparo no topo;\n- áudio: a mensagem sai com o botão \"Ouvir mensagem\" e, quando o cliente toca, o fluxo manda o áudio escolhido no disparo;\n- parcela: a mensagem sai como cartão de pagamento, com o valor e os botões \"Copiar código Pix\" e \"Copiar código do boleto\".\n3) Mensagens especiais com conversa aberta: imagem, áudio e cartão saem no formato certo mesmo quando o cliente já falou com a Finza no dia. Antes, nesse caso, sairia só o texto.\n4) Cobrança por parcela: no disparo \"Uma mensagem por parcela\", da 2ª parcela em diante a mensagem passa mesmo com o atendimento da IA aberto. Assim todas as parcelas chegam, e não só a primeira.\n5) Integrações da Torre (Finza): as integrações [IA] passaram a enviar o valor da parcela, que o cartão usa.\n6) Catálogo de templates: a sincronização de templates da Finza passou a trazer os templates de imagem e áudio, para eles aparecerem no Disparos.\n\nFizemos backup dos dois fluxos antes da mudança.",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-17T00:09:48.50067+00:00",
+    "x": "Já em produção e testado ponta a ponta em 16/11, com um cliente de teste e um celular nosso.\n\nOnde validar: Torre de Controle > Disparos > Novo disparo (org Finza), canal WhatsApp, integração com [IA] no nome.\n\n1) Imagem: escolha o template \"teste_8215_imagem\", preencha as 3 variáveis e suba uma imagem no campo de imagem do cabeçalho. Chega com a imagem no topo e o texto preenchido. No nosso teste chegou às 20:40.\n2) Áudio: escolha \"teste_8215_audio\" e suba um áudio no campo de áudio. Chega a mensagem com o botão \"Ouvir mensagem\". Ao tocar, chega o áudio como nota de voz. No teste, o áudio chegou 1 minuto depois do toque.\n3) Parcela: escolha \"torre_tp_parcela_pagamento_1\", marque \"Uma mensagem por parcela\" e limite a 3 parcelas. Chegam 3 cartões, da parcela mais antiga para a mais nova, com cerca de 1 minuto entre eles. Cada um traz o valor e os botões \"Copiar código Pix\" e \"Copiar código do boleto\". No teste, as 3 saíram às 20:59, 21:00 e 21:01, e nenhuma ficou como \"Em Atendimento\".\n\nO que não muda:\n- Os outros templates da Finza seguem chegando exatamente como antes.\n- Use a integração com [IA] no nome para cobrar por parcela. Pela integração [HUMANO], só a primeira parcela passa quando há atendimento aberto.\n- Áudio continua só no WhatsApp. No RCS, o provedor não aceita, como já acontece na Blips.\n- Os nomes \"teste_8215_imagem\" e \"teste_8215_audio\" são os mesmos usados na Blips. Se quiserem textos definitivos, criamos templates novos com o conteúdo que vocês mandarem.\n\nValidei os três testes no celular e está tudo funcionando. Pode repetir com qualquer contato de teste.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-17T00:10:07.326768+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-17T00:20:54.43574+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   }
+  ]
+ },
+ "13006": {
+  "t": "Melhorias na solicitação de templates WhatsApp (HSM) pela Torre de Controle (tela /templates, aba Solicitações)",
+  "s": "finalizado",
+  "d": "<p>1. Card do Quimera aberto em nome de quem pediu</p><p>- Antes: todo card saía no nome do dono da chave de integração, e quem pediu não recebia nenhuma notificação do card.</p><p>- Agora: a Torre abre o card pelo endpoint tickets-inbound do Quimera, em nome do solicitante, que passa a receber as notificações.</p><p>- Se o e-mail do solicitante não estiver cadastrado no Quimera, o card é aberto no e-mail padrão da integração e isso fica registrado no log.</p><p>- Área solicitante: Cobrança. Time executor: IA Automação Finza.</p><p>- O responsável do card continua sendo atribuído automaticamente logo após a abertura.</p><p>2. Texto do card legível</p><p>- A descrição saía com marcações (asteriscos, crases, \"&gt;\") que o Quimera não interpreta. Agora sai em texto limpo.</p><p>3. Solicitações visíveis em todas as organizações</p><p>- Os templates são criados em todas as WABAs, então qualquer organização da Torre passa a ver todas as solicitações.</p><p>- A lista ganhou a coluna \"Organização\", com a origem de cada pedido.</p><p>- Cancelar continua permitido só para quem pediu ou para um aprovador.</p><p>4. Emoji barrado onde a Meta não aceita</p><p>- A Torre recusa emoji no cabeçalho, no rodapé e no texto dos botões, antes de enviar o pedido. No corpo da mensagem o emoji continua permitido.</p><p>- Isso evita pedido que seria reprovado depois pela Meta.</p>",
+  "edd": null,
+  "res": "2026-11-12T19:59:32.088203+00:00",
+  "sca": "2026-11-12T19:59:32.088203+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 5,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T14:10:29.826889+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-12T14:10:34.508457+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-12T19:59:19.570483+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-12T19:59:32.088203+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   }
+  ]
+ },
+ "13017": {
+  "t": "Email com anexo boleto",
+  "s": "finalizado",
+  "d": "<p>Boa tarde Senhores(as),</p><p></p><p>Segue formalização conforme falamos Marcos:</p><img class=\"kb-img\" src=\"attachment://7a58d0c5-50e6-4b5b-aa8b-5cb202dc6388/1794495287107_image.png\" alt=\"image.png\"><p></p><p>Grato J</p><p></p>",
+  "edd": "2026-11-20",
+  "res": "2026-11-18T13:15:30.859483+00:00",
+  "sca": "2026-11-18T13:15:30.859483+00:00",
+  "asg": "409661f3-603f-4ab1-ae15-146076ddca0a",
+  "sp": 3,
+  "c": [
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-13T21:48:40.42862+00:00",
+    "x": "Entregue e já em produção. O e-mail de cobrança agora pode levar o boleto em PDF anexado. A opção vem desligada e só muda algo onde vocês ligarem.\n\nOnde ligar:\n- Régua: Torre de Controle > Réguas de Cobrança > abra a régua > passo de e-mail > fase \"Conteúdo\" > \"Anexar boleto (PDF)\"\n- Disparo avulso: Torre de Controle > Disparos > \"Novo disparo\" > canal e-mail > mesma opção\n- Ação manual: Torre de Controle > Gestão de Carteira > abra o cliente > nova ação de e-mail > mesma opção\n\nAo ligar, aparece uma segunda opção, \"Anexar também de parcela vencida\", também desligada. A prévia passa a mostrar a linha \"Anexo: boleto em PDF das parcelas citadas\".\n\nComo funciona, com exemplos:\n1) Vão anexados os boletos das parcelas que aparecem no texto do e-mail, nem mais nem menos.\n- A mensagem lista 3 parcelas a vencer (25/11, 25/12 e 25/01): vão 3 PDFs.\n- A lista mostra 5 parcelas e termina com \"e mais 2\": vão os 5 PDFs mostrados, não os 7.\n- A mensagem fala só do valor e do vencimento de uma parcela: vai 1 PDF.\n2) Parcela vencida só vai com a segunda opção ligada. Exemplo: uma parcela vencida em 05/11 e outra a vencer em 25/11, com a opção desligada: vai só a de 25/11. Isso pesa. Nos últimos 30 dias, metade dos e-mails da Finza com boleto falava de parcela já vencida. Deixamos desligado porque o PDF mostra o vencimento original, e vale confirmar com o financeiro se esse boleto continua pagável depois do vencimento.\n3) Parcela sem PDF fica de fora e o e-mail sai normalmente. Nos últimos 30 dias, tinham PDF 100% dos e-mails da Finza, 94% da Blips e só 36% da Ideal (suprimento não tem PDF).\n4) O máximo é de 10 boletos por e-mail.\n5) Se um PDF não puder ser baixado na hora do envio, o e-mail sai sem aquele anexo, em vez de não sair.\n\nPara validar:\n1) Faça uma ação manual de e-mail para um cliente de teste com o seu e-mail cadastrado. Use uma mensagem com a lista de parcelas e ligue \"Anexar boleto (PDF)\".\n2) Confira se chegou um PDF para cada parcela listada e se o nome do arquivo traz o número da parcela.\n3) Repita com a opção desligada: o e-mail chega igual ao de hoje, sem anexo.\nJá testamos o envio de um boleto real pelas contas de e-mail da Finza e da Blips, e os dois chegaram com o PDF.\n\nO que não muda:\n- WhatsApp e RCS seguem sem anexo. A opção existe só no canal e-mail.\n- Em \"Dados externos\" não há parcela, então não há boleto para anexar.\n- Uma lista de contratos montada como variável personalizada não anexa boletos. Só as listas padrão da Torre anexam.\n- O limite diário de envio de cada conta de e-mail é o mesmo.\n- Por enquanto, use a opção em disparos e ações pontuais. Antes de ligar em réguas de volume alto, fale comigo: falta um ajuste interno do nosso lado para esse volume, e eu aviso quando estiver pronto.",
+    "i": false
+   },
+   {
+    "a": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012",
+    "e": null,
+    "dt": "2026-11-16T14:01:48.43831+00:00",
+    "x": "[Solicitação de ajustes] Não entendi a parte de utilização, tenho que usar alguma variável especifica?",
+    "i": false
+   },
+   {
+    "a": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a",
+    "e": null,
+    "dt": "2026-11-16T18:52:04.817765+00:00",
+    "x": "Não precisa de variável nova. O anexo segue as variáveis que a mensagem já usa: com a opção ligada, vai o boleto de cada parcela que essas variáveis escreverem no e-mail.\n\nNa prática, para os e-mails de cobrança de hoje basta ligar a opção. Em 13/11, 628 passos de e-mail ativos (Blips e Finza) usavam a variável \"Contratos com Títulos Disponíveis, Recomprado ou Expirado (vencidos e a vencer 10 dias)\", que já lista as parcelas. Nesses passos, ligar \"Anexar boleto (PDF)\" é tudo o que precisa.\n\nVariáveis que anexam boleto, com o nome que aparece no seletor do editor:\n1) Listas de parcelas: anexam cada parcela que aparece na lista.\n- Contratos com Títulos Disponíveis, Recomprado ou Expirado (vencidos e a vencer 10 dias)\n- Contratos E Suprimentos com Títulos Cobráveis (vencidos e a vencer 10 dias). As parcelas de suprimento ficam sem anexo, porque não têm PDF.\n- Contratos com Títulos Vencidos (e a vencer 10 dias)\n- Lista de Contratos (todos em aberto)\n- Lista de Títulos, Lista de Títulos (Valor Original) e Lista de Títulos com Links\n- Variáveis personalizadas que montam lista de parcelas: anexam as parcelas exibidas, respeitando o limite de itens configurado.\n2) Dados de uma parcela: anexam o boleto da parcela daquela cobrança.\n- Qualquer variável do grupo do título, como Número do Título, Data de Vencimento e Valor Atual.\n- Valor do Pagamento, Data do Pagamento, Código de Barras, Link do Boleto, Código PIX Copia e Cola e Chave PIX.\n- Se o cliente tem mais de uma parcela em aberto e o texto usa Número do Título, Valor Atual, Data de Vencimento ou Dias em Atraso, a Torre troca esses dados pela lista de todas as parcelas em aberto, e então vão os boletos de todas. Isso não acontece em e-mail montado em HTML.\n- No Disparo com \"Uma mensagem por parcela\", vai só o boleto daquela parcela.\n\nVariáveis que não anexam nada sozinhas: Lista de Contratos (números), Valor Total da Dívida e os demais totais, Link de Pagamento, Link do PIX, Link do Cliente e os dados do cliente.\n\nExemplo: \"Olá {nome}, sua dívida é de {Valor Total da Dívida}. Pague em {Link de Pagamento}\". Esse e-mail sai sem anexo mesmo com a opção ligada, porque o texto não cita nenhuma parcela. Se você acrescentar a lista de contratos com títulos disponíveis, passam a ir os PDFs das parcelas listadas.\n\nUm cuidado com a prévia: a linha \"Anexo: boleto em PDF das parcelas citadas\" aparece sempre que a opção está ligada. Ela confirma que a opção está ligada, não que vai algum PDF. Quem decide quais PDFs vão é o texto final.\n\nUma correção ao comentário anterior: lá eu disse que só as listas padrão da Torre anexam. Variável personalizada que monta lista de parcelas também anexa, como no item 1.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T17:53:17.998538+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-13T14:09:10.703747+00:00",
+    "por": "Marcos Rodrigues de Oliveira Júnior",
+    "uid": "409661f3-603f-4ab1-ae15-146076ddca0a"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-13T21:48:42.03042+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "em_andamento",
+    "dt": "2026-11-16T14:01:51.459106+00:00",
+    "por": null,
+    "uid": "72900a52-a218-4a7c-9a57-f05953cef012"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-16T18:52:05.90569+00:00",
+    "por": null,
+    "uid": null
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-18T13:15:30.859483+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "13054": {
+  "t": "Vincular Número Hyperflow",
+  "s": "finalizado",
+  "d": "Solicitação de reconexão de linha WhatsApp (coexistence) no Hyperflow.\n\n• Número: (34) 99725-5968\n• Nome (Hyperflow): Eduarda Zuchetti\n• E-mail do responsável: eduarda.zucheti@blips.com.br\n• Departamento: Cobrança - Suprimentos\n• Empresa: Blips\n\nSolicitado por: joaopedro@blips.com.br\n\nCobrança / Liquidação Financeira / Retirada de Equipamentos / Finza — aberta no time da Finza.\n\nAberta automaticamente pelo Monitor de Conexões (Hyperflow).\n\n---\n_Created via MCP (source: monitor-hyperflow)_",
+  "edd": null,
+  "res": "2026-11-17T00:34:32.658123+00:00",
+  "sca": "2026-11-17T00:34:32.658123+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 1,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-12T19:42:35.871692+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-12T19:57:22.222688+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-12T19:57:24.13817+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-17T00:34:32.658123+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   }
+  ]
+ },
+ "13433": {
+  "t": "Configuração 3 novos números de disparo",
+  "s": "em_andamento",
+  "d": "<h2><strong>Primeiramente bom dia a todos,</strong></h2><p></p><p>Solicito a configuração de <strong>3 novos números de disparo</strong>, seguindo o mesmo padrão de configuração dos números de disparo configurados recentemente.</p><h3><strong>1. Blips Financeiro IV</strong></h3><ul><li><p><strong>Número:</strong> 34998429149</p></li><li><p><strong>Nomenclatura:</strong> Blips - Financeiro IV</p></li><li><p><strong>Identificação:</strong> [IA] &amp; [HUMANO] (Queremos como estão os da torre de controle: 1 IA e 1 humano)</p></li><li><p><strong>Templates:</strong> utilizar os mesmos templates dos números já configurados, mantendo-os idênticos ao padrão existente.</p></li></ul><h3><strong>2. Ideal Financeiro IV</strong></h3><ul><li><p><strong>Número:</strong> 34997135129</p></li><li><p><strong>Nomenclatura:</strong> Ideal - Financeiro IV</p></li><li><p><strong>Identificação:</strong> [IA] &amp; [HUMANO] (Queremos como estão os da torre de controle: 1 IA e 1 humano)</p></li><li><p><strong>Templates:</strong> utilizar os mesmos templates dos números já configurados, mantendo-os idênticos ao padrão existente.</p></li></ul><h3><strong>3. Finza Financeiro IV</strong></h3><ul><li><p><strong>Número:</strong> 34997232774</p></li><li><p><strong>Nomenclatura:</strong> Finza - Financeiro IV</p></li><li><p><strong>Identificação:</strong> [IA] &amp; [HUMANO] (Queremos como estão os da torre de controle: 1 IA e 1 humano)</p></li><li><p><strong>Templates:</strong> utilizar os mesmos templates dos números já configurados, mantendo-os idênticos ao padrão existente.</p></li></ul><h3><strong>Configuração necessária</strong></h3><p>Os três números devem seguir <strong>100% o mesmo padrão dos números configurados recentemente</strong>, contemplando:</p><ul><li><p>Padrão de nomenclatura <strong>[Empresa] - Financeiro IV</strong>;</p></li><li><p>Identificação <strong>[IA] &amp; [HUMANO]</strong>;</p></li><li><p>Templates idênticos aos números que já estão configurados;</p></li><li><p>Configuração e funcionamento na <strong>Torre de Controle</strong>;</p></li><li><p>Configuração e funcionamento no <strong>HyperFlow</strong>;</p></li><li><p>Garantir que os três números estejam <strong>100% operantes</strong> após a configuração.</p></li></ul><p>Um número que pode servir de exemplo para o espelhamento é o <strong>Blips - Financeiro (34 9928-4199)</strong></p><h3><strong>Lembrando que, na organização Finza, queremos somente os números Finza e Ideal.</strong></h3><h3><strong>Na organização Blips, queremos somente os números Blips e Ideal.</strong></h3><p></p>",
+  "edd": "2026-11-20",
+  "res": null,
+  "sca": "2026-11-17T20:14:47.716484+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 3,
+  "c": [
+   {
+    "a": null,
+    "uid": "a9e9d5e8-97a4-48e4-8fe6-12bf2e82e1fd",
+    "e": null,
+    "dt": "2026-11-17T20:14:43.283768+00:00",
+    "x": "[Solicitação de ajustes] João Neto terminou a criação dos números, agora só falta a configuração Leandro",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-16T13:03:06.87475+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-17T12:02:29.831051+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-17T13:18:15.819383+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_validacao",
+    "dt": "2026-11-17T18:53:06.37466+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "em_validacao",
+    "para": "em_andamento",
+    "dt": "2026-11-17T20:14:47.716484+00:00",
+    "por": null,
+    "uid": "a9e9d5e8-97a4-48e4-8fe6-12bf2e82e1fd"
+   }
+  ]
+ },
+ "13457": {
+  "t": "Templates MKT",
+  "s": "bloqueado",
+  "d": "<p>Precisamos de trocar os templates do <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://claude.ai/artifact/1GV7MuUjLnBeToUudSYxFq?sk=Qn97bLob5SS-DWkwmrfx7g\">https://claude.ai/artifact/1GV7MuUjLnBeToUudSYxFq?sk=Qn97bLob5SS-DWkwmrfx7g</a> para utilidade;</p>",
+  "edd": "2026-11-20",
+  "res": null,
+  "sca": "2026-11-16T23:25:16.887434+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 3,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-16T13:02:47.516064+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-16T13:05:48.083878+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-16T23:25:16.887434+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   }
+  ]
+ },
+ "13521": {
+  "t": "Nova Era | Bitrix 2#7897",
+  "s": "fila_exec",
+  "d": "<p>Boa tarde Senhores(as),</p><p></p><p>Entendo que de acordo com a demanda #7897 ainda tem pontos com o time de processo, porém fazendo o batimento da demanda identifiquei alguns pontos necessários de ajuste e cataloguei no seguinte artefato: <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://claude.ai/artifact/UXFKGTAbtYfH8dmhdMBSby?sk=YgfAPJUb-KZk3pGdNWjrqQ#f-formalizacao\">https://claude.ai/artifact/UXFKGTAbtYfH8dmhdMBSby?sk=YgfAPJUb-KZk3pGdNWjrqQ#f-formalizacao</a></p><p>Peço apoio nas correções pertinentes e que informe ao final o que foi possível, o que não foi possível parar eu entender e darmos andamento.</p><p></p><p>Grato J</p>",
+  "edd": "2026-12-02",
+  "res": null,
+  "sca": "2026-11-18T13:07:56.221071+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 8,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-18T13:07:56.221071+00:00",
+    "por": "João Vinicius Dessimoni Fernandes",
+    "uid": "34a15ef4-cfb6-4c4a-86e8-e069b068677f"
+   }
+  ]
+ },
+ "13545": {
+  "t": "Criação Números Novos",
+  "s": "finalizado",
+  "d": "<p>Primeiramente, boa tarde.<br><br>João Neto, estou abrindo esta demanda para solicitar a criação de 3 novos números para disparo.<br>Leandro pediu pra abrir enquanto ele ainda não tem o acesso pra fazer essa função.<br> <br>  <strong>1. Blips Financeiro IV</strong></p><ul><li><p><strong>Número:</strong> 34998429149</p></li><li><p><strong>Nomenclatura:</strong> Blips - Financeiro IV</p></li></ul><h3><strong>2. Ideal Financeiro IV</strong></h3><ul><li><p><strong>Número:</strong> 34997135129</p></li><li><p><strong>Nomenclatura:</strong> Ideal - Financeiro IV</p></li></ul><h3><strong>3. Finza Financeiro IV</strong></h3><ul><li><p><strong>Número:</strong> 34997232774</p></li><li><p><strong>Nomenclatura:</strong> Finza - Financeiro IV</p></li></ul><p></p>",
+  "edd": "2026-11-20",
+  "res": "2026-11-17T20:13:44.420767+00:00",
+  "sca": "2026-11-17T20:13:44.420767+00:00",
+  "asg": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+  "sp": 2,
+  "c": [
+   {
+    "a": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3",
+    "e": null,
+    "dt": "2026-11-17T13:12:52.159717+00:00",
+    "x": "@Filipe Kopper Borges os números anexados já estão vinculados a operadores respectivamente sendo eles: Luiza, Juliane e Eduarda.",
+    "i": false
+   }
+  ],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-17T12:00:29.307096+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "fila_exec",
+    "para": "em_andamento",
+    "dt": "2026-11-17T12:47:12.968318+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "bloqueado",
+    "dt": "2026-11-17T13:11:58.788206+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "bloqueado",
+    "para": "em_andamento",
+    "dt": "2026-11-17T18:59:27.076409+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_andamento",
+    "para": "em_validacao",
+    "dt": "2026-11-17T20:09:58.652003+00:00",
+    "por": "João Pedro da Silva Neto",
+    "uid": "f403707d-27d8-4c49-8632-28d53c3eafe3"
+   },
+   {
+    "de": "em_validacao",
+    "para": "finalizado",
+    "dt": "2026-11-17T20:13:44.420767+00:00",
+    "por": null,
+    "uid": "a9e9d5e8-97a4-48e4-8fe6-12bf2e82e1fd"
+   }
+  ]
+ },
+ "13565": {
+  "t": "Pesquisa Templates Marketing",
+  "s": "finalizado",
+  "d": "<p>Pesquisar quais templates de marketing estão ativos na torre e seus gastos</p>",
+  "edd": null,
+  "res": "2026-11-17T12:02:12.67132+00:00",
+  "sca": "2026-11-17T12:02:12.67132+00:00",
+  "asg": "857575b1-6803-4d5b-b817-b521cc45c5eb",
+  "sp": 3,
+  "c": [],
+  "h": [
+   {
+    "de": "backlog",
+    "para": "fila_exec",
+    "dt": "2026-11-17T12:02:00.584459+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   },
+   {
+    "de": "fila_exec",
+    "para": "finalizado",
+    "dt": "2026-11-17T12:02:12.67132+00:00",
+    "por": "Leandro Marques Gontijo Jersé",
+    "uid": "857575b1-6803-4d5b-b817-b521cc45c5eb"
+   }
+  ]
+ }
+}

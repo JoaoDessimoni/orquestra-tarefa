@@ -19,6 +19,7 @@ Contexto completo: `Apresentacoes/executando/roadmap-q4_squad-negocio_09-11-2026
 
 1. **O quadro tem dono e escopo.** Só entra no quadro o que está na regra da §2. Nada de "achei relevante". Na dúvida, **pergunte** ao João antes de adicionar.
 2. **Não invente.** Toda demanda tem `fonte`. Data que não veio do Quimera ou de um documento leva `df:"sugerida"` e é dita ao João como sugestão. Número de meta só do Quimera (§4).
+2b. **A data de entrega prevista verdadeira é a do Quimera.** Para todo item com `key`, `fp` = `expected_delivery_date` do ticket (`get_ticket` — o `list_tickets` **não** traz esse campo). Se o Quimera tem data, ela vence qualquer `fp` do db (sugerida, confirmada, editada na tela). Se o Quimera não tem data, mantém o `fp` atual. A página também aplica isso sozinha na leitura (`qoverlay`, §3.4).
 3. **O negócio é dono de `homolog/`, `obs/` e `historico/`.** Claude **nunca** escreve, apaga ou "corrige" esses caminhos. Claude escreve só em `roadmap/demandas` e `roadmap/config`.
 4. **Quimera é só leitura daqui.** Reconcile lê o Quimera (`mcp__quimera__list_tickets`/`get_ticket` ou agente `quimera-ops`) e escreve no artefato. Nunca muda ticket.
 5. **Texto curado não é sobrescrito** pelo texto cru do ticket (`titulo`, `desc`, `ac`). Só o reconcile de campos-espelho (§3) é automático.
@@ -41,9 +42,13 @@ Contexto completo: `Apresentacoes/executando/roadmap-q4_squad-negocio_09-11-2026
 
 ## 3. Reconcile com o Quimera (procedimento)
 
-1. Listar os 6 status não-terminais do time (1 chamada por status, `limit` 100). Para cada `key` do quadro que **não** apareceu, `get_ticket` (está finalizado ou cancelado — ler `status`, `resolved_at`, comentários).
-2. `ArtifactData get roadmap/demandas` → `version`.
-3. Montar um único `update` com `{ atualizado_em, items: { <id>: {campos} } }` e `if_version`.
+**Janela fixa: 01/10/2026 → dia atual.** Todo reconcile cobre o time `ia_automacao_finza` nesse período — sempre recalcular "hoje" pela data do sistema, nunca reaproveitar a janela de um reconcile anterior.
+
+1. **Abertos (qualquer data de criação):** `list_tickets` nos 6 status não-terminais (1 chamada por status, `limit` 100).
+2. **Fechados na janela:** `list_tickets status=finalizado only_parents=true limit=200` (resultado grande — sai em arquivo; processar com `node`) e `status=cancelado`. Filtrar `resolved_at >= 2026-10-01` (cancelado: `updated_at >= 2026-10-01`). Se o mais antigo da página ainda for ≥ 01/10, paginar com `offset`.
+3. Cruzar com o quadro (`ArtifactData get roadmap/demandas` com `out_dir` dentro do projeto — o scratchpad é recusado — anotar `version`; contar só `!deleted`). Aplicar §2: aberto que falta → entra; finalizado na janela que falta → **perguntar** ao João (exceto operacionais/templates, que vão para o agregador).
+4. **`get_ticket` + `list_ticket_status_history`** de todo ticket do quadro que está aberto, que mudou desde o último reconcile (`updated_at` ≥ data do último `qmeta.at`) ou que ainda não está no `qmirror`. Para 20+ tickets, delegar a um agente `general-purpose` (só leitura) que grava um JSON `{n:{t,s,d,edd,res,sca,asg,sp,c[],h[]}}` em `Backlog/referencias/json/2026-11-09_roadmap-q4/<data>_quimera-fetch.json`.
+5. Montar um único `update` em `roadmap/demandas` com `{ atualizado_em, items: { <id>: {campos} } }` e `if_version` — o db fica igual ao Quimera mesmo sem a página.
 
 Campos-espelho (mudam sozinhos no reconcile):
 
@@ -54,13 +59,19 @@ Campos-espelho (mudam sozinhos no reconcile):
 | `sp` | `story_points` (nulo mantém o atual) |
 | `ir` | data de entrada em `em_andamento` (`status_changed_at` quando o ticket acabou de ir para lá) — só se ainda vazio |
 | `fr` | `resolved_at` (finalizado) ou data de ida para `em_validacao` |
-| `fp` | `expected_delivery_date` se existir; senão mantém (se estava `sugerida`, continua `sugerida`) |
+| `fp` + `df:"quimera"` | `expected_delivery_date` **sempre que existir** (vence o que estiver no db, inclusive `confirmada`); sem data no Quimera mantém o atual (se estava `sugerida`, continua `sugerida`) |
+| `h0` | ao virar `finalizado`: `{s:"aprovada", n:"Finalizado no Quimera em dd/mm/aaaa."}` só se não houver `homolog/<id>`; `cancelado`: `nao_aplica` |
 
 Item novo (§2): `id:"q<nº>"`, `key`, `tipo:"demanda"`, `ord` maior que o atual, `titulo` curto e limpo (sem prefixos tipo `[Bitrix ID-…]`, sem typos), `frente` (`torre|agentes|hyperflow|bitrix|juridico|compliance|estrategica|sustentacao`), `desc` 1–3 frases fiéis à descrição, `ac` se houver critério, `sol`, `prio`, `fonte:"Quimera (ia_automacao_finza), leitura de AAAA-MM-DD"`, `h0:{s:"nao_iniciada",n:""}`, `rel:[]`.
 
 Cancelado no Quimera → `qs:"cancelado"` e `h0:{s:"nao_aplica", n:"<motivo do comentário>"}` (só se não houver `homolog/<id>`).
 
-4. **Espelho na página** (desde 11/11): o HTML embute `<script id="qmirror">` (por ticket: `t`,`s`,`d`, comentários `c[]={a,e,dt,x,i}` mostrados na tela da demanda) e `<script id="qmig">` (plano do botão "Sincronizar com Quimera": `dates`, `add`, `del`, `delIds`, `edit`, `refine`, `recon`). A cada reconcile, atualizar também `qmirror` (status + comentários novos via `get_ticket`) e `qmig.recon` com os status atuais — senão o botão de sync devolve status antigos. Isso exige republicar a página (mesmo `file_path`, sem `capabilities`), sempre a partir da versão viva (`Artifact read`).
+4. **Espelho na página — sync automático (desde 18/11, sem botão).** O botão "Sincronizar com Quimera" e o plano `qmig` foram **removidos**. O HTML embute:
+   - `<script id="qmirror">` — por ticket: `t` título, `s` status, `d` descrição, `edd` entrega prevista, `res` resolved_at, `dv` responsável (nome), `sp`, `c[]={a,e,dt,x,i}` comentários, `h[]={de,para,dt,por}` histórico de status.
+   - `<script id="qmeta">` — `{at: ISO do reconcile, janela:{de:"2026-10-01", ate}}`; a barra lateral mostra "Quimera sincronizado em …".
+   - Na leitura do db, `qoverlay()` aplica o espelho em cada item com `key`: `qs←s`, `fp←edd` (+`df:"quimera"`, trava com aviso "altere no Quimera"), `fr←res` (finalizado), `dev←dv`, `sp`. Ou seja: **o João só atualiza a tela**; o que aparece é o Quimera do último reconcile.
+   - Atualizar com `scratchpad/build.js`-equivalente: ler a versão viva (`Artifact read`), mesclar o fetch no `qmirror`, regravar `qmeta.at`, `node --check`, republicar (mesmo `file_path`, **sem** `capabilities`). O script de referência fica em `Backlog/referencias/json/2026-11-09_roadmap-q4/build-qmirror.js`.
+   - ⚠️ A página **não** fala com o Quimera em tempo real: o MCP do Quimera é local (host). Atualização "sozinha" exige rodar este reconcile (manual, `/loop` ou rotina agendada).
 5. Reportar ao João: o que mudou de status, o que entrou, o que ficou de fora e por quê. Exclusão pedida pelo João: #12941 (Chamadas Finza) não entra no roadmap.
 
 ## 4. Metas e anéis (`roadmap/config`)

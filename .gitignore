@@ -20,6 +20,9 @@ torre-dev.env
 /finza-torre-controle-ia/
 /infra-torre-controle/
 
+# Dados extraidos de demandas (PII: telefone, CNPJ, conversas). Nunca comitar.
+/Harness/demandas/*/dados/
+
 # Dump de esquema de producao baixado como artifact do CI. Descartavel:
 # regerar pelo workflow dump-schema.yml quando precisar.
 /baseline-schema-PROD-*/
