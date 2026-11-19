@@ -165,6 +165,7 @@ meta.janela = { ini: jMin, fim: jMax, rotulo: `${d2(jMin).slice(0, 5)} a ${d2(jM
 meta.notas = [
   "Todas as conversas vêm do BigQuery. A avaliação por IA (score de qualidade, assunto, frustração) ainda não rodou: aguarda a conversa completa pelo Desk.",
   "FINZA: conversa reconstruída (cerca de metade das mensagens). BLIPS · Cobrança: histórico completo em 34% dos chats; o restante é amostra.",
+  "Torre (Supabase, ai_messages): acrescenta o trecho cliente × IA com horário real quando o chat não tem histórico completo. Só conversa com IA, nada de atendente humano. O texto só está retido de meados de outubro de 2026 em diante; antes disso a mensagem entra sem texto, só para medir o tempo.",
   "Áudio do cliente quase todo sem transcrição.",
   "CNPJ vem do CRM pelo telefone; telefone ligado a mais de um CNPJ aparece como ambíguo.",
   "Encerramento do cliente: último bloco só com cortesia curta, depois de um turno respondido, não conta como sem resposta.",

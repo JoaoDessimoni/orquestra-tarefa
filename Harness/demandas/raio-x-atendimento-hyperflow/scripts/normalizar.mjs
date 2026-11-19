@@ -118,8 +118,14 @@ const botEhHumano = (rec, r) => {
 };
 let resgatadas = { A: 0, B: 0 };
 
-const turnosIA = new Map(); // protocol -> []
-for (const t of ler("ia_turnos_A")) { let a = turnosIA.get(t.protocol); if (!a) turnosIA.set(t.protocol, a = []); a.push(t); }
+// Torre (Supabase, org_finza/org_blips.ai_messages): trecho cliente × IA com horário real (occurred_at). Texto retido só de meados de out/2026 em diante.
+const TORRE_SEM_TXT = "[texto não retido pela Torre]";
+const wallT = s => s ? Date.parse(String(s).replace(" ", "T").replace(/([+-]\d\d)$/, "$1:00")) - OFF : null;
+const torreMsgs = new Map(); // rec|protocol -> [{ts, autor, txt, agent}]
+const torreStat = { A: null, B: null };
+for (const rec of ["A", "B"]) { const T = torreStat[rec] = { linhas: 0, a2a: 0, protocolo_fora_do_recorte: 0, chat_completo_ignorado: 0, fora_do_horario_do_chat: 0, duplicada_do_bq: 0, reclassificada_para_ia: 0, adicionadas: { cliente: 0, ia: 0 }, adicionadas_sem_texto: 0, chats_com_torre: 0 };
+  for (const t of ler("torre_ai_messages_" + rec)) { T.linhas++; if (bool(t.is_a2a)) { T.a2a++; continue; } const ts = wallT(t.occurred_at); if (ts == null || isNaN(ts)) continue;
+    const k = rec + "|" + t.protocol; let a = torreMsgs.get(k); if (!a) torreMsgs.set(k, a = []); a.push({ ts, autor: t.role === "user" ? "cliente" : "ia", txt: t.content || "", agent: t.agent_id }); } }
 const transcr = new Map();  // protocol -> []
 for (const t of ler("transcricoes_B")) { let a = transcr.get(t.protocol); if (!a) transcr.set(t.protocol, a = []); a.push({ tipo: t.type, texto: t.text, ts: wall(t.created_at), usado: false }); }
 
@@ -136,7 +142,7 @@ function estagioEm(est, ts) { let cur = null; for (const s of est) { if (s.t <= 
 
 const stats = { A: null, B: null };
 const novoStat = () => ({ chats: 0, clientes: 0, broadcast: 0, com_agente: 0, sem_mensagem: 0, msgs: { cliente: 0, humano: 0, ia: 0, sistema: 0 }, msgs_fonte: {}, fonte: {}, tipo: { so_ia: 0, ia_humano: 0, so_humano: 0 },
-  com_turno: 0, faixaCor: {}, faixaCom: {}, sem_resposta: 0, encerramento: 0, sem_resposta_aberto: 0, outlier7d: 0, turnos: 0, audio_cli: 0, audio_transcrito: 0, ia_turnos_add: 0, com_cnpj_chats: 0, ambiguo_chats: 0, por_mes: {}, elegiveis: 0, receptivo: 0 });
+  com_turno: 0, faixaCor: {}, faixaCom: {}, sem_resposta: 0, encerramento: 0, sem_resposta_aberto: 0, outlier7d: 0, turnos: 0, audio_cli: 0, audio_transcrito: 0, com_cnpj_chats: 0, ambiguo_chats: 0, por_mes: {}, elegiveis: 0, receptivo: 0 });
 stats.A = novoStat(); stats.B = novoStat();
 
 const idxOut = fs.createWriteStream(path.join(OUT_M, "protocolos.jsonl"));
@@ -155,7 +161,7 @@ for (const c of chats) {
   for (const r of raw) {
     const ts = wall(r.mensagem_em); if (ts == null) continue;
     const dir = r.direction, mt = r.message_type, st = r.system_type;
-    let autor, atendente = null, texto = r.texto, tipo = TIPO[mt] || "texto", agId = null;
+    let autor, atendente = null, texto = r.texto, tipo = TIPO[mt] || "texto", agId = null, resg = false;
     const sEst = estagioEm(est, ts);
     const dId = r.department_id || sEst?.d || c.department_id;
     if (dir === "info" || mt === "system" || st) {
@@ -173,14 +179,14 @@ for (const c of chats) {
       const humanoNoEstagio = !!(sEst && sEst.a && !deptos.get(sEst.d)?.ia);
       const apAtivo = !!ap && ap.ini != null && ts >= ap.ini - 60e3 && ts <= ((ap.transf ?? ap.fim ?? Infinity) + 60e3);
       if (dIA || (apAtivo && !humanoNoEstagio)) { autor = "ia"; atendente = iaNome(ap?.agent) || deptos.get(dId)?.nome || "IA"; }
-      else if (humanoNoEstagio && r.fonte !== "chat_history_completo" && botEhHumano(rec, r)) { autor = "humano"; agId = atKey(sEst.a); atendente = atNome(agId); resgatadas[rec]++; }
+      else if (humanoNoEstagio && r.fonte !== "chat_history_completo" && botEhHumano(rec, r)) { autor = "humano"; agId = atKey(sEst.a); atendente = atNome(agId); resgatadas[rec]++; resg = true; }
       else { autor = "sistema"; atendente = "Automação"; }
     }
     if (autor !== "sistema" || tipo !== "sistema") {
       if (!texto) texto = mt === "hsm" ? `[template${r.tpl ? " " + r.tpl : ""}]` : (PLACE[mt] || `[${mt || "mensagem"}]`);
     }
     fontesMsg.add(r.fonte);
-    msgs.push({ ts, autor, texto, atendente, tipo, _ag: agId, _mt: mt, _f: r.fonte });
+    msgs.push({ ts, autor, texto, atendente, tipo, _ag: agId, _mt: mt, _f: r.fonte, _resg: !!resg });
   }
   // transcrições (BLIPS): casa por protocolo + tipo + horário mais próximo (até 6 h)
   const tr = transcr.get(c.protocol);
@@ -188,19 +194,25 @@ for (const c of chats) {
     let best = null; for (const t of tr) if (!t.usado && t.tipo === "audio" && t.texto && t.ts != null) { const d = Math.abs(t.ts - m.ts); if (d <= 6 * 3600e3 && (!best || d < best.d)) best = { t, d }; }
     if (best) { best.t.usado = true; m.texto = "[áudio transcrito] " + best.t.texto; m._tr = true; }
   }
-  // turnos da IA FINZA (Torre): completa o lado da IA quando a reconstrução não trouxe a mensagem
-  if (rec === "A") { const tu = turnosIA.get(c.protocol); if (tu) {
-    const ini = wall(c.created_at), fim = (wall(c.finished_at) ?? CUT) + DAY;
-    for (const t of tu) { const tr2 = wall(t.created_at); if (tr2 == null || tr2 < ini - 3600e3 || tr2 > fim) continue;
-      // Só a resposta da IA é injetada (horário = created_at). A mensagem do cliente NÃO: processing_time_ms vem zerado na Torre,
-      // então o horário dela é desconhecido e injetá-la criava um turno falso de 1 s. Sem a mensagem real do cliente, não há turno.
-      const cand = [["ia", t.ai_response, tr2]];
-      for (const [autor, txt, ts] of cand) { const n = norm(txt); if (!n) continue;
-        const dup = msgs.some(m => m.autor === autor && Math.abs(m.ts - ts) <= 5 * 60e3 && (() => { const k = norm(m.texto); return k && (n.includes(k.slice(0, 60)) || k.includes(n.slice(0, 60))); })());
-        if (dup) continue;
-        msgs.push({ ts, autor, texto: txt, atendente: autor === "ia" ? (iaNome(t.agent_id) || iaNome(ap?.agent) || "IA") : null, tipo: "texto", _ag: null, _mt: "text", _f: "ia_turnos_torre" });
-        fontesMsg.add("ia_turnos_torre"); S.ia_turnos_add++; }
-    } } }
+  // Torre: mensagens do cliente e da IA com horário real. Vale para A e B; em B só quando o chat não tem chat_history_completo (completo e oficial).
+  // Deduplicação um-para-um contra o BigQuery: mesmo autor, ±5 min e texto contido; ou ±60 s quando um dos lados não tem texto comparável.
+  // Fala que o BigQuery rotulou como automação ou resgatou como humana, mas que a Torre confirma como resposta da IA (texto contido, ±5 min), vira "ia".
+  { const tu = torreMsgs.get(rec + "|" + c.protocol), T = torreStat[rec];
+    if (tu && fontesMsg.has("chat_history_completo")) T.chat_completo_ignorado += tu.length;
+    else if (tu) {
+      const ini = wall(c.created_at), fim = (wall(c.finished_at) ?? CUT) + DAY, usados = new Set(); let add = 0;
+      const contido = (a, b) => a && b && (a.includes(b.slice(0, 60)) || b.includes(a.slice(0, 60)));
+      for (const t of tu) { if (t.ts < ini - 3600e3 || t.ts > fim) { T.fora_do_horario_do_chat++; continue; }
+        const nt = norm(t.txt); let best = null, reclass = null;
+        for (let i = 0; i < msgs.length; i++) { const m = msgs[i]; if (usados.has(i)) continue; const d = Math.abs(m.ts - t.ts); if (d > 5 * 60e3) continue; const k = norm(m.texto), semK = !k || k.startsWith("[");
+          if (m.autor === t.autor) { if ((contido(nt, k) && !semK) || (d <= 60e3 && (!nt || semK))) { if (!best || d < best.d) best = { i, d }; } }
+          else if (t.autor === "ia" && nt && !semK && contido(nt, k) && ((m.autor === "sistema" && m.atendente === "Automação") || (m.autor === "humano" && m._resg))) { if (!reclass || d < reclass.d) reclass = { i, d }; } }
+        if (best) { usados.add(best.i); T.duplicada_do_bq++; continue; }
+        if (reclass) { const m = msgs[reclass.i]; usados.add(reclass.i); m.autor = "ia"; m.atendente = iaNome(t.agent) || iaNome(ap?.agent) || "IA"; m._ag = null; m._resg = false; T.reclassificada_para_ia++; continue; }
+        msgs.push({ ts: t.ts, autor: t.autor, texto: t.txt || TORRE_SEM_TXT, atendente: t.autor === "ia" ? (iaNome(t.agent) || iaNome(ap?.agent) || "IA") : null, tipo: "texto", _ag: null, _mt: "text", _f: "torre_ai_messages" });
+        fontesMsg.add("torre_ai_messages"); T.adicionadas[t.autor]++; if (!t.txt) T.adicionadas_sem_texto++; add++; }
+      if (add) T.chats_com_torre++;
+    } }
   msgs.sort((a, b) => a.ts - b.ts);
 
   // transferência IA → humano: início do 1º estágio humano depois de um estágio de IA (ou transferred_at da Torre)
@@ -230,7 +242,7 @@ for (const c of chats) {
   const outlier = met.turnos.some(t => t.cor != null && t.cor > 7 * 1440);
   const primCli = msgs.find(m => m.autor !== "sistema");
   const receptivo = !bool(c.is_broadcast) && primCli?.autor === "cliente";
-  const fonte = !raw.length ? (rec === "A" ? "BQ reconstrução" : "BQ amostra") : fontesMsg.has("chat_history_completo") ? "BQ completa" : fontesMsg.has("tb_chat_messages_amostra") ? "BQ amostra" : "BQ reconstrução";
+  const fonte = fontesMsg.has("torre_ai_messages") ? "BQ + Torre (IA)" : !raw.length ? (rec === "A" ? "BQ reconstrução" : "BQ amostra") : fontesMsg.has("chat_history_completo") ? "BQ completa" : fontesMsg.has("tb_chat_messages_amostra") ? "BQ amostra" : "BQ reconstrução";
   const inicio = wall(c.created_at), fim = wall(c.finished_at);
   const telDig = (c.contact_phone || "").replace(/\D/g, "");
   const cliId = `${rec}_${c.tel_canon || telDig || c.contact_id || c.chat_id}`;
@@ -267,6 +279,7 @@ for (const r of ["A", "B"]) stats[r].clientes = [...clientes.values()].filter(c 
 for (const r of ["A", "B"]) { const cs = [...clientes.values()].filter(c => c.rec === r); stats[r].clientes_com_cnpj = cs.filter(c => c.cnpjs.length).length; stats[r].clientes_ambiguos = cs.filter(c => c.ambiguo).length; stats[r].atendentes = [...ats.values()].filter(a => a.rec === r).length; }
 fs.writeFileSync(path.join(OUT_M, "clientes.jsonl"), [...clientes.values()].map(c => JSON.stringify(c)).join("\n") + "\n");
 fs.writeFileSync(path.join(OUT_M, "atendentes.json"), JSON.stringify([...ats.values()].map(a => ({ id: a.id, rec: a.rec, nome: a.nome, depto: Object.entries(a.deptos).sort((x, y) => y[1] - x[1])[0]?.[0] || "", n: a.n }))));
-const resumo = { gerado_em: new Date().toISOString(), cargas, mensagens_orfas: orfas, falas_humanas_resgatadas: resgatadas, ...stats };
+for (const rec of ["A", "B"]) { const ps = new Set(chats.filter(c => c.rec === rec).map(c => String(c.protocol))); for (const [k, a] of torreMsgs) if (k.startsWith(rec + "|") && !ps.has(k.slice(2))) torreStat[rec].protocolo_fora_do_recorte += a.length; }
+const resumo = { gerado_em: new Date().toISOString(), cargas, mensagens_orfas: orfas, falas_humanas_resgatadas: resgatadas, torre: torreStat, ...stats };
 fs.writeFileSync(path.join(OUT_M, "resumo.json"), JSON.stringify(resumo, null, 1));
 console.log(JSON.stringify(resumo, null, 1));

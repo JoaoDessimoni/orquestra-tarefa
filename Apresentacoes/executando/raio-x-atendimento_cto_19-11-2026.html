@@ -695,7 +695,7 @@ function maisHTML(deptos){
     <div class="ddsec">Atendimento</div>${rad("tipo",[["so_ia","Só IA"],["ia_humano","IA → humano"],["so_humano","Só humano"]])}
     <div class="ddsec">Resolução</div>${rad("resolvido",[["sim","Resolvido"],["parcial","Resolvido em parte"],["nao","Não resolvido"]])}
     <div class="ddsec">CNPJ</div>${rad("cnpj",[["com","Com CNPJ"],["sem","Sem CNPJ"],["amb","CNPJ ambíguo"]])}
-    <div class="ddsec">Fonte da conversa</div>${rad("fonte",[["API completa","Completa (API)"],["BQ completa","BigQuery completa"],["BQ amostra","BigQuery amostra"],["BQ reconstrução","BigQuery reconstrução"]])}
+    <div class="ddsec">Fonte da conversa</div>${rad("fonte",[["BQ completa","BigQuery completa"],["BQ amostra","BigQuery amostra"],["BQ reconstrução","BigQuery reconstrução"],["BQ + Torre (IA)","BigQuery + Torre (IA)"]])}
     <div class="ddsec">Departamento</div>${rad("depto",deptos.map(d=>[d,d]))}
    </div>`:""}</div>`;
 }
