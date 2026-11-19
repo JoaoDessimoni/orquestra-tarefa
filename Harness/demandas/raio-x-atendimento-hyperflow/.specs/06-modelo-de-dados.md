@@ -82,6 +82,13 @@ As funções `bizMin`, `faixaDe`, `ehCortesia`, `fechaMet` e `metricas` são có
 - Efeito no FINZA: 241 turnos de IA medidos (9 fora da medição), protocolos com turno de 5.637 para 4.651, sem mensagem do cliente de 16.779 para 17.765. BLIPS: 8.209 medidos e 770 fora da medição; contagens de protocolo iguais.
 - Como o FINZA perdeu um lote, `data/m/A_009.json` foi removido da publicação.
 
+### 2.5 Torre (ai_messages) incorporada (2026-11-19)
+
+- Nova entrada bruta: `dados/brutos/torre_ai_messages_{A,B}.json` (SELECT no Supabase da Torre, consolidado por `scripts/torre_consolidar.mjs`).
+- Nova fonte de protocolo: `BQ + Torre (IA)` (2.937 em A, 1.091 em B). Continua "fonte aproximada".
+- Novo tipo de mensagem no lote: índice 7 = `sem_horario` (mensagem do cliente vinda da Torre, sem horário real; não abre bloco em `metricas`). Novo bit em `flags` do índice: 32 = protocolo tem mensagem de cliente sem horário.
+- Volume depois da incorporação: 53 arquivos, 83,9 MB (10 lotes em A, 40 em B). Detalhe e contagens na spec 10, seção "Resultado da incorporação da Torre".
+
 ## 3. Banco do artefato (`db`)
 
 Só o que é pequeno e sem PII. Três documentos:

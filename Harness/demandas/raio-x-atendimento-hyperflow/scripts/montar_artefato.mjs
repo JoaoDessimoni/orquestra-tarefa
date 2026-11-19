@@ -33,7 +33,7 @@ const dicio = () => { const m = new Map(), l = []; return { l, i: v => { let k =
 // A publicação recusa U+FFFD (caractere corrompido na origem) e o JSON não deve levar surrogate solto nem controle: vira U+25A1 (quadrado vazio).
 // Para ehCortesia tanto faz (ambos são não-letra), e a prova de métricas abaixo roda já com o texto limpo.
 const limpo = t => typeof t === "string" ? t.toWellFormed().replace(/[\uFFFD\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "\u25A1") : t;
-const AUT = ["cliente", "humano", "ia", "sistema"], TIPOS_MSG = ["texto", "audio", "imagem", "documento", "video", "template", "sistema"];
+const AUT = ["cliente", "humano", "ia", "sistema"], TIPOS_MSG = ["texto", "audio", "imagem", "documento", "video", "template", "sistema", "sem_horario"];
 const TIPO_P = ["so_ia", "ia_humano", "so_humano"], POR = { ia: 0, humano: 1 };
 
 // ----- conversa: arquivo local -> formato compacto [base, [dt, autor, texto, atendenteIdx?, tipoIdx?], ...]
@@ -131,7 +131,7 @@ for (const rec of ["A", "B"]) {
   const cliLin = Cr.map((c, i) => JSON.stringify([c.id, c.telefone, c.cnpjs, c.ambiguo ? 1 : 0, c.nome, loteDe[i]]));
   const protLin = Pr.map(p => {
     if (p.inicio < jMin) jMin = p.inicio; if (p.inicio > jMax) jMax = p.inicio;
-    const flags = (p.aberto ? 1 : 0) | (p.broadcast ? 2 : 0) | (p.receptivo ? 4 : 0) | (p.outlier ? 8 : 0) | (p.audioNT ? 16 : 0);
+    const flags = (p.aberto ? 1 : 0) | (p.broadcast ? 2 : 0) | (p.receptivo ? 4 : 0) | (p.outlier ? 8 : 0) | (p.audioNT ? 16 : 0) | (p.cliSemHora ? 32 : 0);
     const ai = p.atId != null && atIdx.has(p.atId) ? atIdx.get(p.atId) : -1;
     return JSON.stringify([p.id, p.protocol, cliIdx.get(p.cliente), TIPO_P.indexOf(p.tipo), dDepto.i(p.depto), p.atendentes.map(n => dNome.i(n)), ai, p.inicio,
       p.transf == null ? null : p.transf - p.inicio, dFonte.i(p.fonte), flags, p.met.assumir ? Math.round(p.met.assumir.cor * MIN) : null, turnosCompactos(p)]);
@@ -156,7 +156,7 @@ for (const rec of ["A", "B"]) {
   const S = resumo[rec];
   meta.rec[rec] = { nome: rec === "A" ? "FINZA" : "BLIPS · Cobrança", protocolos: Pr.length, clientes: Cr.length, com_turno: comT.length, sem_resposta: comT.filter(p => p.met.semResposta).length,
     encerramento: Pr.filter(p => p.met.encerramento).length, tipos: cont(Pr, p => p.tipo), fonte: cont(Pr, p => p.fonte), faixaCom: cont(comT, p => p.met.faixaCom), faixaCor: cont(comT, p => p.met.faixaCor),
-    mensagens: nMsgs, audio_cliente: S.audio_cli, audio_transcrito: S.audio_transcrito, protocolos_com_audio_nt: nAudioNT, pct_chats_com_cnpj: +(100 * S.com_cnpj_chats / S.chats).toFixed(1), sem_mensagem_do_cliente: Pr.length - comT.length, mediana_msgs_por_fonte: Object.fromEntries(Object.entries(Pr.reduce((o, p) => ((o[p.fonte] ??= []).push(p.nMsgs), o), {})).map(([f, a]) => [f, median(a)])),
+    mensagens: nMsgs, audio_cliente: S.audio_cli, audio_transcrito: S.audio_transcrito, protocolos_com_audio_nt: nAudioNT, pct_chats_com_cnpj: +(100 * S.com_cnpj_chats / S.chats).toFixed(1), sem_mensagem_do_cliente: Pr.length - comT.length, sem_turno_com_cliente_sem_horario: Pr.filter(p => !p.met.turnos.length && p.cliSemHora).length, protocolos_com_torre: Pr.filter(p => p.fonte === "BQ + Torre (IA)").length, mediana_msgs_por_fonte: Object.fromEntries(Object.entries(Pr.reduce((o, p) => ((o[p.fonte] ??= []).push(p.nMsgs), o), {})).map(([f, a]) => [f, median(a)])),
     turnos_ia_medidos: Pr.reduce((s, p) => s + p.met.turnos.filter(t => t.por === "ia" && !t.rap).length, 0), turnos_ia_fora_da_medicao: Pr.reduce((s, p) => s + p.met.turnos.filter(t => t.rap).length, 0),
     ia_rotulo: rotIA, ia_familias: fam, ats: ats.map(a => ({ id: a.id, nome: a.nome, depto: a.depto })), idx: idxArqs, lotes: lote, lote_prefixo: `data/m/${rec}_` };
 }
@@ -165,7 +165,7 @@ meta.janela = { ini: jMin, fim: jMax, rotulo: `${d2(jMin).slice(0, 5)} a ${d2(jM
 meta.notas = [
   "Todas as conversas vêm do BigQuery. A avaliação por IA (score de qualidade, assunto, frustração) ainda não rodou: aguarda a conversa completa pelo Desk.",
   "FINZA: conversa reconstruída (cerca de metade das mensagens). BLIPS · Cobrança: histórico completo em 34% dos chats; o restante é amostra.",
-  "Torre (Supabase, ai_messages): acrescenta o trecho cliente × IA com horário real quando o chat não tem histórico completo. Só conversa com IA, nada de atendente humano. O texto só está retido de meados de outubro de 2026 em diante; antes disso a mensagem entra sem texto, só para medir o tempo.",
+  "Torre (Supabase, ai_messages): acrescenta o trecho cliente × IA quando o chat não tem histórico completo. Só conversa com IA, nada de atendente humano. A resposta da IA entra com horário real. A mensagem do cliente entra só como texto, sem horário, e não gera espera: a Torre grava nela o mesmo horário da resposta. O texto só está retido de meados de outubro de 2026 em diante; antes disso vem dos turnos da IA no BigQuery, quando existe, ou fica como '[texto não retido pela Torre]'.",
   "Áudio do cliente quase todo sem transcrição.",
   "CNPJ vem do CRM pelo telefone; telefone ligado a mais de um CNPJ aparece como ambíguo.",
   "Encerramento do cliente: último bloco só com cortesia curta, depois de um turno respondido, não conta como sem resposta.",

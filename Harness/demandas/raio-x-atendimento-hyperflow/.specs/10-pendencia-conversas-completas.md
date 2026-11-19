@@ -73,3 +73,59 @@ Recomendação: caminho 1 para fechar a entrega, caminho 3 em paralelo como defi
 4. Refazer a estimativa do lote do avaliador, esperar o ok do João, rodar uma vez (spec 04 §7).
 5. Score e agregados (spec 05), `scripts/montar_artefato.mjs`, republicar no mesmo artefato.
 6. Calibração com 20 protocolos (spec 09 §3) e proposta de comentário de entrega no Quimera #13860.
+
+## Resultado da incorporação da Torre
+
+Feito em 2026-11-19, só com `SELECT` em `org_finza.ai_messages` e `org_blips.ai_messages` (Supabase da Torre), janela 2026-08-20 03:00Z → 2026-11-20 03:00Z. Extração integral, sem redução: `dados/brutos/torre_ai_messages_{A,B}.json`.
+
+**Extraído**
+
+| | FINZA (`org_finza`) | BLIPS (`org_blips`) |
+|---|---|---|
+| Linhas | 31.858 | 41.186 |
+| `user` / `assistant` | 16.529 / 15.329 | 20.626 / 20.560 |
+| Com texto / sem texto | 9.949 / 21.909 | 13.016 / 28.170 |
+| Protocolos | 5.213 | 8.169 |
+| `is_a2a = true` | 0 | 0 |
+
+Texto por mês: ago e set sem texto nas duas orgs; out com 4.254 de 9.280 (FINZA) e 5.485 de 13.665 (BLIPS); nov completo.
+
+**Achado que muda a regra: a Torre não guarda o horário da mensagem do cliente.** No mesmo turno, `user` e `assistant` têm o mesmo `occurred_at` (intervalo mediano de 0 s; abaixo de 3 s em 15.105 de 15.115 pares no FINZA e em 20.254 de 20.261 no BLIPS; `scripts/diag_torre_gap.mjs`). Validação contra o histórico oficial (BLIPS com `chat_history_completo`, mesma mensagem casada por texto):
+
+| | Pares | Torre − oficial (mediana) | p25 – p75 |
+|---|---|---|---|
+| Resposta da IA | 341 | −0,7 s | −1,0 a −0,5 s |
+| Mensagem do cliente | 805 | **+152,5 s** | +100,6 a +195,8 s |
+
+Ou seja: o horário da resposta da IA é real; o da mensagem do cliente é o da resposta. Por isso:
+
+- a resposta da IA (`assistant`) entra com horário real;
+- a mensagem do cliente (`user`) entra só como texto, com tipo `sem_horario`: não abre bloco, não gera espera e fica fora da regra de cortesia. Usar o `occurred_at` dela criaria turnos falsos de 0 s (a mesma falha corrigida antes com os turnos de 1 s);
+- mensagem sem texto entra como `[texto não retido pela Torre]`. No FINZA, o texto dos turnos da IA do BigQuery (`ia_turnos_A`) foi devolvido a 3.678 respostas e 3.627 mensagens de cliente que a Torre guardou sem texto.
+
+**O que entrou nos recortes**
+
+| | FINZA (A) | BLIPS · Cobrança (B) |
+|---|---|---|
+| Linhas de protocolo fora do recorte | 11.280 | 28.426 |
+| Linhas de chat com histórico completo (não usadas) | 0 | 6.252 |
+| Linhas fora do horário do chat | 0 | 516 |
+| Linhas já presentes no BigQuery (deduplicadas) | 4.202 | 2.185 |
+| Mensagens acrescentadas: cliente / IA | 7.727 / 8.649 | 1.495 / 2.312 |
+| Acrescentadas sem texto | 5.364 | 2.619 |
+| Protocolos com fonte "BQ + Torre (IA)" | 2.937 | 1.091 |
+
+**Efeito nas métricas (antes × depois)** — calculado e gerado em disco; a republicação no artefato ficou pendente de confirmação, porque o artefato passou a estar compartilhado com usuários específicos durante o trabalho.
+
+| | A antes | A depois | B antes | B depois |
+|---|---|---|---|---|
+| Protocolos com turno | 4.651 | 4.651 | 28.857 | 28.857 |
+| Sem mensagem do cliente com horário | 17.765 | 17.765 | 29.028 | 29.028 |
+| … dos quais com texto do cliente vindo da Torre | — | 1.382 | — | 85 |
+| Turnos de IA medidos | 241 | 352 | 8.209 | 8.663 |
+| Resposta da IA, mediana (p25–p75), s | 122,5 (73,7–149,3) | 123,2 (77,2–163,6) | — | 77,5 (33,8–131,6) |
+| Sem resposta | 1.985 | 1.968 | 5.460 | 5.421 |
+| Red flag comercial / corrido | 1.388 / 1.471 | 1.365 / 1.444 | 11.780 / 12.719 | 11.720 / 12.649 |
+| so_ia / ia_humano / so_humano | 12.297 / 1.306 / 8.813 | 12.353 / 1.560 / 8.503 | 430 / 5.332 / 52.123 | 451 / 5.574 / 51.860 |
+
+Conclusão: a Torre melhora a leitura do trecho com IA (texto e ordem das falas) e reclassifica cerca de 300 protocolos por recorte que tinham IA e apareciam como só humano. **Não resolve a medição de espera**: sem o horário real do cliente, o número de protocolos com turno não muda. A pendência da conversa completa pelo Desk continua igual.

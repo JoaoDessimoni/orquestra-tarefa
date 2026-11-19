@@ -59,7 +59,8 @@ function fechaMet(turnos,assumir,transf){
 function metricas(p){
   const turnos=[];let bloco=null,btx=[],assumir=null;
   for(const m of p.msgs){
-    if(m.autor==="cliente"){if(bloco==null){bloco=m.ts;btx=[]}btx.push(m.texto)}
+    if(m.autor==="cliente"){if(m.tipo==="sem_horario")continue; // mensagem do cliente vinda da Torre: horário real desconhecido, não abre bloco nem gera espera
+      if(bloco==null){bloco=m.ts;btx=[]}btx.push(m.texto)}
     else if(m.autor!=="sistema"){if(bloco!=null){const t={ini:bloco,cor:(m.ts-bloco)/MIN,com:bizMin(bloco,m.ts),por:m.autor};if(m.autor==="ia"&&m.ts-bloco<IA_MIN_MS)t.rap=true;turnos.push(t);bloco=null}
       if(m.autor==="humano"&&p.transf!=null&&assumir==null)assumir=(m.ts-p.transf)/MIN}}
   if(bloco!=null){const enc=turnos.length>0&&btx.every(ehCortesia);turnos.push(enc?{ini:bloco,cor:null,com:null,por:"enc",enc:true}:{ini:bloco,cor:null,com:null,por:null})}
@@ -118,14 +119,30 @@ const botEhHumano = (rec, r) => {
 };
 let resgatadas = { A: 0, B: 0 };
 
-// Torre (Supabase, org_finza/org_blips.ai_messages): trecho cliente × IA com horário real (occurred_at). Texto retido só de meados de out/2026 em diante.
+// Torre (Supabase, org_finza/org_blips.ai_messages): trecho cliente × IA. Texto retido só de meados de out/2026 em diante.
+// occurred_at é o horário da RESPOSTA: a mensagem do cliente do mesmo turno carrega o mesmo occurred_at (intervalo 0 em ~100% dos pares,
+// ver scripts/diag_torre_gap.mjs). Por isso a resposta da IA entra com horário real, e a mensagem do cliente entra só como texto,
+// com tipo "sem_horario": não abre bloco, não gera espera e fica fora da regra de cortesia.
 const TORRE_SEM_TXT = "[texto não retido pela Torre]";
 const wallT = s => s ? Date.parse(String(s).replace(" ", "T").replace(/([+-]\d\d)$/, "$1:00")) - OFF : null;
 const torreMsgs = new Map(); // rec|protocol -> [{ts, autor, txt, agent}]
-const torreStat = { A: null, B: null };
+const torreStat = { A: null, B: null }, torreVal = { ia: [], cliente: [] }; // validação contra o histórico oficial (BLIPS completo)
 for (const rec of ["A", "B"]) { const T = torreStat[rec] = { linhas: 0, a2a: 0, protocolo_fora_do_recorte: 0, chat_completo_ignorado: 0, fora_do_horario_do_chat: 0, duplicada_do_bq: 0, reclassificada_para_ia: 0, adicionadas: { cliente: 0, ia: 0 }, adicionadas_sem_texto: 0, chats_com_torre: 0 };
   for (const t of ler("torre_ai_messages_" + rec)) { T.linhas++; if (bool(t.is_a2a)) { T.a2a++; continue; } const ts = wallT(t.occurred_at); if (ts == null || isNaN(ts)) continue;
-    const k = rec + "|" + t.protocol; let a = torreMsgs.get(k); if (!a) torreMsgs.set(k, a = []); a.push({ ts, autor: t.role === "user" ? "cliente" : "ia", txt: t.content || "", agent: t.agent_id }); } }
+    const k = rec + "|" + t.protocol; let a = torreMsgs.get(k); if (!a) torreMsgs.set(k, a = []); a.push({ ts, rc: wallT(t.received_at) ?? ts, autor: t.role === "user" ? "cliente" : "ia", txt: t.content || "", agent: t.agent_id }); } }
+for (const a of torreMsgs.values()) a.sort((x, y) => x.ts - y.ts);
+// ia_turnos_A (BigQuery, tabela de turnos da Torre) tem o texto do período em que ai_messages não reteve conteúdo.
+// Cada turno casa com a resposta da IA mais próxima na Torre (até 60 s, por occurred_at ou received_at) e devolve o texto a ela
+// e à mensagem do cliente imediatamente anterior. Turno sem par na Torre segue para a injeção só da resposta da IA.
+const iaTurnosRest = new Map(); // protocol -> [turnos sem par]
+const turnoStat = { linhas: 0, com_par_na_torre: 0, texto_devolvido: { ia: 0, cliente: 0 }, sem_par: 0, sem_par_injetadas: 0 };
+for (const t of ler("ia_turnos_A")) { turnoStat.linhas++; const a = torreMsgs.get("A|" + t.protocol), ts = wall(t.created_at); let best = null;
+  if (a && ts != null) for (let i = 0; i < a.length; i++) { const x = a[i]; if (x.autor !== "ia" || x.par) continue; const d = Math.min(Math.abs(x.ts - ts), Math.abs(x.rc - ts)); if (d <= 60e3 && (!best || d < best.d)) best = { i, d }; }
+  if (!best) { turnoStat.sem_par++; let r = iaTurnosRest.get(t.protocol); if (!r) iaTurnosRest.set(t.protocol, r = []); r.push(t); continue; }
+  const x = a[best.i]; x.par = true; turnoStat.com_par_na_torre++;
+  if (!x.txt && t.ai_response) { x.txt = t.ai_response; turnoStat.texto_devolvido.ia++; }
+  for (let j = best.i - 1; j >= 0 && a[j].autor === "cliente"; j--) if (j === best.i - 1 || a[j + 1].autor === "cliente") { if (j === best.i - 1 && !a[j].txt && t.user_message) { a[j].txt = t.user_message; turnoStat.texto_devolvido.cliente++; } break; }
+}
 const transcr = new Map();  // protocol -> []
 for (const t of ler("transcricoes_B")) { let a = transcr.get(t.protocol); if (!a) transcr.set(t.protocol, a = []); a.push({ tipo: t.type, texto: t.text, ts: wall(t.created_at), usado: false }); }
 
@@ -198,22 +215,36 @@ for (const c of chats) {
   // Deduplicação um-para-um contra o BigQuery: mesmo autor, ±5 min e texto contido; ou ±60 s quando um dos lados não tem texto comparável.
   // Fala que o BigQuery rotulou como automação ou resgatou como humana, mas que a Torre confirma como resposta da IA (texto contido, ±5 min), vira "ia".
   { const tu = torreMsgs.get(rec + "|" + c.protocol), T = torreStat[rec];
-    if (tu && fontesMsg.has("chat_history_completo")) T.chat_completo_ignorado += tu.length;
+    if (tu && fontesMsg.has("chat_history_completo")) { T.chat_completo_ignorado += tu.length;
+      // validação: quanto o occurred_at da Torre difere do horário oficial da mesma mensagem (por texto contido, até 30 min)
+      for (const t of tu) { const nt = norm(t.txt); if (!nt) continue; let b = null; for (const m of msgs) { if (m.autor !== t.autor) continue; const d = t.ts - m.ts, k = norm(m.texto); if (Math.abs(d) <= 30 * 60e3 && k && !k.startsWith("[") && (nt.includes(k.slice(0, 60)) || k.includes(nt.slice(0, 60))) && (b == null || Math.abs(d) < Math.abs(b))) b = d; } if (b != null) torreVal[t.autor].push(b); } }
     else if (tu) {
       const ini = wall(c.created_at), fim = (wall(c.finished_at) ?? CUT) + DAY, usados = new Set(); let add = 0;
       const contido = (a, b) => a && b && (a.includes(b.slice(0, 60)) || b.includes(a.slice(0, 60)));
       for (const t of tu) { if (t.ts < ini - 3600e3 || t.ts > fim) { T.fora_do_horario_do_chat++; continue; }
         const nt = norm(t.txt); let best = null, reclass = null;
-        for (let i = 0; i < msgs.length; i++) { const m = msgs[i]; if (usados.has(i)) continue; const d = Math.abs(m.ts - t.ts); if (d > 5 * 60e3) continue; const k = norm(m.texto), semK = !k || k.startsWith("[");
+        for (let i = 0; i < msgs.length; i++) { const m = msgs[i]; if (usados.has(i)) continue; const dd = t.ts - m.ts, d = Math.abs(dd); const k = norm(m.texto), semK = !k || k.startsWith("[");
+          if (t.autor === "cliente") { // a mensagem real do cliente no BigQuery vem ANTES do horário da Torre (que é o da resposta)
+            if (m.autor === "cliente" && dd >= -60e3 && ((contido(nt, k) && !semK && dd <= 30 * 60e3) || ((!nt || semK) && dd <= 10 * 60e3))) { if (!best || d < best.d) best = { i, d }; } continue; }
+          if (d > 5 * 60e3) continue;
           if (m.autor === t.autor) { if ((contido(nt, k) && !semK) || (d <= 60e3 && (!nt || semK))) { if (!best || d < best.d) best = { i, d }; } }
           else if (t.autor === "ia" && nt && !semK && contido(nt, k) && ((m.autor === "sistema" && m.atendente === "Automação") || (m.autor === "humano" && m._resg))) { if (!reclass || d < reclass.d) reclass = { i, d }; } }
         if (best) { usados.add(best.i); T.duplicada_do_bq++; continue; }
         if (reclass) { const m = msgs[reclass.i]; usados.add(reclass.i); m.autor = "ia"; m.atendente = iaNome(t.agent) || iaNome(ap?.agent) || "IA"; m._ag = null; m._resg = false; T.reclassificada_para_ia++; continue; }
-        msgs.push({ ts: t.ts, autor: t.autor, texto: t.txt || TORRE_SEM_TXT, atendente: t.autor === "ia" ? (iaNome(t.agent) || iaNome(ap?.agent) || "IA") : null, tipo: "texto", _ag: null, _mt: "text", _f: "torre_ai_messages" });
+        msgs.push({ ts: t.ts, autor: t.autor, texto: t.txt || TORRE_SEM_TXT, atendente: t.autor === "ia" ? (iaNome(t.agent) || iaNome(ap?.agent) || "IA") : null, tipo: t.autor === "cliente" ? "sem_horario" : "texto", _ag: null, _mt: "text", _f: "torre_ai_messages" });
         fontesMsg.add("torre_ai_messages"); T.adicionadas[t.autor]++; if (!t.txt) T.adicionadas_sem_texto++; add++; }
       if (add) T.chats_com_torre++;
     } }
-  msgs.sort((a, b) => a.ts - b.ts);
+  // turnos da IA FINZA sem par na Torre: entra só a resposta da IA (horário = created_at). A mensagem do cliente não entra:
+  // processing_time_ms vem zerado, então o horário dela é desconhecido.
+  if (rec === "A") { const tu = iaTurnosRest.get(c.protocol); if (tu) {
+    const ini = wall(c.created_at), fim = (wall(c.finished_at) ?? CUT) + DAY;
+    for (const t of tu) { const ts = wall(t.created_at), n = norm(t.ai_response); if (ts == null || ts < ini - 3600e3 || ts > fim || !n) continue;
+      if (msgs.some(m => m.autor === "ia" && Math.abs(m.ts - ts) <= 5 * 60e3 && (() => { const k = norm(m.texto); return k && (n.includes(k.slice(0, 60)) || k.includes(n.slice(0, 60))); })())) continue;
+      msgs.push({ ts, autor: "ia", texto: t.ai_response, atendente: iaNome(t.agent_id) || iaNome(ap?.agent) || "IA", tipo: "texto", _ag: null, _mt: "text", _f: "ia_turnos_torre" });
+      fontesMsg.add("ia_turnos_torre"); turnoStat.sem_par_injetadas++; }
+  } }
+  msgs.sort((a, b) => a.ts - b.ts || (a.tipo === "sem_horario" ? 0 : 1) - (b.tipo === "sem_horario" ? 0 : 1)); // cliente sem horário fica antes da resposta do mesmo turno
 
   // transferência IA → humano: início do 1º estágio humano depois de um estágio de IA (ou transferred_at da Torre)
   let transf = null, viuIA = false;
@@ -229,7 +260,7 @@ for (const c of chats) {
   const p = { msgs, transf };
   const met = metricas(p);
   // dono de cada turno respondido por humano (spec 03 §6)
-  const respAg = new Map(); { let bloco = null; for (const m of msgs) { if (m.autor === "cliente") { if (bloco == null) bloco = m.ts; } else if (m.autor !== "sistema") { if (bloco != null) { respAg.set(bloco, m._ag); bloco = null; } } } }
+  const respAg = new Map(); { let bloco = null; for (const m of msgs) { if (m.autor === "cliente") { if (m.tipo !== "sem_horario" && bloco == null) bloco = m.ts; } else if (m.autor !== "sistema") { if (bloco != null) { respAg.set(bloco, m._ag); bloco = null; } } } }
   const contAg = {}; for (const t of met.turnos) { t.at = respAg.get(t.ini) ?? null; if (t.por === "humano" && t.at) contAg[t.at] = (contAg[t.at] || 0) + 1; }
   const agMsgs = [...new Set(msgs.filter(m => m.autor === "humano" && m._ag).map(m => m._ag))];
   const atId = Object.entries(contAg).sort((a, b) => b[1] - a[1])[0]?.[0] || agMsgs.at(-1) || (c.agent_id ? atKey(c.agent_id) : null) || agentesJ.at(-1) || null;
@@ -268,7 +299,7 @@ for (const c of chats) {
 
   const limpa = msgs.map(m => ({ ts: m.ts, autor: m.autor, texto: m.texto, atendente: m.atendente, tipo: m.tipo }));
   const semana = (() => { const d = new Date(inicio), j = Date.UTC(d.getUTCFullYear(), 0, 1); return d.getUTCFullYear() + "-" + String(Math.ceil(((inicio - j) / DAY + new Date(j).getUTCDay() + 1) / 7)).padStart(2, "0"); })();
-  idxOut.write(JSON.stringify({ id: c.chat_id, protocol: c.protocol, rec, cliente: cliId, tipo, depto: deptoNome, deptos: deptosJ, atendentes, atId: tipo === "so_ia" ? null : atId, humIds, inicio, fim, status: c.status, aberto, broadcast: bool(c.is_broadcast), receptivo, transf, fonte, nMsgs: limpa.length, nCli: limpa.filter(m => m.autor === "cliente").length, audioNT: limpa.some(m => m.texto.includes("não transcrito")), semana, outlier, hi_ui: c.hi_ui, hi_si: c.hi_si, met }) + "\n");
+  idxOut.write(JSON.stringify({ id: c.chat_id, protocol: c.protocol, rec, cliente: cliId, tipo, depto: deptoNome, deptos: deptosJ, atendentes, atId: tipo === "so_ia" ? null : atId, humIds, inicio, fim, status: c.status, aberto, broadcast: bool(c.is_broadcast), receptivo, transf, fonte, nMsgs: limpa.length, nCli: limpa.filter(m => m.autor === "cliente").length, audioNT: limpa.some(m => m.texto.includes("não transcrito")), cliSemHora: limpa.some(m => m.tipo === "sem_horario"), semana, outlier, hi_ui: c.hi_ui, hi_si: c.hi_si, met }) + "\n");
   if (!SEM_ARQ) fs.writeFileSync(path.join(OUT_P, c.chat_id + ".json"), JSON.stringify({ chat_id: c.chat_id, protocol: c.protocol, recorte: rec === "A" ? "FINZA" : "BLIPS · Cobrança", rec, departamentos: deptosJ, atendentes, tipo, receptivo, inicio: isoBR(inicio), fim: isoBR(fim), status: c.status, fonte, transf,
     mensagens: limpa.map(m => ({ ts: isoBR(m.ts), autor: m.autor, atendente: m.atendente, tipo: m.tipo, texto: m.texto })),
     metricas: { n_turnos: met.turnos.length, turnos: met.turnos.map(t => ({ inicio: isoBR(t.ini), espera_corrida_min: t.cor == null ? null : +t.cor.toFixed(1), espera_comercial_min: t.com == null ? null : +t.com.toFixed(1), respondeu: t.por })),
@@ -280,6 +311,8 @@ for (const r of ["A", "B"]) { const cs = [...clientes.values()].filter(c => c.re
 fs.writeFileSync(path.join(OUT_M, "clientes.jsonl"), [...clientes.values()].map(c => JSON.stringify(c)).join("\n") + "\n");
 fs.writeFileSync(path.join(OUT_M, "atendentes.json"), JSON.stringify([...ats.values()].map(a => ({ id: a.id, rec: a.rec, nome: a.nome, depto: Object.entries(a.deptos).sort((x, y) => y[1] - x[1])[0]?.[0] || "", n: a.n }))));
 for (const rec of ["A", "B"]) { const ps = new Set(chats.filter(c => c.rec === rec).map(c => String(c.protocol))); for (const [k, a] of torreMsgs) if (k.startsWith(rec + "|") && !ps.has(k.slice(2))) torreStat[rec].protocolo_fora_do_recorte += a.length; }
-const resumo = { gerado_em: new Date().toISOString(), cargas, mensagens_orfas: orfas, falas_humanas_resgatadas: resgatadas, torre: torreStat, ...stats };
+const qv = (a, p) => a.length ? +([...a].sort((x, y) => x - y)[Math.min(a.length - 1, Math.floor(p * a.length))] / 1000).toFixed(1) : null;
+const torreValidacao = Object.fromEntries(Object.entries(torreVal).map(([k, a]) => [k, { pares: a.length, torre_menos_oficial_seg: { p10: qv(a, .1), p25: qv(a, .25), mediana: qv(a, .5), p75: qv(a, .75), p90: qv(a, .9) } }]));
+const resumo = { gerado_em: new Date().toISOString(), torre_validacao_blips_completo: torreValidacao, cargas, mensagens_orfas: orfas, falas_humanas_resgatadas: resgatadas, torre: torreStat, ia_turnos_A: turnoStat, ...stats };
 fs.writeFileSync(path.join(OUT_M, "resumo.json"), JSON.stringify(resumo, null, 1));
 console.log(JSON.stringify(resumo, null, 1));

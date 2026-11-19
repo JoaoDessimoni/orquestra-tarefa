@@ -457,7 +457,8 @@ function fechaMet(turnos,assumir,transf){
 function metricas(p){
   const turnos=[];let bloco=null,btx=[],assumir=null;
   for(const m of p.msgs){
-    if(m.autor==="cliente"){if(bloco==null){bloco=m.ts;btx=[]}btx.push(m.texto)}
+    if(m.autor==="cliente"){if(m.tipo==="sem_horario")continue; // mensagem do cliente vinda da Torre: horário real desconhecido, não abre bloco nem gera espera
+      if(bloco==null){bloco=m.ts;btx=[]}btx.push(m.texto)}
     else if(m.autor!=="sistema"){if(bloco!=null){const t={ini:bloco,cor:(m.ts-bloco)/MIN,com:bizMin(bloco,m.ts),por:m.autor};if(m.autor==="ia"&&m.ts-bloco<IA_MIN_MS)t.rap=true;turnos.push(t);bloco=null}
       if(m.autor==="humano"&&p.transf!=null&&assumir==null)assumir=(m.ts-p.transf)/MIN}}
   if(bloco!=null){const enc=turnos.length>0&&btx.every(ehCortesia);turnos.push(enc?{ini:bloco,cor:null,com:null,por:"enc",enc:true}:{ini:bloco,cor:null,com:null,por:null})}
@@ -485,6 +486,8 @@ const fxk=p=>p.met[S.clk==="com"?"faixaCom":"faixaCor"];
 const isRed=p=>{const k=fxk(p);return k==="f60p"||k==="sem"};
 const scls=s=>s==null?"":s>=75?"s-hi":s>=50?"s-mid":"s-lo";
 const SEM_CLI=`<span class="chip c-nv" ${tip("Sem mensagem do cliente","Disparo que o cliente não respondeu. Conta no total de protocolos, mas não tem espera nem score.")}>sem mensagem do cliente</span>`;
+const SEM_HORA=`<span class="chip c-nv" ${tip("Cliente sem horário","A Torre guarda o texto do cliente, mas grava nele o horário da resposta da IA. Sem o horário real, não há espera medida nem score.")}>cliente sem horário</span>`;
+const semChip=p=>p.semHora?SEM_HORA:SEM_CLI;
 const fxChip=k=>k==null?SEM_CLI:`<span class="fxchip fx-${k}" ${tip(FX[k].lbl,FX[k].leit.replace(/<[^>]+>/g,""))}>${FX[k].lbl}</span>`;
 const fxDot=k=>k==null?`<span class="dot" style="background:var(--ghost2)"></span>`:`<span class="dot fx-${k}"></span>`;
 const scTxt=p=>p.sc.score==null?"—":p.sc.score+(p.sc.parcial?"*":"");
@@ -494,7 +497,7 @@ const findC=id=>CMAP.get(id);
 
 /* ----- carregador: arquivos publicados ao lado da página ----- */
 const LOAD={meta:null,st:{A:"idle",B:"idle"},err:{A:null,B:null},gen:{A:0,B:0},timer:{},lotes:new Map()};
-const AUT=["cliente","humano","ia","sistema"],TIPOS_MSG=["texto","audio","imagem","documento","video","template","sistema"];
+const AUT=["cliente","humano","ia","sistema"],TIPOS_MSG=["texto","audio","imagem","documento","video","template","sistema","sem_horario"];
 const CAP=n=>{try{return window.claude&&window.claude.use?window.claude.use(n).catch(()=>null):Promise.resolve(null)}catch(e){return Promise.resolve(null)}};
 async function getJSON(u){const r=await fetch(u);if(!r.ok)throw new Error(`${u} respondeu HTTP ${r.status}`);return r.json()}
 function turnosDe(flat,inicio){const out=[];
@@ -509,7 +512,7 @@ function montarRec(r,parts){
   const clientes=parts[0].cli.map(c=>({id:c[0],rec:r,telefone:c[1],cnpjs:c[2],ambiguo:!!c[3],nome:c[4],lote:c[5],protocolos:[]})),protocolos=[];
   for(const part of parts)for(const a of part.prot){const c=clientes[a[2]],inicio=a[7],transf=a[8]==null?null:inicio+a[8];
     const p={id:a[0],protocol:a[1],rec:r,cliente:c.id,assunto:null,tipo:d.tipo[a[3]],depto:d.depto[a[4]],atendentes:a[5].map(i=>d.nome[i]),atId:a[6]<0?null:ats[a[6]].id,inicio,msgs:null,transf,fonte:d.fonte[a[9]],
-      aberto:!!(a[10]&1),broadcast:!!(a[10]&2),receptivo:!!(a[10]&4),outlier:!!(a[10]&8),audio:!!(a[10]&16),aval:null};
+      aberto:!!(a[10]&1),broadcast:!!(a[10]&2),receptivo:!!(a[10]&4),outlier:!!(a[10]&8),audio:!!(a[10]&16),semHora:!!(a[10]&32),aval:null};
     p.met=fechaMet(turnosDe(a[12],inicio),a[11]==null?null:a[11]/MIN,transf);p.sc=score(p,S.clk);
     c.protocolos.push(p.id);protocolos.push(p);PMAP.set(p.id,p)}
   for(const c of clientes)CMAP.set(c.id,c);
@@ -712,7 +715,7 @@ function renderProtocolos(){
   const list=res.length?res.slice(0,300).map(x=>{const on=x.c.id===S.sel.cli;return `<div class="cc ${on?"on":""}">
       <button class="ci" data-cli="${x.c.id}" aria-expanded="${on}"><span class="ph">${esc(x.c.telefone)}</span><span class="fl"><span class="sc ${scls(x.sc)}" ${tip("Score médio","Média dos protocolos deste cliente que passam nos filtros.")}>${fmt(x.sc)}</span></span>
       <span class="nm">${S.rec==="AB"?recTag(x.r)+" · ":""}${esc(x.c.nome||"Sem cadastro no CRM")}</span><span class="fl">${x.red?`<span class="dot" style="background:var(--bad)" ${tip("Red flag","Tem protocolo com espera acima de 1 h ou sem resposta.")}></span>`:""}${x.fr?`<span class="dot" style="background:var(--warn)" ${tip("Frustrado","A IA viu frustração com o atendimento.")}></span>`:""}<span style="font-size:12px;color:var(--muted);font-weight:600" ${tip("Protocolos","Quantos protocolos deste cliente passam nos filtros.")}>${x.ps.length} protoc.</span></span></button>
-      ${on?`<div class="plist" role="listbox" aria-label="Protocolos do cliente"><span class="lab">${x.ps.length===1?"1 protocolo":`${x.ps.length} protocolos`} · escolha um</span>${x.ps.map(p=>`<button class="pi" role="option" data-prot="${p.id}" aria-selected="${p.id===S.sel.prot}" ${tip(`Protocolo ${p.protocol}`,`${assN(p.assunto)} · ${p.met.turnos.length?"pior espera "+fmin(p.met.pior[S.clk]):"sem mensagem do cliente"} · ${TIPO_L[p.tipo]}`)}>${fxDot(fxk(p))}<span class="a"><span class="d">${dt(p.inicio)}</span> · ${esc(assN(p.assunto))}</span><span class="sc ${scls(p.sc.score)}">${scTxt(p)}</span></button>`).join("")}</div>`:""}</div>`}).join(""):`<div class="empty">Nenhum cliente com esses filtros.</div>`;
+      ${on?`<div class="plist" role="listbox" aria-label="Protocolos do cliente"><span class="lab">${x.ps.length===1?"1 protocolo":`${x.ps.length} protocolos`} · escolha um</span>${x.ps.map(p=>`<button class="pi" role="option" data-prot="${p.id}" aria-selected="${p.id===S.sel.prot}" ${tip(`Protocolo ${p.protocol}`,`${assN(p.assunto)} · ${p.met.turnos.length?"pior espera "+fmin(p.met.pior[S.clk]):p.semHora?"cliente sem horário":"sem mensagem do cliente"} · ${TIPO_L[p.tipo]}`)}>${fxDot(fxk(p))}<span class="a"><span class="d">${dt(p.inicio)}</span> · ${esc(assN(p.assunto))}</span><span class="sc ${scls(p.sc.score)}">${scTxt(p)}</span></button>`).join("")}</div>`:""}</div>`}).join(""):`<div class="empty">Nenhum cliente com esses filtros.</div>`;
   return `<div class="view pv">
   <section class="fbar" aria-label="Filtros">
     <label class="search" for="fq"><span aria-hidden="true" style="color:var(--ghost);font-size:17px">⌕</span><input id="fq" type="search" placeholder="Telefone, CNPJ ou nome" value="${esc(f.q||"")}"></label>
@@ -736,8 +739,8 @@ function convHTML(x,p){
   p.msgs.forEach((m,k)=>{
     if(m.autor==="sistema"){html+=`<div class="sys">${esc(m.texto)} · ${dt(m.ts)}</div>`;return}
     if(m.autor!=="cliente"&&last!=null){const t=tm.get(last);if(t){const v=S.clk==="com"?t.com:t.cor,fk=faixaDe(v);html+=`<div class="gap fx-${fk}" ${tip("Espera",`O cliente esperou ${fmin(v)} (${S.clk==="com"?"relógio comercial":"relógio corrido"}).`)}>esperou ${fmin(v)}</div>`}last=null}
-    if(m.autor==="cliente"&&last==null)last=m.ts;
-    html+=`<div class="msg ${m.autor} ${m.tipo==="audio"?"audio":""} ${S.hl===k?"hl":""}" data-mi="${k}"><span class="who">${m.autor==="cliente"?"Cliente":esc(m.atendente)}</span>${esc(m.texto)}<span class="ts">${dt(m.ts)}</span></div>`});
+    if(m.autor==="cliente"&&m.tipo!=="sem_horario"&&last==null)last=m.ts;
+    html+=`<div class="msg ${m.autor} ${m.tipo==="audio"?"audio":""} ${S.hl===k?"hl":""}" data-mi="${k}"><span class="who">${m.autor==="cliente"?"Cliente":esc(m.atendente)}</span>${esc(m.texto)}<span class="ts">${m.tipo==="sem_horario"?"horário não registrado":dt(m.ts)}</span></div>`});
   if(last!=null)html+=tm.get(last)?.enc?`<div class="sys" ${tip("Encerramento do cliente","O cliente só agradeceu ou se despediu depois de ser atendido. Não conta como falta de resposta.")}>encerramento do cliente</div>`
     :`<div class="gap fx-sem" ${tip("Sem resposta","Esta mensagem do cliente nunca foi respondida.")}>cliente sem resposta</div>`;
   const cnpj=c.cnpjs.length?c.cnpjs.map(v=>`<span class="chip c-nv n" ${tip("CNPJ","Vem do CRM BLIPS, cruzado pelo telefone.")}>${esc(v)}</span>`).join(""):`<span class="chip c-nv" ${tip("Sem CNPJ","O telefone não foi encontrado no CRM.")}>sem CNPJ</span>`;
@@ -745,7 +748,7 @@ function convHTML(x,p){
     <div class="pane-h"><div class="convh">
       <div class="t1"><button class="btn ghost sm back" id="back">← Clientes</button><span class="ph">${esc(c.telefone)}</span><span class="fit nm2">${esc(c.nome||"Sem cadastro no CRM")}</span></div>
       <div class="t2">${recTag(x.r)}<span class="fit">${cnpj}</span>${c.ambiguo?`<span class="chip c-wa" ${tip("CNPJ ambíguo","O telefone está ligado a mais de um CNPJ no CRM.")}>ambíguo</span>`:""}</div>
-      <div class="t2">${fxChip(fxk(p))}<span>Protocolo <b class="n" style="color:var(--dark)">${p.protocol}</b></span><span>· ${dt(p.inicio)}</span><span class="fit">· ${esc(p.depto)}</span>${p.fonte==="BQ completa"?`<span class="chip c-ok" ${tip("Conversa completa","Histórico completo do BigQuery (chat_history).")}>conversa completa</span>`:p.fonte.startsWith("BQ")?`<span class="chip c-wa" ${tip("Fonte aproximada","O BigQuery não tem todas as mensagens deste chat. Os tempos podem variar.")}>fonte aproximada</span>`:`<span class="chip c-ok" ${tip("Conversa completa","Mensagens vindas da API do Hyperflow.")}>conversa completa</span>`}</div>
+      <div class="t2">${fxk(p)==null?semChip(p):fxChip(fxk(p))}<span>Protocolo <b class="n" style="color:var(--dark)">${p.protocol}</b></span><span>· ${dt(p.inicio)}</span><span class="fit">· ${esc(p.depto)}</span>${p.fonte==="BQ completa"?`<span class="chip c-ok" ${tip("Conversa completa","Histórico completo do BigQuery (chat_history).")}>conversa completa</span>`:p.fonte.startsWith("BQ")?`<span class="chip c-wa" ${tip("Fonte aproximada","O BigQuery não tem todas as mensagens deste chat. Os tempos podem variar.")}>fonte aproximada</span>`:`<span class="chip c-ok" ${tip("Conversa completa","Mensagens vindas da API do Hyperflow.")}>conversa completa</span>`}</div>
     </div>
     <div class="acts"><span class="pnav" ${tip("Protocolos do cliente","Troque entre os protocolos deste cliente.")}><button data-pnav="-1" ${i<=0?"disabled":""} aria-label="Protocolo anterior">‹</button><span>${String(i+1).padStart(2,"0")} / ${String(n).padStart(2,"0")}</span><button data-pnav="1" ${i>=n-1?"disabled":""} aria-label="Próximo protocolo">›</button></span>
       <button class="btn sm evbtn" data-evopen ${tip("Avaliação","Abre o score e a análise da IA deste protocolo.")}>Avaliação · <span class="n">${p.sc.score==null?"—":String(p.sc.score).padStart(2,"0")}</span></button>
@@ -758,7 +761,7 @@ function ring(s){const r=36,c=2*Math.PI*r,col=s>=75?"var(--ok)":s>=50?"var(--war
 function evalHTML(p){
   const sc=p.sc,a=p.aval;
   const met=`<dl class="kv"><dt>Pior espera</dt><dd>${p.met.turnos.length?fmin(p.met.pior[S.clk]):"—"}</dd><dt>1ª resposta</dt><dd>${p.met.turnos.length?fmin(p.met.primeira[S.clk]):"—"}</dd>${p.met.assumir?`<dt>Assumir após IA</dt><dd>${fmin(p.met.assumir[S.clk])}</dd>`:""}<dt>Atendimento</dt><dd>${p.tipo==="so_ia"?"Só IA":p.tipo==="ia_humano"?"IA → humano":"Só humano"}</dd><dt>Atendente</dt><dd>${esc(p.atendentes.at(-1)||"—")}</dd></dl>`;
-  if(sc.semTurno)return `<div class="ev"><div class="bs"><div>${SEM_CLI}<div class="lead" style="margin:8px 0 0">Disparo que o cliente não respondeu. Conta no total de protocolos, mas não tem espera nem score.</div></div></div>${met}</div>`;
+  if(sc.semTurno)return `<div class="ev"><div class="bs"><div>${semChip(p)}<div class="lead" style="margin:8px 0 0">${p.semHora?"A Torre guarda o texto do cliente, mas não o horário real dele. Conta no total de protocolos, mas não tem espera nem score.":"Disparo que o cliente não respondeu. Conta no total de protocolos, mas não tem espera nem score."}</div></div></div>${met}</div>`;
   if(!a)return `<div class="ev"><div class="bs" ${tip("Score parcial","A avaliação por IA ainda não rodou. O score usa só a agilidade.")}>${ring(sc.score)}<div><b>Score só de agilidade</b><div class="lead" style="margin:2px 0 0">A avaliação por IA ainda não rodou.</div></div></div>${met}</div>`;
   const L=a.lados.humano||a.lados.ia,fr=a.frustracao_atendimento;
   const facts=`<span class="chip c-bl" ${tip("Assunto","Assunto principal identificado pela IA.")}>${esc(assN(a.assunto_principal))}</span><span class="chip ${a.resolvido==="sim"?"c-ok":a.resolvido==="parcial"?"c-wa":"c-bad"}" ${tip("Resolução","Se o problema do cliente foi resolvido na conversa.")}>${a.resolvido==="sim"?"resolvido":a.resolvido==="parcial"?"resolvido em parte":a.resolvido==="nao"?"não resolvido":"indeterminado"}</span>${fr.presente?`<span class="chip c-bad" ${tip("Frustração com o atendimento",`Intensidade ${fr.intensidade} de 3. Motivo: ${fr.motivos.join(", ")}.`)}>frustrado · ${esc(fr.motivos.join(", "))}</span>`:`<span class="chip c-ok" ${tip("Sem frustração","O cliente não mostrou irritação com o atendimento.")}>sem frustração</span>`}`;
@@ -822,9 +825,9 @@ function renderMetodologia(){
     <div class="def"><h3>Espera</h3><p>Da primeira mensagem do cliente sem resposta até a próxima fala da IA ou de uma pessoa. Mensagem automática de fila não conta como resposta. Resposta da IA em menos de 3 s não é plausível e fica fora da medição da IA.</p></div>
     <div class="def"><h3>Relógio comercial</h3><p>Conta só de segunda a sexta, das 8h às 18h. O relógio corrido conta tudo.</p></div>
     <div class="def"><h3>Encerramento do cliente</h3><p>Se a última mensagem do cliente é só um agradecimento ou uma despedida curta (ok, obrigado, 👍) e ele já tinha sido respondido antes, o protocolo não conta como sem resposta. Esse último bloco fica fora da pior espera e da mediana.</p></div>
-    <div class="def"><h3>Sem mensagem do cliente</h3><p>Disparo que o cliente não respondeu. Conta no total de protocolos, mas fica fora das faixas de espera, do red flag e do score.</p></div>
+    <div class="def"><h3>Sem mensagem do cliente</h3><p>Disparo que o cliente não respondeu, ou conversa em que o texto do cliente veio da Torre sem o horário real ("cliente sem horário"). Conta no total de protocolos, mas fica fora das faixas de espera, do red flag e do score.</p></div>
     <div class="def"><h3>Amostra avaliada</h3><p>A avaliação por IA ainda não rodou: ela espera a conversa completa chegar pelo Desk. Até lá, o score é só de agilidade. O tempo de resposta cobre 100% dos protocolos com mensagem do cliente.</p></div>
-    <div class="def"><h3>Fonte da conversa</h3><p>Hoje tudo vem do BigQuery, e <b>a maior parte das conversas aparece incompleta ou só com o disparo</b>. Não têm nenhuma mensagem do cliente 17.765 protocolos do FINZA e 29.028 do BLIPS. O FINZA é reconstrução, com cerca de 50% das mensagens e mediana de 3 mensagens por conversa. O BLIPS tem histórico completo em 34% dos chats (mediana de 11 mensagens); o restante é amostra (mediana de 4) e aparece como "fonte aproximada". Áudio quase todo sem transcrição. A conversa completa depende da carga pelo Desk, ainda pendente.</p></div>
+    <div class="def"><h3>Fonte da conversa</h3><p>Hoje tudo vem do BigQuery, e <b>a maior parte das conversas aparece incompleta ou só com o disparo</b>. Não têm nenhuma mensagem do cliente com horário 17.765 protocolos do FINZA e 29.028 do BLIPS. O FINZA é reconstrução, com cerca de 50% das mensagens e mediana de 3 mensagens por conversa. O BLIPS tem histórico completo em 34% dos chats (mediana de 11 mensagens); o restante é amostra (mediana de 4). <b>Torre:</b> em 2.937 protocolos do FINZA e 1.091 do BLIPS, o trecho cliente × IA foi completado com o registro da Torre. Ele só cobre a conversa com a IA, nunca com atendente humano, e o texto só está retido de meados de outubro em diante. A resposta da IA entra com horário real; a mensagem do cliente entra sem horário e não gera espera. Tudo que não é histórico completo aparece como "fonte aproximada". Áudio quase todo sem transcrição. A conversa completa depende da carga pelo Desk, ainda pendente.</p></div>
     <div class="def"><h3>CNPJ</h3><p>Vem do CRM BLIPS, cruzado pelo telefone: 87% dos chats em FINZA e 80% em BLIPS têm CNPJ. Telefone ligado a mais de um CNPJ aparece como ambíguo.</p></div>
    </div></section></div>`;
 }
