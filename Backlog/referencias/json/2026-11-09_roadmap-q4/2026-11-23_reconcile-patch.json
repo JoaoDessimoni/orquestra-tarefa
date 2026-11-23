@@ -1,0 +1,89 @@
+{
+ "atualizado_em": "2026-11-23T15:30:00-03:00",
+ "items": {
+  "q12239": {
+   "qs": "finalizado",
+   "fr": "2026-11-20",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 20/11/2026.",
+    "resp": ""
+   }
+  },
+  "q12357": {
+   "qs": "finalizado",
+   "fr": "2026-11-23",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 23/11/2026.",
+    "resp": ""
+   }
+  },
+  "q13457": {
+   "qs": "em_validacao",
+   "fr": "2026-11-19"
+  },
+  "q13521": {
+   "qs": "em_andamento",
+   "ir": "2026-11-19"
+  },
+  "q13824": {
+   "qs": "finalizado",
+   "ir": "2026-11-19",
+   "fr": "2026-11-23",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 23/11/2026.",
+    "resp": ""
+   }
+  },
+  "q13847": {
+   "qs": "finalizado",
+   "ir": "2026-11-19",
+   "fr": "2026-11-23",
+   "h0": {
+    "s": "aprovada",
+    "n": "Finalizado no Quimera em 23/11/2026.",
+    "resp": ""
+   }
+  },
+  "q13860": {
+   "ir": "2026-11-19"
+  },
+  "q13902": {
+   "qs": "fila_exec",
+   "dev": "Leandro",
+   "sp": 3,
+   "fp": "2026-11-27",
+   "df": "quimera"
+  },
+  "q14087": {
+   "id": "q14087",
+   "key": 14087,
+   "tipo": "demanda",
+   "ord": 9281,
+   "titulo": "Lívia na AWS: credenciais, acessos e segredos",
+   "frente": "juridico",
+   "desc": "Parte do time da Lívia na implantação da Lívia V2 no ECS Fargate da AWS da Finza (stage e produção): levantar, obter e gravar as credenciais, acessos e segredos de cada integração (Google OAuth do Kit, caixas de cobrança, BigQuery, LiteLLM, Langfuse, MRS, Plataforma, Bitrix). A infra em si é a #12136, com o DevOps.",
+   "ac": "No stage, a Lívia sobe com o /ready em 200, responde no bot de teste do Bitrix e monta um Kit na pasta de teste com todos os ramos (contrato, demonstrativo, cartas MRS, NF e e-mails).",
+   "sol": "Squad IA · Finza",
+   "prio": "media",
+   "qs": "em_andamento",
+   "dev": "Marcos",
+   "sp": 3,
+   "ip": "2026-11-23",
+   "ir": "2026-11-23",
+   "fp": null,
+   "fr": null,
+   "df": null,
+   "fonte": "Quimera (ia_automacao_finza), leitura de 2026-11-23",
+   "h0": {
+    "s": "nao_iniciada",
+    "n": ""
+   },
+   "rel": [
+    "#10908"
+   ]
+  }
+ }
+}

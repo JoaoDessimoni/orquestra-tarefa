@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentinela · Squad IA</title>
+<!--
+  TEMPLATE CANÔNICO — Deck animado Finza (skill finza-deck-animado)
+  Base: entregas-q3_lideranca_06-11-2026.html + "Torre de Controle - Balanço do ciclo" + "Relatório IAs Finza".
+  Palco fixo 1920×1080 escalado por JS. Cada <section class="s"> é um slide.
+  Contrato de animação por data-attribute (ver SKILL.md §6):
+    data-a  entra em cascata (fade + sobe 32px)       data-w     palavra do título (blur + sobe 60%)
+    data-pop  entra com "pop" (scale .6 → 1.04 → 1)   data-gx    barra cresce da esquerda (scaleX)
+    data-cell célula do waffle (scale .2 → 1)         data-gy    barra cresce de baixo (scaleY)
+    data-count="4735" [data-dec="1"]  contador        data-draw  path SVG se desenha (stroke-dashoffset)
+    data-pulse  pulsa em loop     data-spin="90"  gira em loop (graus/6s)     data-ticker  faixa rolando
+    data-flow="34,0" [data-fd="600"]  ponto viajando na seta
+  Atos: data-act="Entrega 01|Nome do ato" no <section> → cortina azul (wipe) ao chegar AVANÇANDO.
+  Notas do apresentador: data-notes="..." no <section> → tecla N mostra/esconde.
+  Substitua TODO texto/número de exemplo. Nada de número sem fonte (rodapé .foot cita a fonte).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ 1 · TOKENS ============ */
+:root{--blue:#1A1AFF;--deep:#0F0F8C;--soft:#E8E8FF;--dark:#0A0A2E;--lilac:#7A7AFF;--mid:#4D4DFF;--ghost:#9C9CB4;--ghost2:#C8C8D4;--muted:#5C5C7A;--line:#D8D8E5;--ok:#10B981;--warn:#F59E0B;--bad:#EF4444;
+  --navy2:#16163F;--navy3:#23235A;--navy4:#3A3A8C;--EASE:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#0A0A2E;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .5s}
+
+/* ============ 2 · PALCO 1920×1080 ============ */
+#vp{position:fixed;inset:0;overflow:hidden}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(var(--s,1))}
+section.s{position:absolute;inset:0;width:1920px;height:1080px;display:none;overflow:hidden;font-family:Inter,sans-serif}
+section.s.on{display:block}
+section.s.light.on{display:flex}
+.light{background-color:#F2F2F2;background-image:radial-gradient(#D8D8E5 1.5px,transparent 1.5px);background-size:32px 32px;color:#0A0A2E;padding:88px 120px 100px;flex-direction:column}
+.dark{background:#0A0A2E;color:#fff}
+
+/* ============ 3 · TIPOGRAFIA E BASE DE CONTEÚDO ============ */
+.hdr{display:flex;justify-content:space-between;align-items:center;font-size:24px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hdr b{color:var(--blue);letter-spacing:0;text-transform:none;font-weight:700}
+.h2{margin:28px 0 0;font-size:72px;line-height:1.05;letter-spacing:-.03em}
+.g{font-weight:300;color:var(--ghost)}.k{font-weight:800;color:var(--blue)}
+.cw{background:#fff;border-radius:24px}
+.cd{background:#fff;border:2px dotted var(--blue);border-radius:24px}
+.lab{font-size:22px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.big{font-weight:800;letter-spacing:-.04em;line-height:.95}
+.foot{position:absolute;left:120px;right:120px;bottom:36px;display:flex;align-items:center;gap:14px;font-size:20px;color:var(--muted);font-weight:500}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:20px;font-weight:700;border-radius:999px;padding:5px 14px;white-space:nowrap}
+.c-ok{background:#D1FAE5;color:#047857}.c-bl{background:var(--soft);color:var(--blue)}.c-wa{background:#FEF3C7;color:#92400E}.c-bad{background:#FEE2E2;color:#B91C1C}
+.code{font-size:18px;font-weight:800;color:#fff;background:var(--blue);border-radius:6px;padding:2px 10px;letter-spacing:.06em}
+.dotsep{width:6px;height:6px;border-radius:50%;background:var(--ghost2)}
+.ba{border-radius:14px;padding:14px 18px;display:flex;flex-direction:column;gap:2px}
+.ba span:first-child{font-size:20px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.ba span:last-child{font-size:24px;line-height:1.25}
+.ba.antes{background:#FEF2F2}.ba.antes span:first-child{color:#B91C1C}
+.ba.depois{background:#ECFDF5}.ba.depois span:first-child{color:#047857}.ba.depois span:last-child{font-weight:700}
+.para{font-size:28px;line-height:1.4;color:#0A0A2E}
+.para b{color:var(--blue)}
+.note-warn{background:#FEF3C7;border-radius:18px;padding:18px 24px;font-size:22px;line-height:1.35;color:#78350F}
+
+/* ============ 4 · CAPA / ENCERRAMENTO ============ */
+.dotbg{position:absolute;inset:0;background-image:radial-gradient(#23235A 1.5px,transparent 1.5px);background-size:40px 40px}
+.orbit{position:absolute;right:-120px;top:50%;width:980px;height:980px;margin-top:-490px}
+.orbit svg{position:absolute;inset:0;overflow:visible}
+.orbit .lbl{position:absolute;left:490px;top:490px;transform:translate(-50%,-50%);font-size:44px;font-weight:800;color:#fff;letter-spacing:-.02em;white-space:nowrap}
+.cv-top{position:absolute;left:120px;top:96px;right:120px;display:flex;justify-content:space-between;font-size:24px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ghost2)}
+.cv-top b{color:#fff;letter-spacing:0;text-transform:none;font-weight:700;position:relative;z-index:2}
+.cv-main{position:absolute;left:120px;top:270px;width:1120px;display:flex;flex-direction:column;gap:40px}
+.pillb{align-self:flex-start;font-size:24px;font-weight:600;color:#fff;background:var(--blue);border-radius:999px;padding:10px 24px}
+.cv-h1{font-size:120px;line-height:1;letter-spacing:-.04em;display:flex;flex-wrap:wrap;column-gap:.24em;row-gap:8px}
+.ticker{position:absolute;left:0;right:0;bottom:0;height:88px;background:var(--blue);overflow:hidden;display:flex;align-items:center}
+.ticker > div{display:flex;gap:64px;white-space:nowrap;font-size:26px;font-weight:600;color:#fff;padding-left:64px}
+
+/* ============ 5 · RESUMO (cards de entrega clicáveis) ============ */
+.r4{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:40px;min-height:0}
+.ec{position:relative;background:#fff;border-radius:24px;padding:30px 28px 26px;display:flex;flex-direction:column;gap:16px;cursor:pointer;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.ec:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(26,26,255,.14)}
+.ec .bar{position:absolute;left:0;top:0;right:0;height:8px}
+.ec .hd{display:flex;align-items:center;gap:14px}
+.ec .n{width:48px;height:48px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0}
+.ec .t{font-size:29px;font-weight:800;line-height:1.1;white-space:nowrap}
+.ec .m{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.ec .m .big{font-size:84px}
+.ec .m small{font-size:24px;font-weight:600;color:var(--muted)}
+.ec .bb{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.msg{margin-top:24px;background:#0A0A2E;color:#fff;border-radius:20px;padding:26px 36px;font-size:34px;line-height:1.25;font-weight:300}
+.msg b{font-weight:800}
+
+/* ============ 6 · PASSOS QUE ACENDEM (sincronizados com a demo) ============ */
+.lkgrid{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:72px;margin-top:28px;min-height:0}
+.steps{display:flex;flex-direction:column;gap:14px}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;align-items:center;padding:18px 24px;border-radius:20px;background:rgba(255,255,255,.55);border:2px solid transparent;transition:all .45s cubic-bezier(.2,.8,.2,1)}
+.step .n{width:56px;height:56px;border-radius:50%;background:#0A0A2E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;transition:background .4s}
+.step .t{font-size:30px;font-weight:800}
+.step .d{font-size:23px;color:var(--muted);margin-top:2px;line-height:1.3}
+.step.lit{background:#fff;border-color:var(--blue);transform:translateX(12px);box-shadow:0 14px 30px rgba(26,26,255,.12)}
+.step.lit .n{background:var(--blue)}
+.brandsel{display:flex;gap:10px;align-items:center}
+.brandsel span{font-size:22px;font-weight:700;color:var(--muted);margin-right:6px}
+.brandsel button{font:inherit;font-size:20px;font-weight:700;padding:8px 18px;border-radius:999px;border:2px solid var(--line);background:#fff;color:var(--muted);cursor:pointer;display:flex;gap:8px;align-items:center}
+.brandsel button i{width:14px;height:14px;border-radius:50%}
+.brandsel button.on{border-color:var(--blue);color:var(--blue);background:var(--soft)}
+
+/* ============ 7 · GRÁFICOS ============ */
+.waffle{display:grid;grid-template-columns:repeat(20,1fr);gap:7px}
+.waffle i{aspect-ratio:1;border-radius:6px;display:block}
+.stk{display:flex;border-radius:12px;overflow:hidden;font-size:22px;font-weight:700}
+.stk > div{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden}
+.hb{display:grid;grid-template-columns:300px minmax(0,1fr) 170px;gap:16px;align-items:center;font-size:22px}
+.hb .tr{height:22px;border-radius:7px;background:#F2F2F2;overflow:hidden}
+.hb .tr div{height:100%;border-radius:7px;background:var(--blue)}
+.hb .v{font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.statrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center;padding:22px 30px}
+.statrow .big{font-size:96px;color:var(--blue)}
+.statrow .tt{font-size:30px;font-weight:700;line-height:1.15}
+.statrow .ss{font-size:23px;color:var(--muted);margin-top:4px;line-height:1.3}
+.band{display:grid;grid-template-columns:150px 130px minmax(0,1fr);gap:18px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.band .bn{font-size:20px;font-weight:800;border-radius:10px;padding:8px 0;text-align:center}
+.band .bq b{display:block;font-size:34px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.band .bq small{font-size:17px;color:var(--muted);font-weight:600}
+.band .bd{font-size:22px;line-height:1.3}
+.band .bd b{color:var(--blue)}
+/* colunas verticais com tooltip (linha do tempo) */
+.cols{flex:1;display:flex;align-items:flex-end;gap:36px;padding:0 12px;border-bottom:2px solid var(--line);min-height:0}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;height:100%;justify-content:flex-end;position:relative;cursor:default}
+.col .bars{width:100%;display:flex;flex-direction:column;justify-content:flex-end;border-radius:14px 14px 0 0;overflow:hidden;transition:filter .2s}
+.col .bars div{width:100%;transform-origin:bottom}
+.col .v{font-size:40px;font-weight:800;letter-spacing:-.02em}
+.col:hover .bars{filter:brightness(1.12)}
+.col .tip{position:absolute;bottom:calc(100% - 40px);left:50%;transform:translate(-50%,8px);background:#0A0A2E;color:#fff;border-radius:16px;padding:14px 20px;font-size:24px;font-weight:700;box-shadow:0 12px 32px rgba(10,10,46,.28);white-space:nowrap;opacity:0;pointer-events:none;transition:all .2s}
+.col:hover .tip{opacity:1;transform:translate(-50%,0)}
+.xl{display:flex;gap:36px;padding:14px 12px 0}.xl span{flex:1;text-align:center;font-size:22px;font-weight:700;color:var(--muted)}
+/* fluxo com ponto viajando */
+.serve{display:flex;flex-direction:column;gap:14px}
+.serve div{display:flex;gap:16px;align-items:center;font-size:25px;font-weight:600}
+.serve i{width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-style:normal;font-weight:800}
+.flow{display:flex;align-items:center;gap:14px}
+.flow .fb{flex:1;background:#0A0A2E;color:#fff;border-radius:16px;padding:16px 18px;font-size:22px;font-weight:700;text-align:center;line-height:1.2}
+.flow .fb small{display:block;font-size:18px;font-weight:500;color:var(--ghost2);margin-top:4px}
+.flow .ar{position:relative;width:46px;height:4px;background:var(--line);border-radius:2px;flex-shrink:0;overflow:visible}
+.flow .ar b{position:absolute;top:-4px;left:0;width:12px;height:12px;border-radius:50%;background:var(--blue)}
+
+/* ============ 8 · CARDS CLICÁVEIS COM DETALHE (gaveta) ============ */
+.dc{cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s}
+.dc:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(26,26,255,.14)}
+.dc.sel{border-style:solid}
+/* painel lateral FORA do palco (px de tela, não escala): scrim + aside branco com borda azul */
+#scrim{position:fixed;inset:0;z-index:1900;background:rgba(10,10,46,.45);display:none}
+#panel{position:fixed;top:0;right:0;bottom:0;width:min(560px,92vw);z-index:1950;background:#fff;border-left:3px solid #1A1AFF;font-family:Inter,sans-serif;color:#0A0A2E;display:none;flex-direction:column;padding:clamp(20px,4vw,40px);gap:24px;overflow:auto}
+body.pon #scrim{display:block} body.pon #panel{display:flex}
+#panel .ph{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5C5C7A}
+#panel .ph button{font:inherit;letter-spacing:0;text-transform:none;color:#1A1AFF;background:none;border:0;cursor:pointer}
+#panel .pt{display:flex;align-items:baseline;gap:16px}
+#panel .pt b{font-size:64px;font-weight:800;color:#1A1AFF;line-height:1}
+#panel .pt span{font-size:28px;font-weight:800;line-height:1.2}
+#panel .pd{font-size:18px;color:#5C5C7A;line-height:1.5}
+#panel .pi{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid #D8D8E5;font-size:18px;line-height:1.4}
+#panel .pi b{color:#1A1AFF}
+#panel .pf{margin-top:auto;font-size:14px;color:#5C5C7A}
+/* waffle com legenda que destaca no hover */
+.waffle i{transition:opacity .25s}
+.hl{border:2px solid #D8D8E5;transition:border-color .25s;cursor:default}
+/* slide escuro de conteúdo: pontos #1C1C4E, filhos acima da camada */
+.dk{background:#0A0A2E;color:#fff;padding:88px 120px 100px;flex-direction:column}
+section.s.dk.on{display:flex}
+.dk > *{position:relative}
+.dk > .dotbg2{position:absolute;inset:0;background-image:radial-gradient(#1C1C4E 1.5px,transparent 1.5px);background-size:32px 32px}
+.dk .hdr{color:#C8C8D4}.dk .hdr b{color:#fff}
+.kpi{background:#fff;color:#0A0A2E;border-radius:24px;padding:40px 32px;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.kpi .kn{font-size:128px;font-weight:800;color:#1A1AFF;line-height:.9;letter-spacing:-.05em}
+.kpi .ks{font-size:48px;font-weight:800;color:#1A1AFF}
+.kpi .kt{font-size:34px;font-weight:700;line-height:1.15}
+.kpi .kc{font-size:24px;line-height:1.35;color:#5C5C7A}
+.kpi.inv{background:#1A1AFF;color:#fff}.kpi.inv .kn,.kpi.inv .ks{color:#fff}.kpi.inv .kc,.kpi.inv .lab{color:#E8E8FF}
+/* gráfico interativo (padrão Relatório): camadas em grid — bandas, barras/SVG, hit-areas+tooltip */
+.legend{display:flex;gap:28px;font-size:24px;font-weight:700}
+.legend span{display:flex;align-items:center;gap:10px}.legend i{width:22px;height:22px;border-radius:6px}
+.seg{display:flex;gap:4px;background:#F2F2F2;border-radius:14px;padding:4px}
+.seg button{border:0;border-radius:10px;padding:10px 20px;font:700 24px/1 Inter,sans-serif;cursor:pointer;background:transparent;color:#5C5C7A;transition:background-color .2s cubic-bezier(.25,1,.5,1),color .2s cubic-bezier(.25,1,.5,1)}
+.seg button.on{background:#fff;color:#1A1AFF}
+.plot{position:relative;flex:1;min-height:0;border-bottom:2px solid #E6E6EE}
+.plot > .ly{position:absolute;inset:0;display:grid}
+.plot .bd{margin:-12px 6% 0;border-radius:10px 10px 0 0;transition:background .2s}
+.plot .bd.on{background:#F0F0FF}
+.plot .cl{display:flex;align-items:flex-end;justify-content:center;gap:6%;transition:opacity .2s cubic-bezier(.25,1,.5,1)}
+.plot .cl.dim{opacity:.45}
+.plot .bx{height:100%;width:38%;max-width:92px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}
+.plot .bx span{font-size:24px;font-weight:800;white-space:nowrap}
+.plot .stk2{width:72%;max-width:150px;display:flex;flex-direction:column-reverse;border-radius:10px 10px 0 0;overflow:hidden}
+.plot .stk2 div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:800;overflow:hidden}
+.plot .hit{position:relative;margin-top:-12px;z-index:3}
+.plot .tip{position:absolute;top:12px;width:360px;background:#0A0A2E;color:#fff;border-radius:16px;padding:20px 24px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 32px rgba(10,10,46,.28);pointer-events:none;font-size:24px;z-index:4}
+.plot .tip div{display:flex;justify-content:space-between;gap:16px}.plot .tip div span:first-child{color:#C8C8D4}.plot .tip div b{font-weight:800}
+.plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.plot .dot{position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid;transform:translate(-50%,50%)}
+.xax{display:grid}.xax span{text-align:center;font-size:30px;font-weight:800}
+.fr{display:grid;grid-template-columns:200px minmax(0,1fr) 80px;align-items:center;gap:14px;cursor:default;transition:opacity .2s cubic-bezier(.25,1,.5,1)}
+.fr > span:first-child{font-size:24px;white-space:nowrap}
+.fr .fb2{height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;margin:0 auto}
+.fr > span:last-child{text-align:right;font-size:24px;font-weight:700;color:#5C5C7A}
+.finfo{display:flex;align-items:center;gap:14px;background:#F2F2F8;border-radius:14px;padding:12px 18px;min-height:56px;font-size:24px;line-height:1.3;margin-top:auto}
+.finfo b{color:#1A1AFF}
+.stripe{background-color:#F59E0B;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.22) 0 12px,rgba(255,255,255,0) 12px 24px);background-size:34px 34px}
+
+/* ============ 9 · CARROSSEL DE PRINTS (janela de navegador) ============ */
+.carr{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 50px -24px rgba(10,10,46,.35);border:1px solid var(--line)}
+.cbar{height:46px;display:flex;align-items:center;gap:16px;padding:0 18px;background:#F2F2F6;border-bottom:1px solid var(--line)}
+.cdots3{display:flex;gap:7px}.cdots3 i{width:12px;height:12px;border-radius:50%;background:#D8D8E5}
+.curl{flex:1;max-width:420px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 14px;font-size:16px;font-weight:600;color:var(--muted);text-align:center}
+.cnav{display:flex;gap:8px}
+.cnav button{width:34px;height:8px;border-radius:4px;border:0;background:#D8D8E5;cursor:pointer;position:relative;overflow:hidden;padding:0}
+.cnav button::after{content:"";position:absolute;inset:0;background:var(--blue);transform:scaleX(0);transform-origin:left}
+.cnav button.on::after{animation:cfill 6.5s linear forwards}
+.cnav button.done::after{transform:none}
+@keyframes cfill{to{transform:none}}
+.cview{position:relative;width:878px;height:508px;overflow:hidden;background:#fff}
+.cs{position:absolute;inset:0;margin:0;opacity:0;transition:opacity .8s cubic-bezier(.2,.8,.2,1)}
+.cs.on{opacity:1}
+.cs img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block}
+.ctag{position:absolute;top:14px;right:14px;background:var(--blue);color:#fff;font-size:16px;font-weight:700;border-radius:999px;padding:6px 14px;z-index:3}
+/* placeholder de print — troque por <img src="data:image/jpeg;base64,..."> */
+.shot{position:absolute;inset:0;padding:28px;display:grid;gap:16px;background:#F7F7FB}
+.shot div{background:#fff;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--muted)}
+
+/* ============ 10 · CELULAR (moldura) + DEDO DA DEMO ============ */
+.phone{width:380px;height:772px;border:11px solid #14161c;border-radius:54px;background:#14161c;box-shadow:0 34px 70px -24px rgba(10,10,46,.5);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.phone-in{flex:1;min-height:0;border-radius:43px;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);position:relative;color:var(--fg);font-family:var(--font)}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:100px;height:28px;border-radius:99px;background:#14161c;z-index:30}
+.status{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:6px 28px 0;font-size:14px;font-weight:700}
+.sbars{display:flex;align-items:flex-end;gap:2px}
+.sbars i{display:block;width:3px;background:var(--fg);border-radius:1px}
+.sbars i:nth-child(1){height:5px}.sbars i:nth-child(2){height:8px}.sbars i:nth-child(3){height:11px}
+.sbars b{display:block;width:20px;height:10px;border:1.5px solid var(--fg);border-radius:3px;margin-left:5px}
+.sim{position:absolute;top:-36px;right:4px;font-size:16px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tapdot{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(26,26,255,.22);border:2px solid rgba(26,26,255,.65);z-index:40;pointer-events:none;opacity:0;transform:translate(-50%,-50%);transition:left .55s cubic-bezier(.2,.8,.2,1),top .55s cubic-bezier(.2,.8,.2,1),opacity .25s,transform .15s}
+.tapdot.on{opacity:1}.tapdot.press{transform:translate(-50%,-50%) scale(.7)}
+
+/* ============ 11 · MINI-APP DENTRO DO CELULAR (tokens escopados) ============ */
+.app{--bg:hsl(220 20% 98%);--card:#fff;--fg:hsl(220 13% 18%);--mut:hsl(220 9% 46%);--subtle:hsl(220 13% 95%);--border:hsl(220 13% 91%);
+  --primary:hsl(226 100% 40%);--primary-fg:#fff;--primary-soft:hsl(226 100% 96%);--primary-ink:hsl(226 100% 40%);
+  --danger:hsl(0 72% 48%);--danger-soft:hsl(0 86% 97%);--warn:hsl(30 92% 38%);--warn-soft:hsl(38 100% 94%);--okc:hsl(142 70% 32%);--ok-soft:hsl(142 60% 95%);
+  --grid:hsl(220 13% 18% / .035);--shadow:0 1px 2px hsl(220 30% 20% / .06),0 10px 26px -14px hsl(220 30% 20% / .22);
+  --font:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+.app[data-palette="yellow"]{--primary:hsl(45 100% 51%);--primary-fg:hsl(36 60% 10%);--primary-soft:hsl(48 100% 92%);--primary-ink:hsl(34 90% 30%)}
+#approot{position:relative;flex:1;min-height:0;overflow:hidden;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+#approot :where(button){font:inherit;color:inherit;cursor:pointer}
+.a-screen{height:100%;overflow-y:auto;scrollbar-width:none}
+.a-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:16px;letter-spacing:-.02em}
+.a-mark{width:28px;height:28px;border-radius:8px;background:var(--primary);color:var(--primary-fg);display:grid;place-items:center;font-family:var(--mono);font-size:13px}
+.a-eyebrow{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+.a-btn{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;border-radius:12px;padding:.85rem 1rem;font-weight:600;font-size:15px;border:1px solid transparent}
+.a-primary{background:var(--primary);color:var(--primary-fg);box-shadow:0 10px 20px -12px var(--primary)}
+.a-ghost{background:var(--card);border-color:var(--border)}
+.a-gate{min-height:100%;display:flex;flex-direction:column;padding:16px 20px 28px;gap:24px}
+.a-gate-mid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
+.a-avatar{width:64px;height:64px;border-radius:18px;background:var(--primary-soft);color:var(--primary-ink);display:grid;place-items:center;font-weight:700;font-size:22px}
+.a-gate h1{font-size:23px;font-weight:700;letter-spacing:-.02em}
+.a-gate p{color:var(--mut);font-size:14.5px}
+.a-otp{display:flex;gap:10px;margin-top:6px}
+.a-otp input{width:56px;height:64px;text-align:center;font-family:var(--mono);font-size:26px;font-weight:600;border-radius:14px;border:1.5px solid var(--border);background:var(--card);color:var(--fg);transition:border-color .15s,box-shadow .15s}
+.a-otp input.fill{border-color:var(--primary);box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 18%,transparent)}
+.a-help{text-align:center;font-size:12px;color:var(--mut)}
+.a-home{padding:14px 16px 32px;display:flex;flex-direction:column;gap:16px}
+.a-hi{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.a-fc{background:var(--card);border:1px solid var(--border);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;animation:a-rise .4s ease both;animation-delay:calc(var(--i,0)*70ms);box-shadow:var(--shadow)}
+@keyframes a-rise{from{transform:translateY(8px);opacity:.001}}
+.a-band{display:flex;align-items:center;gap:.5rem;padding:10px 18px;background:var(--danger);color:#fff;font-weight:700;font-size:14px}
+.a-body{display:flex;flex-direction:column;gap:10px;padding:18px}
+.a-val{font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.a-sub{font-size:14px;color:var(--mut)}
+.a-sm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:14px}
+.a-sm b{font-size:20px;font-weight:700}
+.a-chip{display:inline-flex;align-items:center;gap:.35rem;font-size:12px;font-weight:600;border-radius:999px;padding:.22rem .6rem;background:var(--warn-soft);color:var(--warn);grid-column:1/-1;justify-self:start}
+.a-btn-sm{width:auto;padding:.55rem .9rem;font-size:14px;border-radius:10px}
+.a-info{display:flex;gap:10px;background:var(--primary-soft);border-radius:12px;padding:11px 13px;font-size:13px;line-height:1.5}
+.a-ghead{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-top:4px}
+.a-ghead span{font-weight:500;color:var(--mut);font-size:12.5px}
+.a-row{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;text-align:left}
+.a-date{width:44px;height:44px;border-radius:11px;background:var(--subtle);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;font-size:16px;font-weight:700}
+.a-date span{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;color:var(--mut);margin-top:3px;font-weight:500}
+.a-row b{display:block;font-size:14px}.a-row small{font-size:12.5px;color:var(--mut)}
+.a-sheet-bg{position:absolute;inset:0;background:hsl(220 30% 8% / .5);opacity:0;transition:opacity .2s;z-index:10;pointer-events:none}
+.a-sheet{position:absolute;left:0;right:0;bottom:0;z-index:11;background:var(--card);border-radius:22px 22px 0 0;padding:10px 18px 22px;display:flex;flex-direction:column;gap:14px;transform:translateY(100%);transition:transform .28s cubic-bezier(.22,1,.36,1)}
+#approot.open .a-sheet-bg{opacity:1;pointer-events:auto}
+#approot.open .a-sheet{transform:none}
+.a-handle{width:40px;height:4px;border-radius:99px;background:var(--border);align-self:center}
+.a-ask-ic{width:48px;height:48px;border-radius:14px;background:var(--warn-soft);color:var(--warn);display:grid;place-items:center;font-weight:800;font-size:22px}
+.a-sheet h2{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.a-sheet p{font-size:14px;color:var(--mut);line-height:1.5}
+.a-seg{display:flex;padding:4px;background:var(--subtle);border:1px solid var(--border);border-radius:12px}
+.a-seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:.5rem;font-size:13.5px;font-weight:500;color:var(--mut)}
+.a-seg button[aria-pressed="true"]{background:var(--card);color:var(--fg);font-weight:600;box-shadow:0 1px 2px hsl(220 30% 20% / .12)}
+.a-qr{align-self:center;padding:12px;background:#fff;border-radius:14px;border:1px solid var(--border)}
+.a-qr canvas{display:block;width:150px;height:150px;image-rendering:pixelated}
+.a-code{font-family:var(--mono);font-size:11px;word-break:break-all;background:var(--subtle);border:1px solid var(--border);border-radius:10px;padding:10px}
+.a-toast{position:absolute;left:50%;bottom:24px;transform:translateX(-50%) translateY(16px);opacity:0;z-index:20;background:var(--fg);color:var(--bg);padding:.55rem .9rem;border-radius:10px;font-size:13.5px;font-weight:500;transition:.22s;pointer-events:none;white-space:nowrap}
+.a-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ 12 · WHATSAPP ANIMADO ============ */
+.clgrid{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:56px;margin-top:28px;min-height:0}
+.feat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.feat > div{background:#fff;border-radius:18px;padding:14px 18px;display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:12px;row-gap:2px;align-items:center}
+.feat .ic{width:40px;height:40px;border-radius:11px;background:var(--soft);display:flex;align-items:center;justify-content:center}
+.feat .t{font-size:23px;font-weight:800}
+.feat .d{grid-column:1/-1;font-size:19px;color:var(--muted);line-height:1.3}
+.clnum{background:#0A0A2E;color:#fff;border-radius:22px;padding:20px 30px;display:grid;grid-template-columns:repeat(3,auto) minmax(0,1fr);gap:36px;align-items:center}
+.clnum .big{font-size:64px;color:#fff}
+.clnum small{display:block;font-size:20px;color:var(--ghost2);margin-top:6px;font-weight:600}
+.clnum p{font-size:20px;line-height:1.35;color:var(--ghost2);border-left:2px solid #23235A;padding-left:24px}
+.clnum p b{color:#fff}
+.wa{width:440px;height:720px;border-radius:32px;overflow:hidden;background:#EFEAE2;display:flex;flex-direction:column;box-shadow:0 30px 70px rgba(10,10,46,.25);border:10px solid #14161c}
+.wa-h{background:#1F2C34;color:#fff;padding:16px 20px;display:flex;gap:12px;align-items:center}
+.wa-h .av{width:44px;height:44px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
+.wa-h .nm{font-weight:700;font-size:19px}.wa-h .st{font-size:14px;opacity:.7}
+.wa-b{flex:1;padding:16px;display:flex;flex-direction:column;gap:10px;overflow:hidden;justify-content:flex-end}
+.bub{max-width:84%;padding:11px 15px;border-radius:12px;font-size:18px;line-height:1.38;background:#fff;box-shadow:0 1px 1px rgba(0,0,0,.08);display:none;opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s}
+.bub.show{display:block}.bub.in{opacity:1;transform:none}
+.bub.me{align-self:flex-end;background:#D9FDD3}
+.bub small{display:block;font-size:12px;color:#667781;text-align:right;margin-top:3px}
+.audio{display:flex;align-items:center;gap:10px}
+.audio .pl{width:32px;height:32px;border-radius:50%;background:#53BDEB;display:flex;align-items:center;justify-content:center}
+.audio .wv{display:flex;gap:2px;align-items:center}.audio .wv i{width:3px;background:#8696A0;border-radius:2px}
+.typing{align-self:flex-start;background:#fff;border-radius:12px;padding:13px 17px;display:none;gap:5px}
+.typing.on{display:flex}
+.typing i{width:8px;height:8px;border-radius:50%;background:#8696A0;animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+
+/* ============ 13 · OVERLAYS (progresso, sweep, wipe de ato, contador, overview, notas) ============ */
+#prog{position:fixed;top:0;left:0;right:0;height:4px;z-index:1500;background:rgba(200,200,212,.25);pointer-events:none}
+#prog div{height:100%;width:0;background:var(--blue);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+#sweep{position:fixed;top:0;bottom:0;left:0;width:22vw;z-index:1700;pointer-events:none;background:linear-gradient(90deg,rgba(26,26,255,0) 0%,rgba(26,26,255,.55) 70%,#1A1AFF 100%);transform:translateX(-30vw)}
+#wipe{position:fixed;inset:0;z-index:1800;background:var(--blue);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;pointer-events:none;clip-path:inset(0 0 0 100%)}
+#wipe span:first-child{font-size:clamp(14px,1.6vw,22px);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--soft)}
+#wipe span:last-child{font-size:clamp(32px,5vw,64px);font-weight:800;letter-spacing:-.03em}
+#cnt{position:fixed;right:22px;bottom:16px;z-index:1600;font-size:13px;font-weight:700;color:rgba(92,92,122,.8);font-variant-numeric:tabular-nums}
+body.isdark #cnt{color:rgba(255,255,255,.45)}
+#fsh{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:1600;font-size:13px;font-weight:600;color:#fff;background:rgba(10,10,46,.75);padding:8px 16px;border-radius:999px;transition:opacity .6s;pointer-events:none}
+#ov{position:fixed;inset:0;z-index:1990;background:#0A0A2E;color:#fff;padding:48px;overflow:auto;display:none;flex-direction:column;gap:28px}
+#ov.on{display:flex}
+#ov .og{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+#ov .oc{aspect-ratio:16/9;border-radius:12px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;border:2px dotted var(--blue);background:#16163F}
+#ov .oc.cur{background:var(--blue)}
+#ov .oc b{font-size:28px;color:#7A7AFF}#ov .oc.cur b{color:#fff}
+#ov .oc span{font-size:16px;font-weight:600}
+#notes{position:fixed;left:16px;right:16px;bottom:16px;z-index:1950;background:rgba(10,10,46,.94);color:#fff;border:1px solid #23235A;border-radius:14px;padding:14px 20px;font-size:16px;line-height:1.5;display:none}
+#notes.on{display:block}
+#notes b{color:#7A7AFF;font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ============ 14 · SENTINELA · componentes próprios ============ */
+.vs{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:40px;min-height:0}
+.li{display:flex;flex-direction:column;gap:18px}
+.li div{display:grid;grid-template-columns:44px minmax(0,1fr);gap:18px;align-items:center;font-size:27px;line-height:1.3}
+.li i{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:22px}
+.li .y{background:#D1FAE5;color:#047857}.li .x{background:#FEE2E2;color:#B91C1C}
+.li b{color:var(--blue)}
+.pbox{padding:30px 34px;display:flex;flex-direction:column;gap:20px}
+.pbox h3{font-size:34px;font-weight:800;letter-spacing:-.02em}
+/* rodada */
+#sl-rodada .step{padding:11px 20px;gap:18px;grid-template-columns:50px minmax(0,1fr)}
+#sl-rodada .step .n{width:50px;height:50px;font-size:24px}
+#sl-rodada .step .t{font-size:27px}
+#sl-rodada .step .d{font-size:22px}
+.term{background:#0A0A2E;border-radius:24px;padding:30px 34px;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:22px;line-height:1.5;color:#C8C8D4;display:flex;flex-direction:column;gap:10px;box-shadow:0 24px 50px -24px rgba(10,10,46,.45)}
+.term .tb{display:flex;gap:8px;margin-bottom:8px}.term .tb i{width:12px;height:12px;border-radius:50%;background:#23235A}
+.term .tl{opacity:.12;transition:opacity .45s cubic-bezier(.2,.8,.2,1),transform .45s cubic-bezier(.2,.8,.2,1);transform:translateX(-8px);display:grid;grid-template-columns:230px minmax(0,1fr);gap:12px}
+.term .tl.on{opacity:1;transform:none}
+.term .tl b{color:#7A7AFF;font-weight:600}
+.term .tl span:last-child{color:#fff}
+.term .ok{color:#10B981!important;font-weight:600}
+/* registro ao vivo (feed) */
+.feed{background:#0A0A2E;border-radius:24px;padding:22px 26px;display:flex;flex-direction:column;gap:8px;color:#fff}
+.feed .fh{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#C8C8D4;padding-bottom:8px;border-bottom:1px solid #23235A}
+.feed .fh b{color:#7A7AFF;letter-spacing:0;text-transform:none}
+.fr2{display:grid;grid-template-columns:120px 250px 150px minmax(0,1fr);gap:14px;align-items:center;padding:8px 6px;border-radius:12px;opacity:.1;transition:opacity .4s,background .6s}
+.fr2.on{opacity:1}
+.fr2.flash{background:#16163F}
+.fr2 .tm{font-family:"JetBrains Mono",monospace;font-size:19px;color:#9C9CB4}
+.fr2 .who{font-size:21px;font-weight:700;color:#C8C8D4}
+.fr2 .tx{font-size:21px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.c-dk{background:#16163F;color:#C8C8D4}
+.chip.c-lil{background:#2A2A70;color:#C8C8FF}
+.chip.c-gr{background:#0F3B30;color:#6EE7B7}
+.sres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.sres > div{background:#fff;border:2px solid var(--line);border-radius:20px;padding:16px 20px;display:flex;flex-direction:column;gap:4px;opacity:.25;transform:translateY(10px);transition:all .5s cubic-bezier(.2,.8,.2,1)}
+.sres > div.on{opacity:1;transform:none;border-color:var(--blue);box-shadow:0 14px 30px rgba(26,26,255,.12)}
+.sres .lab{font-size:19px}
+.sres b{font-size:26px;font-weight:800}
+.bub.sys{align-self:center;background:#FFF5C4;color:#54656F;font-size:15px;text-align:center;border-radius:10px;max-width:90%}
+/* desfechos */
+.dt{display:flex;flex-direction:column}
+.dt > div{display:grid;grid-template-columns:330px minmax(0,1fr);gap:24px;align-items:center;padding:15px 0;border-top:1px solid var(--line);font-size:25px;line-height:1.3}
+.dt > div:first-child{border-top:0}
+.dt .chip{font-size:22px;justify-self:start}
+/* segurança */
+.sg{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:24px;margin-top:40px;min-height:0}
+.sg > div{padding:30px 32px;display:flex;flex-direction:column;gap:14px}
+.sg .ic{width:60px;height:60px;border-radius:16px;background:var(--soft);display:flex;align-items:center;justify-content:center}
+.sg .t{font-size:31px;font-weight:800;line-height:1.15;letter-spacing:-.01em}
+.sg .d{font-size:24px;line-height:1.35;color:var(--muted)}
+.stack{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:28px}
+.stack span:not(.lab){font-size:22px;font-weight:700;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 18px}
+/* linha do tempo (escuro) */
+.tline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;margin-top:36px}
+.tline::before{content:"";position:absolute;left:0;right:0;top:11px;height:3px;background:#23235A}
+.tline > div{position:relative;display:flex;flex-direction:column;gap:8px;padding-right:20px}
+.tline i{width:25px;height:25px;border-radius:50%;background:#0A0A2E;border:4px solid #3A3A8C;display:block}
+.tline .on i{border-color:#7A7AFF;background:#1A1AFF}
+.tline b{font-size:28px;font-weight:800;color:#fff;margin-top:8px}
+.tline span{font-size:24px;color:#C8C8D4;line-height:1.3}
+/* cobertura */
+.ag{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+.ag:first-of-type{border-top:0}
+.ag .nm{font-size:29px;font-weight:800;display:flex;align-items:center;gap:14px}
+.ag .nm i{width:18px;height:18px;border-radius:50%;flex-shrink:0}
+.ag .ds{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.ag .ds small{font-size:23px;color:var(--muted);line-height:1.3}
+.ft{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ft > div{border-radius:16px;padding:14px 18px;display:flex;flex-direction:column;gap:4px}
+.ft b{font-size:25px;font-weight:800}
+.ft small{font-size:20px;font-weight:600}
+.f-ok{background:#D1FAE5;color:#047857}.f-bl{background:var(--soft);color:var(--blue)}.f-wa{background:#FEF3C7;color:#92400E}.f-no{background:#fff;color:var(--muted);border:2px dashed var(--line)}
+/* próximos passos em horizontes */
+.hz{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:36px;min-height:0}
+.hz > div{display:flex;flex-direction:column;gap:16px;min-height:0}
+.hz .hh{display:flex;align-items:center;gap:14px;font-size:24px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.hz .hh i{height:8px;flex:1;border-radius:4px}
+.nx{padding:20px 26px;display:flex;flex-direction:column;gap:6px}
+.nx .t{font-size:28px;font-weight:800;line-height:1.15}
+.nx .d{font-size:23px;color:var(--muted);line-height:1.3}
+.nx .tg{align-self:flex-start;margin-top:6px}
+/* antes → depois (pares) */
+.ba{position:relative;border-left:6px solid}
+.ba.antes{border-left-color:#EF4444}.ba.depois{border-left-color:#10B981}
+.ba.antes + .ba.depois::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid #10B981;color:#047857;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:2}
+.cmp{display:flex;flex-direction:column;gap:14px;min-height:0}
+.cmp .ch,.cmp .cr{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr)}
+.cmp .ch span{font-size:22px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding-left:4px}
+.cmp .la{color:#B91C1C}.cmp .ld{color:#047857}
+.cmp .a,.cmp .d{border-radius:18px;padding:18px 24px;font-size:25px;line-height:1.3;display:flex;align-items:center}
+.cmp .a{background:#FEF2F2;color:#5C5C7A;border-left:6px solid #EF4444}
+.cmp .d{background:#ECFDF5;color:#0A0A2E;font-weight:700;border-left:6px solid #10B981}
+.cmp .arw{position:relative;align-self:center;justify-self:center;width:36px;height:4px;background:#D8D8E5;border-radius:2px}
+.cmp .arw::after{content:"";position:absolute;right:-4px;top:-6px;border:8px solid transparent;border-left:10px solid #D8D8E5;border-right:0}
+.cmp .arw b{position:absolute;top:-4px;left:0;width:12px;height:12px;border-radius:50%;background:#1A1AFF}
+.cmp .cres{margin-top:6px;background:#0A0A2E;color:#fff;border-radius:18px;padding:20px 26px;font-size:27px;font-weight:300}
+.cmp .cres b{font-weight:800;color:#7A7AFF}
+.ags{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-top:8px;font-size:23px;font-weight:600}
+.ags span{display:flex;align-items:center;gap:8px}.ags i{width:14px;height:14px;border-radius:50%}
+.ags small{font-size:19px;font-weight:700;color:var(--muted);background:#F2F2F2;border-radius:999px;padding:3px 12px}
+/* slide 4 · caminho do cliente x Sentinela */
+.lane{display:flex;align-items:stretch;gap:0;margin-top:40px}
+.zn{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:0;border-radius:22px;padding:52px 28px 26px}
+.z1{background:var(--soft)}
+.z2{border:2px dashed #9C9CB4;background:rgba(255,255,255,.5)}
+.zl{position:absolute;top:8px;left:24px;font-size:18px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.z2 .zl{color:var(--muted)}
+.nd{background:#fff;border:2px solid var(--line);border-radius:16px;padding:16px 28px;font-size:28px;font-weight:800;text-align:center;line-height:1.15;white-space:nowrap}
+.nd small{display:block;font-size:18px;font-weight:600;color:var(--muted);margin-top:2px}
+.nd.nb{background:#0A0A2E;color:#fff;border-color:#0A0A2E}.nd.nb small{color:#C8C8D4}
+.nd.ns{background:var(--blue);color:#fff;border-color:var(--blue)}.nd.ns small{color:var(--soft)}
+.ln2{position:relative;align-self:center;flex:1;min-width:110px;max-width:220px;height:4px;margin:0 14px}
+.ln2 span{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:20px;font-weight:700;color:var(--muted);white-space:nowrap}
+.ln2.solid{background:var(--blue);border-radius:2px}
+.ln2.solid::before,.ln2.solid::after{content:"";position:absolute;top:-6px;border:8px solid transparent}
+.ln2.solid::before{left:-6px;border-right:10px solid var(--blue);border-left:0}
+.ln2.solid::after{right:-6px;border-left:10px solid var(--blue);border-right:0}
+.ln2.dash{background:repeating-linear-gradient(90deg,#9C9CB4 0 10px,transparent 10px 18px)}
+.ln2.dash::after{content:"";position:absolute;right:-6px;top:-6px;border:8px solid transparent;border-left:10px solid #9C9CB4;border-right:0}
+.ln2 b{position:absolute;top:-4px;left:0;width:12px;height:12px;border-radius:50%;background:var(--blue)}
+.nl{display:flex;flex-direction:column;gap:22px}
+.nl div{display:grid;grid-template-columns:44px minmax(0,1fr);gap:18px;align-items:center;font-size:26px;line-height:1.3}
+.nl i{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-style:normal;font-weight:800;font-size:22px;display:flex;align-items:center;justify-content:center}
+.nl b{color:var(--blue)}
+/* tese */
+.pil{display:flex;flex-direction:column;gap:14px}
+.pil div{display:flex;align-items:center;gap:20px;background:#16163F;border:1px solid #23235A;border-radius:18px;padding:18px 26px;font-size:30px;font-weight:700}
+.pil i{width:40px;height:40px;border-radius:12px;background:#1A1AFF;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:22px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div id="prog"><div></div></div>
+<div id="vp"><div id="stage">
+
+<!-- ================= 01 CAPA ================= -->
+<section class="s dark" data-label="Capa" data-notes="Abrir com a frase: o Sentinela é o agente que registra, como fato, tudo o que as nossas IAs de cobrança fazem com o cliente. Ele não conversa com ninguém. Está em produção desde 11/11. Vou contar em 4 atos: por que existe, como funciona, onde estamos e para onde vamos.">
+  <div class="dotbg"></div>
+  <div class="orbit">
+    <svg viewBox="0 0 980 980" width="980" height="980">
+      <circle cx="490" cy="490" r="460" fill="none" stroke="#23235A" stroke-width="2"/>
+      <g data-spin="90"><circle cx="490" cy="490" r="380" fill="none" stroke="#1A1AFF" stroke-width="2" stroke-dasharray="4 14"/><circle cx="490" cy="110" r="12" fill="#1A1AFF"/><circle cx="870" cy="490" r="7" fill="#7A7AFF"/></g>
+      <g data-spin="-60"><circle cx="490" cy="490" r="290" fill="none" stroke="#3A3A8C" stroke-width="2"/><circle cx="200" cy="490" r="10" fill="#FFFFFF"/><circle cx="695" cy="285" r="6" fill="#1A1AFF"/></g>
+      <g data-spin="40"><circle cx="490" cy="490" r="200" fill="none" stroke="#1A1AFF" stroke-width="3" stroke-dasharray="120 40 20 40"/></g>
+      <circle data-pulse="1" cx="490" cy="490" r="120" fill="#1A1AFF"/>
+    </svg>
+    <div class="lbl">Sentinela</div>
+  </div>
+  <div class="cv-top"><span data-a="1">Novo agente · Apresentação para a diretoria</span><b data-a="1">◆ Squad IA</b></div>
+  <div class="cv-main">
+    <span data-a="1" class="pillb">Em produção desde 11/11/2026 · v1.2.0</span>
+    <h1 class="cv-h1">
+      <span data-w="1" style="font-weight:300;color:#C8C8D4">Toda</span>
+      <span data-w="1" style="font-weight:300;color:#C8C8D4">conversa</span>
+      <span data-w="1" style="font-weight:300;color:#C8C8D4">da IA,</span>
+      <span data-w="1" style="font-weight:800;color:#fff">registrada</span>
+      <span data-w="1" style="font-weight:800;color:#fff">como</span>
+      <span data-w="1" style="font-weight:800;color:#7A7AFF">fato</span>
+    </h1>
+    <span data-a="1" style="font-size:34px;color:#C8C8D4">Sentinela · Squad IA &amp; Automação — Finza · Novembro/2026</span>
+  </div>
+  <div class="ticker"><div data-ticker="1">
+    <span>35 migrações aplicadas em produção</span><span>◆</span><span>Rodada a cada 5 minutos</span><span>◆</span><span>19 métricas rastreáveis até o fato</span><span>◆</span><span>9/9 classificações válidas na 1ª tentativa</span><span>◆</span><span>0 erros de gravação</span><span>◆</span><span>0 falhas nas primeiras 20 h</span><span>◆</span>
+    <span>35 migrações aplicadas em produção</span><span>◆</span><span>Rodada a cada 5 minutos</span><span>◆</span><span>19 métricas rastreáveis até o fato</span><span>◆</span><span>9/9 classificações válidas na 1ª tentativa</span><span>◆</span><span>0 erros de gravação</span><span>◆</span><span>0 falhas nas primeiras 20 h</span><span>◆</span>
+  </div></div>
+</section>
+
+<!-- ================= 02 RESUMO ================= -->
+<section class="s light" data-label="Resumo" data-notes="Mapa da conversa. Cada card é clicável e leva ao ato. Mensagem central: um número plausível e falso é pior que um vazio declarado. O Sentinela registra o que aconteceu, e nada além.">
+  <div class="hdr"><span>02 · Resumo</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">Quatro atos, </span><span class="k">um observador</span></h2>
+  <div class="r4">
+    <div class="ec" data-a="1" data-go="2">
+      <div class="bar" style="background:#1A1AFF"></div>
+      <div class="hd"><span class="n" style="background:#1A1AFF">1</span><span class="t">Por que existe</span></div>
+      <span class="chip c-bl" style="align-self:flex-start">Substitui o Tageador</span>
+      <div class="m"><span class="big" style="color:#1A1AFF" data-count="1">1</span><small>registro único das conversas da IA</small></div>
+      <div class="bb"><div class="ba antes"><span>Antes</span><span>Tageador julgava turnos soltos</span></div><div class="ba depois"><span>Depois</span><span>Cada agente grava o próprio fato</span></div></div>
+    </div>
+    <div class="ec" data-a="1" data-go="4">
+      <div class="bar" style="background:#7A7AFF"></div>
+      <div class="hd"><span class="n" style="background:#7A7AFF">2</span><span class="t">Como funciona</span></div>
+      <span class="chip c-bl" style="align-self:flex-start">Fora do caminho do cliente</span>
+      <div class="m"><div style="display:flex;align-items:baseline;gap:8px"><span class="big" style="color:#7A7AFF" data-count="5">5</span><span style="font-size:48px;font-weight:800;color:#7A7AFF">min</span></div><small>por rodada, só o que chegou de novo</small></div>
+      <div class="bb"><div class="ba antes"><span>Antes</span><span>Número sem rastro de origem</span></div><div class="ba depois"><span>Depois</span><span>Cada número aponta o fato de origem</span></div></div>
+    </div>
+    <div class="ec" data-a="1" data-go="7">
+      <div class="bar" style="background:#10B981"></div>
+      <div class="hd"><span class="n" style="background:#10B981">3</span><span class="t">Onde estamos</span></div>
+      <span class="chip c-ok" style="align-self:flex-start">✓ Produção desde 11/11</span>
+      <div class="m"><span class="big" style="color:#10B981" data-pop="1">9/9</span><small>classificações válidas na 1ª tentativa</small></div>
+      <div class="bb"><div class="ba depois"><span>No ar</span><span>Valentina + transferências</span></div><div class="ba antes"><span>Falta</span><span>Esperanza e Clara</span></div></div>
+    </div>
+    <div class="ec" data-a="1" data-go="9">
+      <div class="bar" style="background:#F59E0B"></div>
+      <div class="hd"><span class="n" style="background:#F59E0B">4</span><span class="t">Para onde vamos</span></div>
+      <span class="chip c-wa" style="align-self:flex-start">Próximo: Esperanza</span>
+      <div class="m"><div style="display:flex;align-items:baseline;gap:8px"><span class="big" style="color:#F59E0B" data-count="3">3</span><span style="font-size:40px;font-weight:800;color:#F59E0B">agentes</span></div><small>Valentina, Esperanza e Clara no mesmo padrão</small></div>
+      <div class="bb"><div class="ba antes"><span>Hoje</span><span>Sem tela: leitura por API</span></div><div class="ba depois"><span>Depois</span><span>Métricas na Torre</span></div></div>
+    </div>
+  </div>
+  <div class="msg" data-a="1">Um número plausível e falso é pior que um vazio declarado. <b>O Sentinela registra o que aconteceu, e nada além.</b></div>
+  <div class="foot" style="bottom:28px">Fonte: documentação do Sentinela (Marcos Oliveira), 12/11/2026</div>
+</section>
+
+<!-- ================= 03 ATO 1 · O PROBLEMA ================= -->
+<section class="s light" data-label="01 · O problema" data-act="Ato 1|Por que existe" data-notes="As IAs de cobrança conversam com clientes todos os dias. Antes, quem julgava essas conversas era o Tageador: ele via um turno de cada vez, usava o relógio dele e não sabia de onde a conversa vinha. Retentativa duplicava. O resultado era número que parecia certo e não era. O Sentinela inverte a base: cada agente grava o fato, e o julgamento é calculado em cima dele.">
+  <div class="hdr"><span>03 · Ato 1 · Por que existe</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">A IA conversa todo dia. </span><span class="k">Quem confere?</span></h2>
+  <div style="flex:1;display:grid;grid-template-columns:560px minmax(0,1fr);gap:48px;margin-top:40px;min-height:0">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div class="cw statrow" data-a="1" style="align-items:start"><span class="big" data-count="3">3</span><div><div class="tt">agentes de IA</div><div class="ags"><span><i style="background:#7A7AFF"></i>Valentina</span><span><i style="background:#1A1AFF"></i>Esperanza</span><small>cobrança</small></div><div class="ags"><span><i style="background:#0A0A2E"></i>Clara</span><small>formalização</small></div></div></div>
+      <div class="cw statrow" data-a="1"><span class="big" style="color:#7A7AFF" data-count="8">8</span><div><div class="tt">tipos de fato</div><div class="ss">mensagem + 7 eventos do atendimento</div></div></div>
+      <div class="cw statrow" data-a="1"><span class="big" data-count="1">1</span><div><div class="tt">registro único</div><div class="ss">antes, o julgamento ficava espalhado nos fluxos</div></div></div>
+    </div>
+    <div class="cmp">
+      <div class="ch" data-a="1"><span class="la">✕ Antes · Tageador</span><span></span><span class="ld">✓ Depois · Sentinela</span></div>
+      <div class="cr" data-a="1"><div class="a">Julgava um turno solto</div><span class="arw"><b data-flow="22,0"></b></span><div class="d">Julga o atendimento inteiro, do início ao fim</div></div>
+      <div class="cr" data-a="1"><div class="a">Carimbava o horário da própria execução</div><span class="arw"><b data-flow="22,0" data-fd="300"></b></span><div class="d">Usa o horário em que cada fato aconteceu</div></div>
+      <div class="cr" data-a="1"><div class="a">Não sabia de que ramo a conversa vinha</div><span class="arw"><b data-flow="22,0" data-fd="600"></b></span><div class="d">Cada agente grava o que sabe da própria conversa</div></div>
+      <div class="cr" data-a="1"><div class="a">Retentativa duplicava o registro</div><span class="arw"><b data-flow="22,0" data-fd="900"></b></span><div class="d">Reenvio não duplica: cada linha tem chave única</div></div>
+      <div class="cres" data-a="1"><b>Resultado:</b> todo número rastreável até o fato que o gerou.</div>
+    </div>
+  </div>
+  <div class="foot">Fonte: documentação do Sentinela, §Contexto e origem · §Entrada · §Chave de idempotência (12/11/2026)</div>
+</section>
+
+<!-- ================= 04 O QUE FAZ / NÃO FAZ ================= -->
+<section class="s light" data-label="01 · Faz e não faz" data-notes="O ponto mais importante: o Sentinela não está no caminho do cliente. A conversa acontece entre o cliente e o agente. O agente só grava uma cópia do que aconteceu numa tabela, e o Sentinela trabalha em cima dessa cópia, a cada 5 minutos. Tudo o que ele faz é sobre o registro, nunca sobre o cliente. Se ele cair, ninguém percebe. Ele também não mede custo em reais: isso foi tirado do escopo de propósito; tokens e latência ficam.">
+  <div class="hdr"><span>04 · Ato 1 · O que ele é</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">Trabalha sobre o registro. </span><span class="k">Não toca no cliente.</span></h2>
+  <div class="lane" data-a="1">
+    <div class="zn z1">
+      <span class="zl">Caminho do cliente</span>
+      <div class="nd">Cliente<small>WhatsApp</small></div>
+      <div class="ln2 solid"><span>conversa</span></div>
+      <div class="nd nb">Agente de IA<small>Valentina · Esperanza · Clara</small></div>
+    </div>
+    <div class="ln2 dash" style="max-width:240px"><b data-flow="70,0"></b><span>grava uma cópia</span></div>
+    <div class="zn z2">
+      <span class="zl">Fora do caminho do cliente</span>
+      <div class="nd nw">Registro<small>tabela de entrada</small></div>
+      <div class="ln2 dash"><b data-flow="70,0" data-fd="700"></b><span>a cada 5 min</span></div>
+      <div class="nd ns">Sentinela<small>se cair, ninguém percebe</small></div>
+    </div>
+  </div>
+  <div class="vs" style="margin-top:36px">
+    <div class="cd pbox" data-a="1" style="gap:14px">
+      <h3>Com o registro em mãos, ele</h3>
+      <div class="nl">
+        <div><i>1</i><span>Lê cada mensagem e evento que os agentes <b>gravaram</b></span></div>
+        <div><i>2</i><span>Separa o registro com defeito numa <b>quarentena com motivo</b></span></div>
+        <div><i>3</i><span>Identifica <b>quando a conversa terminou</b></span></div>
+        <div><i>4</i><span>Pede a um modelo o <b>julgamento</b> da conversa encerrada</span></div>
+        <div><i>5</i><span>Calcula <b>19 métricas</b>, cada uma ligada ao fato de origem</span></div>
+      </div>
+    </div>
+    <div class="cw pbox" data-a="1" style="gap:14px">
+      <h3>Ele não</h3>
+      <div class="li" style="gap:24px">
+        <div><i class="x">✕</i><span>Fala com o cliente nem responde pelo agente</span></div>
+        <div><i class="x">✕</i><span>Transfere, encerra ou cobra</span></div>
+        <div><i class="x">✕</i><span>Lê banco de outros sistemas</span></div>
+        <div><i class="x">✕</i><span>Mede custo em reais</span></div>
+        <div><i class="x">✕</i><span>Troca dado ausente por zero ou sucesso</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Fonte: documentação do Sentinela, §O que é · §Fora do caminho do cliente · §A rodada do worker (12/11/2026)</div>
+</section>
+
+<!-- ================= 05 ATO 2 · A RODADA ================= -->
+<section class="s light" data-label="02 · A rodada" data-act="Ato 2|Como funciona" id="sl-rodada" data-notes="O caminho do dado, da esquerda para a direita: o agente grava numa tabela e segue a vida. A cada 5 minutos o Sentinela faz uma rodada, sempre na mesma ordem, e termina. Os passos acendem junto com a saída da rodada à direita. A tela da direita resume as primeiras 20 horas em produção no formato da rodada.">
+  <div class="hdr"><span>05 · Ato 2 · Como funciona</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">Uma passada a cada </span><span class="k">5 minutos</span></h2>
+  <div class="flow" data-a="1" style="margin-top:32px">
+    <div class="fb">Agentes no n8n<small>hoje: Valentina</small></div>
+    <div class="ar"><b data-flow="34,0"></b></div>
+    <div class="fb">Tabela de entrada<small>só gravação, nunca leitura</small></div>
+    <div class="ar"><b data-flow="34,0" data-fd="450"></b></div>
+    <div class="fb" style="background:#1A1AFF">Rodada do Sentinela<small style="color:#E8E8FF">a cada 5 min, e termina</small></div>
+    <div class="ar"><b data-flow="34,0" data-fd="900"></b></div>
+    <div class="fb">Fatos + julgamentos<small>em campos separados</small></div>
+    <div class="ar"><b data-flow="34,0" data-fd="1350"></b></div>
+    <div class="fb">19 métricas e API<small>leitura com chave</small></div>
+  </div>
+  <div style="flex:1;display:grid;grid-template-columns:minmax(0,1fr) 820px;gap:44px;margin-top:28px;min-height:0">
+    <div class="steps" style="gap:10px">
+      <div class="step" data-a="1" data-st="1"><span class="n">1</span><div><div class="t">Promoção</div><div class="d">Cada linha vai para o registro oficial ou para a quarentena</div></div></div>
+      <div class="step" data-a="1" data-st="2"><span class="n">2</span><div><div class="t">Varredura</div><div class="d">Decide quais atendimentos terminaram</div></div></div>
+      <div class="step" data-a="1" data-st="3"><span class="n">3</span><div><div class="t">Classificação</div><div class="d">O modelo julga a conversa; o banco confere a resposta</div></div></div>
+      <div class="step" data-a="1" data-st="4"><span class="n">4</span><div><div class="t">Consolidação</div><div class="d">Deriva o desfecho dos fatos, sem modelo</div></div></div>
+      <div class="step" data-a="1" data-st="5"><span class="n">5</span><div><div class="t">Ensaios</div><div class="d">Testa mudanças de vocabulário antes de publicar</div></div></div>
+      <div class="step" data-a="1" data-st="6"><span class="n">6</span><div><div class="t">Rastro</div><div class="d">Registra a execução, sem texto de conversa</div></div></div>
+    </div>
+    <div data-a="1" style="display:flex;flex-direction:column;gap:14px;min-height:0">
+      <div class="term" id="term">
+        <div class="tb"><i></i><i></i><i></i></div>
+        <div class="tl" data-tl="0"><b>$ sentinela</b><span>rodada · produção</span></div>
+        <div class="tl" data-tl="1"><b>→ promoção</b><span>152 lidas · 149 ok · 3 quarentena</span></div>
+        <div class="tl" data-tl="2"><b>→ varredura</b><span>9 atendimentos fechados</span></div>
+        <div class="tl" data-tl="3"><b>→ classificação</b><span>9/9 válidas · 1ª tentativa</span></div>
+        <div class="tl" data-tl="4"><b>→ consolidação</b><span>9 desfechos derivados</span></div>
+        <div class="tl" data-tl="5"><b>→ ensaios</b><span>nenhum aberto</span></div>
+        <div class="tl" data-tl="6"><b>→ rastro</b><span>enviado ao Langfuse</span></div>
+        <div class="tl" data-tl="7"><b>exit</b><span class="ok">0 · limpa</span></div>
+      </div>
+      <span style="font-size:22px;color:var(--muted);line-height:1.35">Tela ilustrativa: soma das primeiras 20 h em produção (11–12/11), no formato de uma rodada.</span>
+    </div>
+  </div>
+  <div class="foot">Fonte: documentação do Sentinela, §A rodada do worker · §Estado em produção <span class="dotsep"></span> Saída 0 = ok · 1 = falha nomeada · 2 = não conectou</div>
+</section>
+
+<!-- ================= 06 DEMO · CONVERSA VIRA FATO ================= -->
+<section class="s light" data-label="02 · Conversa vira fato" id="sl-wa" data-notes="Demo ao vivo, com dados fictícios. À direita, uma conversa da Valentina. À esquerda, o que o Sentinela recebe a cada fala: um fato com tipo, autor e horário. Quando a transferência é confirmada no Desk, entra o evento de encaminhamento. Na rodada seguinte, o Sentinela fecha o atendimento, classifica e deriva o desfecho. Detalhe importante: a transferência é gravada por quem confirma no Desk, não pela IA, porque a IA só sabe que quis transferir.">
+  <div class="hdr"><span>06 · Ato 2 · Na prática</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">Cada fala vira </span><span class="k">fato</span><span class="g">. O fim vira </span><span class="k">desfecho</span></h2>
+  <div class="clgrid" style="gap:48px">
+    <div style="display:flex;flex-direction:column;gap:20px;min-height:0">
+      <div class="feed" data-a="1" id="feed">
+        <div class="fh"><span>Registro recebido pelo Sentinela</span><b>simulação</b></div>
+        <div class="fr2" data-log="0"><span class="tm">17:34:02</span><span class="chip c-dk">mensagem</span><span class="who">cliente</span><span class="tx">"Oi, quero falar sobre meu contrato"</span></div>
+        <div class="fr2" data-log="1"><span class="tm">17:34:09</span><span class="chip c-lil">mensagem</span><span class="who">Valentina</span><span class="tx">"Oi! Sou a Valentina, da Finza…"</span></div>
+        <div class="fr2" data-log="2"><span class="tm">17:35:20</span><span class="chip c-dk">mensagem</span><span class="who">cliente</span><span class="tx">"Quero cancelar, a máquina parou"</span></div>
+        <div class="fr2" data-log="3"><span class="tm">17:35:31</span><span class="chip c-lil">mensagem</span><span class="who">Valentina</span><span class="tx">"Vou te passar para um especialista…"</span></div>
+        <div class="fr2" data-log="4"><span class="tm">17:35:48</span><span class="chip c-gr">encaminhamento</span><span class="who">Conferência</span><span class="tx">transferência confirmada no Desk</span></div>
+      </div>
+      <span class="lab" data-a="1">Na rodada seguinte</span>
+      <div class="sres" data-a="1" id="sres">
+        <div><span class="lab">Fechamento</span><b>por encaminhamento</b></div>
+        <div><span class="lab">Classificação</span><b>válida · 1ª tentativa</b></div>
+        <div><span class="lab">Desfecho</span><b style="color:#047857">encaminhado</b></div>
+      </div>
+      <div class="cd" data-a="1" style="padding:20px 28px"><p class="para" style="font-size:25px">A transferência é gravada por <b>quem confirma no Desk</b>, não pela IA. A IA só sabe que quis transferir: <b>gravar a intenção inflaria a taxa.</b></p></div>
+    </div>
+    <div data-a="1" style="display:flex;justify-content:center;position:relative">
+      <div class="wa">
+        <div class="wa-h"><div class="av">V</div><div><div class="nm">Valentina · Finza</div><div class="st" id="wa-st">online</div></div></div>
+        <div class="wa-b" id="wa">
+          <div class="bub me" data-k="0">Oi, quero falar sobre meu contrato<small>17:34</small></div>
+          <div class="bub" data-k="1">Oi! Sou a Valentina, da Finza. Me conta o que aconteceu?<small>17:34</small></div>
+          <div class="bub me" data-k="2">Quero cancelar, a máquina parou de funcionar<small>17:35</small></div>
+          <div class="bub" data-k="3">Entendi. Vou te passar para um especialista do time, tá?<small>17:35</small></div>
+          <div class="bub sys" data-k="4">Atendimento transferido para Cancelamento</div>
+          <div class="typing"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <span class="sim" style="top:-34px;right:0">simulação</span>
+    </div>
+  </div>
+  <div class="foot">Conversa e horários fictícios <span class="dotsep"></span> Tipos de fato e regra de fechamento: documentação do Sentinela, §Entrada · §Fechamento e desfecho</div>
+</section>
+
+<!-- ================= 07 DESFECHOS + QUARENTENA ================= -->
+<section class="s light" data-label="02 · Desfecho e quarentena" data-notes="Como o atendimento terminou é derivado de fato, com uma condição positiva para cada desfecho. Quando nada casa, o desfecho é desconhecido e fica fora das taxas. Nunca é resolvido por eliminação. À direita, a quarentena: o que chega fora do contrato não é aceito nem apagado. Caso real da primeira noite: 3 anexos em PDF chegaram vazios porque o fluxo da Valentina não lia o campo do arquivo. O Sentinela recusou, o fluxo foi corrigido em 12/11.">
+  <div class="hdr"><span>07 · Ato 2 · Regras do jogo</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">Como terminou vem de fato. </span><span class="k">Na dúvida, desconhecido.</span></h2>
+  <div style="flex:1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;margin-top:36px;min-height:0">
+    <div class="cw" data-a="1" style="padding:24px 32px">
+      <span class="lab">Desfecho · condição para valer</span>
+      <div class="dt" style="margin-top:8px">
+        <div><span class="chip c-ok">encaminhado</span><span>A transferência foi confirmada no Desk</span></div>
+        <div><span class="chip c-bl">resolvido pela IA</span><span>Agente encerrou e o cliente falou por último</span></div>
+        <div><span class="chip c-wa">abandonado pelo cliente</span><span>24 h de silêncio e a IA falou por último</span></div>
+        <div><span class="chip c-wa">expirado</span><span>24 h de silêncio e o cliente falou por último</span></div>
+        <div><span class="chip c-bad">erro</span><span>Uma falha encerrou o atendimento</span></div>
+        <div><span class="chip" style="background:#F2F2F2;color:#5C5C7A">desconhecido</span><span><b>Nenhuma casa.</b> Fica fora das taxas.</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px;min-height:0">
+      <div data-a="1" style="background:#0A0A2E;color:#fff;border-radius:24px;padding:26px 32px;display:flex;flex-direction:column;gap:14px">
+        <span class="lab" style="color:#C8C8D4">Quarentena · primeiras 20 h</span>
+        <div style="display:flex;align-items:baseline;gap:16px"><span class="big" style="font-size:96px" data-count="149">149</span><span style="font-size:30px;font-weight:700;line-height:1.2">de 152 linhas<br><span style="color:#C8C8D4;font-weight:500">entraram no registro oficial</span></span></div>
+        <div class="stk" style="height:48px;font-size:22px"><div data-gx="1" style="flex:149;background:#1A1AFF;color:#fff">149 promovidas</div><div data-gx="1" style="flex:3;background:#F59E0B;min-width:54px;color:#0A0A2E">3</div></div>
+      </div>
+      <div class="cd" data-a="1" style="padding:24px 30px"><p class="para" style="font-size:26px"><b>Caso real:</b> 3 anexos em PDF chegaram sem texto. O Sentinela recusou em vez de aceitar mensagem vazia. <b>O fluxo foi corrigido em 12/11.</b></p></div>
+      <div class="note-warn" data-a="1" style="font-size:24px"><b>Quarentena é fila de conserto, não lixeira.</b> Cada linha leva o motivo e o produtor que a enviou.</div>
+    </div>
+  </div>
+  <div class="foot">Fonte: documentação do Sentinela, §Fechamento e desfecho · §Promoção e quarentena · §Estado em produção (11–12/11/2026) <span class="dotsep"></span> Teto de 7 dias fecha o que nunca silenciou</div>
+</section>
+
+<!-- ================= 09 ATO 3 · PRIMEIRAS 20 HORAS (dk) ================= -->
+<section class="s dk" data-label="03 · Em produção" data-act="Ato 3|Onde estamos" data-notes="Em produção desde 11/11, versão 1.2.0. Primeiras 20 horas: 152 linhas, 9 transferências, todas classificadas na primeira tentativa, zero falhas. Ressalva defensiva: as taxas de desfecho só viram indicador depois de cerca de uma semana de dado. Ainda não há caso real de encerramento por despedida.">
+  <div class="dotbg2"></div>
+  <div class="hdr"><span>08 · Ato 3 · Onde estamos</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1" style="margin-top:32px"><span class="g">Primeiras 20 horas em produção: </span><span style="font-weight:800;color:#fff">zero falhas</span></h2>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:44px">
+    <div class="kpi" data-a="1" style="padding:34px 30px"><span class="lab">Entrada</span><div style="display:flex;flex-direction:column;gap:14px;margin-top:40px"><span class="kn" data-count="152">152</span><span class="kt">linhas lidas</span><span class="kc">149 promovidas · 3 em quarentena</span></div></div>
+    <div class="kpi" data-a="1" style="padding:34px 30px"><span class="lab">Transferências</span><div style="display:flex;flex-direction:column;gap:14px;margin-top:40px"><span class="kn" data-count="9">9</span><span class="kt">encaminhamentos</span><span class="kc">Todos com protocolo, nenhum repetido</span></div></div>
+    <div class="kpi" data-a="1" style="padding:34px 30px"><div style="display:flex;justify-content:space-between;align-items:center"><span class="lab">Julgamento</span><span class="chip c-ok">1ª tentativa</span></div><div style="display:flex;flex-direction:column;gap:14px;margin-top:40px"><span class="kn" data-pop="1">9/9</span><span class="kt">classificações válidas</span><span class="kc">Conferidas pelo banco</span></div></div>
+    <div class="kpi inv" data-a="1" style="padding:34px 30px"><span class="lab">Operação</span><div style="display:flex;flex-direction:column;gap:14px;margin-top:40px"><span class="kn" data-count="0">0</span><span class="kt">falhas e reentregas</span><span class="kc">0 erros de gravação no n8n</span></div></div>
+  </div>
+  <div class="tline" data-a="1">
+    <div class="on"><i></i><b>17/08</b><span>Projeto aberto<br>Quimera #6324</span></div>
+    <div class="on"><i></i><b>08/09</b><span>Primeira versão<br>entregue</span></div>
+    <div class="on"><i></i><b>09/11</b><span>Stage aceito<br>com a DevOps (#8005)</span></div>
+    <div class="on"><i></i><b>11/11</b><span>Produção v1.2.0<br>Valentina gravando</span></div>
+    <div class="on"><i></i><b>12/11</b><span>Primeiros desfechos<br>por silêncio</span></div>
+  </div>
+  <div data-a="1" style="margin-top:auto;font-size:24px;color:#C8C8D4;display:flex;gap:14px;align-items:center"><span class="chip c-wa">Ressalva</span>Taxas de desfecho só viram indicador com ~1 semana de dado. Ainda não houve encerramento por despedida.</div>
+</section>
+
+<!-- ================= 10 COBERTURA + O QUE FALTA ================= -->
+<section class="s light" data-label="03 · O que falta" data-notes="Hoje só a Valentina grava, e ainda de forma incompleta: falta o evento de erro (uma conversa que quebra conta como abandono), a versão do prompt e o texto de áudio e imagem. A Conferência de transferência grava os encaminhamentos. Esperanza e Clara (formalização) ainda não gravam nada; a Esperanza é a prioridade porque hoje não tem log durável nenhum. Dos 8 tipos de fato, 2 já têm dado real. Risco operacional: quem salvar a Valentina a partir de um editor antigo aberto apaga os nós do Sentinela.">
+  <div class="hdr"><span>09 · Ato 3 · O que falta</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">No ar com a Valentina. </span><span class="k">Faltam Esperanza e Clara.</span></h2>
+  <div style="flex:1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;margin-top:32px;min-height:0">
+    <div class="cw" data-a="1" style="padding:20px 32px;display:flex;flex-direction:column">
+      <span class="lab" style="margin-bottom:4px">Quem grava hoje</span>
+      <div class="ag"><span class="nm"><i style="background:#7A7AFF"></i>Valentina v2</span><div class="ds"><span class="chip c-ok">✓ Gravando · parcial</span><small>Falta: evento de erro, versão do prompt, texto de áudio e imagem</small></div></div>
+      <div class="ag"><span class="nm"><i style="background:#10B981"></i>Transferência</span><div class="ds"><span class="chip c-ok">✓ Gravando</span><small>Conferência confirma o repasse no Desk</small></div></div>
+      <div class="ag"><span class="nm"><i style="background:#1A1AFF"></i>Esperanza</span><div class="ds"><span class="chip c-bad">Prioridade</span><small>Não grava. Hoje não tem log durável nenhum</small></div></div>
+      <div class="ag"><span class="nm"><i style="background:#0A0A2E"></i>Clara</span><div class="ds"><span class="chip" style="background:#F2F2F2;color:#5C5C7A">Não grava</span><small>Formalização</small></div></div>
+      <div class="note-warn" style="margin-top:auto;font-size:23px"><b>Risco:</b> salvar a Valentina a partir de um editor antigo aberto apaga os nós do Sentinela.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px;min-height:0">
+      <div data-a="1" style="display:flex;justify-content:space-between;align-items:baseline"><span class="lab">8 tipos de fato</span><span style="font-size:24px;font-weight:700"><b style="color:#047857;font-size:32px">2</b> com dado real</span></div>
+      <div class="ft" data-a="1">
+        <div class="f-ok"><b>Mensagem</b><small>em produção</small></div>
+        <div class="f-ok"><b>Encaminhamento</b><small>em produção</small></div>
+        <div class="f-bl"><b>Pedido de fechamento</b><small>no ar, sem caso real</small></div>
+        <div class="f-bl"><b>Fechamento confirmado</b><small>no ar, sem caso real</small></div>
+        <div class="f-wa"><b>Erro</b><small>próximo</small></div>
+        <div class="f-no"><b>Abertura</b><small>não gravado</small></div>
+        <div class="f-no"><b>Etapa declarada</b><small>não gravado</small></div>
+        <div class="f-no"><b>Pesquisa de satisfação</b><small>não gravado</small></div>
+      </div>
+      <div class="note-warn" data-a="1" style="font-size:23px"><b>Para fechar o aceite:</b> teste de restauração do banco em produção (DevOps) e alertas de rodada parada.</div>
+    </div>
+  </div>
+  <div class="foot">Fonte: documentação do Sentinela, §Entrada (tabela de tipos) · §Próximos passos (12/11/2026) </div>
+</section>
+
+<!-- ================= 11 ATO 4 · PRÓXIMOS PASSOS ================= -->
+<section class="s light" data-label="04 · Próximos passos" data-act="Ato 4|Para onde vamos" data-notes="Três horizontes. Agora: completar a Valentina, ligar os alarmes e testar a restauração em produção. Em seguida: Esperanza, depois Clara, no mesmo padrão. Depois: a Torre vira a tela do Sentinela, os agentes saem do n8n para código sem mudar o contrato, e o negócio passa a medir a IA com rótulo humano. Clique nos cards para abrir o detalhe com a fonte.">
+  <div class="hdr"><span>10 · Ato 4 · Para onde vamos</span><b>◆ Squad IA</b></div>
+  <h2 class="h2" data-a="1"><span class="g">Completar a Valentina. </span><span class="k">Depois, todos os agentes.</span></h2>
+  <div class="hz">
+    <div>
+      <div class="hh" data-a="1" style="color:#1A1AFF">Agora<i style="background:#1A1AFF"></i></div>
+      <div class="cd dc nx" data-a="1" data-det="n1"><span class="t">Completar a Valentina</span><span class="d">Erro, versão do prompt, áudio e imagem</span></div>
+      <div class="cd dc nx" data-a="1" data-det="n2"><span class="t">Alarmes operacionais</span><span class="d">Rodada parada, memória, CPU, conexões</span></div>
+      <div class="cd dc nx" data-a="1" data-det="n3"><span class="t">Restauração em produção</span><span class="d">Último critério de aceite, com a DevOps</span></div>
+    </div>
+    <div>
+      <div class="hh" data-a="1" style="color:#7A7AFF">Em seguida<i style="background:#7A7AFF"></i></div>
+      <div class="cd dc nx" data-a="1" data-det="n4" style="border-color:#7A7AFF"><span class="t">Esperanza primeiro</span><span class="d">Hoje sem log durável nenhum</span></div>
+      <div class="cd dc nx" data-a="1" data-det="n5" style="border-color:#7A7AFF"><span class="t">Clara (formalização)</span><span class="d">Mesmo padrão: mensagens, eventos, transferência</span></div>
+      <div class="cd dc nx" data-a="1" data-det="n6" style="border-color:#7A7AFF"><span class="t">Reentrega do canal</span><span class="d">Limitação declarada, sem id de entrega</span></div>
+    </div>
+    <div>
+      <div class="hh" data-a="1" style="color:#10B981">Depois<i style="background:#10B981"></i></div>
+      <div class="cd dc nx" data-a="1" data-det="n7" style="border-color:#10B981"><span class="t">Métricas na Torre</span><span class="d">A Torre vira a tela do Sentinela</span></div>
+      <div class="cd dc nx" data-a="1" data-det="n8" style="border-color:#10B981"><span class="t">Agentes em código</span><span class="d">Saem do n8n; o contrato não muda</span></div>
+      <div class="cd dc nx" data-a="1" data-det="n9" style="border-color:#10B981"><span class="t">Negócio mede a IA</span><span class="d">Rótulo humano contra o modelo</span><span class="chip c-wa tg">proposta</span></div>
+    </div>
+  </div>
+  <div class="msg" data-a="1" style="margin-top:auto;margin-bottom:24px"><b>Objetivo:</b> cada conversa de IA de cobrança registrada de ponta a ponta, com desfecho derivado de fato <b>e cada lacuna visível, com nome.</b></div>
+  <div class="foot">Clique nos cards para o detalhe <span class="dotsep"></span> Fonte: documentação do Sentinela §Próximos passos · Quimera #8005 (desenho-alvo da Torre e migração dos agentes)</div>
+</section>
+
+<!-- ================= 12 TESE (dk) ================= -->
+<section class="s dk" data-label="A tese" data-notes="Frase-chave. Antes: um número que parecia certo. Agora: o que foi registrado, e nada além. À direita, as seis garantias que sustentam isso.">
+  <div class="dotbg2"></div>
+  <div class="hdr"><span>11 · Em resumo</span><b>◆ Squad IA</b></div>
+  <div style="flex:1;display:grid;grid-template-columns:minmax(0,1fr) 720px;gap:72px;align-items:center;min-height:0">
+    <h2 style="font-size:92px;line-height:1.04;letter-spacing:-.04em;display:flex;flex-direction:column;gap:28px"><span data-a="1" style="font-weight:300;color:#9C9CB4">Antes, um número que parecia certo.</span><span data-a="1" style="font-weight:800;color:#fff">Agora, o que foi registrado<span style="color:#7A7AFF">, e nada além.</span></span></h2>
+    <div class="pil">
+      <div data-pop="1"><i>1</i>Uma tabela de entrada</div>
+      <div data-pop="1"><i>2</i>Quarentena com motivo</div>
+      <div data-pop="1"><i>3</i>Desfecho derivado de fato</div>
+      <div data-pop="1"><i>4</i>Julgamento conferido pelo banco</div>
+      <div data-pop="1"><i>5</i>Cada número ligado ao fato de origem</div>
+      <div data-pop="1"><i>6</i>Sem conversa no rastro de produção</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 13 OBRIGADO ================= -->
+<section class="s dark" data-label="Obrigado" data-notes="Repetir a mensagem central e abrir para perguntas. Créditos: desenvolvimento do Marcos Oliveira; infraestrutura com a DevOps (Helton).">
+  <div class="dotbg"></div>
+  <div class="orbit">
+    <svg viewBox="0 0 980 980" width="980" height="980">
+      <circle cx="490" cy="490" r="460" fill="none" stroke="#23235A" stroke-width="2"/>
+      <g data-spin="90"><circle cx="490" cy="490" r="380" fill="none" stroke="#1A1AFF" stroke-width="2" stroke-dasharray="4 14"/><circle cx="490" cy="110" r="12" fill="#1A1AFF"/><circle cx="870" cy="490" r="7" fill="#7A7AFF"/></g>
+      <g data-spin="-60"><circle cx="490" cy="490" r="290" fill="none" stroke="#3A3A8C" stroke-width="2"/><circle cx="200" cy="490" r="10" fill="#FFFFFF"/><circle cx="695" cy="285" r="6" fill="#1A1AFF"/></g>
+      <g data-spin="40"><circle cx="490" cy="490" r="200" fill="none" stroke="#1A1AFF" stroke-width="3" stroke-dasharray="120 40 20 40"/></g>
+      <circle data-pulse="1" cx="490" cy="490" r="120" fill="#1A1AFF"/>
+    </svg>
+    <div class="lbl">Sentinela</div>
+  </div>
+  <div class="cv-top"><span data-a="1">Sentinela · Encerramento</span><b data-a="1">◆ Squad IA</b></div>
+  <div class="cv-main" style="top:210px;gap:32px">
+    <span data-a="1" class="pillb">Em produção desde 11/11/2026</span>
+    <h1 class="cv-h1" style="font-size:200px;line-height:.95;letter-spacing:-.05em;column-gap:0"><span data-w="1" style="font-weight:800;color:#fff">Obrigado</span><span data-w="1" style="font-weight:800;color:#7A7AFF">.</span></h1>
+    <p data-a="1" style="font-size:40px;font-weight:300;line-height:1.25;color:#C8C8D4;max-width:1000px">Um vazio declarado vale mais que um número bonito. <span style="font-weight:800;color:#fff">O Sentinela registra o que aconteceu.</span> Perguntas?</p>
+    <div data-a="1" style="display:flex;flex-direction:column;gap:14px;margin-top:4px">
+      <span style="font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7A7AFF">Próximos passos</span>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;max-width:1080px">
+        <span class="chip" style="background:#16163F;color:#fff;font-size:22px;padding:10px 20px">Completar a Valentina</span>
+        <span class="chip" style="background:#16163F;color:#fff;font-size:22px;padding:10px 20px">Esperanza gravando</span>
+        <span class="chip" style="background:#16163F;color:#fff;font-size:22px;padding:10px 20px">Alarmes + restauração em prod</span>
+        <span class="chip" style="background:#16163F;color:#fff;font-size:22px;padding:10px 20px">Métricas na Torre</span>
+      </div>
+    </div>
+  </div>
+  <div data-a="1" style="position:absolute;left:120px;bottom:80px;display:flex;align-items:center;gap:24px">
+    <div style="width:104px;height:104px;border-radius:50%;border:3px solid #1A1AFF;background:#16163F;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;color:#fff">JV</div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <span style="font-size:22px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C8C8D4">Apresentado por</span>
+      <span style="font-size:36px;font-weight:800;color:#fff">João Vinícius</span>
+      <span style="font-size:22px;color:#C8C8D4">Supervisor · Squad IA &amp; Automação · Desenvolvimento: Marcos Oliveira</span>
+    </div>
+  </div>
+</section>
+
+</div></div>
+<div id="sweep"></div>
+<div id="wipe"><span></span><span></span></div>
+<div id="cnt"></div>
+<div id="fsh">Clique ou aperte qualquer tecla para tela cheia · ← → navegam · ESC visão geral · N notas</div>
+<div id="ov"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:20px;font-weight:800">Visão geral</span><span style="font-size:16px;color:#C8C8D4">ESC para fechar</span></div><div class="og" id="og"></div></div>
+<div id="notes"><b>Notas do apresentador</b><span id="notes-t"></span></div>
+<div id="scrim"></div>
+<aside id="panel" aria-live="polite"><div class="ph"><span id="p-eb"></span><button id="p-x">Fechar ✕</button></div><div class="pt"><b id="p-big"></b><span id="p-t"></span></div><span class="pd" id="p-d"></span><div id="p-items"></div><span class="pf" id="p-f"></span></aside>
+
+<script>
+(() => {
+/* ================= MOTOR (não editar — idêntico entre os decks) ================= */
+const EASE = 'cubic-bezier(.2,.8,.2,1)';
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const stage = document.getElementById('stage');
+const S = [...document.querySelectorAll('section.s')];
+const N = S.length;
+let idx = -1, active = null, tok = 0, timers = [];
+const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+const clearT = () => { timers.forEach(clearTimeout); timers = []; };
+
+function fit(){ stage.style.setProperty('--s', Math.min(innerWidth/1920, innerHeight/1080)); }
+addEventListener('resize', fit); fit();
+
+const fmt = (el, v) => { const d = +(el.dataset.dec||0); return v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}); };
+const finalCount = el => { cancelAnimationFrame(el._raf); clearTimeout(el._to); el.textContent = fmt(el, parseFloat(el.dataset.count)); };
+function count(el, delay){
+  const t = parseFloat(el.dataset.count), dur = 1300;
+  cancelAnimationFrame(el._raf); clearTimeout(el._to);
+  if (document.hidden) { finalCount(el); return; }
+  el.textContent = fmt(el, 0);
+  el._to = setTimeout(() => { const st = performance.now();
+    const step = n => { const p = Math.max(0, Math.min(1, (n-st)/dur)); el.textContent = fmt(el, t*(1-Math.pow(1-p,3))); if (p<1) el._raf = requestAnimationFrame(step); };
+    el._raf = requestAnimationFrame(step); }, delay);
+}
+function loop(el, kf, o){ if (el._loop){ el._loop.play(); return; } el._loop = el.animate(kf, {iterations:Infinity, ...o}); el._loop._loop = true; }
+function reset(s){ s.getAnimations({subtree:true}).forEach(x => { if (x._loop) x.pause(); else x.cancel(); }); s.querySelectorAll('[data-count]').forEach(finalCount); }
+function settle(s){ s.getAnimations({subtree:true}).forEach(x => { if (x._loop) return; try{ x.finish(); }catch(e){ x.cancel(); } }); s.querySelectorAll('[data-count]').forEach(finalCount); }
+function play(slide, base){
+  const opt = (d, dur) => ({duration:dur||600, delay:base+d, easing:EASE, fill:'backwards'});
+  slide.querySelectorAll('[data-w]').forEach((el,i) => el.animate([{opacity:0,transform:'translateY(60%)',filter:'blur(8px)'},{opacity:1,transform:'none',filter:'blur(0)'}], opt(200+i*90, 700)));
+  slide.querySelectorAll('[data-a]').forEach((el,i) => el.animate([{opacity:0,transform:'translateY(32px)'},{opacity:1,transform:'none'}], opt(80+i*70)));
+  slide.querySelectorAll('[data-pop]').forEach((el,i) => el.animate([{opacity:0,scale:'0.6'},{opacity:1,scale:'1.04',offset:.7},{opacity:1,scale:'1'}], opt(300+i*80, 600)));
+  slide.querySelectorAll('[data-gx]').forEach((el,i) => { el.style.transformOrigin = 'left center'; el.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}], opt(350+i*60, 900)); });
+  slide.querySelectorAll('[data-gy]').forEach((el,i) => { el.style.transformOrigin = 'center bottom'; el.animate([{transform:'scaleY(0)'},{transform:'scaleY(1)'}], opt(350+i*60, 900)); });
+  slide.querySelectorAll('[data-cell]').forEach((el,i) => el.animate([{opacity:0,transform:'scale(0.2)'},{opacity:1,transform:'none'}], opt(250+i*12, 420)));
+  slide.querySelectorAll('[data-draw]').forEach(el => { const L = el.getTotalLength ? el.getTotalLength() : 0; if (!L) return; el.style.strokeDasharray = L; el.animate([{strokeDashoffset:L},{strokeDashoffset:0}], opt(500+(+el.dataset.d||0), 1500)); });
+  slide.querySelectorAll('[data-type]').forEach((el,i) => el.animate([{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0 0 0)'}], opt(600+i*450, 500)));
+  slide.querySelectorAll('[data-rise]').forEach((el,i) => { const col = Math.floor(i/2), base1 = i%2 === 1; el.animate([{clipPath:'inset(100% 0 0 0)'},{clipPath:'inset(0 0 0 0)'}], opt(300+col*120+(base1?0:650), 650)); });
+  chartAnim(slide, base);
+  slide.querySelectorAll('[data-count]').forEach(el => count(el, base+250));
+  slide.querySelectorAll('[data-stripe]').forEach(el => loop(el, [{backgroundPosition:'0 0'},{backgroundPosition:'34px 0'}], {duration:1600}));
+  slide.querySelectorAll('[data-ripple]').forEach(el => { el.style.transformOrigin='center'; el.style.transformBox='fill-box'; loop(el, [{transform:'scale(1)',opacity:.9},{transform:'scale(3.8)',opacity:0}], {duration:4200, delay:+el.dataset.ripple*1400, easing:'cubic-bezier(0.25,1,0.5,1)'}); });
+  slide.querySelectorAll('[data-blink]').forEach(el => loop(el, [{opacity:1},{opacity:0},{opacity:1}], {duration:1000, easing:'steps(2)'}));
+  slide.querySelectorAll('[data-pulse]').forEach(el => { el.style.transformOrigin='center'; el.style.transformBox='fill-box'; loop(el, [{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}], {duration:2600, easing:'ease-in-out'}); });
+  slide.querySelectorAll('[data-spin]').forEach(el => { const s = +el.dataset.spin; el.style.transformOrigin = '490px 490px'; loop(el, [{transform:'rotate(0deg)'},{transform:`rotate(${s>0?360:-360}deg)`}], {duration:Math.abs(360/s)*1000*6}); });
+  slide.querySelectorAll('[data-flow]').forEach(el => { const [dx,dy] = el.dataset.flow.split(',').map(Number); loop(el, [{transform:'translate(0,0)',opacity:0},{opacity:1,offset:.15},{opacity:1,offset:.85},{transform:`translate(${dx}px,${dy}px)`,opacity:0}], {duration:1800, delay:+el.dataset.fd||0, easing:'ease-in-out'}); });
+  slide.querySelectorAll('[data-ticker]').forEach(el => loop(el, [{transform:'translateX(0)'},{transform:'translateX(-50%)'}], {duration:40000}));
+}
+/* linha SVG: data-reveal revela da esquerda; data-fade sobe a área até o atributo opacity */
+function chartAnim(root, base){
+  const opt = (d, dur) => ({duration:dur||600, delay:base+d, easing:EASE, fill:'backwards'});
+  root.querySelectorAll('[data-reveal]').forEach(el => el.animate([{clipPath:'inset(-40px 100% -40px 0)'},{clipPath:'inset(-40px 0% -40px 0)'}], opt(200, 1400)));
+  root.querySelectorAll('[data-fade]').forEach((el,i) => el.animate([{opacity:0},{opacity:el.getAttribute('opacity')||1}], opt(600+i*150, 900)));
+}
+/* ao trocar modo do gráfico: replay só do gráfico, mais rápido */
+function replayChart(c){
+  if (!c || RM) return;
+  const opt = (d, dur) => ({duration:dur||600, delay:d, easing:EASE, fill:'backwards'});
+  c.querySelectorAll('[data-gy]').forEach((el,i) => { el.style.transformOrigin = 'center bottom'; el.animate([{transform:'scaleY(0)'},{transform:'scaleY(1)'}], opt(Math.min(i*60,700), 800)); });
+  c.querySelectorAll('[data-pop]').forEach((el,i) => el.animate([{opacity:0,scale:'0.6'},{opacity:1,scale:'1.04',offset:.7},{opacity:1,scale:'1'}], opt(250+Math.min(i*50,700), 500)));
+  chartAnim(c, 0);
+}
+/* força o navegador a re-rasterizar o slide (corrige texto que fica sem pintar após muitas animações GPU) */
+function repaint(s){ requestAnimationFrame(() => { s.style.outline = '0.1px solid transparent'; void s.offsetWidth; requestAnimationFrame(() => { s.style.outline = ''; }); }); }
+document.addEventListener('visibilitychange', () => { if (!document.hidden && active) settle(active); });
+addEventListener('resize', () => { if (active) settle(active); });
+function transition(slide, dir){
+  slide.animate([{opacity:0,transform:`translateX(${dir*90}px) scale(0.98)`,filter:'blur(10px)'},{opacity:1,transform:'none',filter:'blur(0)'}], {duration:650, easing:EASE});
+  document.getElementById('sweep').animate(dir>0 ? [{transform:'translateX(-30vw)',opacity:1},{transform:'translateX(110vw)',opacity:.2}] : [{transform:'translateX(110vw) scaleX(-1)',opacity:1},{transform:'translateX(-30vw) scaleX(-1)',opacity:.2}], {duration:620, easing:EASE});
+}
+function wipe(label){
+  const el = document.getElementById('wipe'); const [a,t] = label.split('|');
+  el.children[0].textContent = a; el.children[1].textContent = t;
+  el.animate([{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0 0 0)',offset:.35},{clipPath:'inset(0 0 0 0)',offset:.65},{clipPath:'inset(0 0 0 100%)'}], {duration:1500, easing:EASE});
+  [...el.children].forEach((c,i) => c.animate([{opacity:0,transform:'translateY(30px)'},{opacity:1,transform:'none',offset:.4},{opacity:1,offset:.7},{opacity:0,transform:'translateY(-20px)'}], {duration:1500, delay:i*60, easing:EASE}));
+}
+
+/* ================= NAVEGAÇÃO ================= */
+const HOOKS = {};
+function goTo(n){
+  n = Math.max(0, Math.min(N-1, n)); if (n === idx) return;
+  const prev = idx; idx = n; const slide = S[n]; const t = ++tok;
+  clearT(); stopDemos(); closeDrawer();
+  S.forEach(s => { reset(s); s.classList.toggle('on', s === slide); });
+  ['wipe','sweep'].forEach(id => document.getElementById(id).getAnimations().forEach(x => x.cancel()));
+  active = slide;
+  document.body.style.background = getComputedStyle(slide).backgroundColor;
+  document.body.classList.toggle('isdark', slide.classList.contains('dark') || slide.classList.contains('dk'));
+  document.querySelector('#prog div').style.width = ((n+1)/N*100)+'%';
+  document.getElementById('cnt').textContent = (n+1)+' / '+N;
+  document.getElementById('notes-t').textContent = slide.dataset.notes || '—';
+  history.replaceState(null,'','#'+(n+1));
+  const act = !RM && slide.dataset.act && prev === n-1;
+  if (!RM){
+    if (act) wipe(slide.dataset.act); else if (prev >= 0) transition(slide, n>prev?1:-1);
+    try { play(slide, act ? 650 : 120); } catch (err) { settle(slide); }
+    setTimeout(() => { if (tok === t) { settle(slide); repaint(slide); } }, 3400);
+  }
+  repaint(slide);
+  const hook = HOOKS[slide.id]; if (hook) later(hook, RM ? 0 : (act ? 1500 : 900));
+}
+const next = () => goTo(idx+1), prev = () => goTo(idx-1);
+function fs(){ if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); }
+let asked = false;
+function firstGesture(){ if (asked) return; asked = true; fs(); document.getElementById('fsh').style.opacity = 0; }
+setTimeout(() => document.getElementById('fsh').style.opacity = 0, 6000);
+
+addEventListener('keydown', e => {
+  const ov = document.getElementById('ov');
+  if (e.key === 'Escape'){ if (document.body.classList.contains('pon')) { closeDrawer(); return; } toggleOv(); return; }
+  if (e.key === 'n' || e.key === 'N'){ document.getElementById('notes').classList.toggle('on'); return; }
+  firstGesture();
+  if (ov.classList.contains('on')) return;
+  if (['ArrowRight',' ','PageDown','Enter'].includes(e.key)){ e.preventDefault(); next(); }
+  else if (['ArrowLeft','PageUp','Backspace'].includes(e.key)){ e.preventDefault(); prev(); }
+  else if (e.key === 'Home') goTo(0);
+  else if (e.key === 'End') goTo(N-1);
+  else if (e.key === 'f' || e.key === 'F'){ if (document.fullscreenElement) document.exitFullscreen(); else fs(); }
+});
+document.getElementById('vp').addEventListener('click', e => {
+  if (!e.isTrusted) return;
+  const wasFirst = !asked; firstGesture();
+  if (e.target.closest('.wa, #feed, #term, [data-det], .lane')) return;
+  const card = e.target.closest('[data-go]'); if (card){ goTo(+card.dataset.go); return; }
+  if (wasFirst && idx === 0) return;
+  if (e.clientX < innerWidth*0.25) prev(); else next();
+});
+const og = document.getElementById('og');
+function toggleOv(){
+  const ov = document.getElementById('ov'), on = !ov.classList.contains('on');
+  ov.classList.toggle('on', on);
+  if (on){ og.innerHTML = ''; S.forEach((s,i) => { const d = document.createElement('div'); d.className = 'oc'+(i===idx?' cur':''); d.innerHTML = '<b>'+String(i+1).padStart(2,'0')+'</b><span>'+s.dataset.label+'</span>'; d.onclick = () => { ov.classList.remove('on'); goTo(i); }; og.appendChild(d); }); }
+}
+
+/* ================= PAINEL LATERAL · PRÓXIMOS PASSOS ================= */
+const FD = 'Fonte: documentação do Sentinela (Marcos Oliveira), §Próximos passos · 12/11/2026';
+const FQ = 'Fonte: Quimera #8005, comentários de 28/09 e 20/10/2026 (desenho-alvo)';
+const PANELS = {
+  n1:{eyebrow:'Agora · Valentina', big:'01', title:'Completar o produtor da Valentina', desc:'A Valentina já grava mensagens e fechamento. Faltam três peças para o registro ficar completo.', items:[
+    {d:'Erro', t:'Gravar o evento de erro pelo workflow de erro. Hoje uma conversa que quebra fecha como abandono.'},
+    {d:'Versão', t:'Estampar a versão do prompt em cada linha, para comparar a qualidade antes e depois de uma troca.'},
+    {d:'Mídia', t:'Texto interpretado de áudio e imagem: hoje grava só o link. Precisa de decisão de produto.'},
+    {d:'Opcional', t:'Alerta de falha de gravação no Google Chat, como os outros fluxos.'}], fonte:FD},
+  n2:{eyebrow:'Agora · Operação', big:'02', title:'Alarmes operacionais', desc:'Hoje uma rodada parada só seria percebida olhando. Os alarmes vão para a DevOps.', items:[
+    {d:'Rodada', t:'Tarefa saindo com código diferente de 0, ou mais de 15 min sem rodada, no Google Chat da DevOps.'},
+    {d:'Banco', t:'Memória livre, créditos de CPU e conexões, pelo CloudWatch.'}], fonte:FD},
+  n3:{eyebrow:'Agora · Aceite', big:'03', title:'Teste de restauração em produção', desc:'É o último critério de aceite do chamado de produção. Depende da DevOps.', items:[
+    {d:'Stage', t:'Restauração testada em stage: 14 min. Backup com retenção de 14 dias.'},
+    {d:'Prod', t:'Repetir o teste em produção, junto com a DevOps.'}], fonte:FD},
+  n4:{eyebrow:'Em seguida · Esperanza', big:'04', title:'Esperanza gravando', desc:'É a prioridade entre os agentes que faltam: hoje a Esperanza não tem log durável nenhum.', items:[
+    {d:'Padrão', t:'O mesmo da Valentina: mensagens, eventos e o identificador dela na Conferência de transferência.'},
+    {d:'Risco', t:'Nenhum nó existente é alterado: cada gravação é um ramo paralelo, sem saída.'}], fonte:FD},
+  n5:{eyebrow:'Em seguida · Clara', big:'05', title:'Clara no mesmo padrão', desc:'Com Valentina, Esperanza e Clara gravando, as métricas cobrem os agentes de cobrança e a formalização.', items:[
+    {d:'Clara', t:'É a única que já calcula a etapa da conversa: pode gravar o fato "etapa declarada".'}], fonte:FD},
+  n6:{eyebrow:'Em seguida · Limitação', big:'06', title:'Reentrega do webhook', desc:'Se o canal reenviar a mesma mensagem, o Sentinela não consegue saber que é repetida: o canal não manda identificador de entrega.', items:[
+    {d:'Hoje', t:'Limitação declarada na documentação, não escondida.'},
+    {d:'Saída', t:'Depende de o canal passar a enviar um identificador de entrega.'}], fonte:'Fonte: documentação do Sentinela, §12.6 Chave de idempotência'},
+  n7:{eyebrow:'Depois · Torre', big:'07', title:'A Torre vira a tela do Sentinela', desc:'O Sentinela não tem tela própria, por decisão. Quem usa os números vai vê-los na Torre.', items:[
+    {d:'Lê', t:'Métricas, quarentena, inspeção de atendimento e catálogo.'},
+    {d:'Como', t:'Pelo servidor da Torre, com chave. A chave nunca chega ao navegador.'},
+    {d:'Estado', t:'Planejado. A API e a rota de métricas já existem.'}], fonte:FQ},
+  n8:{eyebrow:'Depois · Plataforma', big:'08', title:'Agentes saindo do n8n para código', desc:'A direção é os agentes de cobrança virarem código na mesma plataforma do Sentinela.', items:[
+    {d:'Contrato', t:'Não muda: a gravação sai do n8n e passa para dentro do agente. Mesma tabela, mesma regra.'},
+    {d:'Transição', t:'As duas versões de um agente podem conviver. A coluna de versão separa os números.'},
+    {d:'Padrão', t:'O que se decidiu de infra no Sentinela vira o padrão dos próximos agentes.'}], fonte:FQ},
+  n9:{eyebrow:'Depois · Proposta', big:'09', title:'O negócio mede a IA', desc:'Proposta: usar ferramentas que já existem para medir se o julgamento do modelo bate com o de uma pessoa.', items:[
+    {d:'Rotular', t:'O negócio vê a conversa e grava o rótulo humano, conferido pela mesma regra do modelo.'},
+    {d:'Avaliar', t:'Modelo contra gabarito: cobertura, precisão e concordância por marcador e desfecho.'},
+    {d:'Vocabulário', t:'Mudar o catálogo passa por ensaio sobre conversas reais antes de publicar.'}], fonte:'Fonte: documentação do Sentinela, §Ferramentas · §Catálogo. Uso pelo negócio é proposta, não decisão.'},
+};
+const panel = document.getElementById('panel');
+function closeDrawer(){ document.body.classList.remove('pon'); document.querySelectorAll('.dc.sel').forEach(x => x.classList.remove('sel')); }
+function openPanel(k, card){
+  const p = PANELS[k]; if (!p) return;
+  document.getElementById('p-eb').textContent = p.eyebrow; document.getElementById('p-big').textContent = p.big; document.getElementById('p-t').textContent = p.title;
+  document.getElementById('p-d').textContent = p.desc; document.getElementById('p-f').textContent = p.fonte;
+  document.getElementById('p-items').innerHTML = p.items.map(it => `<div class="pi"><b>${it.d}</b><span>${it.t}</span></div>`).join('');
+  document.querySelectorAll('.dc').forEach(x => x.classList.toggle('sel', x === card));
+  document.body.classList.add('pon');
+  if (RM) return;
+  panel.animate([{transform:'translateX(100%)'},{transform:'none'}], {duration:420, easing:EASE});
+  [...panel.children].forEach((c,i) => c.animate([{opacity:0,transform:'translateX(24px)'},{opacity:1,transform:'none'}], {duration:400, delay:120+i*50, easing:EASE, fill:'backwards'}));
+}
+document.querySelectorAll('[data-det]').forEach(c => c.addEventListener('click', e => { e.stopPropagation(); openPanel(c.dataset.det, c); }));
+document.getElementById('scrim').addEventListener('click', closeDrawer);
+document.getElementById('p-x').addEventListener('click', closeDrawer);
+
+let demoOn = false;
+function stopDemos(){ demoOn = false; }
+
+/* ================= DEMO 1 · RODADA (passos acendem + saída do worker) ================= */
+function rodadaDemo(){
+  demoOn = true;
+  const steps = [...document.querySelectorAll('#sl-rodada .step')], tl = [...document.querySelectorAll('#term .tl')];
+  steps.forEach(s => s.classList.remove('lit')); tl.forEach(l => l.classList.remove('on'));
+  if (RM){ tl.forEach(l => l.classList.add('on')); return; }
+  later(() => tl[0].classList.add('on'), 200);
+  steps.forEach((s,i) => later(() => { steps.forEach(x => x.classList.toggle('lit', x === s)); tl[i+1].classList.add('on'); }, 800 + i*1200));
+  later(() => { steps.forEach(x => x.classList.remove('lit')); tl[7].classList.add('on'); }, 800 + 6*1200);
+  later(() => { if (demoOn) rodadaDemo(); }, 800 + 6*1200 + 3500);
+}
+HOOKS['sl-rodada'] = rodadaDemo;
+
+/* ================= DEMO 2 · WHATSAPP + REGISTRO AO VIVO ================= */
+function waDemo(){
+  demoOn = true;
+  const bubs = [...document.querySelectorAll('#wa .bub')], ty = document.querySelector('#wa .typing'), st = document.getElementById('wa-st');
+  const rows = [...document.querySelectorAll('#feed .fr2')], res = [...document.querySelectorAll('#sres > div')];
+  bubs.forEach(b => b.classList.remove('show','in')); rows.forEach(r => r.classList.remove('on','flash')); res.forEach(r => r.classList.remove('on'));
+  ty.classList.remove('on'); st.textContent = 'online';
+  if (RM){ bubs.forEach(b => b.classList.add('show','in')); rows.forEach(r => r.classList.add('on')); res.forEach(r => r.classList.add('on')); return; }
+  let t = 300;
+  bubs.forEach((b,i) => {
+    const bot = !b.classList.contains('me') && !b.classList.contains('sys');
+    if (bot){ later(() => { ty.classList.add('on'); st.textContent = 'digitando…'; }, t); t += 1300; }
+    if (b.classList.contains('sys')) t += 600;
+    later(() => { ty.classList.remove('on'); st.textContent = 'online'; b.classList.add('show'); requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('in'))); }, t);
+    const r = rows[+b.dataset.k];
+    if (r) later(() => { r.classList.add('on','flash'); setTimeout(() => r.classList.remove('flash'), 900); }, t + 550);
+    t += bot ? 1600 : 1800;
+  });
+  res.forEach((r,i) => later(() => r.classList.add('on'), t + 400 + i*1000));
+  t += 400 + res.length*1000;
+  later(() => { if (demoOn) waDemo(); }, t + 5000);
+}
+HOOKS['sl-wa'] = waDemo;
+
+goTo(Math.min(N-1, Math.max(0, (parseInt(location.hash.slice(1))||1)-1)));
+})();
+</script>
+</body>
+</html>
